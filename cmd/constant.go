@@ -1,6 +1,7 @@
 package main
 
+// currently unused
 const (
 	aPi_Key  = "API_KEY"
-	logFatal = "API_KEY environment variable is not set"
+	loGFatal = "API_KEY environment variable is not set"
 )
