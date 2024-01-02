@@ -12,7 +12,6 @@ const (
 )
 
 // Defined constants for language
-
 const (
 	YouNerd = "🤓 You: "
 	AiNerd  = "🤖 AI: "
