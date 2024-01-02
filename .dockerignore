@@ -1,0 +1,12 @@
+# Ignore all files and directories that are not necessary for building the Docker image.
+**/.git
+**/.vscode
+**/node_modules
+**/*.log
+*.md
+Dockerfile
+.dockerignore
+.gitignore
+**/testdata
+**/tests
+**/tmp
