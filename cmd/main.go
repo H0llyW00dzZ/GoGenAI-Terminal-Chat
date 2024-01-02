@@ -7,8 +7,13 @@ import (
 	"github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal"
 )
 
+const (
+	api_Key  = "API_KEY" // Fixed the typo here
+	logFatal = "API_KEY environment variable is not set"
+)
+
 func main() {
-	apiKey := os.Getenv(aPi_Key)
+	apiKey := os.Getenv(api_Key)
 	if apiKey == "" {
 		log.Fatal(logFatal)
 	}
