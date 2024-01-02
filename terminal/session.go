@@ -14,13 +14,26 @@ import (
 	"google.golang.org/api/option"
 )
 
+// Session encapsulates the state and functionality for a chat session with a generative AI model.
+// It holds the AI client, chat history, and context for managing the session lifecycle.
 type Session struct {
-	Client      *genai.Client
-	ChatHistory ChatHistory
-	Ctx         context.Context
-	Cancel      context.CancelFunc
+	Client      *genai.Client      // Client is the generative AI client used to communicate with the AI model.
+	ChatHistory ChatHistory        // ChatHistory stores the history of the chat session.
+	Ctx         context.Context    // Ctx is the context governing the session, used for cancellation.
+	Cancel      context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
 }
 
+// NewSession creates a new chat session with the provided API key for authentication.
+// It initializes the generative AI client and sets up a context for managing the session.
+//
+// Parameters:
+//
+//	apiKey string: The API key used for authenticating requests to the AI service.
+//
+// Returns:
+//
+//	*Session: A pointer to the newly created Session object.
+//	error: An error object if initialization fails.
 func NewSession(apiKey string) (*Session, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -38,6 +51,13 @@ func NewSession(apiKey string) (*Session, error) {
 	}, nil
 }
 
+// Start begins the chat session, managing user input and AI responses.
+// It sets up a signal listener for graceful shutdown and enters a loop to
+// read user input and fetch AI responses indefinitely until an interrupt signal is received.
+//
+// This method handles user input errors and AI communication errors by logging them and exiting.
+// It ensures resources are cleaned up properly on exit by deferring the cancellation of the session's context
+// and the closure of the AI client.
 func (s *Session) Start() {
 	defer s.Cancel()
 	defer s.Client.Close()
