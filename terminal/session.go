@@ -90,6 +90,9 @@ func (s *Session) Start() {
 		userInput = strings.TrimSpace(userInput)
 		s.ChatHistory.AddMessage(YouNerd, userInput)
 
+		// Add a newline right after the user's input
+		fmt.Println()
+
 		// Pass the entire chat history as context for the AI's response
 		chatContext := s.ChatHistory.GetHistory()
 		aiResponse, err := SendMessage(s.Ctx, s.Client, chatContext)
