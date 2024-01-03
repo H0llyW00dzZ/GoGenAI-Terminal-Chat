@@ -14,6 +14,7 @@ const (
 	logFatal = "API_KEY environment variable is not set"
 )
 
+// why this so simple ? hahahaha
 func main() {
 	apiKey := os.Getenv(api_Key)
 	if apiKey == "" {

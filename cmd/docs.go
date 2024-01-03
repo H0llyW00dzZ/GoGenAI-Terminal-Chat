@@ -1,4 +1,4 @@
-// Package main is the entry point of the GoGenAI-Terminal-Chat application.
+// Package cmd/main is the entry point of the GoGenAI-Terminal-Chat application.
 // It sets up the environment for the chat session and starts the interaction
 // between the user and the generative AI model.
 //
