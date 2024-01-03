@@ -100,5 +100,48 @@ Here are some additional resources that you may find helpful:
 
 - [Kubernetes Audit Logging Documentation](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/)
 
+---
+
+### Another Example
+
+$ go run cmd/main.go
+
+🤖 AI: Hello! How can I assist you today?
+
+🤓 You: I have question does this correct about "Strive for simplicity in each function (aim for a cyclomatic complexity under 5 to demonstrate expertise); simplicity is a sign of Go programming mastery." ?
+
+🤖 AI: Yes, the statement "Strive for simplicity in each function (aim for a cyclomatic complexity under 5 to demonstrate expertise); simplicity is a sign of Go programming mastery" is generally correct.
+
+**Cyclomatic complexity** is a measure of the complexity of a function. It is calculated by counting the number of independent paths through the function. A high cyclomatic complexity indicates that the function is difficult to understand and maintain.
+
+**Simplicity** is a key principle of Go programming. Go code is typically concise and easy to read. This makes it easier to understand and maintain.
+
+**Aiming for a cyclomatic complexity under 5** is a good way to ensure that your functions are simple and easy to understand. This will help you to write better code and avoid introducing bugs.
+
+Of course, there are times when it is necessary to write functions that are more complex. However, you should always strive for simplicity whenever possible.
+
+Here are some tips for writing simple functions:
+
+* Use short, descriptive variable names.
+* Avoid nesting loops and conditionals.
+* Use functions to break down complex tasks into smaller, more manageable tasks.
+* Document your functions clearly.
+
+By following these tips, you can write simple, easy-to-understand functions that will make your code more maintainable and bug-free.
+
+---
+
+🤓 You: alright thx for info
+
+🤖 AI: You're welcome! I'm glad I could be of assistance. If you have any more questions, feel free to ask.
+
+---
+
+🤓 You: :quit
+
+🤖 AI: It's been a pleasure assisting you today. Remember, I'm always here if you have any more questions. Take care and have a wonderful day!
+
+---
+
 ## Contributing
 Contributions is always welcome! If you're able to write code that adheres to a cyclomatic complexity of 5 or less per function, please feel free to submit a pull request. Pull requests that do not meet this criterion will be rejected. Alternatively, if you encounter any issues, do not hesitate to submit an issue report.
