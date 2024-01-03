@@ -26,7 +26,7 @@ type ChatHistory struct {
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
 func (h *ChatHistory) AddMessage(user, text string) {
-	// Forgot to remove LMAO "if" previously, an "if" statement here was causing an internal error when
+	// Forgot to remove "if" previously, an "if" statement here was causing an google internal error when
 	// Shift+Enter was pressed, due to unintended handling of input. This has been corrected.
 	// Additionally, the issue of duplicate "🤖 AI:" prefixes, which resulted in the AI
 	// misinterpreting its own output, has been resolved.
