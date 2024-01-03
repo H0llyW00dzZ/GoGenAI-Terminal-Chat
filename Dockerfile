@@ -5,8 +5,7 @@ FROM golang:1.21.5 as builder
 WORKDIR /app
 
 # Copy the go.mod and go.sum to download all dependencies.
-COPY go.mod ./
-COPY go.sum ./
+COPY go.mod go.sum ./
 
 # Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed.
 RUN go mod download
@@ -27,10 +26,15 @@ FROM alpine:latest
 # Install ca-certificates in case the application makes HTTPS requests.
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /root/
+# Create a non-root user and switch to it.
+RUN adduser -D gogenaiterminal
+USER gogenaiterminal
+
+# Set the working directory to the user's home directory.
+WORKDIR /home/gogenaiterminal
 
 # Copy the pre-built binary file from the previous stage.
-COPY --from=builder /app/cmd/ .
+COPY --from=builder /app/cmd/. /usr/local/bin/
 
 # Run the binary.
-ENTRYPOINT ["./goaiterminal-chat"]
+ENTRYPOINT ["gogenaiterminal-chat"]
