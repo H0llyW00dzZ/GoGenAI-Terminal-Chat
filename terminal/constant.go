@@ -1,5 +1,7 @@
 package terminal
 
+import "time"
+
 // Defined constants for the terminal package
 const (
 	SignalMessage = "\nReceived an interrupt, shutting down gracefully..."
@@ -8,7 +10,8 @@ const (
 	// this animated chars is magic, it used to show the user that the AI is typing just like human would type
 	AnimatedChars = "%c"
 	// this model is subject to changed in future
-	ModelAi = "gemini-pro"
+	ModelAi     = "gemini-pro"
+	TypingDelay = 100 * time.Millisecond
 )
 
 // Defined constants for language
