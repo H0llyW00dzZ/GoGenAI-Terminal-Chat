@@ -22,6 +22,7 @@ Interesting to built it in terminal after touring journey through the Go program
 - **Intelligent Shutdown**: Benefit from built-in signal handling for a smooth exit process, ensuring your session ends without disruption and with proper resource cleanup.
 - **Realistic Typing Animation**: Enjoy a more lifelike interaction with a simulated typing effect that mimics human conversation timing.
 - **Ease of Deployment**: Quickly deploy the chat application using Docker, minimizing setup time and complexity.
+- **Handle Command**: Seamlessly integrate special commands within the chat flow. The `:quit` command, for instance, allows users to end the session gracefully. Upon invoking this command, the application synchronizes with the AI to generate a fitting farewell message, ensuring a natural and courteous conclusion to the interaction. This feature not only elevates the user experience by providing a conversational closure but also ensures that the shutdown sequence is managed in sync with the AI's response, maintaining the immersive quality of the chat session.
 
 > [!NOTE]  
 > Subject planning to continuously improve and add features, enhancing functionality without adding unnecessary complexity. Stay tuned for updates!
