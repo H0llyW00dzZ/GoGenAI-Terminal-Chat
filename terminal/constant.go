@@ -16,6 +16,7 @@ const (
 
 // Defined constants for language
 const (
-	YouNerd = "🤓 You: "
-	AiNerd  = "🤖 AI: "
+	YouNerd       = "🤓 You: "
+	AiNerd        = "🤖 AI: "
+	ContextPrompt = "Hello! How can I assist you today?"
 )
