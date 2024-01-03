@@ -26,12 +26,14 @@ type ChatHistory struct {
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
 func (h *ChatHistory) AddMessage(user, text string) {
-	// Check if the last character of the user string is not a colon
-	if !strings.HasSuffix(user, PrefixChar) {
-		// If it is, don't add another colon
-		h.Messages = append(h.Messages, fmt.Sprintf("%s %s", user, text))
-	}
-	// Append the message with the user string (which now has a guaranteed single colon)
+	// Forgot to remove "if" previously, an "if" statement here was causing an google internal error when
+	// Shift+Enter was pressed, due to unintended handling of input. This has been corrected.
+	// Additionally, the issue of duplicate "🤖 AI:" prefixes, which resulted in the AI
+	// misinterpreting its own output, has been resolved.
+	// Now, the message is simply appended to the history with the correct user prefix.
+	//
+	// Note: the duplicate of "🤖 AI:" it's by AI It's self, not causing of the code.
+	// Now It fixed by sanitize the message before append it to the history.
 	h.Messages = append(h.Messages, fmt.Sprintf("%s %s", user, text))
 }
 
