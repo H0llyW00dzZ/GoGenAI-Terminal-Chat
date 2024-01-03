@@ -1,3 +1,5 @@
+// Copyright (c) 2024 H0llyW00dzZ
+
 package terminal
 
 // apiKey holds the API key used for authenticating requests to the generative

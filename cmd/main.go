@@ -1,3 +1,5 @@
+// Copyright (c) 2024 H0llyW00dzZ
+
 package main
 
 import (
