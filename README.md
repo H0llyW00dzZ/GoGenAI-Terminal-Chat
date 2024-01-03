@@ -15,6 +15,11 @@
 
 Interesting to built it in terminal after touring journey through the Go programming language, plus exploring Google's AI capabilities (currently in beta with Gemini).
 
+> [!NOTE]
+> This repository is specifically designed to adhere to idiomatic Go principles. 🤪
+
+***Fun Fact***: ***Did You Know?*** If your Go code is a jungle of 'if' statements, it's less "Go" and more "Stop-and-ask-for-directions". Flatten those conditionals and let your code run as smoothly as a greased gopher on a slip 'n slide! 🤪
+
 ## Current Features
 
 - **Terminal-Based Interaction**: Experience AI chatting within the comfort of your terminal, with a focus on simplicity and efficiency.
