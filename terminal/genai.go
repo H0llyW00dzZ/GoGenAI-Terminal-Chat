@@ -73,13 +73,30 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 	for _, cand := range resp.Candidates {
 		if cand.Content != nil {
 			for _, part := range cand.Content.Parts {
+				content := fmt.Sprint(part)
+
+				// Colorize the response
+				colorPairs := []string{
+					"**", ColorGreen,
+					"`", ColorYellow,
+				}
+
+				keepDelimiters := map[string]bool{
+					"**": false, // Remove double asterisks from the output
+					"`":  true,  // Keep single backticks in the output
+				}
+
+				colorized := Colorize(content, colorPairs, keepDelimiters)
+
 				// Print "AI:" prefix directly without typing effect
 				fmt.Print(AiNerd)
 
 				// Assuming 'part' can be printed directly and is of type string or has a String() method
 				// Use the typing banner effect only for the part content
-				PrintTypingChat(fmt.Sprint(part), TypingDelay)
-				aiResponse += fmt.Sprint(part) // Collect AI response
+				// Colorized string is printed character by character with a delay between each character
+				PrintTypingChat(colorized, TypingDelay)
+				// Collect AI response
+				aiResponse += colorized
 			}
 		}
 	}
