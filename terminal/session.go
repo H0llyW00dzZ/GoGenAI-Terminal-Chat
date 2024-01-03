@@ -62,16 +62,11 @@ func (s *Session) Start() {
 	defer s.Cancel()
 	defer s.Client.Close()
 
-	reader := bufio.NewReader(os.Stdin)
-
-	// Print the chat history before starting the conversation
-	s.ChatHistory.PrintHistory()
-
 	// Set up channel to listen for interrupt signals
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
-	// Goroutine to handle graceful shutdown
+	// Goroutine Officer (Known as Gopher Officer) to handle graceful shutdown
 	go func() {
 		<-sigChan // Block until a signal is received
 		fmt.Println(SignalMessage)
@@ -79,6 +74,17 @@ func (s *Session) Start() {
 		s.Client.Close()
 		os.Exit(0)
 	}()
+
+	// Simulate AI starting the conversation by Gopher Nerd
+	// This A prompt Context as starting point for AI to start the conversation
+	fmt.Print(AiNerd)
+	PrintTypingChat(ContextPrompt, TypingDelay)
+	fmt.Println()
+
+	// Add AI's initial message to chat history as context
+	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+
+	reader := bufio.NewReader(os.Stdin)
 
 	for {
 		fmt.Print(YouNerd)
