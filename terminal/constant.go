@@ -16,7 +16,22 @@ const (
 
 // Defined constants for language
 const (
-	YouNerd       = "🤓 You: "
-	AiNerd        = "🤖 AI: "
-	ContextPrompt = "Hello! How can I assist you today?"
+	YouNerd               = "🤓 You: "
+	AiNerd                = "🤖 AI: "
+	ContextPrompt         = "Hello! How can I assist you today?"
+	ShutdownMessage       = "Shutting down gracefully..."
+	UnknownCommand        = "Unknown command."
+	ContextPromptShutdown = "The user has issued a quit command. Please provide a shutdown message."
+)
+
+// Defined constants for commands
+// Note: will add more in future based on the need
+const (
+	QuitCommand = ":quit"
+	PrefixChar  = ":"
+)
+
+// Defined List error message
+const (
+	ErrorGettingShutdownMessage = "Error getting shutdown message from AI:"
 )
