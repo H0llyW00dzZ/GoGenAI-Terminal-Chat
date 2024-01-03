@@ -26,7 +26,13 @@ type ChatHistory struct {
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
 func (h *ChatHistory) AddMessage(user, text string) {
-	h.Messages = append(h.Messages, fmt.Sprintf("%s: %s", user, text))
+	// Check if the last character of the user string is not a colon
+	if !strings.HasSuffix(user, PrefixChar) {
+		// If it is, don't add another colon
+		h.Messages = append(h.Messages, fmt.Sprintf("%s %s", user, text))
+	}
+	// Append the message with the user string (which now has a guaranteed single colon)
+	h.Messages = append(h.Messages, fmt.Sprintf("%s %s", user, text))
 }
 
 // GetHistory concatenates all messages in the chat history into a single
@@ -37,7 +43,26 @@ func (h *ChatHistory) AddMessage(user, text string) {
 //
 //	string: A newline-separated string of all messages in the chat history.
 func (h *ChatHistory) GetHistory() string {
-	return strings.Join(h.Messages, "\n")
+	// Create a new slice to hold messages without emoji prefixes
+	sanitizedMessages := make([]string, 0, len(h.Messages))
+
+	// Define the prefixes to be removed
+	prefixesToRemove := []string{YouNerd, AiNerd}
+
+	for _, msg := range h.Messages {
+		sanitizedMsg := msg
+		// Remove each prefix from the start of the message
+		for _, prefix := range prefixesToRemove {
+			if strings.HasPrefix(sanitizedMsg, prefix) {
+				sanitizedMsg = strings.TrimPrefix(sanitizedMsg, prefix)
+				break // Assume only one prefix will match and then break the loop
+			}
+		}
+		sanitizedMessages = append(sanitizedMessages, sanitizedMsg)
+	}
+
+	// Join the sanitized messages with a newline character
+	return strings.Join(sanitizedMessages, "\n")
 }
 
 // PrintHistory outputs all messages in the chat history to the standard output,

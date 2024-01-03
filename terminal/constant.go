@@ -12,8 +12,9 @@ const (
 	// this animated chars is magic, it used to show the user that the AI is typing just like human would type
 	AnimatedChars = "%c"
 	// this model is subject to changed in future
-	ModelAi     = "gemini-pro"
-	TypingDelay = 100 * time.Millisecond
+	ModelAi = "gemini-pro"
+	// this may subject to changed in future for example can customize the delay
+	TypingDelay = 60 * time.Millisecond
 )
 
 // Defined constants for language
