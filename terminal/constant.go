@@ -21,7 +21,7 @@ const (
 	ContextPrompt         = "Hello! How can I assist you today?"
 	ShutdownMessage       = "Shutting down gracefully..."
 	UnknownCommand        = "Unknown command."
-	ContextPromptShutdown = "The user has issued a quit command. Please provide a shutdown message."
+	ContextPromptShutdown = "The user has issued a quit command. Please provide a shutdown message as you are Assistant."
 )
 
 // Defined constants for commands
