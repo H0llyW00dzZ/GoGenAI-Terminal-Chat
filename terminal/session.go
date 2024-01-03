@@ -63,6 +63,16 @@ func (s *Session) Start() {
 
 	s.setupSignalHandling()
 
+	// Simulate AI starting the conversation by Gopher Nerd
+	// This A prompt Context as starting point for AI to start the conversation
+	fmt.Print(AiNerd)
+	PrintTypingChat(ContextPrompt, TypingDelay)
+	fmt.Println()
+
+	// Add AI's initial message to chat history
+	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+
+	// Main loop for processing user input
 	for {
 		if done := s.processInput(); done {
 			break
