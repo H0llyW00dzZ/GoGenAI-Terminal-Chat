@@ -30,6 +30,9 @@ import (
 // The function delegates the embedding task to the genai client's EmbeddingModel method and
 // retrieves the embedding values from the response. It is the caller's responsibility to manage
 // the lifecycle of the genai.Client, including its creation and closure.
+//
+// Note: This function marked as TODO for now, since it is not used in the main because,
+// a current version of chat system it's consider fully stable with better logic.
 func GetEmbedding(ctx context.Context, client *genai.Client, modelID, text string) ([]float32, error) {
 	em := client.EmbeddingModel(modelID)
 	res, err := em.EmbedContent(ctx, genai.Text(text))
