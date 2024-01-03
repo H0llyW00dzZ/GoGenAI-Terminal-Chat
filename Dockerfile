@@ -34,7 +34,7 @@ USER gogenaiterminal
 WORKDIR /home/gogenaiterminal
 
 # Copy the pre-built binary file from the previous stage.
-COPY --from=builder /app/cmd/. /usr/local/bin/
+COPY --from=builder /app/cmd/ /usr/local/bin/
 
 # Run the binary.
 ENTRYPOINT ["gogenaiterminal-chat"]
