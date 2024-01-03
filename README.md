@@ -53,7 +53,7 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 - `API_KEY`: Your API key for accessing the generative AI model. This is a required environment variable.
 
 
-## Example how it wok
+## Example how it work
 
 🤓 You: hello are you ?
 
