@@ -18,7 +18,7 @@ COPY terminal/ terminal/
 WORKDIR /app/cmd
 
 # Build the application.
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o goaiterminal-chat
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gogenaiterminal-chat
 
 # Start a new stage from scratch for a smaller image.
 FROM alpine:latest  
