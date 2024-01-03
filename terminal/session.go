@@ -59,10 +59,20 @@ func NewSession(apiKey string) (*Session, error) {
 // It ensures resources are cleaned up properly on exit by deferring the cancellation of the session's context
 // and the closure of the AI client.
 func (s *Session) Start() {
-	defer s.Cancel()
-	defer s.Client.Close()
+	defer s.cleanup()
 
-	// Set up channel to listen for interrupt signals
+	s.setupSignalHandling()
+
+	for {
+		if done := s.processInput(); done {
+			break
+		}
+	}
+}
+
+// setupSignalHandling configures the handling of interrupt signals to ensure graceful
+// shutdown of the session. It listens for SIGINT and SIGTERM signals.
+func (s *Session) setupSignalHandling() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -70,42 +80,54 @@ func (s *Session) Start() {
 	go func() {
 		<-sigChan // Block until a signal is received
 		fmt.Println(SignalMessage)
-		s.Cancel() // Cancel the context to cleanup resources
-		s.Client.Close()
+		s.cleanup()
 		os.Exit(0)
 	}()
+}
 
-	// Simulate AI starting the conversation by Gopher Nerd
-	// This A prompt Context as starting point for AI to start the conversation
-	fmt.Print(AiNerd)
-	PrintTypingChat(ContextPrompt, TypingDelay)
+// processInput reads user input from the terminal. It returns true if the session
+// should end, either due to a command or an error.
+func (s *Session) processInput() bool {
+	fmt.Print(YouNerd)
+	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	userInput = strings.TrimSpace(userInput)
+	if done := s.handleUserInput(userInput); done {
+		return true
+	}
+
+	return false
+}
+
+// handleUserInput processes the user's input. If the input is a command, it is handled
+// accordingly. Otherwise, the input is sent to the AI for a response. It returns true
+// if the session should end.
+func (s *Session) handleUserInput(input string) bool {
+	s.ChatHistory.AddMessage(YouNerd, input)
 	fmt.Println()
 
-	// Add AI's initial message to chat history as context
-	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
-
-	reader := bufio.NewReader(os.Stdin)
-
-	for {
-		fmt.Print(YouNerd)
-		userInput, err := reader.ReadString(NewLineChars)
+	if isCommand, err := HandleCommand(input, s); isCommand {
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		userInput = strings.TrimSpace(userInput)
-		s.ChatHistory.AddMessage(YouNerd, userInput)
-
-		// Add a newline right after the user's input
-		fmt.Println()
-
-		// Pass the entire chat history as context for the AI's response
-		chatContext := s.ChatHistory.GetHistory()
-		aiResponse, err := SendMessage(s.Ctx, s.Client, chatContext)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		s.ChatHistory.AddMessage(AiNerd, aiResponse)
+		return true
 	}
+
+	aiResponse, err := SendMessage(s.Ctx, s.Client, s.ChatHistory.GetHistory())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s.ChatHistory.AddMessage(AiNerd, aiResponse)
+	return false
+}
+
+// cleanup releases resources used by the session. It cancels the context and closes
+// the AI client connection.
+func (s *Session) cleanup() {
+	s.Cancel()
+	s.Client.Close()
 }
