@@ -76,7 +76,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 
 				// Assuming 'part' can be printed directly and is of type string or has a String() method
 				// Use the typing banner effect only for the part content
-				PrintTypingChat(fmt.Sprint(part), 100*time.Millisecond)
+				PrintTypingChat(fmt.Sprint(part), TypingDelay)
 				aiResponse += fmt.Sprint(part) // Collect AI response
 			}
 		}
