@@ -64,15 +64,3 @@ func (h *ChatHistory) GetHistory() string {
 	// Join the sanitized messages with a newline character
 	return strings.Join(sanitizedMessages, "\n")
 }
-
-// PrintHistory outputs all messages in the chat history to the standard output,
-// one message per line. This method is useful for displaying the chat history
-// directly to the terminal.
-//
-// Each message is printed in the order it was added, preserving the conversation
-// flow. This method does not return any value or error.
-func (h *ChatHistory) PrintHistory() {
-	for _, msg := range h.Messages {
-		fmt.Println(msg)
-	}
-}
