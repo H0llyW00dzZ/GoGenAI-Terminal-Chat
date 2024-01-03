@@ -21,11 +21,36 @@ Interesting to built it in terminal after touring journey through the Go program
 - **Session Chat History**: Maintain a transcript of your dialogue, capturing both queries and AI responses for a continuous conversational flow.
 - **Intelligent Shutdown**: Benefit from built-in signal handling for a smooth exit process, ensuring your session ends without disruption and with proper resource cleanup.
 - **Realistic Typing Animation**: Enjoy a more lifelike interaction with a simulated typing effect that mimics human conversation timing.
+- **Ease of Deployment**: Quickly deploy the chat application using Docker, minimizing setup time and complexity.
 
 > [!NOTE]  
-> Subject to add more in future without any complex of each functions.
+> Subject planning to continuously improve and add features, enhancing functionality without adding unnecessary complexity. Stay tuned for updates!
 
 **`Go`** is designed to be straightforward and efficient, avoiding the unnecessary complexities (fuck complexities, this is `go` anti complexities) often encountered in other programming languages.
+
+## Installation
+
+To use GoGenAI Terminal Chat, you need to have Docker installed on your machine. If you don't have Docker installed, please follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
+
+Once Docker is set up, you can pull the image from GitHub Packages by running:
+
+```sh
+docker pull ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
+```
+
+## Usage
+
+To start a chat session with GoGenAI, run the following command in your terminal. Make sure to replace `YOUR_API_KEY` with the actual API key provided to you.
+
+```sh
+docker run -it --rm --name mychatapp -e API_KEY=YOUR_API_KEY ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
+```
+
+This command will start the GoGenAI Terminal Chat application in interactive mode. You will be able to type your messages and receive responses from the AI.
+
+### Environment Variables
+
+- `API_KEY`: Your API key for accessing the generative AI model. This is a required environment variable.
 
 
 ## Example how it wok
