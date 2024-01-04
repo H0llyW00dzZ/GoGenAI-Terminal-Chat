@@ -45,8 +45,7 @@ func (h *ChatHistory) AddMessage(user, text string) {
 //
 //	string: A newline-separated string of all messages in the chat history.
 func (h *ChatHistory) GetHistory() string {
-	// Create a new slice to hold messages without emoji prefixes
-	sanitizedMessages := make([]string, 0, len(h.Messages))
+	var builder strings.Builder
 
 	// Define the prefixes to be removed
 	prefixesToRemove := []string{YouNerd, AiNerd}
@@ -60,9 +59,12 @@ func (h *ChatHistory) GetHistory() string {
 				break // Assume only one prefix will match and then break the loop
 			}
 		}
-		sanitizedMessages = append(sanitizedMessages, sanitizedMsg)
+		// Optimized to use Builder.WriteString() for better performance and to avoid memory allocation overhead.
+		builder.WriteString(sanitizedMsg)
+		builder.WriteRune(NewLineChars) // Append a newline character after each message.
 	}
 
-	// Join the sanitized messages with a newline character
-	return strings.Join(sanitizedMessages, "\n")
+	// The builder.String() method returns the complete, concatenated chat history.
+	return builder.String()
+
 }
