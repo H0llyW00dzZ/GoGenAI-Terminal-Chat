@@ -17,8 +17,9 @@ const (
 	ColorReset  = "\033[0m"
 )
 
-// Colorize applies ANSI color codes to the text between pairs of delimiters.
-// It supports multiple delimiters and their corresponding colors.
+// Colorize applies ANSI color codes to the text surrounded by specified delimiters.
+// It can process multiple delimiters, each with a corresponding color. The function
+// can also conditionally retain or remove the delimiters in the final output.
 //
 // Parameters:
 //
@@ -29,6 +30,10 @@ const (
 // Returns:
 //
 //	string: The colorized text.
+//
+// Note: This function may not work as expected in Windows Command Prompt due to its limited
+// support for ANSI color codes. It is designed for terminals that support ANSI, such as those
+// in Linux/Unix environments.
 func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) string {
 	for i := 0; i < len(colorPairs); i += 2 {
 		delimiter := colorPairs[i]
