@@ -79,11 +79,13 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 				colorPairs := []string{
 					"**", ColorGreen,
 					"`", ColorYellow,
+					"*", ColorCyan,
 				}
 
 				keepDelimiters := map[string]bool{
 					"**": false, // Remove double asterisks from the output
 					"`":  true,  // Keep single backticks in the output
+					"*":  true,  // Keep single asterisks in the output
 				}
 
 				colorized := Colorize(content, colorPairs, keepDelimiters)
