@@ -59,6 +59,13 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 - `API_KEY`: Your API key for accessing the generative AI model. This is a required environment variable.
 
 
+## Screenshot
+
+<p align="center">
+  <img src="https://i.imgur.com/H9vDYjZ.png" alt="kubectl terminal" />
+</p>
+
+
 ## Example how it work
 
 🤓 You: hello are you ?
