@@ -68,8 +68,11 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 ### Average Consumption (Tested on Production Docker):
 
 <p align="center">
-  <img src="https://i.imgur.com/3haszmI.png" alt="kubectl terminal" />
+  <img src="https://i.imgur.com/3haszmI.png" alt="docker" />
 </p>
+
+> [!NOTE]
+> The `Average Consumption` metrics are calculated without including the use of a storage system like a database and are based on the assumption that each function is relatively simple, with an average cyclomatic complexity of 5 as the maximum. However, consumption may increase with more complex functions (e.g., those with a cyclomatic complexity of 10 or more, which are not recommended).
 
 ## Example how it work
 
