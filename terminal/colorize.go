@@ -50,3 +50,23 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 	}
 	return text
 }
+
+func SingleCharColorize(text string, delimiter rune, color string) string {
+	var result strings.Builder
+	lines := strings.Split(text, "\n")
+	for _, line := range lines {
+		trimmedLine := strings.TrimSpace(line)
+		if strings.HasPrefix(trimmedLine, string(delimiter)) {
+			// Colorize the delimiter and the following space if it's a list item
+			result.WriteString(color)
+			result.WriteString(string(delimiter))
+			result.WriteString(ColorReset)
+			result.WriteString(trimmedLine[1:])
+		} else {
+			// No coloring needed
+			result.WriteString(trimmedLine)
+		}
+		result.WriteString("\n")
+	}
+	return strings.TrimRight(result.String(), "\n")
+}
