@@ -48,3 +48,9 @@ const (
 	SingleBacktick = "`"
 	StringNewLine  = "\n"
 )
+
+// Defined List of Environment variables
+
+const (
+	DEBUG_MODE = "DEBUG_MODE"
+)
