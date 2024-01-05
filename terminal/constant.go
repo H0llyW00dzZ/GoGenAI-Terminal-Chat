@@ -38,7 +38,11 @@ const (
 
 // Defined List error message
 const (
-	ErrorGettingShutdownMessage = "Error getting shutdown message from AI:"
+	ErrorGettingShutdownMessage = "Error getting shutdown message from AI: %v"
+	ErrorHandlingCommand        = "Error handling command: %v"
+	ErrorCountingTokens         = "Error counting tokens: %v"
+	ErrorSendingMessage         = "Error sending message to AI: %v"
+	ErrorReadingUserInput       = "Error reading user input: %v"
 )
 
 // Defined List of characters
