@@ -59,7 +59,7 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 // Parameters:
 //
 //	text      string: The text containing elements to be colorized.
-//	delimiter rune: The single-character delimiter indicating the start of a colorizable element.
+//	delimiter string: The single-character delimiter indicating the start of a colorizable element.
 //	color     string: The ANSI color code to be applied to the elements starting with the delimiter.
 //
 // Returns:
@@ -75,7 +75,7 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 // Note: As with the Colorize function, SingleCharColorize may not function correctly in
 // Windows Command Prompt or other environments that do not support ANSI color codes.
 // It is best used in terminals that support these codes, such as most Linux/Unix terminals.
-func SingleCharColorize(text string, delimiter rune, color string) string {
+func SingleCharColorize(text string, delimiter string, color string) string {
 	var result strings.Builder
 	lines := strings.Split(text, "\n")
 	for _, line := range lines {
