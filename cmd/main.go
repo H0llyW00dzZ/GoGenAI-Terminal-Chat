@@ -3,7 +3,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal"
@@ -16,14 +15,17 @@ const (
 
 // why this so simple ? hahahaha
 func main() {
+	logger := terminal.NewDebugOrErrorLogger() // Assuming NewDebugOrErrorLogger is exported from the terminal package
 	apiKey := os.Getenv(api_Key)
 	if apiKey == "" {
-		log.Fatal(logFatal)
+		logger.Error(logFatal)
+		return // Exit the main function if there's no API key
 	}
 
 	session, err := terminal.NewSession(apiKey)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error("Failed to start session: %v", err)
+		return // Exit the main function if session creation fails
 	}
 
 	session.Start()

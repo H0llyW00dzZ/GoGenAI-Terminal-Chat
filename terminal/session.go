@@ -6,7 +6,6 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"strings"
@@ -103,7 +102,7 @@ func (s *Session) processInput() bool {
 	fmt.Print(YouNerd)
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
 	if err != nil {
-		log.Fatal(err)
+		logger.Error(ErrorReadingUserInput, err)
 	}
 
 	userInput = strings.TrimSpace(userInput)
@@ -123,14 +122,14 @@ func (s *Session) handleUserInput(input string) bool {
 
 	if isCommand, err := HandleCommand(input, s); isCommand {
 		if err != nil {
-			log.Fatal(err)
+			logger.Error(ErrorHandlingCommand, err)
 		}
 		return true
 	}
 
 	aiResponse, err := SendMessage(s.Ctx, s.Client, s.ChatHistory.GetHistory())
 	if err != nil {
-		log.Fatal(err)
+		logger.Error(ErrorSendingMessage, err)
 	}
 
 	s.ChatHistory.AddMessage(AiNerd, aiResponse)

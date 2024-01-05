@@ -10,3 +10,12 @@ package terminal
 // concerns. It is better to use environment variables or secure storage mechanisms
 // to handle sensitive information such as API keys.
 var apiKey string
+
+// logger is a package-level variable that can be used throughout the terminal package.
+var logger *DebugOrErrorLogger
+
+func init() {
+	// Initialize the logger when the package is imported.
+	logger = NewDebugOrErrorLogger()
+
+}
