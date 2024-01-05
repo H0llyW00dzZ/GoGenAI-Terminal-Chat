@@ -65,6 +65,11 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
   <img src="https://i.imgur.com/H9vDYjZ.png" alt="kubectl terminal" />
 </p>
 
+### Average Consumption (Tested on Production Docker):
+
+<p align="center">
+  <img src="https://i.imgur.com/3haszmI.png" alt="kubectl terminal" />
+</p>
 
 ## Example how it work
 

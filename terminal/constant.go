@@ -28,7 +28,9 @@ const (
 )
 
 // Defined constants for commands
-// Note: will add more in future based on the need
+//
+// Note: will add more in future based on the need,
+// for example, to change the model, or to change the delay, another thing is syncing ai with goroutine (known as gopher)
 const (
 	QuitCommand = ":quit"
 	PrefixChar  = ":"
@@ -37,4 +39,12 @@ const (
 // Defined List error message
 const (
 	ErrorGettingShutdownMessage = "Error getting shutdown message from AI:"
+)
+
+// Defined List of characters
+const (
+	SingleAsterisk = "*"
+	DoubleAsterisk = "**"
+	SingleBacktick = "`"
+	StringNewLine  = "\n"
 )
