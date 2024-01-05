@@ -28,7 +28,7 @@ func HandleCommand(input string, session *Session) (bool, error) {
 			aiShutdownMessage, err := SendMessage(session.Ctx, session.Client, ContextPromptShutdown)
 			if err != nil {
 				// If there's an error sending the message, log it and continue with shutdown
-				fmt.Println(ErrorGettingShutdownMessage, err)
+				logger.Error(ErrorGettingShutdownMessage, err)
 			} else {
 				// If AI provides a shutdown message, print it
 				fmt.Println(aiShutdownMessage)
