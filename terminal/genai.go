@@ -79,16 +79,19 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 				colorPairs := []string{
 					"**", ColorGreen,
 					"`", ColorYellow,
-					"*", ColorCyan,
 				}
 
 				keepDelimiters := map[string]bool{
 					"**": false, // Remove double asterisks from the output
 					"`":  true,  // Keep single backticks in the output
-					"*":  true,  // Keep single asterisks in the output
 				}
 
+				// Colorize content that is surrounded by double asterisks or backticks
 				colorized := Colorize(content, colorPairs, keepDelimiters)
+
+				// Handle single asterisks separately
+				// Pass Colorize content that is surrounded by single-character delimiters
+				colorized = SingleCharColorize(colorized, '*', ColorCyan)
 
 				// Print "AI:" prefix directly without typing effect
 				fmt.Print(AiNerd)
