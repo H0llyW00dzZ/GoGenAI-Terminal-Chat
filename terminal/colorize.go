@@ -77,7 +77,7 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 // It is best used in terminals that support these codes, such as most Linux/Unix terminals.
 func SingleCharColorize(text string, delimiter string, color string) string {
 	var result strings.Builder
-	lines := strings.Split(text, "\n")
+	lines := strings.Split(text, StringNewLine)
 	for _, line := range lines {
 		trimmedLine := strings.TrimSpace(line)
 		if strings.HasPrefix(trimmedLine, string(delimiter)) {
@@ -90,7 +90,7 @@ func SingleCharColorize(text string, delimiter string, color string) string {
 			// No coloring needed
 			result.WriteString(trimmedLine)
 		}
-		result.WriteString("\n")
+		result.WriteString(StringNewLine)
 	}
-	return strings.TrimRight(result.String(), "\n")
+	return strings.TrimRight(result.String(), StringNewLine)
 }

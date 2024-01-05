@@ -46,4 +46,5 @@ const (
 	SingleAsterisk = "*"
 	DoubleAsterisk = "**"
 	SingleBacktick = "`"
+	StringNewLine  = "\n"
 )
