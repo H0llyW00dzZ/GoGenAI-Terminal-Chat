@@ -119,7 +119,13 @@ Here are some additional resources that you may find helpful:
 
 ### Another Example
 
+<p align="center">
+  <img src="https://i.imgur.com/PxjZ0Dz.png" alt="gopher" />
+</p>
+
+```sh
 $ go run cmd/main.go
+```
 
 🤖 AI: Hello! How can I assist you today?
 
