@@ -18,7 +18,7 @@ Interesting to built it in terminal after touring journey through the Go program
 > [!NOTE]
 > This repository is specifically designed to adhere to idiomatic Go principles. 🤪
 
-***Fun Fact***: ***Did You Know?*** If your `Go` code is a jungle of `if` (e.g., multiple nested `if` statements reached `10+` which is bad) statements, it's less `Go` and more `Stop-and-ask-for-directions`. Flatten those conditionals and let your code run as smoothly as a greased `gopher` on a slip 'n slide! 🤪
+***Fun Fact***: ***Did You Know?*** If your `Go` code resembles a jungle of `if` statements (think 10+ nested layers – a big no-no!), it's less `Go` and more `Stop-and-ask-for-directions`. Flatten those conditionals and let your code run as smoothly as a greased `gopher` on a slip 'n slide! 🤪
 
 ## Current Features
 
