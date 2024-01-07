@@ -11,14 +11,6 @@ import (
 // Each command handler function must conform to this signature.
 type CommandHandler func(session *Session) (bool, error)
 
-// commandHandlers maps command strings to their corresponding handler functions.
-// This allows for a scalable and maintainable way to manage chat commands.
-var commandHandlers = map[string]CommandHandler{
-	QuitCommand: handleQuitCommand,
-	//TODO: Will add more commands here, example: :help, :about, :credits, :k8s, syncing AI With Go Routines (Known as Gopher hahaha) etc.
-	//Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line
-}
-
 // HandleCommand interprets the user input as a command and executes the associated action.
 // It uses a map of command strings to their corresponding handler functions to manage
 // different commands and their execution. If the command is recognized, the respective
