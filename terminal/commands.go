@@ -26,16 +26,31 @@ type CommandHandler func(session *Session) (bool, error)
 //	bool: A boolean indicating if the input was a command and was handled.
 //	error: An error that may occur while handling the command.
 func HandleCommand(input string, session *Session) (bool, error) {
-	if strings.HasPrefix(input, PrefixChar) {
-		command := strings.TrimSpace(input)
-		if handler, exists := commandHandlers[command]; exists {
-			// Call the handler function for the command
+	// Trim the input and check if it starts with the command prefix.
+	trimmedInput := strings.TrimSpace(input)
+	if !strings.HasPrefix(trimmedInput, PrefixChar) {
+		// If the input doesn't start with the command prefix, it's not a command.
+		return false, nil
+	}
+
+	// Split the input into command and potential arguments.
+	parts := strings.Fields(trimmedInput)
+	if len(parts) == 0 {
+		// This should not happen due to the previous check, but just in case.
+		return false, nil
+	}
+
+	// Retrieve the command and check if it exists in the commandHandlers map.
+	command := parts[0]
+	if handler, exists := commandHandlers[command]; exists {
+		if len(parts) == 1 {
+			// Call the handler function for the command if there are no extra arguments.
 			return handler(session)
-		} else {
-			fmt.Println(UnknownCommand)
-			return true, nil
 		}
 	}
+
+	// let ai handle the command where it's not a command hahaha
+	//fmt.Println(UnknownCommand)
 	return false, nil
 }
 
