@@ -75,8 +75,15 @@ func (s *Session) Start() {
 
 	// Main loop for processing user input
 	for {
-		if done := s.processInput(); done {
-			break
+		select {
+		case <-s.Ctx.Done():
+			// Context has been canceled, time to shut down
+			fmt.Println(ContextCancel)
+			return
+		default:
+			if done := s.processInput(); done {
+				return // Exit the loop if processInput signals to stop
+			}
 		}
 	}
 }
@@ -103,9 +110,21 @@ func (s *Session) processInput() bool {
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
+		return false // Continue the loop, hoping for a successful read next time
 	}
 
 	userInput = strings.TrimSpace(userInput)
+
+	// Check if the input is a command and handle it
+	if isCommand, err := HandleCommand(userInput, s); isCommand {
+		if err != nil {
+			logger.Error(ErrorHandlingCommand, err)
+		}
+		// If it's a command, whether it's handled successfully or not, we end the session
+		return true
+	}
+
+	// If the input is not a command, handle it as a user message
 	if done := s.handleUserInput(userInput); done {
 		return true
 	}
