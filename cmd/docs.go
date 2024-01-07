@@ -20,4 +20,6 @@
 // necessary functionality for handling the chat session and communication with
 // the AI model. Make sure to import the 'terminal' package and any of its
 // dependencies correctly.
+//
+// Copyright (c) 2024 H0llyW00dzZ
 package main
