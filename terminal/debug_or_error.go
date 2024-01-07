@@ -34,6 +34,8 @@ func NewDebugOrErrorLogger() *DebugOrErrorLogger {
 //
 //	format string: The format string for the debug message.
 //	v ...interface{}: The values to be formatted according to the format string.
+//
+// TODO: Add a DEBUG_MODE constant to the terminal package and use it here.
 func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 	// Check the environment variable to determine if the application is in debug mode
 	if os.Getenv(DEBUG_MODE) == "true" {
