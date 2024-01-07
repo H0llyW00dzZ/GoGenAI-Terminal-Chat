@@ -29,6 +29,17 @@ Interesting to built it in terminal after touring journey through the Go program
 - **Ease of Deployment**: Quickly deploy the chat application using Docker, minimizing setup time and complexity.
 - **Handle Command**: Seamlessly integrate special commands within the chat flow. The `:quit` command, for instance, allows users to end the session gracefully. Upon invoking this command, the application synchronizes with the AI to generate a fitting farewell message, ensuring a natural and courteous conclusion to the interaction. This feature not only elevates the user experience by providing a conversational closure but also ensures that the shutdown sequence is managed in sync with the AI's response, maintaining the immersive quality of the chat session.
 
+## Enhanced Scalability
+
+- **Modular Command Framework**: The system now employs a modular command framework that maps commands to dedicated handler functions. This design simplifies the addition of new commands and the modification of existing ones, reducing complexity and improving maintainability. It's a scalable approach that can easily grow with the application's functionality, accommodating an expanding set of features without cluttering the command processing logic.
+- **Streamlined Codebase**: By decoupling command logic from the main interaction flow, the codebase becomes more organized and easier to navigate. Developers can quickly identify where to add new command handlers and understand how commands are processed, leading to a more developer-friendly experience.
+- **Flexible Command Extension**: The new structure allows for the easy integration of additional commands as the system evolves. Whether it's implementing administrative controls, user preferences, or new AI features, the command framework is designed to handle growth efficiently and logically.
+
+> [!NOTE]
+> This specialized feature, better than code resembles a jungle of `if if if if` statements has been successfully integrated.
+
+By adopting this scalable command handling system, the chat application is well-positioned to evolve alongside advancements in AI and user expectations, ensuring a robust and future-proof user experience.
+
 > [!NOTE]  
 > Subject planning to continuously improve and add features, enhancing functionality without adding unnecessary complexity. Stay tuned for updates!
 
