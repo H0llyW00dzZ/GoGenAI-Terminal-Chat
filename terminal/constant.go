@@ -25,6 +25,7 @@ const (
 	ShutdownMessage       = "Shutting down gracefully..."
 	UnknownCommand        = "Unknown command."
 	ContextPromptShutdown = "The user has issued a quit command. Please provide a shutdown message as you are Assistant."
+	ContextCancel         = "Context canceled, shutting down..." // sending a messages to gopher officer
 )
 
 // Defined constants for commands
