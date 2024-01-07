@@ -84,7 +84,7 @@ func handleHelpCommand(session *Session) (bool, error) {
 }
 
 // handleK8sCommand would be a handler function for a hypothetical ":k8s" command.
-// This command is secret of H0llyW00dzZ (Original Author) would be used to interact with a Kubernetes cluster.
+// Note: This command is secret of H0llyW00dzZ (Original Author) would be used to interact with a Kubernetes cluster.
 func k8sCommand(session *Session) (bool, error) {
 	// currently unimplemented
 	return true, nil
