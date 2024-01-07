@@ -29,7 +29,7 @@ Interesting to built it in terminal after touring journey through the Go program
 - **Ease of Deployment**: Quickly deploy the chat application using Docker, minimizing setup time and complexity.
 - **Handle Command**: Seamlessly integrate special commands within the chat flow. The `:quit` command, for instance, allows users to end the session gracefully. Upon invoking this command, the application synchronizes with the AI to generate a fitting farewell message, ensuring a natural and courteous conclusion to the interaction. This feature not only elevates the user experience by providing a conversational closure but also ensures that the shutdown sequence is managed in sync with the AI's response, maintaining the immersive quality of the chat session.
 
-## Enhanced Scalability
+## ⚖️ Enhanced Scalability
 
 - **Modular Command Framework**: The system now employs a modular command framework that maps commands to dedicated handler functions. This design simplifies the addition of new commands and the modification of existing ones, reducing complexity and improving maintainability. It's a scalable approach that can easily grow with the application's functionality, accommodating an expanding set of features without cluttering the command processing logic.
 - **Streamlined Codebase**: By decoupling command logic from the main interaction flow, the codebase becomes more organized and easier to navigate. Developers can quickly identify where to add new command handlers and understand how commands are processed, leading to a more developer-friendly experience.
