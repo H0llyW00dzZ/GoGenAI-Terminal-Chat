@@ -10,26 +10,30 @@ import (
 	"net/http"
 )
 
-// GitHubRelease represents the structure of a release as returned by the GitHub API.
+// GitHubRelease represents the metadata of a software release from GitHub.
+// It includes information such as the tag name, release name, and a description body,
+// typically containing the changelog or release notes.
 type GitHubRelease struct {
-	TagName string `json:"tag_name"` // The name of the tag for this release
-	Name    string `json:"name"`     // The name of the release
-	Body    string `json:"body"`     // The body of the release, typically includes changelog
+	TagName string `json:"tag_name"` // The tag associated with the release, e.g., "v1.2.3"
+	Name    string `json:"name"`     // The official name of the release
+	Body    string `json:"body"`     // Detailed description or changelog for the release
 }
 
-// checkLatestVersion fetches the latest release from the GitHub repository and compares it
-// with the current version of the application.
+// CheckLatestVersion compares the current application version against the latest
+// version available on GitHub. It fetches the latest release information from the
+// repository specified by GitHubAPIURL and determines if an update is available.
 //
 // Parameters:
 //
-//	currentVersion string: The current version of the application.
+//	currentVersion string: The version string of the currently running application.
 //
 // Returns:
 //
-//	bool: Indicates whether the current version is the latest.
-//	string: The latest version tag name if a newer version is available.
-//	error: An error if the request to the GitHub API fails or parsing fails.
-func checkLatestVersion(currentVersion string) (bool, string, error) {
+//	isLatest bool: A boolean indicating if the current version is the latest available.
+//	latestVersion string: The tag name of the latest release, if newer than current; otherwise, an empty string.
+//	latestVersion string: The tag name of the latest release, if newer than current; otherwise, an empty string.
+//	err error: An error if the request fails or if there is an issue parsing the response.
+func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion string, err error) {
 	resp, err := http.Get(GitHubAPIURL)
 	if err != nil {
 		logger.Error(ErrorFailedToFetchReleaseInfo, err)
@@ -54,12 +58,23 @@ func checkLatestVersion(currentVersion string) (bool, string, error) {
 		return false, "", err
 	}
 
-	isLatest := currentVersion == checkVersion.TagName
+	isLatest = currentVersion == checkVersion.TagName
 	return isLatest, checkVersion.TagName, nil
 }
 
-// getFullReleaseInfo fetches the full release info for the given tag name from the GitHub API.
-func getFullReleaseInfo(tagName string) (*GitHubRelease, error) {
+// GetFullReleaseInfo retrieves detailed information about a specific release from GitHub.
+// It constructs the request URL based on the provided tag name and fetches the data
+// from the GitHub API.
+//
+// Parameters:
+//
+//	tagName: The name of the tag for which release information is requested.
+//
+// Returns:
+//
+//	release *GitHubRelease: A pointer to the GitHubRelease struct containing the release information.
+//	err error: An error if the request fails or if there is an issue parsing the response.
+func GetFullReleaseInfo(tagName string) (release *GitHubRelease, err error) {
 	releaseURL := fmt.Sprintf(GitHubReleaseFUll, tagName)
 
 	resp, err := http.Get(releaseURL)

@@ -27,6 +27,10 @@ var commandHandlers = map[string]CommandHandler{
 	//Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line
 }
 
+// checkVersion is a package-level variable that holds the latest release information
+// fetched from the GitHub API. It is used to cache the details of the latest release
+// to avoid multiple API calls when checking for updates within the application's
+// lifecycle. This variable should be updated only through the CheckLatestVersion function.
 var checkVersion GitHubRelease
 
 // This consider stable to avoid memory allocation overhead.
