@@ -27,7 +27,7 @@ var commandHandlers = map[string]CommandHandler{
 	//Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line
 }
 
-var release GitHubRelease
+var checkVersion GitHubRelease
 
 // This consider stable to avoid memory allocation overhead.
 var builder strings.Builder
