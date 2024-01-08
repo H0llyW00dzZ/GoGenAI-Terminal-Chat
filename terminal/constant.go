@@ -5,6 +5,14 @@ package terminal
 
 import "time"
 
+// Defined List of GitHub API
+const (
+	// GitHubAPIURL is the endpoint for the latest release information of the application.
+	GitHubAPIURL = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
+	// CurrentVersion represents the current version of the application.
+	CurrentVersion = "v0.2.1"
+)
+
 // Defined constants for the terminal package
 const (
 	SignalMessage = "\nReceived an interrupt, shutting down gracefully..."
@@ -65,12 +73,4 @@ const (
 // Defined List of Environment variables
 const (
 	DEBUG_MODE = "DEBUG_MODE"
-)
-
-// Defined List of GitHub API
-const (
-	// GitHubAPIURL is the endpoint for the latest release information of the application.
-	GitHubAPIURL = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
-	// CurrentVersion represents the current version of the application.
-	CurrentVersion = "v0.2.1"
 )
