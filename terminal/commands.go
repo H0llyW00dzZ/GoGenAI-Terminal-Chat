@@ -100,7 +100,7 @@ func k8sCommand(session *Session) (bool, error) {
 }
 
 func handleCheckVersionCommand(session *Session) (bool, error) {
-	isLatest, latestVersion, err := checkLatestVersion(CurrentVersion)
+	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
 	if err != nil {
 		return false, err
 	}
@@ -113,7 +113,7 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 		fmt.Println(StripChars)
 
 	} else {
-		releaseInfo, err := getFullReleaseInfo(latestVersion)
+		releaseInfo, err := GetFullReleaseInfo(latestVersion)
 		if err != nil {
 			return false, err
 		}
