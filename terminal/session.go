@@ -66,13 +66,16 @@ func (s *Session) Start() {
 	s.setupSignalHandling()
 
 	// Simulate AI starting the conversation by Gopher Nerd
-	// This A prompt Context as starting point for AI to start the conversation
+	// This is a prompt context as the starting point for AI to start the conversation
 	fmt.Print(AiNerd)
 	PrintTypingChat(ContextPrompt, TypingDelay)
 	fmt.Println()
 
 	// Add AI's initial message to chat history
 	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+
+	// Prompt the user for input after the initial AI message
+	fmt.Print(YouNerd)
 
 	// Main loop for processing user input
 	for {
@@ -85,6 +88,8 @@ func (s *Session) Start() {
 			if done := s.processInput(); done {
 				return // Exit the loop if processInput signals to stop
 			}
+			// Prompt for user input again after each message/command is processed
+			fmt.Print(YouNerd)
 		}
 	}
 }
@@ -107,7 +112,6 @@ func (s *Session) setupSignalHandling() {
 // processInput reads user input from the terminal. It returns true if the session
 // should end, either due to a command or an error.
 func (s *Session) processInput() bool {
-	fmt.Print(YouNerd)
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
@@ -117,17 +121,17 @@ func (s *Session) processInput() bool {
 	userInput = strings.TrimSpace(userInput)
 
 	// Check if the input is a command and handle it
-	if isCommand, err := HandleCommand(userInput, s); isCommand {
-		if err != nil {
-			logger.Error(ErrorHandlingCommand, err)
-		}
-		// If it's a command, whether it's handled successfully or not, we end the session
-		return true
+	if isCommand, _ := HandleCommand(userInput, s); isCommand {
+		return false // Return false to continue the session without sending to AI
 	}
 
 	// If the input is not a command, handle it as a user message
-	if done := s.handleUserInput(userInput); done {
-		return true
+	aiResponse, err := SendMessage(s.Ctx, s.Client, s.ChatHistory.GetHistory())
+	if err != nil {
+		logger.Error(ErrorSendingMessage, err)
+	} else {
+		fmt.Println(aiResponse)                      // Print AI response
+		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
 	}
 
 	return false

@@ -37,22 +37,24 @@ func HandleCommand(input string, session *Session) (bool, error) {
 	// Split the input into command and potential arguments.
 	parts := strings.Fields(trimmedInput)
 	if len(parts) == 0 {
-		// This should not happen due to the previous check, but just in case.
-		return false, nil
+		logger.Error(UnknownCommand) // Use logger to log the unknown command error
+		return true, nil
 	}
 
 	// Retrieve the command and check if it exists in the commandHandlers map.
 	command := parts[0]
 	if handler, exists := commandHandlers[command]; exists {
+		// Call the handler function for the command if no extra arguments are provided.
 		if len(parts) == 1 {
-			// Call the handler function for the command if there are no extra arguments.
 			return handler(session)
+		} else {
+			logger.Error(UnknownCommand) // Use logger to log the unknown command error
+			return true, nil
 		}
+	} else {
+		logger.Error(UnknownCommand) // Use logger to log the unknown command error
+		return true, nil
 	}
-
-	// let ai handle the command where it's not a command hahaha
-	//fmt.Println(UnknownCommand)
-	return false, nil
 }
 
 // handleQuitCommand gracefully terminates the chat session by sending a shutdown
@@ -96,4 +98,22 @@ func handleHelpCommand(session *Session) (bool, error) {
 func k8sCommand(session *Session) (bool, error) {
 	// currently unimplemented
 	return true, nil
+}
+
+func handleCheckVersionCommand(session *Session) (bool, error) {
+	fmt.Println() // Add a newline right after the check version command is entered
+	isLatest, latestVersion, err := checkLatestVersion(CurrentVersion)
+	if err != nil {
+		return false, err
+	}
+
+	if isLatest {
+		fmt.Println(YouAreusingLatest)
+		fmt.Println()
+	} else {
+		fmt.Printf(ANewVersionIsAvailable, latestVersion)
+		fmt.Println()
+	}
+
+	return false, nil
 }
