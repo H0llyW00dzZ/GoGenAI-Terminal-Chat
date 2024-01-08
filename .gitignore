@@ -19,3 +19,6 @@
 
 # Go workspace file
 go.work
+
+# pprof debugger
+pprof_debug.go
