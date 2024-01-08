@@ -69,7 +69,7 @@ func NewSession(apiKey string) (*Session, error) {
 func (s *Session) Start() {
 	// Note: This safe protected by Goroutine Officer (Known as Gopher Officer), to handle session and its connected to `processInput` function.
 	defer s.cleanup()
-
+	// This Automated Spawn another Goroutine Officer (Known as Gopher Officer) to handle signal
 	s.setupSignalHandling()
 
 	// Simulate AI starting the conversation by Gopher Nerd
