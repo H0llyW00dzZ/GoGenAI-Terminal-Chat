@@ -67,6 +67,7 @@ func NewSession(apiKey string) (*Session, error) {
 // It ensures resources are cleaned up properly on exit by deferring the cancellation of the session's context
 // and the closure of the AI client.
 func (s *Session) Start() {
+	// Note: This safe protected by Goroutine Officer (Known as Gopher Officer), to handle session and its connected to `processInput` function.
 	defer s.cleanup()
 
 	s.setupSignalHandling()
