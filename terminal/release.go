@@ -49,7 +49,6 @@ func checkLatestVersion(currentVersion string) (bool, string, error) {
 		return false, "", err
 	}
 
-	var release GitHubRelease
 	if err := json.Unmarshal(body, &release); err != nil {
 		logger.Error(ErrorFaileduUnmarshalTheReleaseData, err)
 		return false, "", err
@@ -76,7 +75,6 @@ func getFullReleaseInfo(tagName string) (*GitHubRelease, error) {
 		return nil, fmt.Errorf(errMsg)
 	}
 
-	var release GitHubRelease
 	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
 		logger.Error(ErrorFailedTagUnmarshalTheReleaseData, tagName, err)
 		return nil, err // Return the original error without additional formatting
