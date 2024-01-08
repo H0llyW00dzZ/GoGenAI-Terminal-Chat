@@ -48,7 +48,8 @@ func NewSession(apiKey string) (*Session, error) {
 
 	model := client.GenerativeModel(ModelAi)
 	aiChatSession := model.StartChat()
-
+	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
+	// So if you're wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
 	return &Session{
 		Client:        client,
 		ChatHistory:   ChatHistory{},
