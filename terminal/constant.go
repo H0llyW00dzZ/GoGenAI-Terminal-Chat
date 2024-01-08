@@ -39,7 +39,8 @@ const (
 	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
 	ReleaseName            = "- %s\n\n"
 	FullChangeLog          = "**%s**\n"
-	YouAreusingLatest      = "You are using the latest version of GoGenAI Terminal Chat."
+	YouAreusingLatest      = "Tell User: You are using the latest version of GoGenAI Terminal Chat."
+	ReleaseNotesPrompt     = "Tell User About GoGenAI Terminal Chat the Release Notes:"
 )
 
 // Defined constants for commands
@@ -48,7 +49,7 @@ const (
 // for example, to change the model, or to change the delay, another thing is syncing ai with goroutine (known as gopher)
 const (
 	QuitCommand    = ":quit"
-	VersionCommand = ":checkVersion"
+	VersionCommand = ":checkversion"
 	PrefixChar     = ":"
 )
 

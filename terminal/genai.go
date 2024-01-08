@@ -67,7 +67,8 @@ func SendMessage(ctx context.Context, chatSession *genai.ChatSession, chatContex
 // This function is unexported and is intended for internal use within the package.
 func printResponse(resp *genai.GenerateContentResponse) string {
 	aiResponse := ""
-	for _, cand := range resp.Candidates {
+	if len(resp.Candidates) > 0 {
+		cand := resp.Candidates[0] // Take the first candidate response
 		if cand.Content != nil {
 			for _, part := range cand.Content.Parts {
 				content := fmt.Sprint(part)
@@ -93,7 +94,6 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 				// Print "AI:" prefix directly without typing effect
 				fmt.Print(AiNerd)
 
-				// Assuming 'part' can be printed directly and is of type string or has a String() method
 				// Use the typing banner effect only for the part content
 				// Colorized string is printed character by character with a delay between each character
 				PrintTypingChat(colorized, TypingDelay)
@@ -102,6 +102,5 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 			}
 		}
 	}
-	fmt.Println(StripChars)
 	return aiResponse
 }

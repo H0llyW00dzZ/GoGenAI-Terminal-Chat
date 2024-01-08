@@ -47,6 +47,7 @@ func HandleCommand(input string, session *Session) (bool, error) {
 	if handler, exists := commandHandlers[command]; exists {
 		// Call the handler function for the command if no extra arguments are provided.
 		if len(parts) == 1 {
+			fmt.Println() // Add a newline before the command is executed
 			return handler(session)
 		} else {
 			logger.Error(UnknownCommand) // Use logger to log the unknown command error
@@ -78,6 +79,8 @@ func handleQuitCommand(session *Session) (bool, error) {
 		logger.Error(ErrorGettingShutdownMessage, err)
 	}
 	// Print only the shutdown message
+	fmt.Println() // A better newline instead of hardcoding "\n"
+	fmt.Println(StripChars)
 	fmt.Println(ShutdownMessage)
 	session.Cancel() // Cancel the context to cleanup resources
 	return true, nil // Signal to the main loop that it's time to exit
@@ -97,42 +100,31 @@ func k8sCommand(session *Session) (bool, error) {
 }
 
 func handleCheckVersionCommand(session *Session) (bool, error) {
-	fmt.Println() // Add a newline right after the check version command is entered
 	isLatest, latestVersion, err := checkLatestVersion(CurrentVersion)
 	if err != nil {
 		return false, err
 	}
 
 	if isLatest {
-		fmt.Println(YouAreusingLatest)
-		fmt.Println()
+		// Prepare the prompt for the AI to confirm the user is on the latest version
+		// Send the prompt to the AI and get the response
+		SendMessage(session.Ctx, session.AiChatSession, YouAreusingLatest)
+		fmt.Println() // A better newline instead of hardcoding "\n"
+		fmt.Println(StripChars)
+
 	} else {
 		releaseInfo, err := getFullReleaseInfo(latestVersion)
 		if err != nil {
 			return false, err
 		}
 
-		// Define the color pairs and delimiters to keep or remove
-		colorPairs := []string{
-			DoubleAsterisk, ColorGreen, // Apply green color and remove ** delimiter
-		}
-		keepDelimiters := map[string]bool{
-			DoubleAsterisk: false, // Remove ** delimiter
-		}
+		// Prepare the prompt for the AI to explain the release notes
+		aiPrompt := ReleaseNotesPrompt + "\n\n" + releaseInfo.Body
 
-		// Colorize and format the release information
-		newVersionMessage := fmt.Sprintf(ANewVersionIsAvailable, ColorGreen+releaseInfo.TagName+ColorReset)
-		releaseNameMessage := fmt.Sprintf(ReleaseName, ColorGreen+releaseInfo.Name+ColorReset)
-
-		// Colorize content that is surrounded by double asterisks or backticks
-		colorizedNewVersionMessage := Colorize(newVersionMessage, colorPairs, keepDelimiters)
-		colorizedReleaseNameMessage := Colorize(releaseNameMessage, colorPairs, keepDelimiters)
-		colorizedChangelogMessage := Colorize(ColorYellow+releaseInfo.Body+ColorReset+StringNewLine, colorPairs, keepDelimiters)
-
-		// Print the colorized and formatted messages, each followed by a new line
-		fmt.Println(colorizedNewVersionMessage)
-		fmt.Println(colorizedReleaseNameMessage)
-		fmt.Println(colorizedChangelogMessage)
+		// Send the prompt to the AI and get the response
+		SendMessage(session.Ctx, session.AiChatSession, aiPrompt)
+		fmt.Println() // A better newline instead of hardcoding "\n"
+		fmt.Println(StripChars)
 	}
 
 	return false, nil
