@@ -99,6 +99,29 @@ func k8sCommand(session *Session) (bool, error) {
 	return true, nil
 }
 
+// handleCheckVersionCommand checks if the user is running the latest version of the application.
+// If the user is not on the latest version, it fetches and displays the release information for
+// the newer version. This function is intended to be used as a command handler within a chat session
+// that allows users to check for software updates.
+//
+// The function performs the following actions:
+//   - Calls CheckLatestVersion with the current application version to determine if an update is available.
+//   - If the current version is the latest, it informs the user accordingly.
+//   - If there is a newer version, it fetches the full release information and prepares a prompt for the AI
+//     to explain the release notes to the user.
+//
+// Parameters:
+//
+//	session *Session: A pointer to the current Session object, which contains the chat session state and context.
+//
+// Returns:
+//
+//	bool: A boolean flag indicating whether the command has been fully handled (always false as the session should continue after checking the version).
+//	error: An error that may occur during the version check or while fetching the release information.
+//
+// Note: The function sends messages to the AI using SendMessage and assumes that the session and its context
+// are properly initialized and active. It does not return any AI-generated messages directly to the user but
+// assumes that the AI response is handled elsewhere in the chat session flow.
 func handleCheckVersionCommand(session *Session) (bool, error) {
 	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
 	if err != nil {
