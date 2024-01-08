@@ -24,12 +24,15 @@ type GitHubRelease struct {
 // repository specified by GitHubAPIURL and determines if an update is available.
 //
 // Parameters:
-// - currentVersion: The version string of the currently running application.
+//
+//	currentVersion string: The version string of the currently running application.
 //
 // Returns:
-// - isLatest: A boolean indicating if the current version is the latest available.
-// - latestVersion: The tag name of the latest release, if newer than current; otherwise, an empty string.
-// - err: An error if the request fails or if there is an issue parsing the response.
+//
+//	isLatest bool: A boolean indicating if the current version is the latest available.
+//	latestVersion string: The tag name of the latest release, if newer than current; otherwise, an empty string.
+//	latestVersion string: The tag name of the latest release, if newer than current; otherwise, an empty string.
+//	err error: An error if the request fails or if there is an issue parsing the response.
 func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion string, err error) {
 	resp, err := http.Get(GitHubAPIURL)
 	if err != nil {
@@ -64,11 +67,13 @@ func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion str
 // from the GitHub API.
 //
 // Parameters:
-// - tagName: The name of the tag for which release information is requested.
+//
+//	tagName: The name of the tag for which release information is requested.
 //
 // Returns:
-// - release: A pointer to the GitHubRelease struct containing the release information.
-// - err: An error if the request fails or if there is an issue parsing the response.
+//
+//	release *GitHubRelease: A pointer to the GitHubRelease struct containing the release information.
+//	err error: An error if the request fails or if there is an issue parsing the response.
 func GetFullReleaseInfo(tagName string) (release *GitHubRelease, err error) {
 	releaseURL := fmt.Sprintf(GitHubReleaseFUll, tagName)
 
