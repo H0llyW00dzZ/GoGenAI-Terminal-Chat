@@ -20,8 +20,7 @@ var logger *DebugOrErrorLogger
 // commandHandlers maps command strings to their corresponding handler functions.
 // This allows for a scalable and maintainable way to manage chat commands.
 var commandHandlers = map[string]CommandHandler{
-	QuitCommand: handleQuitCommand,
-	//Note: This Version Command still in development, since it's not sync with AI yet for Prompt such as greeting messages, but it's already working when checking version, so it's not ready for releasing yet.
+	QuitCommand:    handleQuitCommand,
 	VersionCommand: handleCheckVersionCommand,
 	//TODO: Will add more commands here, example: :help, :about, :credits, :k8s, syncing AI With Go Routines (Known as Gopher hahaha) etc.
 	//Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line
