@@ -13,6 +13,8 @@ import (
 // GitHubRelease represents the structure of a release as returned by the GitHub API.
 type GitHubRelease struct {
 	TagName string `json:"tag_name"` // The name of the tag for this release
+	Name    string `json:"name"`     // The name of the release
+	Body    string `json:"body"`     // The body of the release, typically includes changelog
 }
 
 // checkLatestVersion fetches the latest release from the GitHub repository and compares it
@@ -55,4 +57,30 @@ func checkLatestVersion(currentVersion string) (bool, string, error) {
 
 	isLatest := currentVersion == release.TagName
 	return isLatest, release.TagName, nil
+}
+
+// getFullReleaseInfo fetches the full release info for the given tag name from the GitHub API.
+func getFullReleaseInfo(tagName string) (*GitHubRelease, error) {
+	releaseURL := fmt.Sprintf(GitHubReleaseFUll, tagName)
+
+	resp, err := http.Get(releaseURL)
+	if err != nil {
+		logger.Error(ErrorFailedTagToFetchReleaseInfo, tagName, err)
+		return nil, err // Return the original error without additional formatting
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		errMsg := fmt.Sprintf(ErrorReceivedNon200StatusCode, resp.StatusCode)
+		logger.Error(errMsg)
+		return nil, fmt.Errorf(errMsg)
+	}
+
+	var release GitHubRelease
+	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
+		logger.Error(ErrorFailedTagUnmarshalTheReleaseData, tagName, err)
+		return nil, err // Return the original error without additional formatting
+	}
+
+	return &release, nil
 }
