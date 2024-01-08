@@ -87,6 +87,15 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 > [!NOTE]
 > The `Average Consumption` metrics are calculated without including the use of a storage system like a database and are based on the assumption that each function is relatively simple, with an average cyclomatic complexity of 5 as the maximum. However, consumption may increase with more complex functions (e.g., those with a cyclomatic complexity of 10 or more, which are not recommended).
 
+### Better LLM's:
+<p align="center">
+  <img src="https://i.imgur.com/ge884rb.png" alt="terminal" />
+</p>
+
+<p align="center">
+  <img src="https://i.imgur.com/k8JTX64.png" alt="terminal" />
+</p>
+
 ## Example how it work
 
 🤓 You: hello are you ?
