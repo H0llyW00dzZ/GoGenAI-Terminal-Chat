@@ -71,10 +71,8 @@ func HandleCommand(input string, session *Session) (bool, error) {
 //	bool: Always returns true to indicate the session should end.
 //	error: Returns nil if no error occurs; otherwise, returns an error object.
 func handleQuitCommand(session *Session) (bool, error) {
-	fmt.Println() // Add a newline right after the quit command is entered
-
 	// Send a message to the AI asking for a shutdown message
-	aiShutdownMessage, err := SendMessage(session.Ctx, session.Client, ContextPromptShutdown)
+	aiShutdownMessage, err := SendMessage(session.Ctx, session.AiChatSession, ContextPromptShutdown)
 	if err != nil {
 		// If there's an error sending the message, log it and continue with shutdown
 		logger.Error(ErrorGettingShutdownMessage, err)
