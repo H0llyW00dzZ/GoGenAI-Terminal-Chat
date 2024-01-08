@@ -48,7 +48,7 @@ const (
 // for example, to change the model, or to change the delay, another thing is syncing ai with goroutine (known as gopher)
 const (
 	QuitCommand    = ":quit"
-	VersionCommand = ":version"
+	VersionCommand = ":checkVersion"
 	PrefixChar     = ":"
 )
 
