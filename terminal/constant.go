@@ -8,7 +8,8 @@ import "time"
 // Defined List of GitHub API
 const (
 	// GitHubAPIURL is the endpoint for the latest release information of the application.
-	GitHubAPIURL = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
+	GitHubAPIURL      = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
+	GitHubReleaseFUll = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/tags/%s"
 	// CurrentVersion represents the current version of the application.
 	CurrentVersion = "v0.2.1"
 )
@@ -35,7 +36,9 @@ const (
 	UnknownCommand         = "Unknown command."
 	ContextPromptShutdown  = "The user has issued a quit command. Please provide a shutdown message as you are Assistant."
 	ContextCancel          = "Context canceled, shutting down..." // sending a messages to gopher officer
-	ANewVersionIsAvailable = "A newer version is available: %s\n"
+	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
+	ReleaseName            = "- %s\n\n"
+	FullChangeLog          = "**%s**\n"
 	YouAreusingLatest      = "You are using the latest version of GoGenAI Terminal Chat."
 )
 
@@ -51,15 +54,17 @@ const (
 
 // Defined List error message
 const (
-	ErrorGettingShutdownMessage         = "Error getting shutdown message from AI: %v"
-	ErrorHandlingCommand                = "Error handling command: %v"
-	ErrorCountingTokens                 = "Error counting tokens: %v"
-	ErrorSendingMessage                 = "Error sending message to AI: %v"
-	ErrorReadingUserInput               = "Error reading user input: %v"
-	ErrorFailedToFetchReleaseInfo       = "Failed to fetch the latest release info: %v"
-	ErrorReceivedNon200StatusCode       = "Received non-200 status code: %v"
-	ErrorFailedToReadTheResponseBody    = "Failed to read the response body: %v"
-	ErrorFaileduUnmarshalTheReleaseData = "Failed to unmarshal the release data: %v"
+	ErrorGettingShutdownMessage           = "Error getting shutdown message from AI: %v"
+	ErrorHandlingCommand                  = "Error handling command: %v"
+	ErrorCountingTokens                   = "Error counting tokens: %v"
+	ErrorSendingMessage                   = "Error sending message to AI: %v"
+	ErrorReadingUserInput                 = "Error reading user input: %v"
+	ErrorFailedToFetchReleaseInfo         = "Failed to fetch the latest release info: %v"
+	ErrorReceivedNon200StatusCode         = "Received non-200 status code: %v"
+	ErrorFailedToReadTheResponseBody      = "Failed to read the response body: %v"
+	ErrorFaileduUnmarshalTheReleaseData   = "Failed to unmarshal the release data: %v"
+	ErrorFailedTagToFetchReleaseInfo      = "Failed to fetch release info for tag '%s': %v"
+	ErrorFailedTagUnmarshalTheReleaseData = "Failed to unmarshal release data for tag '%s': %v"
 )
 
 // Defined List of characters

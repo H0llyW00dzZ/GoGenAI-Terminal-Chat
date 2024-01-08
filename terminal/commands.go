@@ -111,8 +111,32 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 		fmt.Println(YouAreusingLatest)
 		fmt.Println()
 	} else {
-		fmt.Printf(ANewVersionIsAvailable, latestVersion)
-		fmt.Println()
+		releaseInfo, err := getFullReleaseInfo(latestVersion)
+		if err != nil {
+			return false, err
+		}
+
+		// Define the color pairs and delimiters to keep or remove
+		colorPairs := []string{
+			DoubleAsterisk, ColorGreen, // Apply green color and remove ** delimiter
+		}
+		keepDelimiters := map[string]bool{
+			DoubleAsterisk: false, // Remove ** delimiter
+		}
+
+		// Colorize and format the release information
+		newVersionMessage := fmt.Sprintf(ANewVersionIsAvailable, ColorGreen+releaseInfo.TagName+ColorReset)
+		releaseNameMessage := fmt.Sprintf(ReleaseName, ColorGreen+releaseInfo.Name+ColorReset)
+
+		// Colorize content that is surrounded by double asterisks or backticks
+		colorizedNewVersionMessage := Colorize(newVersionMessage, colorPairs, keepDelimiters)
+		colorizedReleaseNameMessage := Colorize(releaseNameMessage, colorPairs, keepDelimiters)
+		colorizedChangelogMessage := Colorize(ColorYellow+releaseInfo.Body+ColorReset+StringNewLine, colorPairs, keepDelimiters)
+
+		// Print the colorized and formatted messages, each followed by a new line
+		fmt.Println(colorizedNewVersionMessage)
+		fmt.Println(colorizedReleaseNameMessage)
+		fmt.Println(colorizedChangelogMessage)
 	}
 
 	return false, nil
