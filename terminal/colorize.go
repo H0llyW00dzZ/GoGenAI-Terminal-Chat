@@ -77,6 +77,7 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 // Windows Command Prompt or other environments that do not support ANSI color codes.
 // It is best used in terminals that support these codes, such as most Linux/Unix terminals.
 func SingleCharColorize(text string, delimiter string, color string) string {
+	//Note: This variable result are not possible to register it in the init.go, because it's used to be avoid the duplicate, so better keep like this.
 	var result strings.Builder
 	lines := strings.Split(text, StringNewLine)
 	for _, line := range lines {

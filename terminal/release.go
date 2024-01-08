@@ -49,13 +49,13 @@ func checkLatestVersion(currentVersion string) (bool, string, error) {
 		return false, "", err
 	}
 
-	if err := json.Unmarshal(body, &release); err != nil {
+	if err := json.Unmarshal(body, &checkVersion); err != nil {
 		logger.Error(ErrorFaileduUnmarshalTheReleaseData, err)
 		return false, "", err
 	}
 
-	isLatest := currentVersion == release.TagName
-	return isLatest, release.TagName, nil
+	isLatest := currentVersion == checkVersion.TagName
+	return isLatest, checkVersion.TagName, nil
 }
 
 // getFullReleaseInfo fetches the full release info for the given tag name from the GitHub API.
@@ -75,10 +75,10 @@ func getFullReleaseInfo(tagName string) (*GitHubRelease, error) {
 		return nil, fmt.Errorf(errMsg)
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&checkVersion); err != nil {
 		logger.Error(ErrorFailedTagUnmarshalTheReleaseData, tagName, err)
 		return nil, err // Return the original error without additional formatting
 	}
 
-	return &release, nil
+	return &checkVersion, nil
 }
