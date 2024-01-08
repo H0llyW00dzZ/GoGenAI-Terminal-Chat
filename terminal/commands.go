@@ -27,6 +27,7 @@ type CommandHandler func(session *Session) (bool, error)
 //	bool: A boolean indicating if the input was a command and was handled.
 //	error: An error that may occur while handling the command.
 func HandleCommand(input string, session *Session) (bool, error) {
+	fmt.Println() // Add a newline right after the HandleCommand is entered
 	// Trim the input and check if it starts with the command prefix.
 	trimmedInput := strings.TrimSpace(input)
 	if !strings.HasPrefix(trimmedInput, PrefixChar) {

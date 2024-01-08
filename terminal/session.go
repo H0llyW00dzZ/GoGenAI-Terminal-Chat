@@ -126,11 +126,11 @@ func (s *Session) processInput() bool {
 	}
 
 	// If the input is not a command, handle it as a user message
-	aiResponse, err := SendMessage(s.Ctx, s.Client, s.ChatHistory.GetHistory())
+	aiResponse, err := SendMessage(s.Ctx, s.Client, userInput) // Send only the latest input
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
 	} else {
-		fmt.Println(aiResponse)                      // Print AI response
+		//fmt.Println(aiResponse)                      // Print AI response
 		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
 	}
 
