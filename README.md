@@ -96,6 +96,14 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
   <img src="https://i.imgur.com/k8JTX64.png" alt="terminal" />
 </p>
 
+### Kubernetes in the wild's:
+<p align="center">
+  <img src="https://i.imgur.com/4iFId5w.png" alt="k8s" />
+  <img src="https://i.imgur.com/qVEpOZy.png" alt="k8s" />
+  <img src="https://i.imgur.com/Ox7CqMV.png" alt="k8s" />
+  <img src="https://i.imgur.com/BH81O61.png" alt="k8s" />
+</p>
+
 ## Example how it work
 
 🤓 You: hello are you ?
