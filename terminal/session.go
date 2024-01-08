@@ -79,22 +79,11 @@ func (s *Session) Start() {
 	// Add AI's initial message to chat history
 	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 
-	// Prompt the user for input after the initial AI message
-	fmt.Print(YouNerd)
-
 	// Main loop for processing user input
 	for {
-		select {
-		case <-s.Ctx.Done():
-			// Context has been canceled, time to shut down
-			fmt.Println(ContextCancel)
-			return
-		default:
-			if done := s.processInput(); done {
-				return // Exit the loop if processInput signals to stop
-			}
-			// Prompt for user input again after each message/command is processed
-			fmt.Print(YouNerd)
+		fmt.Print(YouNerd)
+		if done := s.processInput(); done {
+			break // Exit the loop if processInput signals to stop
 		}
 	}
 }
@@ -126,8 +115,11 @@ func (s *Session) processInput() bool {
 	userInput = strings.TrimSpace(userInput)
 
 	// Check if the input is a command and handle it
-	if isCommand, _ := HandleCommand(userInput, s); isCommand {
-		return false // Return false to continue the session without sending to AI
+	if isCommand, err := HandleCommand(userInput, s); isCommand {
+		if err != nil {
+			logger.Error(ErrorHandlingCommand, err)
+		}
+		return true // Return true to indicate that the session should end
 	}
 
 	// If the input is not a command, handle it as a user message
