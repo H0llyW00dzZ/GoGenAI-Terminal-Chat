@@ -111,7 +111,14 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 		fmt.Println(YouAreusingLatest)
 		fmt.Println()
 	} else {
-		fmt.Printf(ANewVersionIsAvailable, latestVersion)
+		releaseInfo, err := getFullReleaseInfo(latestVersion)
+		if err != nil {
+			return false, err
+		}
+
+		fmt.Printf(ANewVersionIsAvailable, releaseInfo.TagName)
+		fmt.Printf(ReleaseName, releaseInfo.Name)
+		fmt.Printf(FullChangeLog, releaseInfo.Body)
 		fmt.Println()
 	}
 
