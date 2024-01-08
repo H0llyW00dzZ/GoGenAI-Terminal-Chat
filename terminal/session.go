@@ -76,7 +76,8 @@ func (s *Session) Start() {
 	// This is a prompt context as the starting point for AI to start the conversation
 	fmt.Print(AiNerd)
 	PrintTypingChat(ContextPrompt, TypingDelay)
-	fmt.Println()
+	fmt.Println() // A better newline instead of hardcoding "\n"
+	fmt.Println() // A better newline instead of hardcoding "\n"
 
 	// Add AI's initial message to chat history
 	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
@@ -87,6 +88,8 @@ func (s *Session) Start() {
 		if done := s.processInput(); done {
 			break // Exit the loop if processInput signals to stop
 		}
+		fmt.Println() // A better newline instead of hardcoding "\n"
+		fmt.Println() // A better newline instead of hardcoding "\n"
 	}
 }
 
@@ -124,16 +127,8 @@ func (s *Session) processInput() bool {
 		return true // Return true to indicate that the session should end
 	}
 
-	// If the input is not a command, handle it as a user message
-	aiResponse, err := SendMessage(s.Ctx, s.AiChatSession, userInput) // Send only the latest input
-	if err != nil {
-		logger.Error(ErrorSendingMessage, err)
-	} else {
-		//fmt.Println(aiResponse)                      // Print AI response
-		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
-	}
-
-	return false
+	// If the input is not a command, send it to the AI as part of the chat history
+	return s.handleUserInput(userInput)
 }
 
 // handleUserInput processes the user's input. If the input is a command, it is handled
@@ -148,7 +143,6 @@ func (s *Session) handleUserInput(input string) bool {
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
 	} else {
-		fmt.Println(aiResponse)                      // Print AI response
 		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
 	}
 
