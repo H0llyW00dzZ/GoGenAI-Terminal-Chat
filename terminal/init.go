@@ -3,6 +3,8 @@
 
 package terminal
 
+import "strings"
+
 // apiKey holds the API key used for authenticating requests to the generative
 // AI service. It should be initialized with a valid API key before making any
 // requests that require authentication.
@@ -26,6 +28,9 @@ var commandHandlers = map[string]CommandHandler{
 }
 
 var release GitHubRelease
+
+// This consider stable to avoid memory allocation overhead.
+var builder strings.Builder
 
 func init() {
 	// Initialize the logger when the package is imported.

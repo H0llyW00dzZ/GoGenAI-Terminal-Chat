@@ -46,8 +46,6 @@ func (h *ChatHistory) AddMessage(user, text string) {
 //
 //	string: A newline-separated string of all messages in the chat history.
 func (h *ChatHistory) GetHistory() string {
-	var builder strings.Builder
-
 	// Define the prefixes to be removed
 	prefixesToRemove := []string{YouNerd, AiNerd}
 
