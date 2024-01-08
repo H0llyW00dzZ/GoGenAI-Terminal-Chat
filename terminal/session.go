@@ -19,10 +19,11 @@ import (
 // Session encapsulates the state and functionality for a chat session with a generative AI model.
 // It holds the AI client, chat history, and context for managing the session lifecycle.
 type Session struct {
-	Client      *genai.Client      // Client is the generative AI client used to communicate with the AI model.
-	ChatHistory ChatHistory        // ChatHistory stores the history of the chat session.
-	Ctx         context.Context    // Ctx is the context governing the session, used for cancellation.
-	Cancel      context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
+	Client        *genai.Client      // Client is the generative AI client used to communicate with the AI model.
+	ChatHistory   ChatHistory        // ChatHistory stores the history of the chat session.
+	Ctx           context.Context    // Ctx is the context governing the session, used for cancellation.
+	Cancel        context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
+	AiChatSession *genai.ChatSession // AiChatSession is the chat session with the generative AI model.
 }
 
 // NewSession creates a new chat session with the provided API key for authentication.
@@ -45,11 +46,15 @@ func NewSession(apiKey string) (*Session, error) {
 		return nil, err
 	}
 
+	model := client.GenerativeModel(ModelAi)
+	aiChatSession := model.StartChat()
+
 	return &Session{
-		Client:      client,
-		ChatHistory: ChatHistory{},
-		Ctx:         ctx,
-		Cancel:      cancel,
+		Client:        client,
+		ChatHistory:   ChatHistory{},
+		Ctx:           ctx,
+		Cancel:        cancel,
+		AiChatSession: aiChatSession,
 	}, nil
 }
 
@@ -126,11 +131,11 @@ func (s *Session) processInput() bool {
 	}
 
 	// If the input is not a command, handle it as a user message
-	aiResponse, err := SendMessage(s.Ctx, s.Client, s.ChatHistory.GetHistory())
+	aiResponse, err := SendMessage(s.Ctx, s.AiChatSession, userInput) // Send only the latest input
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
 	} else {
-		fmt.Println(aiResponse)                      // Print AI response
+		//fmt.Println(aiResponse)                      // Print AI response
 		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
 	}
 
@@ -144,19 +149,15 @@ func (s *Session) handleUserInput(input string) bool {
 	s.ChatHistory.AddMessage(YouNerd, input)
 	fmt.Println()
 
-	if isCommand, err := HandleCommand(input, s); isCommand {
-		if err != nil {
-			logger.Error(ErrorHandlingCommand, err)
-		}
-		return true
-	}
-
-	aiResponse, err := SendMessage(s.Ctx, s.Client, s.ChatHistory.GetHistory())
+	// Pass the existing AI chat session to SendMessage
+	aiResponse, err := SendMessage(s.Ctx, s.AiChatSession, s.ChatHistory.GetHistory())
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
+	} else {
+		fmt.Println(aiResponse)                      // Print AI response
+		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
 	}
 
-	s.ChatHistory.AddMessage(AiNerd, aiResponse)
 	return false
 }
 
