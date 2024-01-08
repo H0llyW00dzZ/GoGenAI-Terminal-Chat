@@ -36,7 +36,9 @@ const (
 	UnknownCommand         = "Unknown command."
 	ContextPromptShutdown  = "The user has issued a quit command. Please provide a shutdown message as you are Assistant."
 	ContextCancel          = "Context canceled, shutting down..." // sending a messages to gopher officer
-	ANewVersionIsAvailable = "A newer version is available: %s\n"
+	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
+	ReleaseName            = "- %s\n\n"
+	FullChangeLog          = "**%s**\n"
 	YouAreusingLatest      = "You are using the latest version of GoGenAI Terminal Chat."
 )
 
