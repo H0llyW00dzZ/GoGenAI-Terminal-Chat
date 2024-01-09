@@ -56,18 +56,22 @@ const (
 
 // Defined List error message
 const (
-	ErrorGettingShutdownMessage           = "Error getting shutdown message from AI: %v"
-	ErrorHandlingCommand                  = "Error handling command: %v"
-	ErrorCountingTokens                   = "Error counting tokens: %v"
-	ErrorSendingMessage                   = "Error sending message to AI: %v"
-	ErrorReadingUserInput                 = "Error reading user input: %v"
-	ErrorFailedToFetchReleaseInfo         = "Failed to fetch the latest release info: %v"
-	ErrorReceivedNon200StatusCode         = "Received non-200 status code: %v"
-	ErrorFailedToReadTheResponseBody      = "Failed to read the response body: %v"
-	ErrorFaileduUnmarshalTheReleaseData   = "Failed to unmarshal the release data: %v"
-	ErrorFailedTagToFetchReleaseInfo      = "Failed to fetch release info for tag '%s': %v"
-	ErrorFailedTagUnmarshalTheReleaseData = "Failed to unmarshal release data for tag '%s': %v"
-	ErrorFailedTosendmessagesToAI         = "Failed to send messages to AI: %v"
+	ErrorGettingShutdownMessage            = "Error getting shutdown message from AI: %v"
+	ErrorHandlingCommand                   = "Error handling command: %v"
+	ErrorCountingTokens                    = "Error counting tokens: %v"
+	ErrorSendingMessage                    = "Error sending message to AI: %v"
+	ErrorReadingUserInput                  = "Error reading user input: %v"
+	ErrorFailedToFetchReleaseInfo          = "Failed to fetch the latest release info: %v"
+	ErrorReceivedNon200StatusCode          = "Received non-200 status code: %v"
+	ErrorFailedToReadTheResponseBody       = "Failed to read the response body: %v"
+	ErrorFaileduUnmarshalTheReleaseData    = "Failed to unmarshal the release data: %v"
+	ErrorFailedTagToFetchReleaseInfo       = "Failed to fetch release info for tag '%s': %v"
+	ErrorFailedTagUnmarshalTheReleaseData  = "Failed to unmarshal release data for tag '%s': %v"
+	ErrorFailedTosendmessagesToAI          = "Failed to send messages to AI: %v"
+	ErrorFailedToCreateNewAiClient         = "Failed to create new AI client: %v"
+	ErrorFailedToStartAIChatSessionAttempt = "Failed to start AI chat session, attempt %d/%d"
+	ErrorFailedtoStartAiChatSessionAfter   = "Failed to start AI chat session after %d attempts"
+	ErrorChatSessionisnill                 = "chat session is nil"
 )
 
 // Defined List of characters
