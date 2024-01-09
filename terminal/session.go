@@ -25,8 +25,10 @@ type Session struct {
 	Ctx         context.Context    // Ctx is the context governing the session, used for cancellation.
 	Cancel      context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
 	Ended       bool               // Ended indicates whether the session has ended.
-	mutex       sync.Mutex         // Mutex is a mutex to ensure thread-safe access to the session's state.
-	lastInput   string             // Stores the last user input for reference
+	// mu protects the concurrent access to session's state, ensuring thread safety.
+	// It should be locked when accessing or modifying the session's state.
+	mu        sync.Mutex
+	lastInput string // Stores the last user input for reference
 
 }
 
@@ -229,8 +231,8 @@ func (s *Session) HasEnded() (ended bool) {
 // Upon successful completion, the Session's Client field is updated to reference the new
 // genai.Client instance. In case of failure, an error is returned and the Client field is set to nil.
 func (s *Session) RenewSession(apiKey string) error {
-	s.mutex.Lock()         // Lock the mutex before accessing shared resources
-	defer s.mutex.Unlock() // Ensure the mutex is unlocked at the end of the method
+	s.mu.Lock()         // Lock the mutex before accessing shared resources
+	defer s.mu.Unlock() // Ensure the mutex is unlocked at the end of the method
 
 	// Close the current session if it exists
 	if s.Client != nil {
