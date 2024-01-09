@@ -31,7 +31,6 @@ type GitHubRelease struct {
 //
 //	isLatest bool: A boolean indicating if the current version is the latest available.
 //	latestVersion string: The tag name of the latest release, if newer than current; otherwise, an empty string.
-//	latestVersion string: The tag name of the latest release, if newer than current; otherwise, an empty string.
 //	err error: An error if the request fails or if there is an issue parsing the response.
 func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion string, err error) {
 	resp, err := http.Get(GitHubAPIURL)
