@@ -124,39 +124,37 @@ func k8sCommand(session *Session) (bool, error) {
 // are properly initialized and active. It does not return any AI-generated messages directly to the user but
 // assumes that the AI response is handled elsewhere in the chat session flow.
 func handleCheckVersionCommand(session *Session) (bool, error) {
+	// Check if the current version is the latest.
 	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
 	if err != nil {
 		return false, err
 	}
 
 	if isLatest {
-		// Prepare the prompt for the AI to confirm the user is on the latest version
-		// Send the prompt to the AI and get the response
-		_, err := SendMessage(session.Ctx, session.AiChatSession, YouAreusingLatest)
-		if err != nil {
-			// Handle any errors that occur when sending the message.
-			logger.Error(ErrorFailedTosendmessagesToAI, err)
-		}
-		fmt.Println() // A better newline instead of hardcoding "\n"
-		fmt.Println(StripChars)
-
+		aiPrompt = fmt.Sprintf(YouAreusingLatest, CurrentVersion)
 	} else {
+		// Fetch the release information for the latest version.
 		releaseInfo, err := GetFullReleaseInfo(latestVersion)
 		if err != nil {
 			return false, err
 		}
 
-		// Prepare the prompt for the AI to explain the release notes
-		aiPrompt := ReleaseNotesPrompt + "\n\n" + releaseInfo.Body
-
-		// Send the prompt to the AI and get the response
-		_, err = SendMessage(session.Ctx, session.AiChatSession, aiPrompt)
-		if err != nil {
-			// Handle any errors that occur when sending the message.
-			logger.Error(ErrorFailedTosendmessagesToAI, err)
-		}
-		fmt.Println() // A better newline instead of hardcoding "\n"
-		fmt.Println(StripChars)
+		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
+			CurrentVersion,
+			releaseInfo.TagName,
+			releaseInfo.Name,
+			releaseInfo.Body)
 	}
+
+	// Send the constructed message to the AI and get the response.
+	_, err = SendMessage(session.Ctx, session.AiChatSession, aiPrompt)
+	if err != nil {
+		logger.Error(ErrorFailedTosendmessagesToAI, err)
+		return false, err
+	}
+
+	fmt.Println() // A better newline instead of hardcoding "\n"
+	fmt.Println(StripChars)
+
 	return false, nil
 }
