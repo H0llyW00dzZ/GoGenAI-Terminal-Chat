@@ -66,6 +66,7 @@ const (
 	ErrorFaileduUnmarshalTheReleaseData   = "Failed to unmarshal the release data: %v"
 	ErrorFailedTagToFetchReleaseInfo      = "Failed to fetch release info for tag '%s': %v"
 	ErrorFailedTagUnmarshalTheReleaseData = "Failed to unmarshal release data for tag '%s': %v"
+	ErrorFailedTosendmessagesToAI         = "Failed to send messages to AI: %v"
 )
 
 // Defined List of characters
