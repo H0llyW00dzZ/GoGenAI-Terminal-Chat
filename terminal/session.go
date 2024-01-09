@@ -209,7 +209,25 @@ func (s *Session) HasEnded() (ended bool) {
 	return s.Ended
 }
 
-// RenewSession attempts to renew the client session with the AI service.
+// RenewSession attempts to renew the client session with the AI service by reinitializing
+// the genai.Client with the provided API key. This method is useful when the existing
+// client session has expired or is no longer valid and a new session needs to be established
+// to continue communication with the AI service.
+//
+// The method ensures thread-safe access by using a mutex lock during the client reinitialization
+// process. If a client session already exists, it is properly closed and a new client is created.
+//
+// Parameters:
+//
+//	apiKey string: The API key used for authenticating requests to the AI service.
+//
+// Returns:
+//
+//	error: An error object if reinitializing the client fails. If the operation is successful,
+//	       the error is nil.
+//
+// Upon successful completion, the Session's Client field is updated to reference the new
+// genai.Client instance. In case of failure, an error is returned and the Client field is set to nil.
 func (s *Session) RenewSession(apiKey string) error {
 	s.mutex.Lock()         // Lock the mutex before accessing shared resources
 	defer s.mutex.Unlock() // Ensure the mutex is unlocked at the end of the method
