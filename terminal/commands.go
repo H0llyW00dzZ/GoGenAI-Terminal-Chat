@@ -132,7 +132,11 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 	if isLatest {
 		// Prepare the prompt for the AI to confirm the user is on the latest version
 		// Send the prompt to the AI and get the response
-		SendMessage(session.Ctx, session.AiChatSession, YouAreusingLatest)
+		_, err := SendMessage(session.Ctx, session.AiChatSession, YouAreusingLatest)
+		if err != nil {
+			// Handle any errors that occur when sending the message.
+			logger.Error(ErrorFailedTosendmessagesToAI, err)
+		}
 		fmt.Println() // A better newline instead of hardcoding "\n"
 		fmt.Println(StripChars)
 
@@ -146,10 +150,13 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 		aiPrompt := ReleaseNotesPrompt + "\n\n" + releaseInfo.Body
 
 		// Send the prompt to the AI and get the response
-		SendMessage(session.Ctx, session.AiChatSession, aiPrompt)
+		_, err = SendMessage(session.Ctx, session.AiChatSession, aiPrompt)
+		if err != nil {
+			// Handle any errors that occur when sending the message.
+			logger.Error(ErrorFailedTosendmessagesToAI, err)
+		}
 		fmt.Println() // A better newline instead of hardcoding "\n"
 		fmt.Println(StripChars)
 	}
-	session.Ended = true // Signal that the session has ended
 	return false, nil
 }
