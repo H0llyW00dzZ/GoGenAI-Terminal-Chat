@@ -125,6 +125,8 @@ func k8sCommand(session *Session) (bool, error) {
 // are properly initialized and active. It does not return any AI-generated messages directly to the user but
 // assumes that the AI response is handled elsewhere in the chat session flow.
 func handleCheckVersionCommand(session *Session) (bool, error) {
+	// Get the entire chat history as a string
+	chatHistory := session.ChatHistory.GetHistory()
 	// Check if the current version is the latest.
 	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
 	if err != nil {
@@ -148,7 +150,7 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 	}
 
 	// Send the constructed message to the AI and get the response.
-	_, err = SendMessage(session.Ctx, session.Client, aiPrompt)
+	_, err = SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
 	if err != nil {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		return false, err
