@@ -43,12 +43,16 @@ func PrintTypingChat(message string, delay time.Duration) {
 //
 //	string: The AI's response as a string.
 //	error: An error message if the message sending or response retrieval fails.
-func SendMessage(ctx context.Context, client *genai.Client, chatContext string) (string, error) {
-	// this subject to changed if there is lots of models
+func SendMessage(ctx context.Context, client *genai.Client, chatContext string, chatHistory ...string) (string, error) {
 	model := client.GenerativeModel(ModelAi)
 	cs := model.StartChat()
 
-	resp, err := cs.SendMessage(ctx, genai.Text(chatContext))
+	fullContext := chatContext
+	if len(chatHistory) > 0 {
+		fullContext = chatHistory[0] + "\n" + chatContext
+	}
+
+	resp, err := cs.SendMessage(ctx, genai.Text(fullContext))
 	if err != nil {
 		return "", err
 	}
