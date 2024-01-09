@@ -66,23 +66,3 @@ func (h *ChatHistory) GetHistory() string {
 	return builder.String()
 
 }
-
-// RenewSession attempts to renew the chat session with the AI service.
-func (s *Session) RenewSession() error {
-	s.mutex.Lock()         // Lock the mutex before accessing shared resources
-	defer s.mutex.Unlock() // Ensure the mutex is unlocked at the end of the method
-
-	// Close the current session if it exists
-	if s.AiChatSession != nil {
-		s.endSession()
-	}
-
-	var err error
-	s.AiChatSession, err = startChatSession(s.Client)
-	if err != nil {
-		// this low level error not possible to use logger.Error
-		return fmt.Errorf(ErrorLowLevelFailedtoStartAiChatSession, err)
-	}
-
-	return nil
-}
