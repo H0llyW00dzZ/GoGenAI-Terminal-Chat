@@ -157,11 +157,22 @@ func (s *Session) cleanup() {
 	s.Client.Close()
 }
 
+// EndSession terminates the chat session and performs necessary cleanup operations. It should be
+// invoked in response to user commands that signify the end of a session, system interrupts, or
+// internal errors that require the session to be closed.
+//
+// After calling EndSession, the session's resources are released, and it should not be used further.
 func (s *Session) EndSession() {
 	s.cleanup()    // Perform cleanup operations
 	s.Ended = true // Mark the session as ended
 }
 
+// HasEnded reports whether the chat session has ended. It can be called at any point to
+// check the session's state without altering it.
+//
+// Return value:
+//
+//	ended bool: A boolean indicating true if the session has ended, or false if it is still active.
 func (s *Session) HasEnded() (ended bool) {
 	return s.Ended
 }
