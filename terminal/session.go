@@ -193,7 +193,12 @@ func (s *Session) handleUserInput(input string) bool {
 		// Attempt to renew the session
 		if err := s.RenewSession(); err != nil {
 			// Handle the error, possibly by logging and returning true to signal the session should end
-			logger.Error("Failed to renew session: %v", err)
+			logger.Error(ErrorFailedToRenewSession, err)
+			return true // Signal to end the session
+		}
+
+		if s.AiChatSession == nil {
+			logger.Error(ErrorAiChatSessionStillNill)
 			return true // Signal to end the session
 		}
 	}
