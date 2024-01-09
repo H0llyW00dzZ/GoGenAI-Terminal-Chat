@@ -93,11 +93,6 @@ func (s *Session) Start() {
 			if done {
 				return
 			}
-			// Add a newline after handling input, but only if it's not a command
-			// This helps separate the AI's response from the user's next prompt
-			if !strings.HasPrefix(strings.TrimSpace(s.lastInput), PrefixChar) {
-				fmt.Println()
-			}
 		}
 	}
 }
@@ -167,10 +162,16 @@ func (s *Session) handleUserInput(input string) bool {
 		}
 	}
 
+	// Add the user's input to the chat history
 	s.ChatHistory.AddMessage(YouNerd, input)
 	fmt.Println() // Ensure a newline after the user's input
 
-	aiResponse, err := SendMessage(s.Ctx, s.Client, input)
+	// Get the entire chat history as a string
+	chatHistory := s.ChatHistory.GetHistory()
+
+	// Pass Better LLm's Send the user input along with the chat history to the AI
+	// Note: This not using json struct of candidate (e.g, User and model in json struct), lmao but it more better.
+	aiResponse, err := SendMessage(s.Ctx, s.Client, input, chatHistory)
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
 		return true // End the session if there's an error sending the message
