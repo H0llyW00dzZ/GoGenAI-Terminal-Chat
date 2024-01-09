@@ -17,7 +17,7 @@ const (
 // Defined constants for the terminal package
 const (
 	SignalMessage = "\nReceived an interrupt, shutting down gracefully..."
-	RecoverGopher = "Recovered from panic: %+v\n"
+	RecoverGopher = "%sRecovered from panic:%s %s%v%s"
 	StripChars    = "---"
 	NewLineChars  = '\n'
 	// this animated chars is magic, it used to show the user that the AI is typing just like human would type
