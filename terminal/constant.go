@@ -39,8 +39,9 @@ const (
 	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
 	ReleaseName            = "- %s\n\n"
 	FullChangeLog          = "**%s**\n"
-	YouAreusingLatest      = "Tell User: You are using the latest version of GoGenAI Terminal Chat."
-	ReleaseNotesPrompt     = "Tell User About GoGenAI Terminal Chat the Release Notes:"
+	// Better prompt instead of typing manually hahaha
+	YouAreusingLatest  = "The user is using Version %s\nThis is the latest version.\n Tell the user, No need to update."
+	ReleaseNotesPrompt = "The user is using Version %s\nA newer version is available: %s\nCan you tell\nRelease Name: %s\n%s"
 )
 
 // Defined constants for commands
