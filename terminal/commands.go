@@ -81,7 +81,8 @@ func handleQuitCommand(session *Session) (bool, error) {
 	// Print only the shutdown message
 	fmt.Println() // A better newline instead of hardcoding "\n"
 	fmt.Println(StripChars)
-	session.EndSession() // Use EndSession to perform cleanup and signal that the session has ended
+	fmt.Println(ShutdownMessage) // Print the shutdown message
+	session.EndSession()         // Use EndSession to perform cleanup and signal that the session has ended
 
 	return true, nil // Signal to the main loop that it's time to exit
 }
