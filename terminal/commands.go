@@ -27,7 +27,6 @@ type CommandHandler func(session *Session) (bool, error)
 //	bool: A boolean indicating if the input was a command and was handled.
 //	error: An error that may occur while handling the command.
 func HandleCommand(input string, session *Session) (bool, error) {
-	fmt.Println() // Add a newline right after the HandleCommand is entered
 	// Trim the input and check if it starts with the command prefix.
 	trimmedInput := strings.TrimSpace(input)
 	if !strings.HasPrefix(trimmedInput, PrefixChar) {
@@ -49,14 +48,11 @@ func HandleCommand(input string, session *Session) (bool, error) {
 		if len(parts) == 1 {
 			fmt.Println() // Add a newline before the command is executed
 			return handler(session)
-		} else {
-			logger.Error(UnknownCommand) // Use logger to log the unknown command error
-			return true, nil
 		}
-	} else {
-		logger.Error(UnknownCommand) // Use logger to log the unknown command error
-		return true, nil
 	}
+	// If the command is not recognized, print an error message.
+	logger.Error(UnknownCommand)
+	return false, nil
 }
 
 // handleQuitCommand gracefully terminates the chat session by sending a shutdown
@@ -72,19 +68,16 @@ func HandleCommand(input string, session *Session) (bool, error) {
 //	bool: Always returns true to indicate the session should end.
 //	error: Returns nil if no error occurs; otherwise, returns an error object.
 func handleQuitCommand(session *Session) (bool, error) {
-	// Request a shutdown message from the AI but don't print it
-	_, err := SendMessage(session.Ctx, session.AiChatSession, ContextPromptShutdown)
+	// Send a message to the AI asking for a shutdown message
+	_, err := SendMessage(session.Ctx, session.Client, ContextPromptShutdown)
 	if err != nil {
-		// Log the error if there's an issue getting the message
+		// If there's an error sending the message, log it
 		logger.Error(ErrorGettingShutdownMessage, err)
 	}
-	// Print only the shutdown message
-	fmt.Println() // A better newline instead of hardcoding "\n"
-	fmt.Println(StripChars)
-	fmt.Println(ShutdownMessage) // Print the shutdown message
-	session.endSession()         // Use EndSession to perform cleanup and signal that the session has ended
-
-	return true, nil // Signal to the main loop that it's time to exit
+	// Proceed with shutdown
+	fmt.Println(ShutdownMessage)
+	session.endSession() // Use endSession to perform cleanup and signal that the session has ended
+	return true, nil     // Signal to the main loop that it's time to exit
 }
 
 // handleHelpCommand would be a handler function for a hypothetical ":help" command.
@@ -147,14 +140,10 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 	}
 
 	// Send the constructed message to the AI and get the response.
-	_, err = SendMessage(session.Ctx, session.AiChatSession, aiPrompt)
+	_, err = SendMessage(session.Ctx, session.Client, aiPrompt)
 	if err != nil {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		return false, err
 	}
-
-	fmt.Println() // A better newline instead of hardcoding "\n"
-	fmt.Println(StripChars)
-
 	return false, nil
 }
