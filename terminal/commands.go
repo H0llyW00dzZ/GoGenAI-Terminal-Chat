@@ -8,6 +8,23 @@ import (
 	"strings"
 )
 
+// isCommand checks if the input is a command based on the prefix.
+func isCommand(input string) bool {
+	return strings.HasPrefix(input, PrefixChar)
+}
+
+// handleCommand processes the input as a command and returns true if the session should end.
+func (s *Session) handleCommand(input string) bool {
+	if isCommand, err := HandleCommand(input, s); isCommand {
+		if err != nil {
+			logger.Error(ErrorHandlingCommand, err)
+		}
+		// If it's a command, whether it's handled successfully or not, we continue the session
+		return false
+	}
+	return false
+}
+
 // CommandHandler defines the function signature for handling chat commands.
 // Each command handler function must conform to this signature.
 type CommandHandler func(session *Session) (bool, error)
