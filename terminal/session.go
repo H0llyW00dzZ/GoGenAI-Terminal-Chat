@@ -133,23 +133,6 @@ func (s *Session) processInput() bool {
 	return s.handleUserInput(userInput)
 }
 
-// isCommand checks if the input is a command based on the prefix.
-func isCommand(input string) bool {
-	return strings.HasPrefix(input, PrefixChar)
-}
-
-// handleCommand processes the input as a command and returns true if the session should end.
-func (s *Session) handleCommand(input string) bool {
-	if isCommand, err := HandleCommand(input, s); isCommand {
-		if err != nil {
-			logger.Error(ErrorHandlingCommand, err)
-		}
-		// If it's a command, whether it's handled successfully or not, we continue the session
-		return false
-	}
-	return false
-}
-
 // handleUserInput processes the user's input. If the input is a command, it is handled
 // accordingly. Otherwise, the input is sent to the AI for a response. It returns true
 // if the session should end.
