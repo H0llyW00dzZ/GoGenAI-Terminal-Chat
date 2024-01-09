@@ -75,16 +75,14 @@ func (s *Session) RenewSession() error {
 	// Close the current session if it exists
 	if s.AiChatSession != nil {
 		s.endSession()
-		s.AiChatSession = nil // Explicitly set to nil to avoid using a closed session
 	}
 
-	// Create a new session
-	newSession, err := startChatSession(s.Client)
+	var err error
+	s.AiChatSession, err = startChatSession(s.Client)
 	if err != nil {
-		return err
+		// this low level error not possible to use logger.Error
+		return fmt.Errorf(ErrorLowLevelFailedtoStartAiChatSession, err)
 	}
 
-	// Replace the old session with the new one
-	s.AiChatSession = newSession
 	return nil
 }
