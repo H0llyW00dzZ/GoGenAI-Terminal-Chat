@@ -190,6 +190,8 @@ func (s *Session) endSession() {
 // Return value:
 //
 //	ended bool: A boolean indicating true if the session has ended, or false if it is still active.
+//
+// TODO: Utilize this in multiple goroutines, such as for task queues, terminal control, etc.
 func (s *Session) HasEnded() (ended bool) {
 	return s.Ended
 }
