@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 
@@ -26,6 +27,8 @@ type Session struct {
 	Cancel        context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
 	AiChatSession *genai.ChatSession // AiChatSession is the chat session with the generative AI model.
 	Ended         bool               // Ended is a flag to indicate if the session has ended.
+	mutex         sync.Mutex         // Mutex is a mutex to ensure thread-safe access to the session's state.
+
 }
 
 // NewSession creates a new chat session with the provided API key for authentication.
@@ -185,6 +188,16 @@ func (s *Session) processInput() bool {
 // accordingly. Otherwise, the input is sent to the AI for a response. It returns true
 // if the session should end.
 func (s *Session) handleUserInput(input string) bool {
+	// Check if the session is still valid
+	if s.AiChatSession == nil {
+		// Attempt to renew the session
+		if err := s.RenewSession(); err != nil {
+			// Handle the error, possibly by logging and returning true to signal the session should end
+			logger.Error("Failed to renew session: %v", err)
+			return true // Signal to end the session
+		}
+	}
+
 	s.ChatHistory.AddMessage(YouNerd, input)
 	fmt.Println()
 
@@ -192,11 +205,12 @@ func (s *Session) handleUserInput(input string) bool {
 	aiResponse, err := SendMessage(s.Ctx, s.AiChatSession, s.ChatHistory.GetHistory())
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
+		return true // Signal to end the session due to an error
 	} else {
 		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
 	}
 
-	return false
+	return false // Continue the session
 }
 
 // cleanup releases resources used by the session. It cancels the context and closes
