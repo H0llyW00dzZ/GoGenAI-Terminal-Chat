@@ -45,9 +45,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 //	error: An error message if the message sending or response retrieval fails.
 func SendMessage(ctx context.Context, chatSession *genai.ChatSession, chatContext string) (string, error) {
 	if chatSession == nil {
-		errMsg := ErrorChatSessionisnill
-		logger.Error(errMsg)
-		return "", fmt.Errorf(errMsg)
+		return "", fmt.Errorf(ErrorChatSessionisnill)
 	}
 	resp, err := chatSession.SendMessage(ctx, genai.Text(chatContext))
 	if err != nil {
