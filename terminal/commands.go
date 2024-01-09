@@ -10,6 +10,7 @@ import (
 
 // isCommand checks if the input is a command based on the prefix.
 func isCommand(input string) bool {
+	fmt.Println() // Add newline if it's a command or unrecognized command
 	return strings.HasPrefix(input, PrefixChar)
 }
 
@@ -63,13 +64,27 @@ func HandleCommand(input string, session *Session) (bool, error) {
 	if handler, exists := commandHandlers[command]; exists {
 		// Call the handler function for the command if no extra arguments are provided.
 		if len(parts) == 1 {
-			fmt.Println() // Add a newline before the command is executed
 			return handler(session)
 		}
 	}
-	// If the command is not recognized, print an error message.
-	logger.Error(UnknownCommand)
-	return false, nil
+
+	// If the command is not recognized, inform the AI about the unrecognized command (Free Error Messages hahaha).
+	// Note: This cheap since Google AI's Gemini-Pro model, the maximum is 32K tokens
+	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, command)
+
+	// Get the entire chat history as a string
+	chatHistory := session.ChatHistory.GetHistory()
+
+	// Send the constructed message to the AI and get the response.
+	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+	if err != nil {
+		errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
+		logger.Error(errMsg)
+		return false, fmt.Errorf(errMsg)
+	}
+
+	// Since the command was handled (even though unrecognized), return true.
+	return true, nil
 }
 
 // handleQuitCommand gracefully terminates the chat session by sending a shutdown
