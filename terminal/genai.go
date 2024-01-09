@@ -43,8 +43,12 @@ func PrintTypingChat(message string, delay time.Duration) {
 //
 //	string: The AI's response as a string.
 //	error: An error message if the message sending or response retrieval fails.
-func SendMessage(ctx context.Context, chatSession *genai.ChatSession, chatContext string) (string, error) {
-	resp, err := chatSession.SendMessage(ctx, genai.Text(chatContext))
+func SendMessage(ctx context.Context, client *genai.Client, chatContext string) (string, error) {
+	// this subject to changed if there is lots of models
+	model := client.GenerativeModel(ModelAi)
+	cs := model.StartChat()
+
+	resp, err := cs.SendMessage(ctx, genai.Text(chatContext))
 	if err != nil {
 		return "", err
 	}
@@ -67,8 +71,8 @@ func SendMessage(ctx context.Context, chatSession *genai.ChatSession, chatContex
 // This function is unexported and is intended for internal use within the package.
 func printResponse(resp *genai.GenerateContentResponse) string {
 	aiResponse := ""
-	if len(resp.Candidates) > 0 {
-		cand := resp.Candidates[0] // Take the first candidate response
+	// Note: this method are better instead of resp.Candidates[0] because it's more efficient and faster.
+	for _, cand := range resp.Candidates {
 		if cand.Content != nil {
 			for _, part := range cand.Content.Parts {
 				content := fmt.Sprint(part)
@@ -94,6 +98,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 				// Print "AI:" prefix directly without typing effect
 				fmt.Print(AiNerd)
 
+				// Assuming 'part' can be printed directly and is of type string or has a String() method
 				// Use the typing banner effect only for the part content
 				// Colorized string is printed character by character with a delay between each character
 				PrintTypingChat(colorized, TypingDelay)
@@ -102,5 +107,6 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 			}
 		}
 	}
+	fmt.Println(StripChars)
 	return aiResponse
 }

@@ -16,6 +16,7 @@ const (
 
 // why this so simple ? hahahaha
 func main() {
+	defer terminal.RecoverFromPanic()
 	logger := terminal.NewDebugOrErrorLogger() // Assuming NewDebugOrErrorLogger is exported from the terminal package
 	apiKey := os.Getenv(api_Key)
 	if apiKey == "" {

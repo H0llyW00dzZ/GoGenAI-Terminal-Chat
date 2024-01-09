@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"sync"
 	"syscall"
 
 	"github.com/google/generative-ai-go/genai"
@@ -19,12 +20,14 @@ import (
 // Session encapsulates the state and functionality for a chat session with a generative AI model.
 // It holds the AI client, chat history, and context for managing the session lifecycle.
 type Session struct {
-	Client        *genai.Client      // Client is the generative AI client used to communicate with the AI model.
-	ChatHistory   ChatHistory        // ChatHistory stores the history of the chat session.
-	Ctx           context.Context    // Ctx is the context governing the session, used for cancellation.
-	Cancel        context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
-	AiChatSession *genai.ChatSession // AiChatSession is the chat session with the generative AI model.
-	Ended         bool               // Ended is a flag to indicate if the session has ended.
+	Client      *genai.Client      // Client is the generative AI client used to communicate with the AI model.
+	ChatHistory ChatHistory        // ChatHistory stores the history of the chat session.
+	Ctx         context.Context    // Ctx is the context governing the session, used for cancellation.
+	Cancel      context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
+	Ended       bool               // Ended indicates whether the session has ended.
+	mutex       sync.Mutex         // Mutex is a mutex to ensure thread-safe access to the session's state.
+	lastInput   string             // Stores the last user input for reference
+
 }
 
 // NewSession creates a new chat session with the provided API key for authentication.
@@ -46,17 +49,13 @@ func NewSession(apiKey string) (*Session, error) {
 		cancel()
 		return nil, err
 	}
-
-	model := client.GenerativeModel(ModelAi)
-	aiChatSession := model.StartChat()
 	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
 	// So if you're wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
 	return &Session{
-		Client:        client,
-		ChatHistory:   ChatHistory{},
-		Ctx:           ctx,
-		Cancel:        cancel,
-		AiChatSession: aiChatSession,
+		Client:      client,
+		ChatHistory: ChatHistory{},
+		Ctx:         ctx,
+		Cancel:      cancel,
 	}, nil
 }
 
@@ -78,20 +77,28 @@ func (s *Session) Start() {
 	// This is a prompt context as the starting point for AI to start the conversation
 	fmt.Print(AiNerd)
 	PrintTypingChat(ContextPrompt, TypingDelay)
-	fmt.Println() // A better newline instead of hardcoding "\n"
-	fmt.Println() // A better newline instead of hardcoding "\n"
+	fmt.Println() // Ensure there's a newline after the AI's initial message
 
 	// Add AI's initial message to chat history
 	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 
 	// Main loop for processing user input
 	for {
-		fmt.Print(YouNerd)
-		if done := s.processInput(); done {
-			break // Exit the loop if processInput signals to stop
+		select {
+		case <-s.Ctx.Done():
+			fmt.Println(ContextCancel)
+			return
+		default:
+			done := s.processInput()
+			if done {
+				return
+			}
+			// Add a newline after handling input, but only if it's not a command
+			// This helps separate the AI's response from the user's next prompt
+			if !strings.HasPrefix(strings.TrimSpace(s.lastInput), PrefixChar) {
+				fmt.Println()
+			}
 		}
-		fmt.Println() // A better newline instead of hardcoding "\n"
-		fmt.Println() // A better newline instead of hardcoding "\n"
 	}
 }
 
@@ -113,6 +120,7 @@ func (s *Session) setupSignalHandling() {
 // processInput reads user input from the terminal. It returns true if the session
 // should end, either due to a command or an error.
 func (s *Session) processInput() bool {
+	fmt.Print(YouNerd)
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
@@ -120,35 +128,57 @@ func (s *Session) processInput() bool {
 	}
 
 	userInput = strings.TrimSpace(userInput)
+	s.lastInput = userInput // Store the last input
 
-	// Check if the input is a command and handle it
-	if isCommand, err := HandleCommand(userInput, s); isCommand {
+	if isCommand(userInput) {
+		return s.handleCommand(userInput)
+	}
+	return s.handleUserInput(userInput)
+}
+
+// isCommand checks if the input is a command based on the prefix.
+func isCommand(input string) bool {
+	return strings.HasPrefix(input, PrefixChar)
+}
+
+// handleCommand processes the input as a command and returns true if the session should end.
+func (s *Session) handleCommand(input string) bool {
+	if isCommand, err := HandleCommand(input, s); isCommand {
 		if err != nil {
 			logger.Error(ErrorHandlingCommand, err)
 		}
-		return true // Return true to indicate that the session should end
+		// If it's a command, whether it's handled successfully or not, we continue the session
+		return false
 	}
-
-	// If the input is not a command, send it to the AI as part of the chat history
-	return s.handleUserInput(userInput)
+	return false
 }
 
 // handleUserInput processes the user's input. If the input is a command, it is handled
 // accordingly. Otherwise, the input is sent to the AI for a response. It returns true
 // if the session should end.
 func (s *Session) handleUserInput(input string) bool {
-	s.ChatHistory.AddMessage(YouNerd, input)
-	fmt.Println()
-
-	// Pass the existing AI chat session to SendMessage
-	aiResponse, err := SendMessage(s.Ctx, s.AiChatSession, s.ChatHistory.GetHistory())
-	if err != nil {
-		logger.Error(ErrorSendingMessage, err)
-	} else {
-		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add AI response to history
+	// Check if the session is still valid
+	if s.Client == nil {
+		// Attempt to renew the session
+		if err := s.RenewSession(apiKey); err != nil {
+			// Handle the error, possibly by logging and returning true to signal the session should end
+			logger.Error(ErrorFailedToRenewSession, err)
+			return true // Signal to end the session
+		}
 	}
 
-	return false
+	s.ChatHistory.AddMessage(YouNerd, input)
+	fmt.Println() // Ensure a newline after the user's input
+
+	aiResponse, err := SendMessage(s.Ctx, s.Client, input)
+	if err != nil {
+		logger.Error(ErrorSendingMessage, err)
+		return true // End the session if there's an error sending the message
+	}
+
+	// Add the AI's response to the chat history
+	s.ChatHistory.AddMessage(AiNerd, aiResponse)
+	return false // Continue the session
 }
 
 // cleanup releases resources used by the session. It cancels the context and closes
@@ -176,4 +206,26 @@ func (s *Session) endSession() {
 //	ended bool: A boolean indicating true if the session has ended, or false if it is still active.
 func (s *Session) HasEnded() (ended bool) {
 	return s.Ended
+}
+
+// RenewSession attempts to renew the client session with the AI service.
+func (s *Session) RenewSession(apiKey string) error {
+	s.mutex.Lock()         // Lock the mutex before accessing shared resources
+	defer s.mutex.Unlock() // Ensure the mutex is unlocked at the end of the method
+
+	// Close the current session if it exists
+	if s.Client != nil {
+		s.Client.Close() // Assuming Close is the method to properly shutdown the client
+		s.Client = nil   // Set the client to nil after closing
+	}
+
+	// Create a new client for the session
+	var err error
+	s.Client, err = genai.NewClient(s.Ctx, option.WithAPIKey(apiKey))
+	if err != nil {
+		// this low level error not possible to use logger.Error
+		return fmt.Errorf(ErrorLowLevelFailedtoStartAiChatSession, err)
+	}
+
+	return nil
 }

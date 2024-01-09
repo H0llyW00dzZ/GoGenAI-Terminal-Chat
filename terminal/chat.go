@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+const MaxChatHistory = 5 // Maximum number of messages to keep in history
+
 // ChatHistory holds the chat messages exchanged during a session.
 // It provides methods to add new messages to the history and to retrieve
 // the current state of the conversation.
@@ -27,15 +29,12 @@ type ChatHistory struct {
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
 func (h *ChatHistory) AddMessage(user, text string) {
-	// Forgot to remove "if" previously, an "if" statement here was causing an google internal error when
-	// Shift+Enter was pressed, due to unintended handling of input. This has been corrected.
-	// Additionally, the issue of duplicate "🤖 AI:" prefixes, which resulted in the AI
-	// misinterpreting its own output, has been resolved.
-	// Now, the message is simply appended to the history with the correct user prefix.
-	//
-	// Note: the duplicate of "🤖 AI:" it's by AI It's self, not causing of the code.
-	// Now It fixed by sanitize the message before append it to the history.
-	h.Messages = append(h.Messages, fmt.Sprintf("%s %s", user, text))
+	message := fmt.Sprintf("%s %s", user, text)
+	h.Messages = append(h.Messages, message)
+	if len(h.Messages) > MaxChatHistory {
+		// Remove the oldest message to maintain a fixed history size
+		h.Messages = h.Messages[1:]
+	}
 }
 
 // GetHistory concatenates all messages in the chat history into a single
