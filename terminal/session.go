@@ -40,49 +40,13 @@ type Session struct {
 //	*Session: A pointer to the newly created Session object.
 //	error: An error object if initialization fails.
 func NewSession(apiKey string) (*Session, error) {
-	var aiChatSession *genai.ChatSession
-	var client *genai.Client
-	var ctx context.Context
-	var cancel context.CancelFunc
-	var err error
-
-	maxRetries := 3
-	for attempt := 0; attempt < maxRetries; attempt++ {
-		ctx, cancel = context.WithCancel(context.Background())
-		client, err = genai.NewClient(ctx, option.WithAPIKey(apiKey))
-		if err != nil {
-			cancel()
-			logger.Error(ErrorFailedToCreateNewAiClient, err)
-			return nil, err
-		}
-
-		model := client.GenerativeModel(ModelAi)
-		aiChatSession = model.StartChat()
-		if aiChatSession != nil {
-			// Successfully started the chat session
-			break
-		}
-
-		// Cleanup before retrying
-		cancel()
-		client.Close()
-		logger.Error(ErrorFailedToStartAIChatSessionAttempt, attempt+1, maxRetries)
-		time.Sleep(1 * time.Second) // Wait for a second before retrying
+	client, aiChatSession, ctx, cancel, err := createChatSessionWithRetries(apiKey)
+	if err != nil {
+		return nil, err
 	}
 
-	if aiChatSession == nil {
-		errMsg := fmt.Sprintf(ErrorFailedtoStartAiChatSessionAfter, maxRetries)
-		logger.Error(errMsg)
-		// All retries failed, ensure we clean up the last attempt
-		if cancel != nil {
-			cancel()
-		}
-		if client != nil {
-			client.Close()
-		}
-		return nil, fmt.Errorf(errMsg)
-	}
-
+	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
+	// So if you're wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
 	return &Session{
 		Client:        client,
 		ChatHistory:   ChatHistory{},
@@ -90,6 +54,58 @@ func NewSession(apiKey string) (*Session, error) {
 		Cancel:        cancel,
 		AiChatSession: aiChatSession,
 	}, nil
+}
+
+func createChatSessionWithRetries(apiKey string) (*genai.Client, *genai.ChatSession, context.Context, context.CancelFunc, error) {
+	maxRetries := 3
+	for attempt := 0; attempt < maxRetries; attempt++ {
+		client, ctx, cancel, err := initializeClient(apiKey)
+		if err != nil {
+			return nil, nil, nil, nil, err
+		}
+
+		aiChatSession, err := startChatSession(client)
+		if err == nil {
+			return client, aiChatSession, ctx, cancel, nil
+		}
+
+		// Cleanup before retrying
+		cleanup(client, cancel)
+		logger.Error(ErrorFailedToStartAIChatSessionAttempt, attempt+1, maxRetries)
+		time.Sleep(1 * time.Second)
+	}
+
+	errMsg := fmt.Sprintf(ErrorFailedtoStartAiChatSessionAfter, maxRetries)
+	logger.Error(errMsg)
+	return nil, nil, nil, nil, fmt.Errorf(errMsg)
+}
+
+func initializeClient(apiKey string) (*genai.Client, context.Context, context.CancelFunc, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+	if err != nil {
+		cancel()
+		return nil, nil, nil, err
+	}
+	return client, ctx, cancel, nil
+}
+
+func startChatSession(client *genai.Client) (*genai.ChatSession, error) {
+	model := client.GenerativeModel(ModelAi)
+	aiChatSession := model.StartChat()
+	if aiChatSession == nil {
+		errMsg := ErrorFailedtoStartAiChatSession
+		logger.Error(errMsg)
+		return nil, fmt.Errorf(errMsg)
+	}
+	return aiChatSession, nil
+}
+
+func cleanup(client *genai.Client, cancel context.CancelFunc) {
+	cancel()
+	if client != nil {
+		client.Close()
+	}
 }
 
 // Start begins the chat session, managing user input and AI responses.
