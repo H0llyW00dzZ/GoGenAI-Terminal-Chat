@@ -35,6 +35,8 @@ var checkVersion GitHubRelease
 // This consider stable to avoid memory allocation overhead.
 var builder strings.Builder
 
+var aiPrompt string
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
