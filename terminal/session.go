@@ -24,6 +24,7 @@ type Session struct {
 	Ctx           context.Context    // Ctx is the context governing the session, used for cancellation.
 	Cancel        context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
 	AiChatSession *genai.ChatSession // AiChatSession is the chat session with the generative AI model.
+	Ended         bool               // Ended is a flag to indicate if the session has ended.
 }
 
 // NewSession creates a new chat session with the provided API key for authentication.
@@ -154,4 +155,13 @@ func (s *Session) handleUserInput(input string) bool {
 func (s *Session) cleanup() {
 	s.Cancel()
 	s.Client.Close()
+}
+
+func (s *Session) EndSession() {
+	s.cleanup()    // Perform cleanup operations
+	s.Ended = true // Mark the session as ended
+}
+
+func (s *Session) HasEnded() (ended bool) {
+	return s.Ended
 }
