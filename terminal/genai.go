@@ -30,19 +30,27 @@ func PrintTypingChat(message string, delay time.Duration) {
 }
 
 // SendMessage sends a chat message to the generative AI model and retrieves the response.
-// It uses the provided `genai.Client` to communicate with the AI service and simulates a chat
-// interaction by sending the provided chat context.
+// It constructs a chat session using the provided `genai.Client`, which is used to communicate
+// with the AI service. The function simulates a chat interaction by sending the chat context,
+// optionally preceded by previous chat history, to the AI model.
 //
 // Parameters:
 //
 //	ctx context.Context: The context for controlling the cancellation of the request.
-//	client *genai.Client: The client instance used to send messages to the AI model.
+//	client *genai.Client: The client instance used to create a generative model session and send messages to the AI model.
 //	chatContext string: The chat context or message to be sent to the AI model.
+//	chatHistory ...string: An optional slice of strings representing previous chat history. If provided,
+//	                       it is prepended to the chatContext, separated by a newline, to provide context to the AI.
 //
 // Returns:
 //
-//	string: The AI's response as a string.
-//	error: An error message if the message sending or response retrieval fails.
+//	string: The AI's response as a string, which includes the AI's message with a simulated typing effect.
+//	error: An error message if the message sending or response retrieval fails. If the operation is successful,
+//	       the error is nil.
+//
+// The function initializes a new chat session and sends the chat context, along with any provided chat history,
+// to the generative AI model. It then calls `printResponse` to process and print the AI's response. The final
+// AI response is returned as a concatenated string of all parts from the AI response.
 func SendMessage(ctx context.Context, client *genai.Client, chatContext string, chatHistory ...string) (string, error) {
 	model := client.GenerativeModel(ModelAi)
 	cs := model.StartChat()
