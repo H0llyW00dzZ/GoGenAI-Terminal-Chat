@@ -60,11 +60,11 @@ func (h *ChatHistory) GetHistory() string {
 			}
 		}
 		// Optimized to use Builder.WriteString() for better performance and to avoid memory allocation overhead.
-		builder.WriteString(sanitizedMsg)
-		builder.WriteRune(NewLineChars) // Append a newline character after each message.
+		buildeR.WriteString(sanitizedMsg)
+		buildeR.WriteRune(NewLineChars) // Append a newline character after each message.
 	}
 
-	// The builder.String() method returns the complete, concatenated chat history.
-	return builder.String()
+	// The buildeR.String() method returns the complete, concatenated chat history.
+	return buildeR.String()
 
 }

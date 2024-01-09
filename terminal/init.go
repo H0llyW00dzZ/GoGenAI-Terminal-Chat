@@ -35,7 +35,7 @@ var commandHandlers = map[string]CommandHandler{
 var checkVersion GitHubRelease
 
 // This consider stable to avoid memory allocation overhead.
-var builder strings.Builder
+var buildeR strings.Builder
 
 var aiPrompt string
 
