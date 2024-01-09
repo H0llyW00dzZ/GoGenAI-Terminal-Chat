@@ -72,6 +72,7 @@ const (
 	ErrorFailedToStartAIChatSessionAttempt = "Failed to start AI chat session, attempt %d/%d"
 	ErrorFailedtoStartAiChatSessionAfter   = "Failed to start AI chat session after %d attempts"
 	ErrorChatSessionisnill                 = "chat session is nil"
+	ErrorFailedtoStartAiChatSession        = "failed to start AI chat session"
 )
 
 // Defined List of characters
