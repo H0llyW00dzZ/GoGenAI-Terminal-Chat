@@ -157,12 +157,12 @@ func (s *Session) cleanup() {
 	s.Client.Close()
 }
 
-// EndSession terminates the chat session and performs necessary cleanup operations. It should be
+// endSession terminates the chat session and performs necessary cleanup operations. It should be
 // invoked in response to user commands that signify the end of a session, system interrupts, or
 // internal errors that require the session to be closed.
 //
-// After calling EndSession, the session's resources are released, and it should not be used further.
-func (s *Session) EndSession() {
+// After calling endSession, the session's resources are released, and it should not be used further.
+func (s *Session) endSession() {
 	s.cleanup()    // Perform cleanup operations
 	s.Ended = true // Mark the session as ended
 }
