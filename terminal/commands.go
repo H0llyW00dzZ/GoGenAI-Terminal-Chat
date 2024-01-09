@@ -68,16 +68,24 @@ func HandleCommand(input string, session *Session) (bool, error) {
 //	bool: Always returns true to indicate the session should end.
 //	error: Returns nil if no error occurs; otherwise, returns an error object.
 func handleQuitCommand(session *Session) (bool, error) {
-	// Send a message to the AI asking for a shutdown message
-	_, err := SendMessage(session.Ctx, session.Client, ContextPromptShutdown)
+	// Get the entire chat history as a string
+	chatHistory := session.ChatHistory.GetHistory()
+
+	// Send a shutdown message to the AI including the chat history
+	_, err := SendMessage(session.Ctx, session.Client, ContextPromptShutdown, chatHistory)
 	if err != nil {
 		// If there's an error sending the message, log it
 		logger.Error(ErrorGettingShutdownMessage, err)
 	}
+
 	// Proceed with shutdown
 	fmt.Println(ShutdownMessage)
-	session.endSession() // Use endSession to perform cleanup and signal that the session has ended
-	return true, nil     // Signal to the main loop that it's time to exit
+
+	// End the session and perform cleanup
+	session.endSession()
+
+	// Signal to the main loop that it's time to exit
+	return true, nil
 }
 
 // handleHelpCommand would be a handler function for a hypothetical ":help" command.
