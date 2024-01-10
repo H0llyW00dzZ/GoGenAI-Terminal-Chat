@@ -117,7 +117,7 @@ func (s *Session) setupSignalHandling() {
 // processInput reads user input from the terminal. It returns true if the session
 // should end, either due to a command or an error.
 func (s *Session) processInput() bool {
-	fmt.Print(YouNerd)
+	fmt.Print(StringNewLine + YouNerd)
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
