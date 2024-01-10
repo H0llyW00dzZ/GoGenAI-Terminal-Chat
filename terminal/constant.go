@@ -38,16 +38,23 @@ const (
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
 	UnknownCommand         = "Unknown command."
-	ContextPromptShutdown  = "The user has issued a quit command. Please provide a shutdown message as you are Assistant."
 	ContextCancel          = "Context canceled, shutting down..." // sending a messages to gopher officer
 	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
 	ReleaseName            = "- %s\n\n"
 	FullChangeLog          = "**%s**\n"
 	// Better prompt instead of typing manually hahaha
-	YouAreusingLatest  = "The user is using Version **%s**\nThis is the latest version.\n Tell the user, No need to update."              // Better Response for AI
-	ReleaseNotesPrompt = "The user is using Version **%s**\nA newer version is available: **%s**\nCan you tell\nRelease Name: **%s**\n%s" // Better Response for AI
+	//
+	// Note: These prompts are not persisted in the chat history retrieved by the ChatHistory.GetHistory() method.
+	// Therefore, if you continue interacting with the AI after using these command prompts,
+	// the conversation will resume from the point prior to the invocation of these commands.
+	ApplicationName = "GoGenAI Terminal Chat"
+	// Check Version Prompt commands
+	YouAreusingLatest  = "**This a System messages**:**%s**\n\nThe user is using Version **%s**\nThis is the latest version.\n Tell the user, No need to update."              // Better Response for AI
+	ReleaseNotesPrompt = "**This a System messages**:**%s**\n\nThe user is using Version **%s**\nA newer version is available: **%s**\nCan you tell\nRelease Name: **%s**\n%s" // Better Response for AI
+	// Quit Prompt commands
+	ContextPromptShutdown = "**This a System messages**:**%s**\n\nThe user attempted an command: **%s**\n Please provide a shutdown message as you are Assistant."
 	// Help Prompt commands
-	HelpCommandPrompt = "The user attempted an command: **%s**\nCan you provide help information for the available commands?\nList Command Available:\n**%s**\n**%s**" // Better Response for AI"
+	HelpCommandPrompt = "**This a System messages**:**%s**\n\nThe user attempted an command: **%s**\nCan you provide help information for the available commands?\nList Command Available:\n**%s**\n**%s**" // Better Response for AI"
 )
 
 // Defined constants for commands
@@ -83,7 +90,7 @@ const (
 	ErrorFailedToRenewSession                 = "Failed to renew session: %v"
 	ErrorAiChatSessionStillNill               = "AI chat session is still nil after renewal attempt"
 	ErrorLowLevelFailedtoStartAiChatSession   = "failed to start a new AI chat session: %w"
-	ErrorUserAttemptUnrecognizedCommandPrompt = "The user attempted an unrecognized command: **%s**" // Better Response for AI
+	ErrorUserAttemptUnrecognizedCommandPrompt = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
 	ErrorFailedtoSendUnrecognizedCommandToAI  = "Failed to send unrecognized command to AI: %v"
 )
 
