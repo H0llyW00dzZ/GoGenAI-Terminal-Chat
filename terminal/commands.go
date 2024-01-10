@@ -111,7 +111,7 @@ func handleQuitCommand(session *Session) (bool, error) {
 	}
 
 	// Proceed with shutdown
-	fmt.Println(ShutdownMessage)
+	fmt.Println(StringNewLine + ShutdownMessage)
 
 	// End the session and perform cleanup
 	session.endSession()
