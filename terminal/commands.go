@@ -122,7 +122,20 @@ func handleQuitCommand(session *Session) (bool, error) {
 
 // handleHelpCommand would be a handler function for a hypothetical ":help" command.
 func handleHelpCommand(session *Session) (bool, error) {
-	// currently unimplemented
+	// Define the help prompt to be sent to the AI, including the list of available commands.
+	aiPrompt := fmt.Sprintf(HelpCommandPrompt, QuitCommand, VersionCommand, HelpCommand)
+
+	// Get the entire chat history as a string.
+	chatHistory := session.ChatHistory.GetHistory()
+
+	// Send the constructed message to the AI and get the response.
+	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+	if err != nil {
+		logger.Error(ErrorSendingMessage, err)
+		return false, err
+	}
+
+	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
 	return true, nil
 }
 
