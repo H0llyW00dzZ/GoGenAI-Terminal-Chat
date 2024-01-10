@@ -48,7 +48,7 @@ func (h *ChatHistory) AddMessage(user, text string) {
 func (h *ChatHistory) GetHistory() string {
 	// Note: if you're still wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
 	// Define the prefixes to be removed
-	prefixesToRemove := []string{youNerd, aiNerd, ColorGreen, ColorYellow, ColorBlue, ColorPurple, ColorCyan, ColorReset}
+	prefixesToRemove := []string{youNerd, aiNerd, ColorGreen, ColorYellow, ColorBlue, ColorPurple, ColorCyan, ColorReset} // Fix all Issues
 
 	for _, msg := range h.Messages {
 		sanitizedMsg := msg
