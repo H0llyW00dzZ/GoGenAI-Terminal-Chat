@@ -77,7 +77,7 @@ const (
 	ErrorFailedToRenewSession                 = "Failed to renew session: %v"
 	ErrorAiChatSessionStillNill               = "AI chat session is still nil after renewal attempt"
 	ErrorLowLevelFailedtoStartAiChatSession   = "failed to start a new AI chat session: %w"
-	ErrorUserAttemptUnrecognizedCommandPrompt = "The user attempted an unrecognized command: '%s'"
+	ErrorUserAttemptUnrecognizedCommandPrompt = "The user attempted an unrecognized command: **%s**" // Better Response for AI
 	ErrorFailedtoSendUnrecognizedCommandToAI  = "Failed to send unrecognized command to AI: %v"
 )
 
