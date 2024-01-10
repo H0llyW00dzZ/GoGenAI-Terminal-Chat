@@ -200,7 +200,6 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 ## TODO Front-End
 
 - [ ] **UI Front-End Terminal**
-
 - [ ] **Reporting System**
 
 > [!NOTE]
