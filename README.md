@@ -196,3 +196,12 @@ By following these tips, you can write simple, easy-to-understand functions that
 
 ## Contributing
 Contributions is always welcome! If you're able to write code that adheres to a cyclomatic complexity of 5 or less per function, please feel free to submit a pull request. Pull requests that do not meet this criterion will be rejected. Alternatively, if you encounter any issues, do not hesitate to submit an issue report.
+
+## TODO Front-End
+
+- [ ] **UI Front-End Terminal**
+
+- [ ] **Reporting System**
+
+> [!NOTE]
+> The `Reporting System` is designed to capture and handle runtime panic events in the Go application, facilitating streamlined error reporting and analysis.
