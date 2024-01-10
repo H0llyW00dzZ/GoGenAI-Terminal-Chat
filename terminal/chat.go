@@ -48,6 +48,8 @@ func (h *ChatHistory) AddMessage(user, text string) {
 func (h *ChatHistory) GetHistory() string {
 	// Note: if you're still wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
 	// Define the prefixes to be removed
+	// Additional Note: If issues still arise due to ANSI color codes in AI responses, it's not because of the 'this' or 'Colorize' function in Genai.go.
+	// The issue lies with the AI's attempt to apply formatting, which fails due to incorrect ANSI sequences, reminiscent of issues one might encounter with "PYTHON" or Your Machine is bad LMAO.
 	prefixesToRemove := []string{youNerd, aiNerd, ColorGreen, ColorYellow, ColorBlue, ColorPurple, ColorCyan, ColorReset} // Fix all Issues
 
 	for _, msg := range h.Messages {
