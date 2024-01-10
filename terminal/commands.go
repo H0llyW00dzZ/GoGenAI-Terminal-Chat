@@ -133,29 +133,22 @@ func k8sCommand(session *Session) (bool, error) {
 	return true, nil
 }
 
-// handleCheckVersionCommand checks if the user is running the latest version of the application.
-// If the user is not on the latest version, it fetches and displays the release information for
-// the newer version. This function is intended to be used as a command handler within a chat session
-// that allows users to check for software updates.
-//
-// The function performs the following actions:
-//   - Calls CheckLatestVersion with the current application version to determine if an update is available.
-//   - If the current version is the latest, it informs the user accordingly.
-//   - If there is a newer version, it fetches the full release information and prepares a prompt for the AI
-//     to explain the release notes to the user.
+// handleCheckVersionCommand checks if the current version of the software is the latest.
+// It updates the aiPrompt with either a confirmation that the current version is up to date
+// or with release notes for the latest version available.
 //
 // Parameters:
 //
-//	session *Session: A pointer to the current Session object, which contains the chat session state and context.
+//	session *Session: The current session containing the chat history and other context.
 //
 // Returns:
 //
-//	bool: A boolean flag indicating whether the command has been fully handled (always false as the session should continue after checking the version).
-//	error: An error that may occur during the version check or while fetching the release information.
+//	bool: Returns true to indicate that the command was successfully handled.
+//	error: Returns an error if any occurs during version check or message sending.
 //
-// Note: The function sends messages to the AI using SendMessage and assumes that the session and its context
-// are properly initialized and active. It does not return any AI-generated messages directly to the user but
-// assumes that the AI response is handled elsewhere in the chat session flow.
+// Note:
+// The function returns `true` to indicate that the command was successfully handled
+// and the session should continue. This is safe to perform in conjunction with `RenewSession`.
 func handleCheckVersionCommand(session *Session) (bool, error) {
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
@@ -187,5 +180,6 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		return false, err
 	}
-	return false, nil
+	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
+	return true, nil
 }
