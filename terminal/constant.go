@@ -41,8 +41,8 @@ const (
 	ReleaseName            = "- %s\n\n"
 	FullChangeLog          = "**%s**\n"
 	// Better prompt instead of typing manually hahaha
-	YouAreusingLatest  = "The user is using Version %s\nThis is the latest version.\n Tell the user, No need to update."
-	ReleaseNotesPrompt = "The user is using Version %s\nA newer version is available: %s\nCan you tell\nRelease Name: %s\n%s"
+	YouAreusingLatest  = "The user is using Version **%s**\nThis is the latest version.\n Tell the user, No need to update."              // Better Response for AI
+	ReleaseNotesPrompt = "The user is using Version **%s**\nA newer version is available: **%s**\nCan you tell\nRelease Name: **%s**\n%s" // Better Response for AI
 )
 
 // Defined constants for commands
