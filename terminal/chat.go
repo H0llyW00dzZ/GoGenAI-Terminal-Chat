@@ -30,7 +30,7 @@ type ChatHistory struct {
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
 func (h *ChatHistory) AddMessage(user, text string) {
-	message := fmt.Sprintf("%s %s", user, text)
+	message := fmt.Sprintf(ObjectHighLevelString, user, text)
 	h.Messages = append(h.Messages, message)
 	if len(h.Messages) > MaxChatHistory {
 		// Remove the oldest message to maintain a fixed history size
