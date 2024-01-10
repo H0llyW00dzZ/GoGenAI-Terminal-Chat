@@ -119,6 +119,6 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 			}
 		}
 	}
-	fmt.Println(StripChars)
+	fmt.Println(StringNewLine + StripChars)
 	return aiResponse
 }
