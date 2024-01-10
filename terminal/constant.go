@@ -33,8 +33,11 @@ const (
 
 // Defined constants for language
 const (
-	YouNerd                = "🤓 You: "
-	AiNerd                 = "🤖 AI: "
+	YouNerd = "🤓 You: "
+	AiNerd  = "🤖 AI: "
+	// Pass Context to LLM's Google AI
+	youNerd                = "🤓"
+	aiNerd                 = "🤖"
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
 	UnknownCommand         = "Unknown command."
