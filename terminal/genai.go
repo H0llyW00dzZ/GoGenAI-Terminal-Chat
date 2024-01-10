@@ -57,7 +57,7 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 
 	fullContext := chatContext
 	if len(chatHistory) > 0 {
-		fullContext = chatHistory[0] + "\n" + chatContext
+		fullContext = chatHistory[0] + StringNewLine + chatContext
 	}
 
 	resp, err := cs.SendMessage(ctx, genai.Text(fullContext))
