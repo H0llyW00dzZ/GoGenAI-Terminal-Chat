@@ -21,6 +21,10 @@ import (
 //	delay time.Duration: The duration to wait between printing each character.
 //
 // This function does not return any value. It directly prints to the standard output.
+//
+// Note: This is particularly useful for simulating the Gopher's lifecycle (Known as Goroutines) events in a user-friendly manner.
+// For instance, when a Gopher completes a task or job and transitions to a resting state,
+// this function can print a message with a typing effect to visually represent the Gopher's "sleeping" activities.
 func PrintTypingChat(message string, delay time.Duration) {
 	for _, char := range message {
 		fmt.Printf(AnimatedChars, char)
