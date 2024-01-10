@@ -17,7 +17,8 @@ const (
 // why this so simple ? hahahaha
 func main() {
 	logger := terminal.NewDebugOrErrorLogger() // Assuming NewDebugOrErrorLogger is exported from the terminal package
-	defer logger.RecoverFromPanic()            // Assuming RecoverFromPanic is exported from the terminal package
+	// this goroutines logger panic are not because code of function "terminal package", goroutines will tell if there's a panic in other side, indicate that other side system are bad (e.g, too complex).
+	defer logger.RecoverFromPanic() // Assuming RecoverFromPanic is exported from the terminal package
 	apiKey := os.Getenv(api_Key)
 	if apiKey == "" {
 		logger.Error(logFatal)
