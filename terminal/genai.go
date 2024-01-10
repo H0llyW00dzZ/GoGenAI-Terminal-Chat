@@ -112,7 +112,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 				colorized = SingleCharColorize(colorized, SingleAsterisk, ColorCyan)
 
 				// Print "AI:" prefix directly without typing effect
-				fmt.Print(AiNerd)
+				PrintPrefixWithTimeStamp(AiNerd)
 
 				// Assuming 'part' can be printed directly and is of type string or has a String() method
 				// Use the typing banner effect only for the part content
@@ -124,5 +124,6 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 		}
 	}
 	fmt.Println(StringNewLine + StripChars)
+	fmt.Print(StringNewLine)
 	return aiResponse
 }
