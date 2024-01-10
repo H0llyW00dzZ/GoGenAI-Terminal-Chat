@@ -83,8 +83,9 @@ func HandleCommand(input string, session *Session) (bool, error) {
 		return false, fmt.Errorf(errMsg)
 	}
 
-	// Since the command was handled (even though unrecognized), return true.
-	return true, nil
+	// Since the command was handled (even though unrecognized), return false now (as Direct).
+	session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
+	return false, nil
 }
 
 // handleQuitCommand gracefully terminates the chat session by sending a shutdown
@@ -166,7 +167,7 @@ func handleHelpCommand(session *Session) (bool, error) {
 	}
 	// Let gopher Remove last chatHistory of the message from the chat history
 	// This for protect loop of the AI hahah
-	session.ChatHistory.RemoveMessages(1, chatHistory)
+	session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
 	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
 	return true, nil
 }
@@ -245,7 +246,7 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 	}
 	// Let gopher Remove last chatHistory of the message from the chat history
 	// This for protect loop of the AI hahah
-	session.ChatHistory.RemoveMessages(1, chatHistory)
+	session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
 	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
 	return true, nil
 }
