@@ -220,8 +220,10 @@ func (s *Session) RenewSession(apiKey string) error {
 
 	// Close the current session if it exists
 	if s.Client != nil {
-		s.Client.Close() // Assuming Close is the method to properly shutdown the client
-		s.Client = nil   // Set the client to nil after closing
+		//s.Client.Close() // Assuming Close is the method to properly shutdown the client
+		// This just ensure that not looping the chat history after RenewSession.
+		defer s.cleanup()
+		s.Client = nil // Set the client to nil after closing
 	}
 
 	// Create a new client for the session

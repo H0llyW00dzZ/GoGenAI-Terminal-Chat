@@ -70,3 +70,32 @@ func (h *ChatHistory) GetHistory() string {
 	return buildeR.String()
 
 }
+
+// RemoveMessages removes messages from the chat history. If a specific message is provided,
+// it removes messages that contain that text; otherwise, it removes the specified number of
+// most recent messages.
+//
+// Parameters:
+//
+//	numMessages int: The number of most recent messages to remove. If set to 0 and a specific
+//	                 message is provided, all instances of that message are removed.
+//	messageContent string: The specific content of messages to remove. If empty, it removes
+//	                       the number of most recent messages specified by numMessages.
+//
+// This method does not return any value. It updates the chat history in place.
+func (h *ChatHistory) RemoveMessages(numMessages int, messageContent string) {
+	// Note: This simple and yet powerful unlike shitty complex code Hahaha.
+	if messageContent != "" {
+		// Remove messages that contain the specified content
+		filteredMessages := []string{}
+		for _, msg := range h.Messages {
+			if !strings.Contains(msg, messageContent) {
+				filteredMessages = append(filteredMessages, msg)
+			}
+		}
+		h.Messages = filteredMessages
+	} else if numMessages > 0 && numMessages <= len(h.Messages) {
+		// Remove the last numMessages messages
+		h.Messages = h.Messages[:len(h.Messages)-numMessages]
+	}
+}
