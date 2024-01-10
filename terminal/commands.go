@@ -197,6 +197,12 @@ func loadhistoryfromstorageCommand(session *Session) (bool, error) {
 	return true, nil
 }
 
+// reportshitFunctionthatToComplexCommand would be a handler function for a hypothetical ":report" command.
+func reportshitFunctionthatToComplex(session *Session) (bool, error) {
+	// currently unimplemented
+	return true, nil
+}
+
 // handleCheckVersionCommand checks if the current version of the software is the latest.
 // It updates the aiPrompt with either a confirmation that the current version is up to date
 // or with release notes for the latest version available.
