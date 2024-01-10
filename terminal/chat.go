@@ -9,7 +9,7 @@ import (
 )
 
 // Note: This is subject to change (for example, it can be customized in commands). For now, it's stable. Additionally, a token is inexpensive since, with Google AI's Gemini-Pro model, the maximum is 32K tokens.
-const MaxChatHistory = 15 // Maximum number of messages to keep in secret storage (Updated to 15 from 5 to be stored in the RAM's labyrinth, since it's still stable for terminal).
+const MaxChatHistory = 5 // Maximum number of messages to keep in history
 
 // ChatHistory holds the chat messages exchanged during a session.
 // It provides methods to add new messages to the history and to retrieve
