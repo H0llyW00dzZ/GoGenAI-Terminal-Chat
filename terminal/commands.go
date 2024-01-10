@@ -70,7 +70,7 @@ func HandleCommand(input string, session *Session) (bool, error) {
 
 	// If the command is not recognized, inform the AI about the unrecognized command (Free Error Messages hahaha).
 	// Note: This cheap since Google AI's Gemini-Pro model, the maximum is 32K tokens
-	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, command)
+	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, command)
 
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
@@ -104,7 +104,9 @@ func handleQuitCommand(session *Session) (bool, error) {
 	chatHistory := session.ChatHistory.GetHistory()
 
 	// Send a shutdown message to the AI including the chat history
-	_, err := SendMessage(session.Ctx, session.Client, ContextPromptShutdown, chatHistory)
+	// this method better instead of hardcode LOL
+	aiPrompt := fmt.Sprintf(ContextPromptShutdown, ApplicationName, QuitCommand)
+	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
 	if err != nil {
 		// If there's an error sending the message, log it
 		logger.Error(ErrorGettingShutdownMessage, err)
@@ -151,7 +153,7 @@ func handleQuitCommand(session *Session) (bool, error) {
 // to log any errors encountered during the operation.
 func handleHelpCommand(session *Session) (bool, error) {
 	// Define the help prompt to be sent to the AI, including the list of available commands.
-	aiPrompt := fmt.Sprintf(HelpCommandPrompt, QuitCommand, VersionCommand, HelpCommand)
+	aiPrompt := fmt.Sprintf(HelpCommandPrompt, ApplicationName, QuitCommand, VersionCommand, HelpCommand)
 
 	// Get the entire chat history as a string.
 	chatHistory := session.ChatHistory.GetHistory()
@@ -218,7 +220,7 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 	}
 
 	if isLatest {
-		aiPrompt = fmt.Sprintf(YouAreusingLatest, CurrentVersion)
+		aiPrompt = fmt.Sprintf(YouAreusingLatest, ApplicationName, CurrentVersion)
 	} else {
 		// Fetch the release information for the latest version.
 		releaseInfo, err := GetFullReleaseInfo(latestVersion)
@@ -226,7 +228,7 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 			return false, err
 		}
 
-		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
+		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt, ApplicationName,
 			CurrentVersion,
 			releaseInfo.TagName,
 			releaseInfo.Name,
