@@ -197,9 +197,10 @@ func loadhistoryfromstorageCommand(session *Session) (bool, error) {
 	return true, nil
 }
 
-// reportshitFunctionthatToComplexCommand would be a handler function for a hypothetical ":report" command.
-func reportshitFunctionthatToComplex(session *Session) (bool, error) {
+// reportshitFunctionthatTooComplexCommand would be a handler function for a hypothetical ":report" command.
+func reportshitFunctionthatTooComplex(session *Session) (bool, error) {
 	// currently unimplemented
+	// this would be used to report when goroutines panic in other side not because of this terminal LOL
 	return true, nil
 }
 
