@@ -16,10 +16,13 @@ const (
 
 // Defined constants for the terminal package
 const (
-	SignalMessage = "\nReceived an interrupt, shutting down gracefully..."
-	RecoverGopher = "%sRecovered from panic:%s %s%v%s"
-	StripChars    = "---"
-	NewLineChars  = '\n'
+	SignalMessage         = "\nReceived an interrupt, shutting down gracefully..."
+	RecoverGopher         = "%sRecovered from panic:%s %s%v%s"
+	ObjectHighLevelString = "%s %s" // Catch High level string
+	// TimeFormat is tailored for AI responses, providing a layout conducive to formatting chat transcripts.
+	TimeFormat   = "2006/01/02 15:04:05"
+	StripChars   = "---"
+	NewLineChars = '\n'
 	// this animated chars is magic, it used to show the user that the AI is typing just like human would type
 	AnimatedChars = "%c"
 	// this model is subject to changed in future

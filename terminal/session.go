@@ -77,7 +77,7 @@ func (s *Session) Start() {
 
 	// Simulate AI starting the conversation by Gopher Nerd
 	// This is a prompt context as the starting point for AI to start the conversation
-	fmt.Print(AiNerd)
+	PrintPrefixWithTimeStamp(AiNerd)
 	PrintTypingChat(ContextPrompt, TypingDelay)
 	fmt.Println() // Ensure there's a newline after the AI's initial message
 
@@ -117,7 +117,7 @@ func (s *Session) setupSignalHandling() {
 // processInput reads user input from the terminal. It returns true if the session
 // should end, either due to a command or an error.
 func (s *Session) processInput() bool {
-	fmt.Print(StringNewLine + YouNerd)
+	PrintPrefixWithTimeStamp(YouNerd)
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
@@ -149,7 +149,6 @@ func (s *Session) handleUserInput(input string) bool {
 
 	// Add the user's input to the chat history
 	s.ChatHistory.AddMessage(YouNerd, input)
-	fmt.Println() // Ensure a newline after the user's input
 
 	// Get the entire chat history as a string
 	chatHistory := s.ChatHistory.GetHistory()
