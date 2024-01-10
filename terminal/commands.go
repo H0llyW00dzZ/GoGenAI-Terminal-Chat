@@ -174,6 +174,24 @@ func k8sCommand(session *Session) (bool, error) {
 	return true, nil
 }
 
+// storageCommand would be a handler function for a hypothetical ":storage" command.
+func storageCommand(session *Session) (bool, error) {
+	// currently unimplemented
+	return true, nil
+}
+
+// savehistorytostorageCommand would be a handler function for a hypothetical ":save history" command.
+func savehistorytostorageCommand(session *Session) (bool, error) {
+	// currently unimplemented
+	return true, nil
+}
+
+// loadhistoryfromstorageCommand would be a handler function for a hypothetical ":load history" command.
+func loadhistoryfromstorageCommand(session *Session) (bool, error) {
+	// currently unimplemented
+	return true, nil
+}
+
 // handleCheckVersionCommand checks if the current version of the software is the latest.
 // It updates the aiPrompt with either a confirmation that the current version is up to date
 // or with release notes for the latest version available.
