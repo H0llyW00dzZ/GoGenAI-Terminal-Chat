@@ -46,6 +46,8 @@ const (
 	// Better prompt instead of typing manually hahaha
 	YouAreusingLatest  = "The user is using Version **%s**\nThis is the latest version.\n Tell the user, No need to update."              // Better Response for AI
 	ReleaseNotesPrompt = "The user is using Version **%s**\nA newer version is available: **%s**\nCan you tell\nRelease Name: **%s**\n%s" // Better Response for AI
+	// Help Prompt commands
+	HelpCommandPrompt = "The user attempted an command: **%s**\nCan you provide help information for the available commands?\nList Command Available:\n**%s**\n**%s**" // Better Response for AI"
 )
 
 // Defined constants for commands
@@ -55,6 +57,7 @@ const (
 const (
 	QuitCommand    = ":quit"
 	VersionCommand = ":checkversion"
+	HelpCommand    = ":help"
 	PrefixChar     = ":"
 )
 

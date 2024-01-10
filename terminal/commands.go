@@ -120,9 +120,50 @@ func handleQuitCommand(session *Session) (bool, error) {
 	return true, nil
 }
 
-// handleHelpCommand would be a handler function for a hypothetical ":help" command.
+// handleHelpCommand processes the ":help" command within a chat session. When a user
+// inputs the ":help" command, this function constructs a help prompt that includes a list
+// of available commands and sends it to the generative AI model for a response.
+//
+// The function uses the session's current chat history to provide context for the AI's response,
+// ensuring that the help message is relevant to the conversation's state. After sending the
+// prompt to the AI, the function retrieves and logs the AI's response, which contains
+// information on how to use the commands.
+//
+// Parameters:
+//
+//	session *Session: A pointer to the current chat session, which contains state information
+//	                  such as the chat history and the generative AI client.
+//
+// Returns:
+//
+//	bool: A boolean indicating whether the command was handled. It returns true to signal
+//	      that indicate that the command was successfully handled.
+//	error: An error object that may occur during the sending of the message to the AI. If the
+//	       operation is successful, the error is nil.
+//
+// The function ensures that the session's context and AI client are utilized to communicate
+// with the AI model. It also handles any errors that may occur during the message-sending
+// process by logging them appropriately.
+//
+// Note: The function assumes the presence of a HelpCommandPrompt constant that contains the
+// format string for the AI's help prompt, as well as constants for the various commands
+// (e.g., QuitCommand, VersionCommand, HelpCommand). It also relies on a logger variable
+// to log any errors encountered during the operation.
 func handleHelpCommand(session *Session) (bool, error) {
-	// currently unimplemented
+	// Define the help prompt to be sent to the AI, including the list of available commands.
+	aiPrompt := fmt.Sprintf(HelpCommandPrompt, QuitCommand, VersionCommand, HelpCommand)
+
+	// Get the entire chat history as a string.
+	chatHistory := session.ChatHistory.GetHistory()
+
+	// Send the constructed message to the AI and get the response.
+	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+	if err != nil {
+		logger.Error(ErrorSendingMessage, err)
+		return false, err
+	}
+
+	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
 	return true, nil
 }
 
