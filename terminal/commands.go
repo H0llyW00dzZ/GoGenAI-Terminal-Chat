@@ -164,7 +164,9 @@ func handleHelpCommand(session *Session) (bool, error) {
 		logger.Error(ErrorSendingMessage, err)
 		return false, err
 	}
-
+	// Let gopher Remove last chatHistory of the message from the chat history
+	// This for protect loop of the AI hahah
+	session.ChatHistory.RemoveMessages(1, chatHistory)
 	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
 	return true, nil
 }
@@ -241,6 +243,9 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		return false, err
 	}
+	// Let gopher Remove last chatHistory of the message from the chat history
+	// This for protect loop of the AI hahah
+	session.ChatHistory.RemoveMessages(1, chatHistory)
 	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
 	return true, nil
 }
