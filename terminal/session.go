@@ -27,7 +27,9 @@ type Session struct {
 	Ended       bool               // Ended indicates whether the session has ended.
 	// mu protects the concurrent access to session's state, ensuring thread safety.
 	// It should be locked when accessing or modifying the session's state.
-	mu        sync.Mutex
+	mu sync.Mutex
+	// this reference pretty useful, which can handle runtime 24/7, unlike original ai chat session systems.
+	// for example, if session is ended not cause of client, then it will be renew with previous chat history.
 	lastInput string // Stores the last user input for reference
 
 }
