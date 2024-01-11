@@ -6,6 +6,8 @@ package terminal
 import (
 	"fmt"
 	"strings"
+
+	"github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal/fun_stuff"
 )
 
 // isCommand checks if the input is a command based on the prefix.
@@ -29,8 +31,9 @@ func (s *Session) handleCommand(input string) bool {
 // CommandHandler defines the function signature for handling chat commands.
 // Each command handler function must conform to this signature.
 type CommandHandler interface {
-	Execute(*Session) (bool, error)
-	IsValid(parts []string) bool // new method
+	// Note: The list of command handlers here does not use os.Args; instead, it employs advanced idiomatic Go practices. 🤪
+	Execute(session *Session, parts []string) (bool, error) // new method
+	IsValid(parts []string) bool                            // new method
 }
 
 // HandleCommand interprets the user input as a command and executes the associated action.
@@ -74,7 +77,7 @@ func HandleCommand(input string, session *Session) (bool, error) {
 	}
 
 	// Execute the command if it is recognized and valid.
-	return commandHandler.Execute(session)
+	return commandHandler.Execute(session, parts)
 }
 
 // handleUnrecognizedCommand takes an unrecognized command and the current session,
@@ -129,7 +132,7 @@ func handleUnrecognizedCommand(command string, session *Session) (bool, error) {
 // and a predefined shutdown message (ShutdownMessage). It relies on the session's endSession method to perform
 // any necessary cleanup. The method's return value of true indicates to the calling code that the session loop
 // should exit and the application should terminate.
-func (q *handleQuitCommand) Execute(session *Session) (bool, error) {
+func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 
@@ -176,7 +179,7 @@ func (q *handleQuitCommand) Execute(session *Session) (bool, error) {
 //
 // Note: The method does not add the AI's response to the chat history to avoid potential
 // loops in the AI's behavior.
-func (h *handleHelpCommand) Execute(session *Session) (bool, error) {
+func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Define the help prompt to be sent to the AI, including the list of available commands.
 	aiPrompt := fmt.Sprintf(HelpCommandPrompt, ApplicationName, QuitCommand, VersionCommand, HelpCommand)
 
@@ -211,7 +214,7 @@ func (h *handleHelpCommand) Execute(session *Session) (bool, error) {
 // to ensure that the session state is correctly maintained. The method assumes the presence of constants
 // for formatting messages to the AI (YouAreUsingLatest and ReleaseNotesPrompt) and relies on external
 // functions (CheckLatestVersion and GetFullReleaseInfo) to determine version information and fetch release details.
-func (c *handleCheckVersionCommand) Execute(session *Session) (bool, error) {
+func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 	// Check if the current version is the latest.
@@ -243,5 +246,27 @@ func (c *handleCheckVersionCommand) Execute(session *Session) (bool, error) {
 		return false, err
 	}
 	// Indicate that the command was handled; return false to continue the session.
+	return false, nil
+}
+
+// Execute performs the ping operation on the provided IP address.
+// It uses system utilities to send ICMP packets to the IP and returns the result.
+//
+// session *Session: The current chat session containing state and context, including the AI client.
+// parts []string: The slice containing the command and its arguments.
+//
+// Returns true if the ping command was executed, and an error if there was an issue executing the command.
+func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Note: WIP
+	if !cmd.IsValid(parts) {
+		return true, fmt.Errorf("invalid ping command")
+	}
+
+	ip := parts[1]
+	_, err := fun_stuff.PingIP(ip)
+	if err != nil {
+		return true, fmt.Errorf("ping failed: %v", err)
+	}
+
 	return false, nil
 }
