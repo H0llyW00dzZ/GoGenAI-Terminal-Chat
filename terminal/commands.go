@@ -118,6 +118,7 @@ func handleUnrecognizedCommand(command string, session *Session) (bool, error) {
 // Parameters:
 //
 //	session *Session: The current chat session, which provides context and state for the operation.
+//	parts []string: The slice containing the command and its arguments.
 //
 // Returns:
 //
@@ -171,6 +172,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 //
 //	session *Session: the current chat session, which contains state information such as the chat history
 //	          and the generative AI client.
+//	parts 	[]string: The slice containing the command and its arguments.
 //
 // Returns:
 //
@@ -204,6 +206,7 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 // Parameters:
 //
 //	session *Session: The current session containing the chat history and other relevant context.
+//	parts 	[]string: The slice containing the command and its arguments.
 //
 // Returns:
 //
@@ -253,7 +256,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 // It uses system utilities to send ICMP packets to the IP and returns the result.
 //
 // session *Session: The current chat session containing state and context, including the AI client.
-// parts []string: The slice containing the command and its arguments.
+// parts   []string: The slice containing the command and its arguments.
 //
 // Returns true if the ping command was executed, and an error if there was an issue executing the command.
 func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, error) {
