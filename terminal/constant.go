@@ -97,6 +97,7 @@ const (
 	ErrorUserAttemptUnrecognizedCommandPrompt = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
 	ErrorFailedtoSendUnrecognizedCommandToAI  = "Failed to send unrecognized command to AI: %v"
 	HumanErrorWhileTypingCommandArgs          = "Invalid Command Arguments"
+	ErrorPingFailed                           = "Ping failed: %v"
 )
 
 // Defined List of characters
