@@ -83,19 +83,43 @@ func (h *ChatHistory) GetHistory() string {
 //	                       the number of most recent messages specified by numMessages.
 //
 // This method does not return any value. It updates the chat history in place.
+//
+// Note: This currently marked as TODO since it's not used anywhere in the code. It's a good idea to add this feature in the future.
 func (h *ChatHistory) RemoveMessages(numMessages int, messageContent string) {
 	// Note: This simple and yet powerful unlike shitty complex code Hahaha.
 	if messageContent != "" {
-		// Remove messages that contain the specified content
-		filteredMessages := []string{}
-		for _, msg := range h.Messages {
-			if !strings.Contains(msg, messageContent) {
-				filteredMessages = append(filteredMessages, msg)
-			}
-		}
-		h.Messages = filteredMessages
-	} else if numMessages > 0 && numMessages <= len(h.Messages) {
-		// Remove the last numMessages messages
-		h.Messages = h.Messages[:len(h.Messages)-numMessages]
+		h.removeMessagesByContent(messageContent)
+		return
 	}
+
+	// If numMessages is provided, remove the most recent messages.
+	if numMessages > 0 {
+		h.removeRecentMessages(numMessages)
+	}
+}
+
+// removeMessagesByContent removes all messages that contain the specified content.
+func (h *ChatHistory) removeMessagesByContent(content string) {
+	filteredMessages := h.filterMessages(func(msg string) bool {
+		return !strings.Contains(msg, content)
+	})
+	h.Messages = filteredMessages
+}
+
+// removeRecentMessages removes the specified number of most recent messages.
+func (h *ChatHistory) removeRecentMessages(count int) {
+	if count <= len(h.Messages) {
+		h.Messages = h.Messages[:len(h.Messages)-count]
+	}
+}
+
+// filterMessages filters the messages using the provided predicate function.
+func (h *ChatHistory) filterMessages(predicate func(string) bool) []string {
+	filtered := []string{}
+	for _, msg := range h.Messages {
+		if predicate(msg) {
+			filtered = append(filtered, msg)
+		}
+	}
+	return filtered
 }
