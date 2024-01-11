@@ -6,3 +6,11 @@ package terminal
 type handleQuitCommand struct{}
 type handleHelpCommand struct{}
 type handleCheckVersionCommand struct{}
+
+// Note: this unimplemented
+// Now even it's unimplemented, it wont detected in deadcode that "unreachable func"
+type handleK8sCommand struct{}
+type storageCommand struct{}
+type savehistorytostorageCommand struct{}
+type loadhistoryfromstorageCommand struct{}
+type reportshitFunctionthatTooComplexCommand struct{}
