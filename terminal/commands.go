@@ -30,6 +30,7 @@ func (s *Session) handleCommand(input string) bool {
 // Each command handler function must conform to this signature.
 type CommandHandler interface {
 	Execute(*Session) (bool, error)
+	IsValid(parts []string) bool // new method
 }
 
 // HandleCommand interprets the user input as a command and executes the associated action.
@@ -58,26 +59,53 @@ func HandleCommand(input string, session *Session) (bool, error) {
 		return true, nil
 	}
 
-	command, exists := commandHandlers[parts[0]]
+	// Retrieve the command handler and check if it exists.
+	commandHandler, exists := commandHandlers[parts[0]]
 	if !exists {
-		// If the command is not recognized, inform the AI about the unrecognized command (Free Error Messages hahaha).
-		// Note: This cheap since Google AI's Gemini-Pro model, the maximum is 32K tokens
-		aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, parts[0])
-
-		// Get the entire chat history as a string
-		chatHistory := session.ChatHistory.GetHistory()
-
-		// Send the constructed message to the AI and get the response.
-		_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
-		if err != nil {
-			errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
-			logger.Error(errMsg)
-			return false, fmt.Errorf(errMsg)
-		}
-		return false, nil
+		// Handle unrecognized commands.
+		return handleUnrecognizedCommand(parts[0], session)
 	}
 
-	return command.Execute(session)
+	// Validate the command arguments.
+	if !commandHandler.IsValid(parts) {
+		logger.Error(HumanErrorWhileTypingCommandArgs)
+		fmt.Println()
+		return true, nil
+	}
+
+	// Execute the command if it is recognized and valid.
+	return commandHandler.Execute(session)
+}
+
+// handleUnrecognizedCommand takes an unrecognized command and the current session,
+// constructs a prompt to inform the AI about the unrecognized command, and sends
+// this information to the AI service. This function is typically called when a user
+// input is detected as a command but does not match any of the known command handlers.
+//
+// Parameters:
+// - command string: The unrecognized command input by the user.
+// - session *Session: The current chat session containing state and context, including the AI client.
+//
+// Returns:
+// - bool: Always returns false as this function does not result in a command execution.
+// - error: Returns an error if sending the message to the AI fails; otherwise, nil.
+//
+// The function constructs an error prompt using the application's name and the unrecognized command,
+// retrieves the current chat history, and sends this information to the AI service. If an error occurs
+// while sending the message, the function logs the error and returns an error to the caller.
+func handleUnrecognizedCommand(command string, session *Session) (bool, error) {
+	// If the command is not recognized, inform the AI about the unrecognized command.
+	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, command)
+	chatHistory := session.ChatHistory.GetHistory()
+
+	// Send the constructed message to the AI and get the response.
+	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+	if err != nil {
+		errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
+		logger.Error(errMsg)
+		return false, fmt.Errorf(errMsg)
+	}
+	return false, nil
 }
 
 // Execute gracefully terminates the chat session. It sends a shutdown message to the AI,

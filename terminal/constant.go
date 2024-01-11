@@ -11,7 +11,7 @@ const (
 	GitHubAPIURL      = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
 	GitHubReleaseFUll = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/tags/%s"
 	// CurrentVersion represents the current version of the application.
-	CurrentVersion = "v0.2.6"
+	CurrentVersion = "v0.2.7"
 )
 
 // Defined constants for the terminal package
@@ -95,6 +95,7 @@ const (
 	ErrorLowLevelFailedtoStartAiChatSession   = "failed to start a new AI chat session: %w"
 	ErrorUserAttemptUnrecognizedCommandPrompt = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
 	ErrorFailedtoSendUnrecognizedCommandToAI  = "Failed to send unrecognized command to AI: %v"
+	HumanErrorWhileTypingCommandArgs          = "Invalid Command Arguments"
 )
 
 // Defined List of characters

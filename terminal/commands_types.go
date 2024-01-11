@@ -8,8 +8,46 @@ package terminal
 // This approach questions why many developers write Go code in an overly complex manner (that I don't fucking understand),
 // which often leads to problems.
 type handleQuitCommand struct{}
+
+// IsValid checks if the quit command is valid based on the input parts.
+// The quit command is valid only if there are no additional arguments, hence
+// the length of parts must be exactly 1.
+//
+// parts []string: The slice containing the command and its arguments.
+//
+// Returns true if the command is valid, otherwise false.
+func (cmd *handleQuitCommand) IsValid(parts []string) bool {
+	// The quit command should not have any arguments.
+	return len(parts) == 1
+}
+
 type handleHelpCommand struct{}
+
+// IsValid checks if the help command is valid based on the input parts.
+// The help command is valid only if there are no additional arguments, hence
+// the length of parts must be exactly 1.
+//
+// parts []string: The slice containing the command and its arguments.
+//
+// Returns true if the command is valid, otherwise false.
+func (cmd *handleHelpCommand) IsValid(parts []string) bool {
+	// The help command should not have any arguments.
+	return len(parts) == 1
+}
+
 type handleCheckVersionCommand struct{}
+
+// IsValid checks if the checkversion command is valid based on the input parts.
+// The checkversion command is valid only if there are no additional arguments, hence
+// the length of parts must be exactly 1.
+//
+// parts []string: The slice containing the command and its arguments.
+//
+// Returns true if the command is valid, otherwise false.
+func (cmd *handleCheckVersionCommand) IsValid(parts []string) bool {
+	// The checkversion command should not have any arguments.
+	return len(parts) == 1
+}
 
 // Note: this unimplemented
 // Now even it's unimplemented, it wont detected in deadcode indicate that "unreachable func"
