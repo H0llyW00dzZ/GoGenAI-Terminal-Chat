@@ -28,7 +28,9 @@ func (s *Session) handleCommand(input string) bool {
 
 // CommandHandler defines the function signature for handling chat commands.
 // Each command handler function must conform to this signature.
-type CommandHandler func(session *Session) (bool, error)
+type CommandHandler interface {
+	Execute(*Session) (bool, error)
+}
 
 // HandleCommand interprets the user input as a command and executes the associated action.
 // It uses a map of command strings to their corresponding handler functions to manage
@@ -45,47 +47,37 @@ type CommandHandler func(session *Session) (bool, error)
 //	bool: A boolean indicating if the input was a command and was handled.
 //	error: An error that may occur while handling the command.
 func HandleCommand(input string, session *Session) (bool, error) {
-	// Trim the input and check if it starts with the command prefix.
 	trimmedInput := strings.TrimSpace(input)
 	if !strings.HasPrefix(trimmedInput, PrefixChar) {
-		// If the input doesn't start with the command prefix, it's not a command.
 		return false, nil
 	}
 
-	// Split the input into command and potential arguments.
 	parts := strings.Fields(trimmedInput)
 	if len(parts) == 0 {
-		logger.Error(UnknownCommand) // Use logger to log the unknown command error
+		logger.Error(UnknownCommand)
 		return true, nil
 	}
 
-	// Retrieve the command and check if it exists in the commandHandlers map.
-	command := parts[0]
-	if handler, exists := commandHandlers[command]; exists {
-		// Call the handler function for the command if no extra arguments are provided.
-		if len(parts) == 1 {
-			return handler(session)
+	command, exists := commandHandlers[parts[0]]
+	if !exists {
+		// If the command is not recognized, inform the AI about the unrecognized command (Free Error Messages hahaha).
+		// Note: This cheap since Google AI's Gemini-Pro model, the maximum is 32K tokens
+		aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, parts[0])
+
+		// Get the entire chat history as a string
+		chatHistory := session.ChatHistory.GetHistory()
+
+		// Send the constructed message to the AI and get the response.
+		_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+		if err != nil {
+			errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
+			logger.Error(errMsg)
+			return false, fmt.Errorf(errMsg)
 		}
+		return false, nil
 	}
 
-	// If the command is not recognized, inform the AI about the unrecognized command (Free Error Messages hahaha).
-	// Note: This cheap since Google AI's Gemini-Pro model, the maximum is 32K tokens
-	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, command)
-
-	// Get the entire chat history as a string
-	chatHistory := session.ChatHistory.GetHistory()
-
-	// Send the constructed message to the AI and get the response.
-	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
-	if err != nil {
-		errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
-		logger.Error(errMsg)
-		return false, fmt.Errorf(errMsg)
-	}
-
-	// Since the command was handled (even though unrecognized), return false now (as Direct).
-	session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
-	return false, nil
+	return command.Execute(session)
 }
 
 // handleQuitCommand gracefully terminates the chat session by sending a shutdown
@@ -100,7 +92,7 @@ func HandleCommand(input string, session *Session) (bool, error) {
 //
 //	bool: Always returns true to indicate the session should end.
 //	error: Returns nil if no error occurs; otherwise, returns an error object.
-func handleQuitCommand(session *Session) (bool, error) {
+func (q *handleQuitCommand) Execute(session *Session) (bool, error) {
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 
@@ -120,7 +112,7 @@ func handleQuitCommand(session *Session) (bool, error) {
 	session.endSession()
 
 	// Signal to the main loop that it's time to exit
-	return true, nil
+	return true, nil // Return true to end the session.
 }
 
 // handleHelpCommand processes the ":help" command within a chat session. When a user
@@ -152,7 +144,7 @@ func handleQuitCommand(session *Session) (bool, error) {
 // format string for the AI's help prompt, as well as constants for the various commands
 // (e.g., QuitCommand, VersionCommand, HelpCommand). It also relies on a logger variable
 // to log any errors encountered during the operation.
-func handleHelpCommand(session *Session) (bool, error) {
+func (h *handleHelpCommand) Execute(session *Session) (bool, error) {
 	// Define the help prompt to be sent to the AI, including the list of available commands.
 	aiPrompt := fmt.Sprintf(HelpCommandPrompt, ApplicationName, QuitCommand, VersionCommand, HelpCommand)
 
@@ -167,9 +159,9 @@ func handleHelpCommand(session *Session) (bool, error) {
 	}
 	// Let gopher Remove last chatHistory of the message from the chat history
 	// This for protect loop of the AI hahah
-	session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
-	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
-	return true, nil
+	//session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
+	// return false to indicate the command was handled, now it doesn't looping ai hahaha
+	return false, nil
 }
 
 // handleCheckVersionCommand checks if the current version of the software is the latest.
@@ -188,7 +180,7 @@ func handleHelpCommand(session *Session) (bool, error) {
 // Note:
 // The function returns `true` to indicate that the command was successfully handled
 // and the session should continue. This is safe to perform in conjunction with `RenewSession`.
-func handleCheckVersionCommand(session *Session) (bool, error) {
+func (c *handleCheckVersionCommand) Execute(session *Session) (bool, error) {
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 	// Check if the current version is the latest.
@@ -221,7 +213,7 @@ func handleCheckVersionCommand(session *Session) (bool, error) {
 	}
 	// Let gopher Remove last chatHistory of the message from the chat history
 	// This for protect loop of the AI hahah
-	session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
-	// return true to indicate the command was handled, but the session should continue since it's safe to do so alongside with RenewSession
-	return true, nil
+	//session.ChatHistory.RemoveMessages(2, "") // Remove 2 line Ai and user message
+	// return false to indicate the command was handled now it doesn't looping ai hahaha
+	return false, nil
 }
