@@ -56,3 +56,4 @@ type storageCommand struct{}
 type savehistorytostorageCommand struct{}
 type loadhistoryfromstorageCommand struct{}
 type reportshitFunctionthatTooComplexCommand struct{}
+type pingCommand struct{}
