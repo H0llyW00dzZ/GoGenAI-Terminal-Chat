@@ -31,10 +31,3 @@ func (c *reportshitFunctionthatTooComplexCommand) Execute(session *Session) (boo
 	// this would be used to report when goroutines panic in other side not because of this terminal LOL
 	return true, nil
 }
-
-// pingCommand would be a handler function for a hypothetical ":ping <ip>" command.
-// Note: This just fun stuff, testing the connection in the terminal written in Go.
-func (c *pingCommand) Execute(session *Session) (bool, error) {
-	// currently unimplemented
-	return true, nil
-}
