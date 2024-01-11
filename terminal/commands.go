@@ -258,14 +258,17 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 // Returns true if the ping command was executed, and an error if there was an issue executing the command.
 func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Note: WIP
+	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
-		return true, fmt.Errorf("invalid ping command")
+		logger.Error(HumanErrorWhileTypingCommandArgs)
+		fmt.Println()
+		return true, nil
 	}
 
 	ip := parts[1]
 	_, err := fun_stuff.PingIP(ip)
 	if err != nil {
-		return true, fmt.Errorf("ping failed: %v", err)
+		logger.Error(ErrorPingFailed, err)
 	}
 
 	return false, nil
