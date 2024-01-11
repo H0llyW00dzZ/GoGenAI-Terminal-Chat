@@ -272,6 +272,7 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, e
 	_, err := fun_stuff.PingIP(ip)
 	if err != nil {
 		logger.Error(ErrorPingFailed, err)
+		fmt.Println()
 	}
 
 	return false, nil
