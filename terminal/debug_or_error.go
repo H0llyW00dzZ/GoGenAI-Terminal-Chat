@@ -13,7 +13,8 @@ import (
 // It encapsulates a standard log.Logger and adds functionality for conditional debug
 // logging and colorized error output.
 type DebugOrErrorLogger struct {
-	logger *log.Logger
+	logger    *log.Logger
+	debugMode bool
 }
 
 // NewDebugOrErrorLogger initializes a new DebugOrErrorLogger with a logger that writes
@@ -23,8 +24,10 @@ type DebugOrErrorLogger struct {
 //
 //	*DebugOrErrorLogger: A pointer to a newly created DebugOrErrorLogger.
 func NewDebugOrErrorLogger() *DebugOrErrorLogger {
+	debugMode := os.Getenv(DEBUG_MODE) == "true" // Read the environment variable once
 	return &DebugOrErrorLogger{
-		logger: log.New(os.Stderr, "", log.LstdFlags),
+		logger:    log.New(os.Stderr, "", log.LstdFlags),
+		debugMode: debugMode,
 	}
 }
 
@@ -38,8 +41,7 @@ func NewDebugOrErrorLogger() *DebugOrErrorLogger {
 //
 // TODO: Add a DEBUG_MODE constant to the terminal package and use it here.
 func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
-	// Check the environment variable to determine if the application is in debug mode
-	if os.Getenv(DEBUG_MODE) == "true" {
+	if l.debugMode {
 		l.logger.Printf(format, v...)
 	}
 }
