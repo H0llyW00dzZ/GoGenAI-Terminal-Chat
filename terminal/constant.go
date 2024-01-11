@@ -68,6 +68,7 @@ const (
 	QuitCommand    = ":quit"
 	VersionCommand = ":checkversion"
 	HelpCommand    = ":help"
+	PingCommand    = ":ping"
 	PrefixChar     = ":"
 )
 
