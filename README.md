@@ -29,7 +29,8 @@ Interesting to built it in terminal after touring journey through the Go program
 > [!NOTE]
 > This `Realistic Typing Animation` specialized feature is economical in terms of resource consumption (e.g, `memory,cpu`), in contrast to `front-end languages` or `other languages` that tend to be more resource-intensive.
 - **Ease of Deployment**: Quickly deploy the chat application using Docker, minimizing setup time and complexity.
-- **Handle Command**: Seamlessly integrate special commands within the chat flow. The `:quit` command, for instance, allows users to end the session gracefully. Upon invoking this command, the application synchronizes with the AI to generate a fitting farewell message, ensuring a natural and courteous conclusion to the interaction. This feature not only elevates the user experience by providing a conversational closure but also ensures that the shutdown sequence is managed in sync with the AI's response, maintaining the immersive quality of the chat session.
+- **Command Handling**: Integrate special chat commands naturally within the conversation. The `:quit` command, for example, allows users to end their session in an orderly fashion. When this command is executed, it prompts a cooperative shutdown sequence with the AI, which generates an appropriate goodbye message. This thoughtful design enhances the user experience by providing a conversational closure that is both natural and polite, ensuring that the session termination is as engaging as the conversation itself.
+- **Concurrency**: Leverage the power of Go's concurrency model with goroutines.
 
 ## ⚖️ Enhanced Scalability
 
