@@ -56,4 +56,15 @@ type storageCommand struct{}
 type savehistorytostorageCommand struct{}
 type loadhistoryfromstorageCommand struct{}
 type reportshitFunctionthatTooComplexCommand struct{}
-type pingCommand struct{}
+type handlepingCommand struct{}
+
+// IsValid checks if the ping command is valid based on the input parts.
+// The ping command is valid only if it is followed by exactly one argument, which is the IP address.
+//
+// parts []string: The slice containing the command and its arguments.
+//
+// Returns true if the command is valid, otherwise false.
+func (cmd *handlepingCommand) IsValid(parts []string) bool {
+	// The ping command should have exactly two parts: the command itself and the IP address.
+	return len(parts) == 2
+}
