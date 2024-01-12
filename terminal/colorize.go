@@ -9,13 +9,15 @@ import (
 
 // ANSI color codes
 const (
-	ColorRed    = "\033[31m"
-	ColorGreen  = "\033[32m"
-	ColorYellow = "\033[33m"
-	ColorBlue   = "\033[34m"
-	ColorPurple = "\033[35m"
-	ColorCyan   = "\033[36m"
-	ColorReset  = "\033[0m"
+	// Note: By replacing the ANSI escape sequence from "\033" to "\x1b", might can avoid a rare bug that sometimes occurs on different machines,
+	// although the original code works fine on mine (Author: @H0llyW00dzZ).
+	ColorRed    = "\x1b[31m"
+	ColorGreen  = "\x1b[32m"
+	ColorYellow = "\x1b[33m"
+	ColorBlue   = "\x1b[34m"
+	ColorPurple = "\x1b[35m"
+	ColorCyan   = "\x1b[36m"
+	ColorReset  = "\x1b[0m"
 )
 
 // Colorize applies ANSI color codes to the text surrounded by specified delimiters.
