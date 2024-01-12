@@ -97,6 +97,8 @@ func HandleCommand(input string, session *Session) (bool, error) {
 // retrieves the current chat history, and sends this information to the AI service. If an error occurs
 // while sending the message, the function logs the error and returns an error to the caller.
 func handleUnrecognizedCommand(command string, session *Session) (bool, error) {
+	// Pass ContextPrompt
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// If the command is not recognized, inform the AI about the unrecognized command.
 	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, command)
 	chatHistory := session.ChatHistory.GetHistory()
@@ -134,6 +136,8 @@ func handleUnrecognizedCommand(command string, session *Session) (bool, error) {
 // any necessary cleanup. The method's return value of true indicates to the calling code that the session loop
 // should exit and the application should terminate.
 func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Pass ContextPrompt
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 
@@ -182,6 +186,8 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 // Note: The method does not add the AI's response to the chat history to avoid potential
 // loops in the AI's behavior.
 func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Pass ContextPrompt 🤪
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Define the help prompt to be sent to the AI, including the list of available commands.
 	aiPrompt := fmt.Sprintf(HelpCommandPrompt, ApplicationName, QuitCommand, VersionCommand, HelpCommand)
 
@@ -218,6 +224,8 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 // for formatting messages to the AI (YouAreUsingLatest and ReleaseNotesPrompt) and relies on external
 // functions (CheckLatestVersion and GetFullReleaseInfo) to determine version information and fetch release details.
 func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Pass ContextPrompt 🤪
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 	// Check if the current version is the latest.
