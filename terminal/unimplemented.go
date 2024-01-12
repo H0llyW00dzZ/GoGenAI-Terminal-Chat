@@ -31,3 +31,10 @@ func (c *reportshitFunctionthatTooComplexCommand) Execute(session *Session) (boo
 	// this would be used to report when goroutines panic in other side not because of this terminal LOL
 	return true, nil
 }
+
+// translateCommand would be a handler function for a hypothetical ":translate" command.
+func (cmd *translateCommand) Execute(session *Session) (bool, error) {
+	// currently unimplemented
+	// this a magic translate the power of Go would be used to translate the message from human readable to machine readable (e.g. English to binary)
+	return true, nil
+}

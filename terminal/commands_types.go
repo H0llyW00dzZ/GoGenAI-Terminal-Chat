@@ -68,3 +68,5 @@ func (cmd *handlepingCommand) IsValid(parts []string) bool {
 	// The ping command should have exactly two parts: the command itself and the IP address.
 	return len(parts) == 2
 }
+
+type translateCommand struct{}
