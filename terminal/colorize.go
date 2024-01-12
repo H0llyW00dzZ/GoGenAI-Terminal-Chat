@@ -18,17 +18,6 @@ type ANSIColorCodes struct {
 	ColorReset  string
 }
 
-// colors holds the ANSI color codes and is accessible throughout the package.
-var colors = ANSIColorCodes{
-	ColorRed:    "\x1b[31m",
-	ColorGreen:  "\x1b[32m",
-	ColorYellow: "\x1b[33m",
-	ColorBlue:   "\x1b[34m",
-	ColorPurple: "\x1b[35m",
-	ColorCyan:   "\x1b[36m",
-	ColorReset:  "\x1b[0m",
-}
-
 // ANSI color codes
 const (
 	// Note: By replacing the ANSI escape sequence from "\033" to "\x1b", might can avoid a rare bug that sometimes occurs on different machines,
