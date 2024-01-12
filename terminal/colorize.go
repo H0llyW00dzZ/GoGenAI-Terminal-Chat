@@ -7,6 +7,28 @@ import (
 	"strings"
 )
 
+// ANSIColorCodes defines a struct for holding ANSI color escape sequences.
+type ANSIColorCodes struct {
+	ColorRed    string
+	ColorGreen  string
+	ColorYellow string
+	ColorBlue   string
+	ColorPurple string
+	ColorCyan   string
+	ColorReset  string
+}
+
+// colors holds the ANSI color codes and is accessible throughout the package.
+var colors = ANSIColorCodes{
+	ColorRed:    "\x1b[31m",
+	ColorGreen:  "\x1b[32m",
+	ColorYellow: "\x1b[33m",
+	ColorBlue:   "\x1b[34m",
+	ColorPurple: "\x1b[35m",
+	ColorCyan:   "\x1b[36m",
+	ColorReset:  "\x1b[0m",
+}
+
 // ANSI color codes
 const (
 	// Note: By replacing the ANSI escape sequence from "\033" to "\x1b", might can avoid a rare bug that sometimes occurs on different machines,
@@ -44,9 +66,9 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 		parts := strings.Split(text, delimiter)
 		for j := 1; j < len(parts); j += 2 {
 			if keep, exists := keepDelimiters[delimiter]; exists && keep {
-				parts[j] = color + delimiter + parts[j] + delimiter + ColorReset
+				parts[j] = color + delimiter + parts[j] + delimiter + colors.ColorReset
 			} else {
-				parts[j] = color + parts[j] + ColorReset
+				parts[j] = color + parts[j] + colors.ColorReset
 			}
 		}
 		text = strings.Join(parts, "")
@@ -84,11 +106,11 @@ func SingleCharColorize(text string, delimiter string, color string) string {
 	lines := strings.Split(text, StringNewLine)
 	for _, line := range lines {
 		trimmedLine := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmedLine, string(delimiter)) {
+		if strings.HasPrefix(trimmedLine, delimiter) {
 			// Colorize the delimiter and the following space if it's a list item
 			result.WriteString(color)
-			result.WriteString(string(delimiter))
-			result.WriteString(ColorReset)
+			result.WriteString(trimmedLine[:1])
+			result.WriteString(colors.ColorReset)
 			result.WriteString(trimmedLine[1:])
 		} else {
 			// No coloring needed
