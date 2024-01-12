@@ -31,6 +31,21 @@ Interesting to built it in terminal after touring journey through the Go program
 - **Ease of Deployment**: Quickly deploy the chat application using Docker, minimizing setup time and complexity.
 - **Command Handling**: Integrate special chat commands naturally within the conversation. The `:quit` command, for example, allows users to end their session in an orderly fashion. When this command is executed, it prompts a cooperative shutdown sequence with the AI, which generates an appropriate goodbye message. This thoughtful design enhances the user experience by providing a conversational closure that is both natural and polite, ensuring that the session termination is as engaging as the conversation itself.
 - **Concurrency**: Leverage the power of Go's concurrency model with goroutines.
+- **Minimalist Package**: `DebugOrErrorLogger`
+The `DebugOrErrorLogger` package offers a streamlined and efficient logging system, designed specifically for Go applications that require robust error and debug logging capabilities with minimal overhead.
+
+### 🛠️ 📦 Minimalist Package `DebugOrErrorLogger` Key Features
+
+- 🔎 **Conditional Debug Logging (Currently Marked as TODO 📝)**: The logger allows for debug messages to be conditionally output based on the `DEBUG_MODE` environment variable. When set to `true`, detailed debug information will be printed to `os.Stderr`, aiding in the development and troubleshooting process.
+
+- 🎨 **Color-Coded Error Output**: Errors are distinctly colorized in red when logged, making them stand out in the terminal for immediate attention. This colorization helps in quickly identifying errors amidst other log outputs.
+
+- 😱 🔋 **Panic Recovery**: A recovery function is provided to gracefully handle and log any panics that may occur during runtime. This function ensures that a panic message is clearly logged with colorized output, preventing the application from crashing unexpectedly and aiding in rapid diagnosis.
+
+- ⚡ **Simple API**: The package exposes a simple and intuitive API, with methods for debug and error logging that accept format strings and variadic arguments, similar to the standard `Printf` and `Println` functions.
+
+- 🔓 ⚙️ **Environment Variable Configuration**: The debug mode can be easily toggled on or off through an environment variable, allowing for flexible configuration without the need to recompile the application.
+
 
 ## ⚖️ Enhanced Scalability
 
