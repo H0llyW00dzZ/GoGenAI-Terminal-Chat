@@ -117,6 +117,7 @@ const (
 	SingleAsterisk          = "*"
 	DoubleAsterisk          = "**"
 	SingleBacktick          = "`"
+	TripleBacktick          = "```"
 	StringNewLine           = "\n"
 	BinaryAnsiChar          = '\x1b'
 	BinaryAnsiSquenseChar   = 'm'
