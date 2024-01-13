@@ -119,6 +119,7 @@ const (
 	SingleBacktick          = "`"
 	StringNewLine           = "\n"
 	BinaryAnsiChar          = '\x1b'
+	BinaryAnsiSquenseChar   = 'm'
 	BinaryAnsiSquenseString = "m"
 )
 
