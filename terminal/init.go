@@ -42,13 +42,14 @@ var aiPrompt string
 
 // colors holds the ANSI color codes and is accessible throughout the package.
 var colors = ANSIColorCodes{
-	ColorRed:    "\x1b[31m",
-	ColorGreen:  "\x1b[32m",
-	ColorYellow: "\x1b[33m",
-	ColorBlue:   "\x1b[34m",
-	ColorPurple: "\x1b[35m",
-	ColorCyan:   "\x1b[36m",
-	ColorReset:  "\x1b[0m",
+	ColorRed:       "\x1b[31m",
+	ColorGreen:     "\x1b[32m",
+	ColorYellow:    "\x1b[33m",
+	ColorBlue:      "\x1b[34m",
+	ColorPurple:    "\x1b[35m",
+	ColorCyan:      "\x1b[36m",
+	ColorHex95b806: "\x1b[38;2;149;184;6m",
+	ColorReset:     "\x1b[0m",
 }
 
 func init() {
