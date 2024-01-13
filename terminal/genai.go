@@ -128,8 +128,8 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 
 				// Colorize the response
 				colorPairs := []string{
-					DoubleAsterisk, ColorHex95b806,
-					SingleBacktick, ColorYellow,
+					DoubleAsterisk, colors.ColorHex95b806,
+					SingleBacktick, colors.ColorYellow,
 				}
 
 				keepDelimiters := map[string]bool{
@@ -142,7 +142,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 
 				// Handle single asterisks separately
 				// Pass Colorize content that is surrounded by single-character delimiters
-				colorized = SingleCharColorize(colorized, SingleAsterisk, ColorCyan24Bit)
+				colorized = SingleCharColorize(colorized, SingleAsterisk, colors.ColorCyan24Bit)
 
 				// Print "AI:" prefix directly without typing effect
 				PrintPrefixWithTimeStamp(AiNerd)
@@ -156,7 +156,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 			}
 		}
 	}
-	fmt.Println(StringNewLine + StripChars)
+	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 	fmt.Print(StringNewLine)
 	return aiResponse
 }
