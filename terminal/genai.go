@@ -38,14 +38,15 @@ type TypingChars struct {
 // For instance, when a Gopher completes a task or job and transitions to a resting state,
 // this function can print a message with a typing effect to visually represent the Gopher's "sleeping" activities.
 func PrintTypingChat(message string, delay time.Duration) {
+	runes := []rune(message) // Convert the message to a slice of runes Boost the performance of the program.
 	i := 0
-	for i < len(message) {
-		if message[i] == byte(ansichar.BinaryAnsiChar) {
-			// Pass the message and the current index to printANSISequence
-			printANSISequence(message, &i)
+	for i < len(runes) {
+		if runes[i] == ansichar.BinaryAnsiChar {
+			// Assume the full ANSI sequence follows
+			i = printANSISequence(runes, i)
 		} else {
 			// Print a regular character with delay.
-			fmt.Printf(humantyping.AnimatedChars, message[i])
+			fmt.Printf(humantyping.AnimatedChars, runes[i])
 			time.Sleep(delay)
 			i++
 		}
@@ -53,17 +54,19 @@ func PrintTypingChat(message string, delay time.Duration) {
 	fmt.Println()
 }
 
-// printANSISequence prints the full ANSI sequence without delay.
-func printANSISequence(message string, index *int) {
-	// Print the beginning of the ANSI sequence.
-	fmt.Printf(humantyping.AnimatedChars, message[*index])
-	*index++ // Move past the escape character.
-
-	// Print the rest of the ANSI sequence until 'm' is encountered.
-	for *index < len(message) && message[*index] != byte(ansichar.BinaryAnsiSquenseChar) {
-		fmt.Printf(humantyping.AnimatedChars, message[*index])
-		*index++ // Move past the current character.
+// printANSISequence prints the full ANSI sequence without delay and returns the new index.
+func printANSISequence(runes []rune, index int) int {
+	// Print the full ANSI sequence without delay.
+	for index < len(runes) && runes[index] != ansichar.BinaryAnsiSquenseChar {
+		fmt.Printf(humantyping.AnimatedChars, runes[index])
+		index++ // Move past the current character.
 	}
+	if index < len(runes) && runes[index] == ansichar.BinaryAnsiSquenseChar {
+		// This should print the 'm' character and complete the ANSI sequence
+		fmt.Printf(humantyping.AnimatedChars, runes[index])
+		index++ // Move past the 'm' character.
+	}
+	return index // Return the new index position.
 }
 
 // SendMessage sends a chat message to the generative AI model and retrieves the response.
