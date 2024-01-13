@@ -230,9 +230,12 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 ### Front-End:
 - [ ] **UI Front-End Terminal**
 - [ ] **Reporting System**
-
 > [!NOTE]
 > The `Reporting System` is designed to capture and handle runtime panic events in the Go application, facilitating streamlined error reporting and analysis.
+- [ ] **Debug System**
+
+### Back-End:
+- [ ] **Any unimplemented**
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](SECURITY.md)
