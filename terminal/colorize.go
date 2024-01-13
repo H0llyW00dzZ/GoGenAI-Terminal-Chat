@@ -61,11 +61,17 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 	for i := 0; i < len(colorPairs); i += 2 {
 		delimiter := colorPairs[i]
 		color := colorPairs[i+1]
+		if delimiter == TripleBacktick {
+			tripleBacktickColor = color
+		}
 		text = processDelimiters(text, delimiter, color, keepDelimiters)
 	}
 
-	colorizedTripleBacktick := ColorCyan24Bit + TripleBacktick + ColorReset
-	text = strings.Replace(text, tripleBacktickPlaceholder, colorizedTripleBacktick, -1)
+	if tripleBacktickColor != "" {
+		// Append the ResetColor after the colorizedTripleBacktick to reset color formatting
+		colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + colors.ColorReset
+		text = strings.Replace(text, tripleBacktickPlaceholder, colorizedTripleBacktick, -1)
+	}
 
 	return text
 }
