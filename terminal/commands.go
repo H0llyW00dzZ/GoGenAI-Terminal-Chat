@@ -196,7 +196,14 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Define the help prompt to be sent to the AI, including the list of available commands.
-	aiPrompt := fmt.Sprintf(HelpCommandPrompt, ApplicationName, QuitCommand, VersionCommand, HelpCommand)
+	aiPrompt := fmt.Sprintf(HelpCommandPrompt,
+		ApplicationName,
+		HelpCommand,
+		QuitCommand,
+		VersionCommand,
+		HelpCommand,
+		ClearCommand,
+		ClearChatHistoryArgs)
 
 	// Get the entire chat history as a string.
 	chatHistory := session.ChatHistory.GetHistory()
