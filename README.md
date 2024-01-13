@@ -11,7 +11,7 @@
   <img src="https://i.imgur.com/j4OXbC8.png" alt="Go Picture" />
 </p>
 
-## Why Continue Development?
+## 🤔 Why Continue Development?
 
 Interesting to built it in terminal after touring journey through the Go programming language, plus exploring Google's AI capabilities (currently in beta with Gemini).
 
@@ -20,7 +20,7 @@ Interesting to built it in terminal after touring journey through the Go program
 
 ***Fun Fact***: ***Did You Know?*** If your `Go` code resembles a jungle of `if` statements (think 10+ nested layers – a big no-no!), it's less `Go` and more `Stop-and-ask-for-directions`. Flatten those conditionals and let your code run as smoothly as a greased `gopher` on a slip 'n slide! 🤪
 
-## Current Features
+## ✨ Current Features
 
 - **Terminal-Based Interaction**: Experience AI chatting within the comfort of your terminal, with a focus on simplicity and efficiency.
 - **Session Chat History**: Maintain a transcript of your dialogue, capturing both queries and AI responses for a continuous conversational flow.
@@ -63,7 +63,7 @@ By adopting this scalable command handling system, the chat application is well-
 
 **`Go`** is designed to be straightforward and efficient, avoiding the unnecessary complexities (fuck complexities, this is `go` anti complexities) often encountered in other programming languages.
 
-## Installation
+## ⚙️ Installation
 
 To use GoGenAI Terminal Chat, you need to have Docker installed on your machine. If you don't have Docker installed, please follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
 
@@ -88,13 +88,13 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 - `API_KEY`: Your API key for accessing the generative AI model. This is a required environment variable.
 
 
-## Screenshot
+## 📸 Screenshot
 
 <p align="center">
   <img src="https://i.imgur.com/H9vDYjZ.png" alt="kubectl terminal" />
 </p>
 
-### Average Consumption (Tested on Production Docker):
+### 📊 Average Consumption (Tested on Production Docker):
 
 <p align="center">
   <img src="https://i.imgur.com/3haszmI.png" alt="docker" />
@@ -115,7 +115,7 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 > [!NOTE]
 > The `Average Consumption` metrics are calculated without including the use of a storage system like a database and are based on the assumption that each function is relatively simple, with an average cyclomatic complexity of 5 as the maximum. However, consumption may increase with more complex functions (e.g., those with a cyclomatic complexity of 10 or more, which are not recommended).
 
-### Better LLM's:
+### 🤖 Better LLM's:
 <p align="center">
   <img src="https://i.imgur.com/ge884rb.png" alt="terminal" />
 </p>
@@ -175,7 +175,7 @@ Here are some additional resources that you may find helpful:
 
 ---
 
-### Another Example
+### ⚡ Another Example
 
 <p align="center">
   <img src="https://i.imgur.com/PxjZ0Dz.png" alt="gopher" />
@@ -222,13 +222,16 @@ By following these tips, you can write simple, easy-to-understand functions that
 
 ---
 
-## Contributing
+## 🙌 Contributing
 Contributions is always welcome! If you're able to write code that adheres to a cyclomatic complexity of 5 or less per function, please feel free to submit a pull request. Pull requests that do not meet this criterion will be rejected. Alternatively, if you encounter any issues, do not hesitate to submit an issue report.
 
-## TODO Front-End
+## 📝 TODO Front-End
 
 - [ ] **UI Front-End Terminal**
 - [ ] **Reporting System**
 
 > [!NOTE]
 > The `Reporting System` is designed to capture and handle runtime panic events in the Go application, facilitating streamlined error reporting and analysis.
+
+## 🕵️‍♂️ HACKING
+Available [`here`](SECURITY.md)
