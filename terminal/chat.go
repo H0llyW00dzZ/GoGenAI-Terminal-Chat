@@ -141,3 +141,8 @@ func (h *ChatHistory) filterMessages(predicate func(string) bool) []string {
 	}
 	return filtered
 }
+
+// Clear removes all messages from the chat history, effectively resetting it.
+func (h *ChatHistory) Clear() {
+	h.Messages = []string{}
+}
