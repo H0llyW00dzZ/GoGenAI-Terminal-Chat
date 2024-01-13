@@ -83,9 +83,10 @@ docker run -it --rm --name mychatapp -e API_KEY=YOUR_API_KEY ghcr.io/h0llyw00dzz
 
 This command will start the GoGenAI Terminal Chat application in interactive mode. You will be able to type your messages and receive responses from the AI.
 
-### Environment Variables
+### 🔓 Environment Variables
 
 - `API_KEY`: Your API key for accessing the generative AI model. This is a required environment variable.
+- `DEBUG_MODE`: set `true` to enabled `DEBUG_MODE` other wise set to `false` to disabled it.
 
 
 ## 📸 Screenshot
@@ -131,6 +132,14 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
   <img src="https://i.imgur.com/Ox7CqMV.png" alt="k8s" />
   <img src="https://i.imgur.com/BH81O61.png" alt="k8s" />
 </p>
+
+### 🔓 ⚙️ Simple Debugging:
+<p align="center">
+  <img src="https://i.imgur.com/zAu5ORl.png" alt="simple debug" />
+</p>
+
+> [!NOTE]
+> This `🔓 ⚙️ Simple Debugging` are simple unlike shitty a complex logic `go codes` that increase of `cyclomatic complexity`
 
 ## Example how it work
 
