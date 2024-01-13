@@ -11,6 +11,13 @@ import (
 	genai "github.com/google/generative-ai-go/genai"
 )
 
+// BinaryAnsiChars is a struct that contains the ANSI characters used to print the typing effect.
+type BinaryAnsiChars struct {
+	BinaryAnsiChar          rune
+	BinaryAnsiSquenseChar   rune
+	BinaryAnsiSquenseString string
+}
+
 // PrintTypingChat simulates the visual effect of typing out a message character by character.
 // It prints each character of a message to the standard output with a delay between each character
 // to give the appearance of real-time typing.
@@ -28,7 +35,7 @@ import (
 func PrintTypingChat(message string, delay time.Duration) {
 	i := 0
 	for i < len(message) {
-		if message[i] == BinaryAnsiChar {
+		if message[i] == byte(ansichar.BinaryAnsiChar) {
 			// Pass the message and the current index to printANSISequence
 			printANSISequence(message, &i)
 		} else {
