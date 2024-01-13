@@ -42,7 +42,8 @@ func NewDebugOrErrorLogger() *DebugOrErrorLogger {
 // TODO: Add a DEBUG_MODE constant to the terminal package and use it here.
 func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 	if l.debugMode {
-		l.logger.Printf(format, v...)
+		debugPrefix := colors.ColorHex95b806 + DEBUGPREFIX + colors.ColorReset // Add color to the prefix
+		l.logger.Printf(debugPrefix+" "+format, v...)
 	}
 }
 
