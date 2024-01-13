@@ -143,7 +143,7 @@ func SingleCharColorize(text string, delimiter string, color string) string {
 			// No coloring needed
 			result.WriteString(trimmedLine)
 		}
-		result.WriteString(StringNewLine)
+		result.WriteRune(nl.NewLineChars)
 	}
 	return strings.TrimRight(result.String(), StringNewLine)
 }
