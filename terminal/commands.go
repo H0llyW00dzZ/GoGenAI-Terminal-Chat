@@ -311,11 +311,18 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, e
 //
 // Returns true if the clear command was executed, and an error if there was an issue executing the command.
 func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Heads-Up: The current implementation is sleek and storage-agnostic, but beware of the ever-lurking feature creep!
+	// Future enhancements might include targeted message purges—think selective user word-bombs or a full-on message-specific snipe hunt.
+	// But let's cross that bridge when we get to it. For now, we revel in the simplicity of our logic. Stay tuned, fellow code whisperers! 😜
+
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
 	if cmd.IsValid(parts) {
 		session.ChatHistory.Clear()
+		PrintPrefixWithTimeStamp(SYSTEMPREFIX)
 		PrintTypingChat(colors.ColorHex95b806+ChatHistoryClear+colors.ColorReset, TypingDelay)
+		// Added back the context prompt after clearing the chat history
+		session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 		fmt.Println()
 		return false, nil
 	} else {

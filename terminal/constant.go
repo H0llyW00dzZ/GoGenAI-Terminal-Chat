@@ -134,7 +134,13 @@ const (
 // Defined List of Environment variables
 const (
 	DEBUG_MODE  = "DEBUG_MODE"
-	DEBUGPREFIX = "DEBUG:"
+	DEBUGPREFIX = "🔎 DEBUG:"
 	// Note: Currently only executing CMD, will add more later
 	DEBUGEXECUTINGCMD = "Executing %s command with parts: %#v"
+)
+
+// Defined Prefix System
+const (
+	// Note: This is a prefix for the system
+	SYSTEMPREFIX = "⚙️  SYSTEM: "
 )
