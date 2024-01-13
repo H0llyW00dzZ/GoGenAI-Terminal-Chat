@@ -80,7 +80,7 @@ const (
 	QuitCommand    = ":quit"
 	VersionCommand = ":checkversion"
 	HelpCommand    = ":help"
-	PingCommand    = ":ping"
+	PingCommand    = ":ping" // Currently marked as TODO
 	PrefixChar     = ":"
 )
 
