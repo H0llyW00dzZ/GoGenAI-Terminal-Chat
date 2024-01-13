@@ -95,7 +95,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 
 				// Colorize the response
 				colorPairs := []string{
-					DoubleAsterisk, ColorGreen,
+					DoubleAsterisk, ColorHex95b806,
 					SingleBacktick, ColorYellow,
 				}
 
