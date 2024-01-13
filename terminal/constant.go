@@ -30,6 +30,8 @@ const (
 	ModelAi = "gemini-pro"
 	// this may subject to changed in future for example can customize the delay
 	TypingDelay = 60 * time.Millisecond
+	// this clearing chat history in secret storage
+	ChatHistoryClear = "All Chat history cleared."
 )
 
 // Defined constants for language
