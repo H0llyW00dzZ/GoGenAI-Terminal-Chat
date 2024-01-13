@@ -18,6 +18,11 @@ type BinaryAnsiChars struct {
 	BinaryAnsiSquenseString string
 }
 
+// TypingChars is a struct that contains the Animated Chars used to print the typing effect.
+type TypingChars struct {
+	AnimatedChars string
+}
+
 // PrintTypingChat simulates the visual effect of typing out a message character by character.
 // It prints each character of a message to the standard output with a delay between each character
 // to give the appearance of real-time typing.
@@ -40,7 +45,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 			printANSISequence(message, &i)
 		} else {
 			// Print a regular character with delay.
-			fmt.Printf(AnimatedChars, message[i])
+			fmt.Printf(humantyping.AnimatedChars, message[i])
 			time.Sleep(delay)
 			i++
 		}
@@ -51,19 +56,13 @@ func PrintTypingChat(message string, delay time.Duration) {
 // printANSISequence prints the full ANSI sequence without delay.
 func printANSISequence(message string, index *int) {
 	// Print the beginning of the ANSI sequence.
-	fmt.Printf(AnimatedChars, message[*index])
+	fmt.Printf(humantyping.AnimatedChars, message[*index])
 	*index++ // Move past the escape character.
 
 	// Print the rest of the ANSI sequence until 'm' is encountered.
 	for *index < len(message) && message[*index] != BinaryAnsiSquenseChar {
-		fmt.Printf(AnimatedChars, message[*index])
+		fmt.Printf(humantyping.AnimatedChars, message[*index])
 		*index++ // Move past the current character.
-	}
-
-	if *index < len(message) && message[*index] == BinaryAnsiSquenseChar {
-		// Print the 'm' character to end the ANSI sequence
-		fmt.Printf(BinaryAnsiSquenseString)
-		*index++ // Move past the 'm' character.
 	}
 }
 

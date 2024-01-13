@@ -60,6 +60,11 @@ var ansichar = BinaryAnsiChars{
 	BinaryAnsiSquenseString: BinaryAnsiSquenseString,
 }
 
+// animatedchars
+var humantyping = TypingChars{
+	AnimatedChars: AnimatedChars,
+}
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
