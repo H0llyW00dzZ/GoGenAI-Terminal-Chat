@@ -308,7 +308,7 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
 	if cmd.IsValid(parts) {
 		session.ChatHistory.Clear()
-		PrintTypingChat(ChatHistoryClear, TypingDelay)
+		PrintTypingChat(colors.ColorHex95b806+ChatHistoryClear+colors.ColorReset, TypingDelay)
 		fmt.Println()
 		return false, nil
 	} else {
