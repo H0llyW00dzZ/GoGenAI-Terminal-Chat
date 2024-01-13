@@ -6,6 +6,7 @@ package terminal
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	genai "github.com/google/generative-ai-go/genai"
@@ -26,9 +27,23 @@ import (
 // For instance, when a Gopher completes a task or job and transitions to a resting state,
 // this function can print a message with a typing effect to visually represent the Gopher's "sleeping" activities.
 func PrintTypingChat(message string, delay time.Duration) {
-	for _, char := range message {
-		fmt.Printf(AnimatedChars, char)
-		time.Sleep(delay)
+	for i := 0; i < len(message); {
+		if message[i] == BinaryAnsiChar {
+			// Print the entire ANSI sequence at once without delay.
+			end := strings.Index(message[i:], BinaryAnsiSquenseString)
+			if end == -1 {
+				// If there's no 'm' character, just print the rest and break.
+				fmt.Print(message[i:])
+				break
+			}
+			fmt.Print(message[i : i+end+1])
+			i += end + 1
+		} else {
+			// Print a regular character with delay.
+			fmt.Printf(AnimatedChars, message[i])
+			time.Sleep(delay)
+			i++
+		}
 	}
 	fmt.Println()
 }
