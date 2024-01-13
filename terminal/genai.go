@@ -130,7 +130,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 				colorPairs := []string{
 					DoubleAsterisk, colors.ColorHex95b806,
 					SingleBacktick, colors.ColorYellow,
-					TripleBacktick, colors.ColorPurple,
+					TripleBacktick, colors.ColorPurple24Bit,
 				}
 
 				keepDelimiters := map[string]bool{
