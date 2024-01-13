@@ -60,7 +60,7 @@ func printANSISequence(message string, index *int) {
 	*index++ // Move past the escape character.
 
 	// Print the rest of the ANSI sequence until 'm' is encountered.
-	for *index < len(message) && message[*index] != BinaryAnsiSquenseChar {
+	for *index < len(message) && message[*index] != byte(ansichar.BinaryAnsiSquenseChar) {
 		fmt.Printf(humantyping.AnimatedChars, message[*index])
 		*index++ // Move past the current character.
 	}
