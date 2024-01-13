@@ -49,6 +49,7 @@ var colors = ANSIColorCodes{
 	ColorPurple:    "\x1b[35m",
 	ColorCyan:      "\x1b[36m",
 	ColorHex95b806: "\x1b[38;2;149;184;6m",
+	ColorCyan24Bit: "\x1b[38;2;17;240;247m",
 	ColorReset:     "\x1b[0m",
 }
 
