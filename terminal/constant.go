@@ -130,7 +130,8 @@ const (
 
 // Defined List of Environment variables
 const (
-	DEBUG_MODE     = "DEBUG_MODE"
-	DEBUGPREFIX    = "DEBUG:"
-	DEBUGEXECUTING = "Executing %s command with parts: %#v"
+	DEBUG_MODE  = "DEBUG_MODE"
+	DEBUGPREFIX = "DEBUG:"
+	// Note: Currently only executing CMD, will add more later
+	DEBUGEXECUTINGCMD = "Executing %s command with parts: %#v"
 )

@@ -71,7 +71,7 @@ func HandleCommand(input string, session *Session) (bool, error) {
 
 	// Validate the command arguments.
 	if !commandHandler.IsValid(parts) {
-		logger.Debug(DEBUGEXECUTING, parts[0], parts)
+		logger.Debug(DEBUGEXECUTINGCMD, parts[0], parts)
 		logger.Error(HumanErrorWhileTypingCommandArgs)
 		fmt.Println()
 		return true, nil
@@ -99,7 +99,7 @@ func HandleCommand(input string, session *Session) (bool, error) {
 // while sending the message, the function logs the error and returns an error to the caller.
 func handleUnrecognizedCommand(command string, session *Session, parts []string) (bool, error) {
 	// Debug
-	logger.Debug(DEBUGEXECUTING, command)
+	logger.Debug(DEBUGEXECUTINGCMD, command)
 	// Pass ContextPrompt
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// If the command is not recognized, inform the AI about the unrecognized command.
@@ -140,7 +140,7 @@ func handleUnrecognizedCommand(command string, session *Session, parts []string)
 // should exit and the application should terminate.
 func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug
-	logger.Debug(DEBUGEXECUTING, QuitCommand, parts)
+	logger.Debug(DEBUGEXECUTINGCMD, QuitCommand, parts)
 	// Pass ContextPrompt
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
@@ -192,7 +192,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 // loops in the AI's behavior.
 func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug
-	logger.Debug(DEBUGEXECUTING, HelpCommand, parts)
+	logger.Debug(DEBUGEXECUTINGCMD, HelpCommand, parts)
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Define the help prompt to be sent to the AI, including the list of available commands.
@@ -232,7 +232,7 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 // functions (CheckLatestVersion and GetFullReleaseInfo) to determine version information and fetch release details.
 func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug:
-	logger.Debug(DEBUGEXECUTING, VersionCommand, parts)
+	logger.Debug(DEBUGEXECUTINGCMD, VersionCommand, parts)
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
@@ -278,7 +278,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 // Returns true if the ping command was executed, and an error if there was an issue executing the command.
 func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug
-	logger.Debug(DEBUGEXECUTING, PingCommand, parts)
+	logger.Debug(DEBUGEXECUTINGCMD, PingCommand, parts)
 	// Note: WIP
 	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
