@@ -34,13 +34,53 @@ type NewLineChar struct {
 //
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
-func (h *ChatHistory) AddMessage(user, text string) {
-	message := fmt.Sprintf(ObjectHighLevelString, user, text)
-	h.Messages = append(h.Messages, message)
+func (h *ChatHistory) AddMessage(user string, text string) {
+	// Sanitize and format the message before adding it to the history of RAM's labyrinth.
+	sanitizedMessage := h.SanitizeMessage(text)
+	formattedMessage := fmt.Sprintf(ObjectHighLevelString, user, sanitizedMessage)
+	h.Messages = append(h.Messages, formattedMessage)
+
+	// Remove the oldest message to maintain a fixed history size in RAM's labyrinth.
 	if len(h.Messages) > MaxChatHistory {
-		// Remove the oldest message to maintain a fixed history size
-		h.Messages = h.Messages[1:]
+		h.Messages = h.Messages[len(h.Messages)-MaxChatHistory:]
 	}
+}
+
+// SanitizeMessage removes ANSI color codes and other non-content prefixes from a message.
+//
+// Parameters:
+//
+//	message string: The message to be sanitized.
+//
+// Returns:
+//
+//	string: The sanitized message.
+func (h *ChatHistory) SanitizeMessage(message string) string {
+	// Define a map of prefixes to remove from the message.
+	prefixesToRemove := map[string]struct{}{
+		youNerd:               {},
+		aiNerd:                {},
+		colors.ColorRed:       {},
+		colors.ColorGreen:     {},
+		colors.ColorYellow:    {},
+		colors.ColorBlue:      {},
+		colors.ColorPurple:    {},
+		colors.ColorCyan:      {},
+		colors.ColorHex95b806: {},
+		colors.ColorCyan24Bit: {},
+		colors.ColorReset:     {},
+	}
+
+	// Iterate over the prefixes and remove the first occurrence from the message.
+	for prefix := range prefixesToRemove {
+		if strings.HasPrefix(message, prefix) {
+			// Return the message without the prefix.
+			return strings.TrimPrefix(message, prefix)
+		}
+	}
+
+	// Return the original message if no prefixes are found.
+	return message
 }
 
 // GetHistory concatenates all messages in the chat history into a single
@@ -55,38 +95,13 @@ func (h *ChatHistory) GetHistory() string {
 	// Define the prefixes to be removed
 	// Additional Note: If issues still arise due to ANSI color codes in AI responses, it's not because of the 'this' or 'Colorize' function in Genai.go.
 	// The issue lies with the AI's attempt to apply formatting, which fails due to incorrect ANSI sequences, reminiscent of issues one might encounter with "PYTHON" or Your Machine is bad LMAO.
-	prefixesToRemove := map[string]struct{}{
-		youNerd: {},
-		aiNerd:  {},
-		// list of ansii color codes
-		colors.ColorRed:         {},
-		colors.ColorGreen:       {},
-		colors.ColorYellow:      {},
-		colors.ColorBlue:        {},
-		colors.ColorPurple:      {},
-		colors.ColorCyan:        {},
-		colors.ColorHex95b806:   {},
-		colors.ColorCyan24Bit:   {},
-		colors.ColorPurple24Bit: {},
-		colors.ColorReset:       {},
-	}
 	for _, msg := range h.Messages {
-		sanitizedMsg := msg
-		// Remove each prefix from the start of the message
-		for prefix := range prefixesToRemove {
-			if strings.HasPrefix(sanitizedMsg, prefix) {
-				sanitizedMsg = strings.TrimPrefix(sanitizedMsg, prefix)
-				break // Assume only one prefix will match and then break the loop
-			}
-		}
-		// Optimized to use Builder.WriteString() for better performance and to avoid memory allocation overhead.
-		buildeR.WriteString(sanitizedMsg)
-		buildeR.WriteRune(nl.NewLineChars) // Append a newline character after each message.
+		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
+		buildeR.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
+		buildeR.WriteRune(nl.NewLineChars)     // Append a newline character after each message
 	}
 
-	// The buildeR.String() method returns the complete, concatenated chat history.
-	return buildeR.String()
-
+	return buildeR.String() // Return the complete, concatenated chat history
 }
 
 // RemoveMessages removes messages from the chat history. If a specific message is provided,
