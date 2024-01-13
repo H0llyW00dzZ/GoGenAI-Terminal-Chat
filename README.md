@@ -36,7 +36,7 @@ The `DebugOrErrorLogger` package offers a streamlined and efficient logging syst
 
 ### 🛠️ 📦 Minimalist Package `DebugOrErrorLogger` Key Features
 
-- 🔎 **Conditional Debug Logging (Currently Marked as TODO 📝)**: The logger allows for debug messages to be conditionally output based on the `DEBUG_MODE` environment variable. When set to `true`, detailed debug information will be printed to `os.Stderr`, aiding in the development and troubleshooting process.
+- 🔎 **Conditional Debug Logging**: The logger allows for debug messages to be conditionally output based on the `DEBUG_MODE` environment variable. When set to `true`, detailed debug information will be printed to `os.Stderr`, aiding in the development and troubleshooting process.
 
 - 🎨 **Color-Coded Error Output**: Errors are distinctly colorized in red when logged, making them stand out in the terminal for immediate attention. This colorization helps in quickly identifying errors amidst other log outputs.
 
@@ -232,7 +232,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Reporting System**
 > [!NOTE]
 > The `Reporting System` is designed to capture and handle runtime panic events in the Go application, facilitating streamlined error reporting and analysis.
-- [ ] **Debug System**
+- [X] **Debug System**
 
 ### Back-End:
 - [ ] **Any unimplemented**

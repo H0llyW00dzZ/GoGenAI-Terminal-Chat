@@ -82,7 +82,10 @@ const (
 	VersionCommand = ":checkversion"
 	HelpCommand    = ":help"
 	PingCommand    = ":ping" // Currently marked as TODO
+	ClearCommand   = ":clear"
 	PrefixChar     = ":"
+	// List args
+	ClearChatHistoryArgs = "chat history"
 )
 
 // Defined List error message
@@ -127,5 +130,8 @@ const (
 
 // Defined List of Environment variables
 const (
-	DEBUG_MODE = "DEBUG_MODE"
+	DEBUG_MODE  = "DEBUG_MODE"
+	DEBUGPREFIX = "DEBUG:"
+	// Note: Currently only executing CMD, will add more later
+	DEBUGEXECUTINGCMD = "Executing %s command with parts: %#v"
 )
