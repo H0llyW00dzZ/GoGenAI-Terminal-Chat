@@ -16,9 +16,10 @@ const (
 
 // Defined constants for the terminal package
 const (
-	SignalMessage         = "\nReceived an interrupt, shutting down gracefully..."
-	RecoverGopher         = "%sRecovered from panic:%s %s%v%s"
-	ObjectHighLevelString = "%s %s" // Catch High level string
+	SignalMessage               = "\nReceived an interrupt, shutting down gracefully..."
+	RecoverGopher               = "%sRecovered from panic:%s %s%v%s"
+	ObjectHighLevelString       = "%s %s"  // Catch High level string
+	ObjectTripleHighLevelString = "%%%s%%" // Catch High level triple string
 	// TimeFormat is tailored for AI responses, providing a layout conducive to formatting chat transcripts.
 	TimeFormat   = "2006/01/02 15:04:05"
 	StripChars   = "---"
@@ -117,6 +118,7 @@ const (
 	SingleAsterisk          = "*"
 	DoubleAsterisk          = "**"
 	SingleBacktick          = "`"
+	TripleBacktick          = "```"
 	StringNewLine           = "\n"
 	BinaryAnsiChar          = '\x1b'
 	BinaryAnsiSquenseChar   = 'm'

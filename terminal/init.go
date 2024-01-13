@@ -70,6 +70,8 @@ var nl = NewLineChar{
 	NewLineChars: NewLineChars,
 }
 
+var tripleBacktickColor string
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()

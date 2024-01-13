@@ -55,20 +55,50 @@ const (
 // support for ANSI color codes. It is designed for terminals that support ANSI, such as those
 // in Linux/Unix environments.
 func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) string {
+	tripleBacktickPlaceholder := ObjectTripleHighLevelString
+	text = replaceTripleBackticks(text, tripleBacktickPlaceholder)
+
 	for i := 0; i < len(colorPairs); i += 2 {
 		delimiter := colorPairs[i]
 		color := colorPairs[i+1]
-		parts := strings.Split(text, delimiter)
-		for j := 1; j < len(parts); j += 2 {
-			if keep, exists := keepDelimiters[delimiter]; exists && keep {
-				parts[j] = color + delimiter + parts[j] + delimiter + colors.ColorReset
-			} else {
-				parts[j] = color + parts[j] + colors.ColorReset
-			}
+		if delimiter == TripleBacktick {
+			tripleBacktickColor = color
 		}
-		text = strings.Join(parts, "")
+		text = processDelimiters(text, delimiter, color, keepDelimiters)
+	}
+
+	if tripleBacktickColor != "" {
+		// Append the ResetColor after the colorizedTripleBacktick to reset color formatting
+		colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + colors.ColorReset
+		text = strings.Replace(text, tripleBacktickPlaceholder, colorizedTripleBacktick, -1)
+	}
+
+	return text
+}
+
+// replaceTripleBackticks replaces all occurrences of triple backticks with a placeholder.
+func replaceTripleBackticks(text, placeholder string) string {
+	for {
+		index := strings.Index(text, TripleBacktick)
+		if index == -1 {
+			break
+		}
+		text = strings.Replace(text, TripleBacktick, placeholder, 1)
 	}
 	return text
+}
+
+// processDelimiters processes the delimiters in the text and applies the corresponding color.
+func processDelimiters(text string, delimiter, color string, keepDelimiters map[string]bool) string {
+	parts := strings.Split(text, delimiter)
+	for j := 1; j < len(parts); j += 2 {
+		if keep, exists := keepDelimiters[delimiter]; exists && keep {
+			parts[j] = color + delimiter + parts[j] + delimiter + ColorReset
+		} else {
+			parts[j] = color + parts[j] + ColorReset
+		}
+	}
+	return strings.Join(parts, "")
 }
 
 // SingleCharColorize applies ANSI color codes to text surrounded by single-character delimiters.
