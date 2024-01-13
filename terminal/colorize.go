@@ -9,13 +9,14 @@ import (
 
 // ANSIColorCodes defines a struct for holding ANSI color escape sequences.
 type ANSIColorCodes struct {
-	ColorRed    string
-	ColorGreen  string
-	ColorYellow string
-	ColorBlue   string
-	ColorPurple string
-	ColorCyan   string
-	ColorReset  string
+	ColorRed       string
+	ColorGreen     string
+	ColorYellow    string
+	ColorBlue      string
+	ColorPurple    string
+	ColorCyan      string
+	ColorHex95b806 string // 24-bit color
+	ColorReset     string
 }
 
 // ANSI color codes
@@ -28,7 +29,9 @@ const (
 	ColorBlue   = "\x1b[34m"
 	ColorPurple = "\x1b[35m"
 	ColorCyan   = "\x1b[36m"
-	ColorReset  = "\x1b[0m"
+	// ColorHex95b806 represents the color #95b806 using an ANSI escape sequence for 24-bit color.
+	ColorHex95b806 = "\x1b[38;2;149;184;6m"
+	ColorReset     = "\x1b[0m"
 )
 
 // Colorize applies ANSI color codes to the text surrounded by specified delimiters.
