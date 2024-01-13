@@ -52,12 +52,24 @@ const (
 	// the conversation will resume from the point prior to the invocation of these commands.
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
-	YouAreusingLatest  = "**This a System messages**:**%s**\n\nThe user is using Version **%s**\nThis is the latest version.\n Tell the user, No need to update."              // Better Response for AI
-	ReleaseNotesPrompt = "**This a System messages**:**%s**\n\nThe user is using Version **%s**\nA newer version is available: **%s**\nCan you tell\nRelease Name: **%s**\n%s" // Better Response for AI
+	YouAreusingLatest = "attempted a command: **%s**\n" +
+		"The user is using Version **%s** of **%s**\n" +
+		"This is the latest version.\n" +
+		"Tell the user, No need to update." // Better Response for AI
+	ReleaseNotesPrompt = "a user attempted a command: **%s**\n" +
+		"The user is using Version **%s** of **%s**\n" +
+		"A newer version is available: **%s**\n" +
+		"Can you tell\n" +
+		"Release Name: **%s**\n" +
+		"%s" // Better Response for AI
 	// Quit Prompt commands
-	ContextPromptShutdown = "**This a System messages**:**%s**\n\nThe user attempted an command: **%s**\n Please provide a shutdown message as you are Assistant."
+	ContextPromptShutdown = "a user attempted an command: **%s** of **%s**\n" +
+		"Please provide a shutdown message as you are AI."
 	// Help Prompt commands
-	HelpCommandPrompt = "**This a System messages**:**%s**\n\nThe user attempted an command: **%s**\nCan you provide help information for the available commands?\nList Command Available:\n**%s**\n**%s**" // Better Response for AI"
+	HelpCommandPrompt = "**This a System messages**:**%s**\n\n" +
+		"The user attempted an command: **%s**\n" +
+		"Can you provide help information for the available commands?\n" +
+		"List Command Available:\n**%s**\n**%s**" // Better Response for AI"
 )
 
 // Defined constants for commands
@@ -68,7 +80,7 @@ const (
 	QuitCommand    = ":quit"
 	VersionCommand = ":checkversion"
 	HelpCommand    = ":help"
-	PingCommand    = ":ping"
+	PingCommand    = ":ping" // Currently marked as TODO
 	PrefixChar     = ":"
 )
 
