@@ -127,5 +127,6 @@ const (
 
 // Defined List of Environment variables
 const (
-	DEBUG_MODE = "DEBUG_MODE"
+	DEBUG_MODE  = "DEBUG_MODE"
+	DEBUGPREFIX = "DEBUG:"
 )
