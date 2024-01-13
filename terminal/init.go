@@ -42,15 +42,16 @@ var aiPrompt string
 
 // colors holds the ANSI color codes and is accessible throughout the package.
 var colors = ANSIColorCodes{
-	ColorRed:       ColorRed,
-	ColorGreen:     ColorGreen,
-	ColorYellow:    ColorYellow,
-	ColorBlue:      ColorBlue,
-	ColorPurple:    ColorPurple,
-	ColorCyan:      ColorCyan,
-	ColorHex95b806: ColorHex95b806,
-	ColorCyan24Bit: ColorCyan24Bit,
-	ColorReset:     ColorReset,
+	ColorRed:         ColorRed,
+	ColorGreen:       ColorGreen,
+	ColorYellow:      ColorYellow,
+	ColorBlue:        ColorBlue,
+	ColorPurple:      ColorPurple,
+	ColorCyan:        ColorCyan,
+	ColorHex95b806:   ColorHex95b806,
+	ColorCyan24Bit:   ColorCyan24Bit,
+	ColorPurple24Bit: ColorPurple24Bit,
+	ColorReset:       ColorReset,
 }
 
 // ansichar
