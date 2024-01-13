@@ -130,11 +130,13 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 				colorPairs := []string{
 					DoubleAsterisk, colors.ColorHex95b806,
 					SingleBacktick, colors.ColorYellow,
+					TripleBacktick, colors.ColorCyan24Bit,
 				}
 
 				keepDelimiters := map[string]bool{
 					DoubleAsterisk: false, // Remove double asterisks from the output
 					SingleBacktick: true,  // Keep single backticks in the output
+					TripleBacktick: true,  // Keep triple backticks in the output
 				}
 
 				// Colorize content that is surrounded by double asterisks or backticks
