@@ -26,11 +26,38 @@ import (
 // For instance, when a Gopher completes a task or job and transitions to a resting state,
 // this function can print a message with a typing effect to visually represent the Gopher's "sleeping" activities.
 func PrintTypingChat(message string, delay time.Duration) {
-	for _, char := range message {
-		fmt.Printf(AnimatedChars, char)
-		time.Sleep(delay)
+	i := 0
+	for i < len(message) {
+		if message[i] == BinaryAnsiChar {
+			// Pass the message and the current index to printANSISequence
+			printANSISequence(message, &i)
+		} else {
+			// Print a regular character with delay.
+			fmt.Printf(AnimatedChars, message[i])
+			time.Sleep(delay)
+			i++
+		}
 	}
 	fmt.Println()
+}
+
+// printANSISequence prints the full ANSI sequence without delay.
+func printANSISequence(message string, index *int) {
+	// Print the beginning of the ANSI sequence.
+	fmt.Printf(AnimatedChars, message[*index])
+	*index++ // Move past the escape character.
+
+	// Print the rest of the ANSI sequence until 'm' is encountered.
+	for *index < len(message) && message[*index] != BinaryAnsiSquenseChar {
+		fmt.Printf(AnimatedChars, message[*index])
+		*index++ // Move past the current character.
+	}
+
+	if *index < len(message) && message[*index] == BinaryAnsiSquenseChar {
+		// Print the 'm' character to end the ANSI sequence
+		fmt.Printf(BinaryAnsiSquenseString)
+		*index++ // Move past the 'm' character.
+	}
 }
 
 // SendMessage sends a chat message to the generative AI model and retrieves the response.

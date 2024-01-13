@@ -114,10 +114,13 @@ const (
 
 // Defined List of characters
 const (
-	SingleAsterisk = "*"
-	DoubleAsterisk = "**"
-	SingleBacktick = "`"
-	StringNewLine  = "\n"
+	SingleAsterisk          = "*"
+	DoubleAsterisk          = "**"
+	SingleBacktick          = "`"
+	StringNewLine           = "\n"
+	BinaryAnsiChar          = '\x1b'
+	BinaryAnsiSquenseChar   = 'm'
+	BinaryAnsiSquenseString = "m"
 )
 
 // Defined List of Environment variables
