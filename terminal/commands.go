@@ -296,3 +296,26 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, e
 
 	return false, nil
 }
+
+// Execute clears the chat history if the command is valid.
+//
+// session *Session: The current chat session containing state and context.
+// parts   []string: The slice containing the command and its arguments.
+//
+// Returns true if the clear command was executed, and an error if there was an issue executing the command.
+func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
+	if cmd.IsValid(parts) {
+		session.ChatHistory.Clear()
+		PrintTypingChat(colors.ColorHex95b806+ChatHistoryClear+colors.ColorReset, TypingDelay)
+		fmt.Println()
+		return false, nil
+	} else {
+		// Log the error using the logger instead of returning fmt.Errorf
+		errorMessage := HumanErrorWhileTypingCommandArgs
+		logger.Error(errorMessage)
+		// Return nil for the error since we've already logged it
+		return false, nil
+	}
+}

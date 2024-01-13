@@ -3,6 +3,8 @@
 
 package terminal
 
+import "strings"
+
 // Note: This list of commands has already been implemented.
 // It is now located here for ease of maintenance and to avoid unnecessary complexity.
 // This approach questions why many developers write Go code in an overly complex manner (that I don't fucking understand),
@@ -47,6 +49,21 @@ type handleCheckVersionCommand struct{}
 func (cmd *handleCheckVersionCommand) IsValid(parts []string) bool {
 	// The checkversion command should not have any arguments.
 	return len(parts) == 1
+}
+
+type handleClearCommand struct{}
+
+// IsValid checks if the clear command is valid based on the input parts.
+// The clear command is valid only if there are no additional arguments, hence
+// the length of parts must be exactly 2.
+//
+// parts []string: The slice containing the command and its arguments.
+//
+// Returns true if the command is valid, otherwise false.
+func (cmd *handleClearCommand) IsValid(parts []string) bool {
+	// Combine the parts after the command keyword to match the ClearChatHistoryArgs
+	args := strings.Join(parts[1:], " ")
+	return len(parts) > 1 && args == ClearChatHistoryArgs
 }
 
 // Note: this unimplemented
