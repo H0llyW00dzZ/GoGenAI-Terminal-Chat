@@ -65,6 +65,11 @@ var humantyping = TypingChars{
 	AnimatedChars: AnimatedChars,
 }
 
+// newLineChar
+var nl = NewLineChar{
+	NewLineChars: NewLineChars,
+}
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()

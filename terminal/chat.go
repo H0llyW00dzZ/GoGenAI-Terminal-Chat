@@ -18,6 +18,11 @@ type ChatHistory struct {
 	Messages []string
 }
 
+// NewLineChar is a struct that containt Rune for New Line Character
+type NewLineChar struct {
+	NewLineChars rune
+}
+
 // AddMessage appends a new message to the chat history.
 // It takes the username and the text of the message as inputs and formats
 // them before adding to the Messages slice.
@@ -63,7 +68,7 @@ func (h *ChatHistory) GetHistory() string {
 		}
 		// Optimized to use Builder.WriteString() for better performance and to avoid memory allocation overhead.
 		buildeR.WriteString(sanitizedMsg)
-		buildeR.WriteRune(NewLineChars) // Append a newline character after each message.
+		buildeR.WriteRune(nl.NewLineChars) // Append a newline character after each message.
 	}
 
 	// The buildeR.String() method returns the complete, concatenated chat history.

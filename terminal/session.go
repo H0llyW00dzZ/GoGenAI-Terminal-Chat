@@ -120,7 +120,7 @@ func (s *Session) setupSignalHandling() {
 // should end, either due to a command or an error.
 func (s *Session) processInput() bool {
 	PrintPrefixWithTimeStamp(YouNerd)
-	userInput, err := bufio.NewReader(os.Stdin).ReadString(NewLineChars)
+	userInput, err := bufio.NewReader(os.Stdin).ReadString(byte(nl.NewLineChars))
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
 		return false // Continue the loop, hoping for a successful read next time
