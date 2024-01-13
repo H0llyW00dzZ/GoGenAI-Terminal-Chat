@@ -156,7 +156,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 			}
 		}
 	}
-	fmt.Println(StringNewLine + StripChars)
+	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 	fmt.Print(StringNewLine)
 	return aiResponse
 }
