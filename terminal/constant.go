@@ -72,7 +72,7 @@ const (
 	HelpCommandPrompt = "**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +
 		"Can you provide help information for the available commands?\n" +
-		"List Command Available:\n**%s**\n**%s**" // Better Response for AI"
+		"List Command Available:\n**%s**\n**%s**\n**%s**\n**%s %s**" // Better Response for AI"
 )
 
 // Defined constants for commands
