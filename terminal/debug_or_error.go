@@ -55,7 +55,7 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 //	v ...interface{}: The values to be formatted according to the format string.
 func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 	msg := fmt.Sprintf(format, v...)
-	colorizedMsg := ColorRed + msg + ColorReset // Apply red color to the entire message
+	colorizedMsg := colors.ColorRed + msg + colors.ColorReset // Apply red color to the entire message
 	l.logger.Println(colorizedMsg)
 }
 
@@ -81,7 +81,7 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 // function or goroutine.
 func (l *DebugOrErrorLogger) RecoverFromPanic() {
 	if r := recover(); r != nil {
-		msg := fmt.Sprintf(RecoverGopher, ColorGreen, ColorReset, ColorRed, r, ColorReset)
+		msg := fmt.Sprintf(RecoverGopher, colors.ColorGreen, colors.ColorReset, colors.ColorRed, r, colors.ColorReset)
 		l.logger.Println(msg)
 	}
 }
