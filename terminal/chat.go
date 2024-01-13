@@ -55,12 +55,25 @@ func (h *ChatHistory) GetHistory() string {
 	// Define the prefixes to be removed
 	// Additional Note: If issues still arise due to ANSI color codes in AI responses, it's not because of the 'this' or 'Colorize' function in Genai.go.
 	// The issue lies with the AI's attempt to apply formatting, which fails due to incorrect ANSI sequences, reminiscent of issues one might encounter with "PYTHON" or Your Machine is bad LMAO.
-	prefixesToRemove := []string{youNerd, aiNerd, ColorGreen, ColorYellow, ColorBlue, ColorPurple, ColorCyan, ColorReset} // Fix all Issues
-
+	prefixesToRemove := map[string]struct{}{
+		youNerd: {},
+		aiNerd:  {},
+		// list of ansii color codes
+		colors.ColorRed:         {},
+		colors.ColorGreen:       {},
+		colors.ColorYellow:      {},
+		colors.ColorBlue:        {},
+		colors.ColorPurple:      {},
+		colors.ColorCyan:        {},
+		colors.ColorHex95b806:   {},
+		colors.ColorCyan24Bit:   {},
+		colors.ColorPurple24Bit: {},
+		colors.ColorReset:       {},
+	}
 	for _, msg := range h.Messages {
 		sanitizedMsg := msg
 		// Remove each prefix from the start of the message
-		for _, prefix := range prefixesToRemove {
+		for prefix := range prefixesToRemove {
 			if strings.HasPrefix(sanitizedMsg, prefix) {
 				sanitizedMsg = strings.TrimPrefix(sanitizedMsg, prefix)
 				break // Assume only one prefix will match and then break the loop
