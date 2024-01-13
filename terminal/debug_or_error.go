@@ -42,6 +42,7 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 	if l.debugMode {
 		debugPrefix := colors.ColorHex95b806 + DEBUGPREFIX + colors.ColorReset // Add color to the prefix
 		l.logger.Printf(debugPrefix+" "+format, v...)
+		fmt.Println()
 	}
 }
 
