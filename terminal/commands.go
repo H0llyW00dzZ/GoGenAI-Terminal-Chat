@@ -143,7 +143,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 
 	// Send a shutdown message to the AI including the chat history
 	// this method better instead of hardcode LOL
-	aiPrompt := fmt.Sprintf(ContextPromptShutdown, ApplicationName, QuitCommand)
+	aiPrompt := fmt.Sprintf(ContextPromptShutdown, QuitCommand, ApplicationName)
 	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
 	if err != nil {
 		// If there's an error sending the message, log it
@@ -235,7 +235,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	}
 
 	if isLatest {
-		aiPrompt = fmt.Sprintf(YouAreusingLatest, ApplicationName, CurrentVersion)
+		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, CurrentVersion, ApplicationName)
 	} else {
 		// Fetch the release information for the latest version.
 		releaseInfo, err := GetFullReleaseInfo(latestVersion)
@@ -243,8 +243,8 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 			return false, err
 		}
 
-		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt, ApplicationName,
-			CurrentVersion,
+		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt, VersionCommand, CurrentVersion,
+			ApplicationName,
 			releaseInfo.TagName,
 			releaseInfo.Name,
 			releaseInfo.Body)
