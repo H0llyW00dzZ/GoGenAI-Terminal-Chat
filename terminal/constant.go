@@ -73,7 +73,8 @@ const (
 		"The user attempted an command: **%s**\n" +
 		"Can you provide help information for the available commands?\n" +
 		// Better Response for AI instead of "Hard Coded" hahaha
-		"List Command Available:\n**%s**\n**%s**\n**%s**\n**%s %s**"
+		"List Command Available:\n**%s** or **%s**\n**%s** or **%s**\n" +
+		"**%s** or **%s**\n**%s %s**"
 )
 
 // Defined constants for commands
@@ -81,12 +82,14 @@ const (
 // Note: will add more in future based on the need,
 // for example, to change the model, or to change the delay, another thing is syncing ai with goroutine (known as gopher)
 const (
-	QuitCommand    = ":quit"
-	VersionCommand = ":checkversion"
-	HelpCommand    = ":help"
-	PingCommand    = ":ping" // Currently marked as TODO
-	ClearCommand   = ":clear"
-	PrefixChar     = ":"
+	QuitCommand      = ":quit"
+	ShortQuitCommand = ":q" // Short quit command
+	VersionCommand   = ":checkversion"
+	HelpCommand      = ":help"
+	ShortHelpCommand = ":h"    // Short help command
+	PingCommand      = ":ping" // Currently marked as TODO
+	ClearCommand     = ":clear"
+	PrefixChar       = ":"
 	// List args
 	ClearChatHistoryArgs = "chat history"
 )

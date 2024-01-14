@@ -22,10 +22,12 @@ var logger *DebugOrErrorLogger
 var commandHandlers = map[string]CommandHandler{
 	// Note: This map offers excellent scalability. For Example: You can easily add numerous commands without impacting
 	// the AI's performance or synchronization ai, such as `:quit` or `:checkversion`.
-	QuitCommand:    &handleQuitCommand{},
-	VersionCommand: &handleCheckVersionCommand{},
-	HelpCommand:    &handleHelpCommand{},
-	ClearCommand:   &handleClearCommand{},
+	QuitCommand:      &handleQuitCommand{},
+	ShortQuitCommand: &handleQuitCommand{}, // Short quit command
+	VersionCommand:   &handleCheckVersionCommand{},
+	HelpCommand:      &handleHelpCommand{},
+	ShortHelpCommand: &handleHelpCommand{}, // Short help command
+	ClearCommand:     &handleClearCommand{},
 	//TODO: Will add more commands here, example: :help, :about, :credits, :k8s, syncing AI With Go Routines (Known as Gopher hahaha) etc.
 	//Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line
 }
