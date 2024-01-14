@@ -323,7 +323,7 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	if cmd.IsValid(parts) {
 		session.ChatHistory.Clear()
 		PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-		PrintTypingChat(colors.ColorHex95b806+ChatHistoryClear+colors.ColorReset, TypingDelay)
+		PrintTypingChat(ChatHistoryClear, TypingDelay)
 		// Added back the context prompt after clearing the chat history
 		session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 		fmt.Println()

@@ -31,7 +31,7 @@ const (
 	// this may subject to changed in future for example can customize the delay
 	TypingDelay = 60 * time.Millisecond
 	// this clearing chat history in secret storage
-	ChatHistoryClear = "All Chat history cleared."
+	ChatHistoryClear = ColorHex95b806 + "All Chat history cleared." + ColorReset
 )
 
 // Defined constants for language
