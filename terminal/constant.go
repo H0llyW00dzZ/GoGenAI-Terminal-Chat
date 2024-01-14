@@ -141,7 +141,10 @@ const (
 	DEBUG_MODE  = "DEBUG_MODE"
 	DEBUGPREFIX = "🔎 DEBUG:"
 	// Note: Currently only executing CMD, will add more later
-	DEBUGEXECUTINGCMD = "Executing %s command with parts: " +
+	DEBUGEXECUTINGCMD = "Executing " +
+		// Better Readability use Custom HEX color
+		ColorHex95b806 + "%s" + ColorReset +
+		" command with parts: " +
 		// Better Readability use Custom HEX color
 		ColorHex95b806 + "%#v" + ColorReset
 )
