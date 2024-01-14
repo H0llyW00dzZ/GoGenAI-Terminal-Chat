@@ -47,6 +47,7 @@ func RecoverFromPanic() func() {
 }
 
 // IsANSISequence checks if the current index in the rune slice is the start of an ANSI sequence.
+//
 // Deprecated: This method is no longer used, and was replaced by SanitizeMessage.
 // It used to be filter for fix truncated message.
 func IsANSISequence(runes []rune, index int) bool {
@@ -54,6 +55,7 @@ func IsANSISequence(runes []rune, index int) bool {
 }
 
 // PrintANSISequence prints the full ANSI sequence without delay and returns the new index.
+//
 // Deprecated: This method is no longer used, and was replaced by SanitizeMessage.
 // It used to be filter for fix truncated message.
 func PrintANSISequence(runes []rune, index int) int {
