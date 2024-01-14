@@ -64,7 +64,7 @@ func (h *ChatHistory) AddMessage(user string, text string) {
 func (h *ChatHistory) SanitizeMessage(message string) string {
 	// This better way to sanitize message instead of struct again.
 	// It fix truncated message about color codes.
-
+	buildeR.Reset() // Reset the builder to clear any previous state.
 	// Define patterns to identify ANSI color codes.
 	colorCodePattern := regExp.BinaryRegexAnsi
 
