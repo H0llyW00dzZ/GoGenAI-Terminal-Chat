@@ -87,3 +87,5 @@ func (cmd *handlepingCommand) IsValid(parts []string) bool {
 }
 
 type translateCommand struct{}
+
+type fixDocsFormattingCommand struct{}
