@@ -16,6 +16,7 @@ type BinaryAnsiChars struct {
 	BinaryAnsiChar          rune
 	BinaryAnsiSquenseChar   rune
 	BinaryAnsiSquenseString string
+	BinaryLeftSquareBracket rune
 }
 
 // TypingChars is a struct that contains the Animated Chars used to print the typing effect.
@@ -38,20 +39,21 @@ type TypingChars struct {
 // For instance, when a Gopher completes a task or job and transitions to a resting state,
 // this function can print a message with a typing effect to visually represent the Gopher's "sleeping" activities.
 func PrintTypingChat(message string, delay time.Duration) {
-	runes := []rune(message) // Convert the message to a slice of runes Boost the performance of the program.
-	i := 0
-	for i < len(runes) {
-		if runes[i] == ansichar.BinaryAnsiChar {
-			// Assume the full ANSI sequence follows
-			i = printANSISequence(runes, i)
+	runes := []rune(message) // Convert the message to a slice of runes for Boost performance.
+	for i := 0; i < len(runes); i++ {
+		if isANSISequence(runes, i) {
+			i = printANSISequence(runes, i) // Print the ANSI sequence without delay.
 		} else {
-			// Print a regular character with delay.
-			fmt.Printf(humantyping.AnimatedChars, runes[i])
+			fmt.Printf(humantyping.AnimatedChars, runes[i]) // Print a regular character with delay.
 			time.Sleep(delay)
-			i++
 		}
 	}
 	fmt.Println()
+}
+
+// isANSISequence checks if the current index in the rune slice is the start of an ANSI sequence.
+func isANSISequence(runes []rune, index int) bool {
+	return index+1 < len(runes) && runes[index] == ansichar.BinaryAnsiChar && runes[index+1] == ansichar.BinaryLeftSquareBracket
 }
 
 // printANSISequence prints the full ANSI sequence without delay and returns the new index.
@@ -61,10 +63,8 @@ func printANSISequence(runes []rune, index int) int {
 		fmt.Printf(humantyping.AnimatedChars, runes[index])
 		index++ // Move past the current character.
 	}
-	if index < len(runes) && runes[index] == ansichar.BinaryAnsiSquenseChar {
-		// This should print the 'm' character and complete the ANSI sequence
-		fmt.Printf(humantyping.AnimatedChars, runes[index])
-		index++ // Move past the 'm' character.
+	if index < len(runes) {
+		fmt.Printf(humantyping.AnimatedChars, runes[index]) // Print the 'm' character to complete the ANSI sequence.
 	}
 	return index // Return the new index position.
 }

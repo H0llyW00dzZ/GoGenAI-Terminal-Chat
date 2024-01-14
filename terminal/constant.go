@@ -127,6 +127,7 @@ const (
 	TripleBacktick          = "```"
 	StringNewLine           = "\n"
 	BinaryAnsiChar          = '\x1b'
+	BinaryLeftSquareBracket = '['
 	BinaryAnsiSquenseChar   = 'm'
 	BinaryAnsiSquenseString = "m"
 )

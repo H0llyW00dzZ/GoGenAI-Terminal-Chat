@@ -60,6 +60,7 @@ var ansichar = BinaryAnsiChars{
 	BinaryAnsiChar:          BinaryAnsiChar,
 	BinaryAnsiSquenseChar:   BinaryAnsiSquenseChar,
 	BinaryAnsiSquenseString: BinaryAnsiSquenseString,
+	BinaryLeftSquareBracket: BinaryLeftSquareBracket,
 }
 
 // animatedchars
