@@ -130,6 +130,7 @@ const (
 	BinaryLeftSquareBracket = '['
 	BinaryAnsiSquenseChar   = 'm'
 	BinaryAnsiSquenseString = "m"
+	BinaryRegexAnsi         = `\x1b\[[0-9;]*m`
 )
 
 // Defined List of Environment variables
