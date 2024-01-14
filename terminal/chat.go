@@ -5,6 +5,7 @@ package terminal
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -21,6 +22,11 @@ type ChatHistory struct {
 // NewLineChar is a struct that containt Rune for New Line Character
 type NewLineChar struct {
 	NewLineChars rune
+}
+
+// Regexp is a struct that containts the Regexp for ANSI color codes
+type Regexp struct {
+	BinaryRegexAnsi string
 }
 
 // AddMessage appends a new message to the chat history.
@@ -56,31 +62,27 @@ func (h *ChatHistory) AddMessage(user string, text string) {
 //
 //	string: The sanitized message.
 func (h *ChatHistory) SanitizeMessage(message string) string {
-	// Define a map of prefixes to remove from the message.
-	prefixesToRemove := map[string]struct{}{
-		youNerd:               {},
-		aiNerd:                {},
-		colors.ColorRed:       {},
-		colors.ColorGreen:     {},
-		colors.ColorYellow:    {},
-		colors.ColorBlue:      {},
-		colors.ColorPurple:    {},
-		colors.ColorCyan:      {},
-		colors.ColorHex95b806: {},
-		colors.ColorCyan24Bit: {},
-		colors.ColorReset:     {},
-	}
+	// This better way to sanitize message instead of struct again.
+	// It fix truncated message about color codes.
 
-	// Iterate over the prefixes and remove the first occurrence from the message.
-	for prefix := range prefixesToRemove {
-		if strings.HasPrefix(message, prefix) {
-			// Return the message without the prefix.
-			return strings.TrimPrefix(message, prefix)
+	// Define patterns to identify ANSI color codes.
+	colorCodePattern := regExp.BinaryRegexAnsi
+
+	// Replace all ANSI color codes with the empty string except for the reset code.
+	re := regexp.MustCompile(colorCodePattern)
+	sanitizedMessage := re.ReplaceAllStringFunc(message, func(match string) string {
+		if match == colors.ColorReset {
+			return match
 		}
+		return ""
+	})
+
+	// Ensure the message ends with a reset ANSI code.
+	if !strings.HasSuffix(sanitizedMessage, colors.ColorReset) {
+		sanitizedMessage += colors.ColorReset
 	}
 
-	// Return the original message if no prefixes are found.
-	return message
+	return sanitizedMessage
 }
 
 // GetHistory concatenates all messages in the chat history into a single
