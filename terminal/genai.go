@@ -39,34 +39,13 @@ type TypingChars struct {
 // For instance, when a Gopher completes a task or job and transitions to a resting state,
 // this function can print a message with a typing effect to visually represent the Gopher's "sleeping" activities.
 func PrintTypingChat(message string, delay time.Duration) {
-	runes := []rune(message) // Convert the message to a slice of runes for Boost performance.
-	for i := 0; i < len(runes); i++ {
-		if isANSISequence(runes, i) {
-			i = printANSISequence(runes, i) // Print the ANSI sequence without delay.
-		} else {
-			fmt.Printf(humantyping.AnimatedChars, runes[i]) // Print a regular character with delay.
-			time.Sleep(delay)
-		}
+	// Note: This now more like a human typing effect.
+	// It's safe now alongside with sanitizing message.
+	for _, char := range message {
+		fmt.Printf(AnimatedChars, char)
+		time.Sleep(delay)
 	}
 	fmt.Println()
-}
-
-// isANSISequence checks if the current index in the rune slice is the start of an ANSI sequence.
-func isANSISequence(runes []rune, index int) bool {
-	return index+1 < len(runes) && runes[index] == ansichar.BinaryAnsiChar && runes[index+1] == ansichar.BinaryLeftSquareBracket
-}
-
-// printANSISequence prints the full ANSI sequence without delay and returns the new index.
-func printANSISequence(runes []rune, index int) int {
-	// Print the full ANSI sequence without delay.
-	for index < len(runes) && runes[index] != ansichar.BinaryAnsiSquenseChar {
-		fmt.Printf(humantyping.AnimatedChars, runes[index])
-		index++ // Move past the current character.
-	}
-	if index < len(runes) {
-		fmt.Printf(humantyping.AnimatedChars, runes[index]) // Print the 'm' character to complete the ANSI sequence.
-	}
-	return index // Return the new index position.
 }
 
 // SendMessage sends a chat message to the generative AI model and retrieves the response.
