@@ -252,15 +252,16 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
-	chatHistory := session.ChatHistory.GetHistory()
-	// Sanitize the message before sending it to the AI
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+	// no longer needed just for check version
+	//chatHistory := session.ChatHistory.GetHistory()
+
 	// Check if the current version is the latest.
 	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
 	if err != nil {
 		return false, err
 	}
 
+	var aiPrompt string
 	if isLatest {
 		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, CurrentVersion, ApplicationName)
 	} else {
@@ -269,16 +270,20 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 		if err != nil {
 			return false, err
 		}
-
-		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt, VersionCommand, CurrentVersion,
+		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
+			VersionCommand,
+			CurrentVersion,
 			ApplicationName,
 			releaseInfo.TagName,
 			releaseInfo.Name,
 			releaseInfo.Body)
 	}
 
-	// Send the constructed message to the AI and get the response.
-	_, err = SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+
+	// Send the sanitized message to the AI and get the response.
+	_, err = SendMessage(session.Ctx, session.Client, sanitizedMessage)
 	if err != nil {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		return false, err
