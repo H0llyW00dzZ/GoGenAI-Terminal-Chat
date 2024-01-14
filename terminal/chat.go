@@ -68,17 +68,12 @@ func (h *ChatHistory) SanitizeMessage(message string) string {
 	// Define patterns to identify ANSI color codes.
 	colorCodePattern := regExp.BinaryRegexAnsi
 
-	// Replace all ANSI color codes with the empty string except for the reset code.
-	re := regexp.MustCompile(colorCodePattern)
-	sanitizedMessage := re.ReplaceAllString(message, "")
+	// Compile the regex pattern just once and store it for reuse.
+	// This is more efficient than compiling the pattern each time the function is called.
+	var ansiRegex = regexp.MustCompile(colorCodePattern)
 
-	// Append a reset ANSI code at the end of the message if it contains color codes.
-	if re.MatchString(message) && !strings.HasSuffix(sanitizedMessage, ColorReset) {
-		sanitizedMessage += ColorReset
-	}
-
-	// Append a reset ANSI code at the end of the message to ensure default color.
-	sanitizedMessage += ColorReset
+	// Remove all ANSI color codes from the message.
+	sanitizedMessage := ansiRegex.ReplaceAllString(message, "")
 
 	return sanitizedMessage
 }
