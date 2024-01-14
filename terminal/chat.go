@@ -24,7 +24,7 @@ type NewLineChar struct {
 	NewLineChars rune
 }
 
-// Regexp is a struct that containts the Regexp for ANSI color codes
+// Regexp is a struct that contains the Regexp for ANSI color codes
 type Regexp struct {
 	BinaryRegexAnsi string
 }
