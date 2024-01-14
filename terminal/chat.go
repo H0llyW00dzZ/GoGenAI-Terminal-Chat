@@ -70,17 +70,10 @@ func (h *ChatHistory) SanitizeMessage(message string) string {
 
 	// Replace all ANSI color codes with the empty string except for the reset code.
 	re := regexp.MustCompile(colorCodePattern)
-	sanitizedMessage := re.ReplaceAllStringFunc(message, func(match string) string {
-		if match == colors.ColorReset {
-			return match
-		}
-		return ""
-	})
+	sanitizedMessage := re.ReplaceAllString(message, "")
 
-	// Ensure the message ends with a reset ANSI code.
-	if !strings.HasSuffix(sanitizedMessage, colors.ColorReset) {
-		sanitizedMessage += colors.ColorReset
-	}
+	// Append a reset ANSI code at the end of the message to ensure default color.
+	sanitizedMessage += ColorReset
 
 	return sanitizedMessage
 }
