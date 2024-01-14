@@ -5,7 +5,6 @@ package terminal
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 )
 
@@ -22,11 +21,6 @@ type ChatHistory struct {
 // NewLineChar is a struct that containt Rune for New Line Character
 type NewLineChar struct {
 	NewLineChars rune
-}
-
-// Regexp is a struct that containt the Regexp for ANSI color codes
-type Regexp struct {
-	BinaryRegexAnsi string
 }
 
 // AddMessage appends a new message to the chat history.
@@ -64,18 +58,9 @@ func (h *ChatHistory) AddMessage(user string, text string) {
 func (h *ChatHistory) SanitizeMessage(message string) string {
 	// This better way to sanitize message instead of struct again.
 	// It fix truncated message about color codes.
-
-	// Define patterns to identify ANSI color codes.
-	colorCodePattern := regExp.BinaryRegexAnsi
-
-	// Compile the regex pattern just once and store it for reuse.
-	// This is more efficient than compiling the pattern each time the function is called.
-	var ansiRegex = regexp.MustCompile(colorCodePattern)
-
+	// Note: now more Simplicity and yet powerful.
 	// Remove all ANSI color codes from the message.
-	sanitizedMessage := ansiRegex.ReplaceAllString(message, "")
-
-	return sanitizedMessage
+	return ansiRegex.ReplaceAllString(message, "")
 }
 
 // GetHistory concatenates all messages in the chat history into a single

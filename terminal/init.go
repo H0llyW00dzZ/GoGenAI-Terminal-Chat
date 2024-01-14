@@ -3,7 +3,10 @@
 
 package terminal
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 // apiKey holds the API key used for authenticating requests to the generative
 // AI service. It should be initialized with a valid API key before making any
@@ -75,15 +78,17 @@ var nl = NewLineChar{
 	NewLineChars: NewLineChars,
 }
 
-// regexp
-var regExp = Regexp{
-	BinaryRegexAnsi: BinaryRegexAnsi,
-}
+// ansiRegex is a compiled regular expression that matches ANSI color codes.
+// It is compiled once when the package is initialized.
+// Note: Removing Struct now, this a `Go` not a `Rust`
+var ansiRegex *regexp.Regexp
 
 var tripleBacktickColor string
 
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
+	// Compile the ANSI color code regular expression pattern.
+	ansiRegex = regexp.MustCompile(BinaryRegexAnsi)
 
 }
