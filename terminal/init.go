@@ -73,6 +73,11 @@ var nl = NewLineChar{
 	NewLineChars: NewLineChars,
 }
 
+// regexp
+var regExp = Regexp{
+	BinaryRegexAnsi: BinaryRegexAnsi,
+}
+
 var tripleBacktickColor string
 
 func init() {
