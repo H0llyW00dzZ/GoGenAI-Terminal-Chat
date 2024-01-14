@@ -81,7 +81,7 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 // function or goroutine.
 func (l *DebugOrErrorLogger) RecoverFromPanic() {
 	if r := recover(); r != nil {
-		msg := fmt.Sprintf(RecoverGopher, colors.ColorGreen, colors.ColorReset, colors.ColorRed, r, colors.ColorReset)
+		msg := fmt.Sprintf(RecoverGopher, colors.ColorHex95b806, colors.ColorReset, colors.ColorRed, r, colors.ColorReset)
 		l.logger.Println(msg)
 	}
 }
