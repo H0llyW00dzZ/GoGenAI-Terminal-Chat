@@ -81,12 +81,14 @@ var nl = NewLineChar{
 // ansiRegex is a compiled regular expression that matches ANSI color codes.
 // It is compiled once when the package is initialized.
 // Note: Removing Struct now, this a `Go` not a `Rust`
-var ansiRegex = regexp.MustCompile(BinaryRegexAnsi)
+var ansiRegex *regexp.Regexp
 
 var tripleBacktickColor string
 
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
+	// Compile the ANSI color code regular expression pattern.
+	ansiRegex = regexp.MustCompile(BinaryRegexAnsi)
 
 }
