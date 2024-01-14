@@ -105,9 +105,11 @@ func handleUnrecognizedCommand(command string, session *Session, parts []string)
 	// If the command is not recognized, inform the AI about the unrecognized command.
 	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, command)
 	chatHistory := session.ChatHistory.GetHistory()
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
 	// Send the constructed message to the AI and get the response.
-	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
 	if err != nil {
 		errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
 		logger.Error(errMsg)
@@ -145,10 +147,12 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(QuitCommand)
 
 	// Send a shutdown message to the AI including the chat history
 	// this method better instead of hardcode LOL
-	aiPrompt := fmt.Sprintf(ContextPromptShutdown, QuitCommand, ApplicationName)
+	aiPrompt := fmt.Sprintf(ContextPromptShutdown, sanitizedMessage, ApplicationName)
 	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
 	if err != nil {
 		// If there's an error sending the message, log it
@@ -207,12 +211,14 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		ShortHelpCommand,
 		ClearCommand,
 		ClearChatHistoryArgs)
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
 	// Get the entire chat history as a string.
 	chatHistory := session.ChatHistory.GetHistory()
 
 	// Send the constructed message to the AI and get the response.
-	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
 		return false, err
@@ -246,13 +252,17 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
-	chatHistory := session.ChatHistory.GetHistory()
+	// no longer needed just for check version
+	//chatHistory := session.ChatHistory.GetHistory()
+
 	// Check if the current version is the latest.
 	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
 	if err != nil {
 		return false, err
 	}
-
+	// this avoid duplicate logic, by adding variable in this function
+	// unlike quit or help command which is already functionality used variable in `init.go`
+	var aiPrompt string
 	if isLatest {
 		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, CurrentVersion, ApplicationName)
 	} else {
@@ -261,16 +271,20 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 		if err != nil {
 			return false, err
 		}
-
-		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt, VersionCommand, CurrentVersion,
+		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
+			VersionCommand,
+			CurrentVersion,
 			ApplicationName,
 			releaseInfo.TagName,
 			releaseInfo.Name,
 			releaseInfo.Body)
 	}
 
-	// Send the constructed message to the AI and get the response.
-	_, err = SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+
+	// Send the sanitized message to the AI and get the response.
+	_, err = SendMessage(session.Ctx, session.Client, sanitizedMessage)
 	if err != nil {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		return false, err
