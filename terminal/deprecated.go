@@ -45,3 +45,25 @@ func RecoverFromPanic() func() {
 		}
 	}
 }
+
+// isANSISequence checks if the current index in the rune slice is the start of an ANSI sequence.
+// Deprecated: This method is no longer used, and was replaced by SanitizeMessage.
+// It used to be filter for fix truncated message.
+func isANSISequence(runes []rune, index int) bool {
+	return index+1 < len(runes) && runes[index] == ansichar.BinaryAnsiChar && runes[index+1] == ansichar.BinaryLeftSquareBracket
+}
+
+// printANSISequence prints the full ANSI sequence without delay and returns the new index.
+// Deprecated: This method is no longer used, and was replaced by SanitizeMessage.
+// It used to be filter for fix truncated message.
+func printANSISequence(runes []rune, index int) int {
+	// Print the full ANSI sequence without delay.
+	for index < len(runes) && runes[index] != ansichar.BinaryAnsiSquenseChar {
+		fmt.Printf(humantyping.AnimatedChars, runes[index])
+		index++ // Move past the current character.
+	}
+	if index < len(runes) {
+		fmt.Printf(humantyping.AnimatedChars, runes[index]) // Print the 'm' character to complete the ANSI sequence.
+	}
+	return index // Return the new index position.
+}
