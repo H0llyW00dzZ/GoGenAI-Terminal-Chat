@@ -72,6 +72,11 @@ func (h *ChatHistory) SanitizeMessage(message string) string {
 	re := regexp.MustCompile(colorCodePattern)
 	sanitizedMessage := re.ReplaceAllString(message, "")
 
+	// Append a reset ANSI code at the end of the message if it contains color codes.
+	if re.MatchString(message) && !strings.HasSuffix(sanitizedMessage, ColorReset) {
+		sanitizedMessage += ColorReset
+	}
+
 	// Append a reset ANSI code at the end of the message to ensure default color.
 	sanitizedMessage += ColorReset
 
