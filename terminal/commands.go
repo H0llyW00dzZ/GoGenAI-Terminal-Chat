@@ -260,7 +260,8 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	if err != nil {
 		return false, err
 	}
-
+	// this avoid duplicate logic, by adding variable in this function
+	// unlike quit or help command which is already functionality used variable in `init.go`
 	var aiPrompt string
 	if isLatest {
 		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, CurrentVersion, ApplicationName)
