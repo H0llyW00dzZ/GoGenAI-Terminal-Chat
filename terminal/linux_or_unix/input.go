@@ -1,7 +1,7 @@
 //go:build !windows
 // +build !windows
 
-package terminal
+package linux_or_unix
 
 // InputHistoryManager manages the history of user inputs during a chat session.
 // It allows navigating through the history of commands or messages that have been
