@@ -117,7 +117,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 
 				keepDelimiters := map[string]bool{
 					TripleBacktick: true,  // Keep triple backticks in the output
-					SingleBacktick: true,  // Keep single backticks in the output
+					SingleBacktick: false, // Remove single backticks in the output
 					DoubleAsterisk: false, // Remove double asterisks from the output
 				}
 
