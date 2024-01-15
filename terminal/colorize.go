@@ -39,6 +39,14 @@ const (
 	ColorReset       = "\x1b[0m"
 )
 
+// ANSI Text Formatting.
+const (
+	// bold text.
+	BoldText = "\x1b[1m"
+	// reset text formatting.
+	ResetText = "\x1b[22m"
+)
+
 // Colorize applies ANSI color codes to the text surrounded by specified delimiters.
 // It can process multiple delimiters, each with a corresponding color. The function
 // can also conditionally retain or remove the delimiters in the final output.
@@ -90,6 +98,16 @@ func replaceTripleBackticks(text, placeholder string) string {
 	return text
 }
 
+// applyBold applies bold formatting to the provided text if the delimiter indicates bold.
+//
+// Note: This is subject to change to avoid complexity, as it currently uses a nested "if" statement.
+func applyBold(text string, delimiter string, color string) string {
+	if delimiter == DoubleAsterisk {
+		return color + BoldText + text + ResetText + ColorReset
+	}
+	return color + text + ColorReset
+}
+
 // processDelimiters processes the delimiters in the text and applies the corresponding color.
 func processDelimiters(text string, delimiter, color string, keepDelimiters map[string]bool) string {
 	parts := strings.Split(text, delimiter)
@@ -97,7 +115,7 @@ func processDelimiters(text string, delimiter, color string, keepDelimiters map[
 		if keep, exists := keepDelimiters[delimiter]; exists && keep {
 			parts[j] = color + delimiter + parts[j] + delimiter + ColorReset
 		} else {
-			parts[j] = color + parts[j] + ColorReset
+			parts[j] = applyBold(parts[j], delimiter, color)
 		}
 	}
 	return strings.Join(parts, "")
