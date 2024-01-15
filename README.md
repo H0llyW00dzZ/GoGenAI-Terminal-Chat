@@ -85,8 +85,10 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 
 ### 🔓 Environment Variables
 
-- `API_KEY`: Your API key for accessing the generative AI model. This is a required environment variable.
-- `DEBUG_MODE`: set `true` to enabled `DEBUG_MODE` other wise set to `false` to disabled it.
+| Variable      | Description                                                   | Required |
+|---------------|---------------------------------------------------------------|:--------:|
+| `API_KEY`     | Your API key for accessing the generative AI model.           |   Yes    |
+| `DEBUG_MODE`  | Set to `true` to enable `DEBUG_MODE`, or `false` to disable it.|   No     |
 
 
 ## 📸 Screenshot
