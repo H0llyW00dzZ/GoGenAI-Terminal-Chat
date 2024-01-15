@@ -41,6 +41,8 @@ func (h *ChatHistory) AddMessage(user string, text string) {
 	h.Messages = append(h.Messages, formattedMessage)
 
 	// Remove the oldest message to maintain a fixed history size in RAM's labyrinth.
+	// Note: The fixed history size might be increased in the future. Currently, the application's memory usage is minimal, consuming only 16 MB (Average).
+	// then keep a maximum of 5 history entries for transmission to Google AI.
 	if len(h.Messages) > MaxChatHistory {
 		h.Messages = h.Messages[len(h.Messages)-MaxChatHistory:]
 	}
