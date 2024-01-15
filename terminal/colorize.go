@@ -56,6 +56,7 @@ const (
 //	text          string: The text to be colorized.
 //	colorPairs    []string: A slice where each pair of elements represents a delimiter and its color.
 //	keepDelimiters map[string]bool: A map to indicate whether to keep the delimiter in the output.
+//	formatting     map[string]string: A map of delimiters to their corresponding ANSI formatting codes.
 //
 // Returns:
 //
@@ -64,7 +65,7 @@ const (
 // Note: This function may not work as expected in Windows Command Prompt due to its limited
 // support for ANSI color codes. It is designed for terminals that support ANSI, such as those
 // in Linux/Unix environments.
-func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) string {
+func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool, formatting map[string]string) string {
 	tripleBacktickPlaceholder := ObjectTripleHighLevelString
 	text = replaceTripleBackticks(text, tripleBacktickPlaceholder)
 
@@ -74,7 +75,7 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool) 
 		if delimiter == TripleBacktick {
 			tripleBacktickColor = color
 		}
-		text = processDelimiters(text, delimiter, color, keepDelimiters)
+		text = processDelimiters(text, delimiter, color, keepDelimiters, formatting)
 	}
 
 	if tripleBacktickColor != "" {
@@ -98,24 +99,34 @@ func replaceTripleBackticks(text, placeholder string) string {
 	return text
 }
 
-// applyBold applies bold formatting to the provided text if the delimiter indicates bold.
+// ApplyFormatting applies text formatting based on the provided delimiter.
+// If the delimiter is recognized, it applies the appropriate ANSI formatting codes.
 //
-// Note: This is subject to change to avoid complexity, as it currently uses a nested "if" statement.
-func applyBold(text string, delimiter string, color string) string {
-	if delimiter == DoubleAsterisk {
-		return color + BoldText + text + ResetText + ColorReset
+// Parameters:
+//
+//	text string: The text to format.
+//	delimiter string: The delimiter that indicates what kind of formatting to apply.
+//	color string: The ANSI color code to apply to the text.
+//	formatting map[string]string: A map of delimiters to their corresponding ANSI formatting codes.
+//
+// Returns:
+//
+//	string: The formatted text.
+func ApplyFormatting(text string, delimiter string, color string, formatting map[string]string) string {
+	if formatCode, ok := formatting[delimiter]; ok {
+		return color + formatCode + text + ResetText + ColorReset
 	}
 	return color + text + ColorReset
 }
 
-// processDelimiters processes the delimiters in the text and applies the corresponding color.
-func processDelimiters(text string, delimiter, color string, keepDelimiters map[string]bool) string {
+// processDelimiters processes the delimiters in the text and applies the corresponding color and formatting.
+func processDelimiters(text string, delimiter, color string, keepDelimiters map[string]bool, formatting map[string]string) string {
 	parts := strings.Split(text, delimiter)
 	for j := 1; j < len(parts); j += 2 {
 		if keep, exists := keepDelimiters[delimiter]; exists && keep {
 			parts[j] = color + delimiter + parts[j] + delimiter + ColorReset
 		} else {
-			parts[j] = applyBold(parts[j], delimiter, color)
+			parts[j] = ApplyFormatting(parts[j], delimiter, color, formatting)
 		}
 	}
 	return strings.Join(parts, "")
