@@ -11,7 +11,7 @@ const (
 	GitHubAPIURL      = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
 	GitHubReleaseFUll = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/tags/%s"
 	// CurrentVersion represents the current version of the application.
-	CurrentVersion = "v0.3.5"
+	CurrentVersion = "v0.3.6"
 )
 
 // Defined constants for the terminal package
@@ -55,7 +55,7 @@ const (
 	// the conversation will resume from the point prior to the invocation of these commands.
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
-	YouAreusingLatest = "attempted a command: **%s**\n" +
+	YouAreusingLatest = "a User attempted a command: **%s**\n" +
 		"The user is using Version **%s** of **%s**\n" +
 		"This is the latest version.\n" +
 		"Tell the user, No need to update." // Better Response for AI
