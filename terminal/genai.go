@@ -120,9 +120,12 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 					SingleBacktick: false, // Remove single backticks in the output
 					DoubleAsterisk: false, // Remove double asterisks from the output
 				}
+				formatting := map[string]string{
+					DoubleAsterisk: BoldText, // Assuming DoubleAsterisk in the output
+				}
 
 				// Colorize content that is surrounded by double asterisks or backticks
-				colorized := Colorize(content, colorPairs, keepDelimiters)
+				colorized := Colorize(content, colorPairs, keepDelimiters, formatting)
 
 				// Handle single asterisks separately
 				// Pass Colorize content that is surrounded by single-character delimiters

@@ -69,3 +69,14 @@ func PrintANSISequence(runes []rune, index int) int {
 	}
 	return index // Return the new index position.
 }
+
+// ApplyBold applies bold formatting to the provided text if the delimiter indicates bold.
+//
+// Deprecated: This method is no longer used, and was replaced by ApplyFormatting.
+// It used to be used for formatting text.
+func ApplyBold(text string, delimiter string, color string) string {
+	if delimiter == DoubleAsterisk {
+		return color + BoldText + text + ResetText + ColorReset
+	}
+	return color + text + ColorReset
+}
