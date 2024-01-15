@@ -99,6 +99,8 @@ func replaceTripleBackticks(text, placeholder string) string {
 }
 
 // applyBold applies bold formatting to the provided text if the delimiter indicates bold.
+//
+// Note: This is subject to change to avoid complexity, as it currently uses a nested "if" statement.
 func applyBold(text string, delimiter string, color string) string {
 	if delimiter == DoubleAsterisk {
 		return color + BoldText + text + ResetText + ColorReset
