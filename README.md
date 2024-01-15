@@ -242,6 +242,9 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > The `Reporting System` is designed to capture and handle runtime panic events in the Go application, facilitating streamlined error reporting and analysis.
 - [X] **Debug System**
+- [ ] **Convert Result Table**
+> [!NOTE]
+> The `Convert Result Table` feature is designed to reformat output from the AI into a tabular structure.
 
 ### Back-End:
 - [ ] **Any unimplemented**
