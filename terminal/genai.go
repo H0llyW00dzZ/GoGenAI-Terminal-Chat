@@ -163,6 +163,8 @@ func printAIResponse(colorized string) {
 
 // printResponseFooter prints the footer after the AI response.
 func printResponseFooter() {
+	// Note: This a footer would be used for Enabling Additional Response from AI such as prompt feedback.
+	// It possible to add more response from AI in the future.
 	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 	fmt.Print(StringNewLine)
 }
