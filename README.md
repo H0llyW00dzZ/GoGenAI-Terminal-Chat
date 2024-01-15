@@ -245,6 +245,10 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Convert Result Table**
 > [!NOTE]
 > The `Convert Result Table` feature is designed to reformat output from the AI into a tabular structure.
+- [ ] **Enabling Additional Response**
+> [!NOTE]
+> The `Enabling Additional Response` feature is designed to permit additional responses from the AI, such as prompt feedback. To activate this feature, use the `Environment Variable Configuration`.
+
 
 ### Back-End:
 - [ ] **Any unimplemented**
