@@ -6,6 +6,7 @@ package terminal
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	genai "github.com/google/generative-ai-go/genai"
@@ -107,43 +108,61 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 		if cand.Content != nil {
 			for _, part := range cand.Content.Parts {
 				content := fmt.Sprint(part)
-
-				// Colorize the response
-				colorPairs := []string{
-					TripleBacktick, colors.ColorPurple24Bit,
-					SingleBacktick, colors.ColorYellow,
-					DoubleAsterisk, colors.ColorHex95b806,
-				}
-
-				keepDelimiters := map[string]bool{
-					TripleBacktick: true,  // Keep triple backticks in the output
-					SingleBacktick: false, // Remove single backticks in the output
-					DoubleAsterisk: false, // Remove double asterisks from the output
-				}
-				formatting := map[string]string{
-					DoubleAsterisk: BoldText, // Assuming DoubleAsterisk in the output
-				}
-
-				// Colorize content that is surrounded by double asterisks or backticks
-				colorized := Colorize(content, colorPairs, keepDelimiters, formatting)
-
-				// Handle single asterisks separately
-				// Pass Colorize content that is surrounded by single-character delimiters
-				colorized = SingleCharColorize(colorized, SingleAsterisk, colors.ColorCyan24Bit)
-
-				// Print "AI:" prefix directly without typing effect
-				PrintPrefixWithTimeStamp(AiNerd)
-
-				// Assuming 'part' can be printed directly and is of type string or has a String() method
-				// Use the typing banner effect only for the part content
-				// Colorized string is printed character by character with a delay between each character
-				PrintTypingChat(colorized, TypingDelay)
-				// Collect AI response
+				content = removeAIPrefix(content)
+				colorized := colorizeResponse(content)
+				colorized = handleSingleAsterisks(colorized)
+				printAIResponse(colorized)
 				aiResponse += colorized
 			}
 		}
 	}
+
+	printResponseFooter()
+	return aiResponse
+}
+
+// removeAIPrefix checks for and removes the AI prefix if it's present in the response.
+func removeAIPrefix(content string) string {
+	aiPrefix := AiNerd // Define the AI prefix
+	if strings.HasPrefix(content, aiPrefix) {
+		return strings.TrimPrefix(content, aiPrefix)
+	}
+	return content
+}
+
+// colorizeResponse applies color to the response content.
+func colorizeResponse(content string) string {
+	// Define color pairs and delimiters for colorization
+	colorPairs := []string{
+		TripleBacktick, colors.ColorPurple24Bit,
+		SingleBacktick, colors.ColorYellow,
+		DoubleAsterisk, colors.ColorHex95b806,
+	}
+	keepDelimiters := map[string]bool{
+		TripleBacktick: true,  // Keep triple backticks in the output
+		SingleBacktick: false, // Remove single backticks in the output
+		DoubleAsterisk: false, // Remove double asterisks from the output
+	}
+	formatting := map[string]string{
+		DoubleAsterisk: BoldText, // Assuming DoubleAsterisk in the output
+	}
+
+	return Colorize(content, colorPairs, keepDelimiters, formatting)
+}
+
+// handleSingleAsterisks applies color to text surrounded by single-character delimiters.
+func handleSingleAsterisks(content string) string {
+	return SingleCharColorize(content, SingleAsterisk, colors.ColorCyan24Bit)
+}
+
+// printAIResponse prints the AI's response with a typing effect.
+func printAIResponse(colorized string) {
+	PrintPrefixWithTimeStamp(AiNerd)
+	PrintTypingChat(colorized, TypingDelay)
+}
+
+// printResponseFooter prints the footer after the AI response.
+func printResponseFooter() {
 	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 	fmt.Print(StringNewLine)
-	return aiResponse
 }
