@@ -143,6 +143,12 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 > [!NOTE]
 > This `🔓 ⚙️ Simple Debugging` are simple unlike shitty a complex logic `go codes` that increase of `cyclomatic complexity`
 
+### Solving Math in the Terminal:
+<p align="center">
+  <img src="https://i.imgur.com/2dAAm6G.png" alt="math" />
+  <img src="https://i.imgur.com/S94nLp9.png" alt="math" />
+</p>
+
 ## Example how it work
 
 🤓 You: hello are you ?
