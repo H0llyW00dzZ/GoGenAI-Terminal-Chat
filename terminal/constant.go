@@ -55,7 +55,7 @@ const (
 	// the conversation will resume from the point prior to the invocation of these commands.
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
-	YouAreusingLatest = "attempted a command: **%s**\n" +
+	YouAreusingLatest = "a User attempted a command: **%s**\n" +
 		"The user is using Version **%s** of **%s**\n" +
 		"This is the latest version.\n" +
 		"Tell the user, No need to update." // Better Response for AI
