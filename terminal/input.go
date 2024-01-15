@@ -1,3 +1,6 @@
+//go:build !windows
+// +build !windows
+
 package terminal
 
 // InputHistoryManager manages the history of user inputs during a chat session.
