@@ -6,6 +6,7 @@ package terminal
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -116,9 +117,22 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 			}
 		}
 	}
-
-	printResponseFooter()
+	// print the prompt feedback if it's present
+	// why this so simple ? because it's more efficient and faster.
+	// get good get "Go" hahaha
+	printResponseFooter(resp)
 	return aiResponse
+}
+
+// printPromptFeedback formats and prints the prompt feedback received from the AI.
+func printPromptFeedback(feedback *genai.PromptFeedback) {
+	if feedback == nil {
+		return
+	}
+	// Iterate over safety ratings and print them.
+	for _, rating := range feedback.SafetyRatings {
+		fmt.Printf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+	}
 }
 
 // removeAIPrefix checks for and removes the AI prefix if it's present in the response.
@@ -161,10 +175,16 @@ func printAIResponse(colorized string) {
 	PrintTypingChat(colorized, TypingDelay)
 }
 
-// printResponseFooter prints the footer after the AI response.
-func printResponseFooter() {
-	// Note: This a footer would be used for Enabling Additional Response from AI such as prompt feedback.
-	// It possible to add more response from AI in the future.
+// printResponseFooter prints the footer after the AI response and includes prompt feedback if enabled.
+func printResponseFooter(resp *genai.GenerateContentResponse) {
+	// Check the environment variable to decide whether to show prompt feedback.
+	showPromptFeedback := os.Getenv(SHOW_PROMPT_FEEDBACK) == "true"
+	if showPromptFeedback && resp.PromptFeedback != nil {
+		fmt.Print(StringNewLine)
+		fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+		printPromptFeedback(resp.PromptFeedback)
+	}
+
 	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 	fmt.Print(StringNewLine)
 }
