@@ -49,6 +49,7 @@ func (cmd *fixDocsFormattingCommand) Execute(session *Session) (bool, error) {
 }
 
 // handleTokecountingCommand would be a handler function for a hypothetical ":tokencount <text>" or ":tokencount -f <file.txt>" command.
+// better than that tokenizer since it written in "GO" hahaha
 func (cmd *handleTokecountingCommand) Execute(session *Session) (bool, error) {
 	// currently unimplemented
 	return true, nil
