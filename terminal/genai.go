@@ -151,11 +151,17 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 		// Handle the error appropriately
 		logger.Error(ErrorCountingTokens, err)
 	} else {
+		// Print the current and total token count
+		tokenPrefix := TokenEmoji
+		tokenMSG := fmt.Sprintf(TokenCount, tokenCount)
+		PrintPrefixWithTimeStamp(tokenPrefix + " ")
+		// Simulate typing the debug message
+		PrintTypingChat(tokenMSG, TypingDelay)
 		// Update the total token count
 		totalTokenCount += tokenCount
-		// Print the current and total token count
-		fmt.Printf(TokenCount, tokenCount)
-		fmt.Printf(TotalTokenCount, totalTokenCount)
+		tokenusageMSG := fmt.Sprintf(TotalTokenCount, totalTokenCount)
+		PrintPrefixWithTimeStamp(StatisticsEmoji + " ")
+		PrintTypingChat(tokenusageMSG, TypingDelay)
 	}
 }
 
