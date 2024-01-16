@@ -40,8 +40,19 @@ func NewDebugOrErrorLogger() *DebugOrErrorLogger {
 //	v ...interface{}: The values to be formatted according to the format string.
 func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 	if l.debugMode {
-		debugPrefix := colors.ColorHex95b806 + DEBUGPREFIX + colors.ColorReset // Add color to the prefix
-		l.logger.Printf(debugPrefix+" "+format, v...)
+		// Format the debug message
+		message := fmt.Sprintf(format, v...)
+
+		// Add the debug prefix in color
+		debugPrefix := colors.ColorHex95b806 + DEBUGPREFIX + colors.ColorReset
+
+		// Print the debug prefix without a newline
+		PrintPrefixWithTimeStamp(debugPrefix + " ")
+
+		// Simulate typing the debug message
+		PrintTypingChat(message, TypingDelay)
+
+		// Print a newline after the message
 		fmt.Println()
 	}
 }
