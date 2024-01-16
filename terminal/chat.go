@@ -100,6 +100,7 @@ func (h *ChatHistory) GetHistory() string {
 // This method does not return any value. It updates the chat history in place.
 //
 // Note: This currently marked as TODO since it's not used anywhere in the code. It's a good idea to add this feature in the future.
+// Also it used to be maintain the RAM's labyrinth hahaha and automated handle by Garbage Collector.
 func (h *ChatHistory) RemoveMessages(numMessages int, messageContent string) {
 	// Note: This simple and yet powerful unlike shitty complex code Hahaha.
 	if messageContent != "" {
