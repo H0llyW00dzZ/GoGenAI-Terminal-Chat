@@ -40,8 +40,19 @@ func NewDebugOrErrorLogger() *DebugOrErrorLogger {
 //	v ...interface{}: The values to be formatted according to the format string.
 func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 	if l.debugMode {
-		debugPrefix := colors.ColorHex95b806 + DEBUGPREFIX + colors.ColorReset // Add color to the prefix
-		l.logger.Printf(debugPrefix+" "+format, v...)
+		// Format the debug message
+		message := fmt.Sprintf(format, v...)
+
+		// Add the debug prefix in color
+		debugPrefix := colors.ColorHex95b806 + DEBUGPREFIX + colors.ColorReset
+
+		// Print the debug prefix without a newline
+		PrintPrefixWithTimeStamp(debugPrefix + " ")
+
+		// Simulate typing the debug message
+		PrintTypingChat(message, TypingDelay)
+
+		// Print a newline after the message
 		fmt.Println()
 	}
 }
@@ -54,9 +65,18 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 //	format string: The format string for the error message.
 //	v ...interface{}: The values to be formatted according to the format string.
 func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
-	msg := fmt.Sprintf(format, v...)
-	colorizedMsg := colors.ColorRed + msg + colors.ColorReset // Apply red color to the entire message
-	l.logger.Println(colorizedMsg)
+	// Format the error message
+	message := fmt.Sprintf(format, v...)
+
+	// Add the error prefix in color
+	errorPrefix := colors.ColorRed + message + colors.ColorReset
+
+	// Print the error prefix without a newline
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+
+	// Simulate typing the error message
+	PrintTypingChat(errorPrefix, TypingDelay)
+
 }
 
 // RecoverFromPanic should be deferred at the beginning of a function or goroutine
