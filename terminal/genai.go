@@ -132,40 +132,67 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 	}
 	// Iterate over safety ratings and print them.
 	for _, rating := range feedback.SafetyRatings {
-		fmt.Printf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+		safetyPrefix := ShieldEmoji
+		PrintPrefixWithTimeStamp(safetyPrefix)
+		promptFeedback := fmt.Sprintf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+		PrintTypingChat(promptFeedback, TypingDelay)
 	}
 	// fix front end lmao
-	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+	printVisualSeparator()
 }
 
 // printTokenCount prints the number of tokens used in the AI's response, including the chat history.
 // It also updates and prints the total token count for the session.
 func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	// Concatenate chat history and AI response for token counting
-	fullText := aiResponse
-	if len(chatHistory) > 0 {
-		fullText = chatHistory[0] + StringNewLine + aiResponse
-	}
+	fullText := concatenateChatHistory(aiResponse, chatHistory...)
 
 	tokenCount, err := CountTokens(apiKey, fullText)
 	fmt.Print(StringNewLine)
 	if err != nil {
-		// Handle the error appropriately
-		logger.Error(ErrorCountingTokens, err)
-	} else {
-		// Print the current and total token count
-		tokenPrefix := TokenEmoji
-		tokenMSG := fmt.Sprintf(TokenCount, tokenCount)
-		PrintPrefixWithTimeStamp(tokenPrefix + " ")
-		// Simulate typing the debug message
-		PrintTypingChat(tokenMSG, TypingDelay)
-		// Update the total token count
-		totalTokenCount += tokenCount
-		tokenusageMSG := fmt.Sprintf(TotalTokenCount, totalTokenCount)
-		PrintPrefixWithTimeStamp(StatisticsEmoji + " ")
-		PrintTypingChat(tokenusageMSG, TypingDelay)
+		handleTokenCountError(err)
+		return
 	}
-	// fix front end lmao
+	// print the current token count
+	printCurrentTokenCount(tokenCount)
+	// update and print the total token count
+	updateAndPrintTotalTokenCount(tokenCount)
+
+	// Visual separator for clarity in the output
+	printVisualSeparator()
+}
+
+// concatenateChatHistory concatenates the AI's response with the chat history.
+func concatenateChatHistory(aiResponse string, chatHistory ...string) string {
+	if len(chatHistory) > 0 {
+		return strings.Join(chatHistory, StringNewLine) + StringNewLine + aiResponse
+	}
+	return aiResponse
+}
+
+// handleTokenCountError handles errors that occur while counting tokens.
+func handleTokenCountError(err error) {
+	logger.Error(ErrorCountingTokens, err)
+}
+
+// printCurrentTokenCount prints the number of tokens used in the AI's response.
+func printCurrentTokenCount(tokenCount int) {
+	tokenPrefix := TokenEmoji
+	tokenMSG := fmt.Sprintf(TokenCount, tokenCount)
+	PrintPrefixWithTimeStamp(tokenPrefix)
+	PrintTypingChat(tokenMSG, TypingDelay)
+}
+
+// updateAndPrintTotalTokenCount updates the total token count for the session and prints it.
+func updateAndPrintTotalTokenCount(tokenCount int) {
+	totalTokenCount += tokenCount // Assuming totalTokenCount is a global or package-level variable
+	tokenUsageMSG := fmt.Sprintf(TotalTokenCount, totalTokenCount)
+	PrintPrefixWithTimeStamp(StatisticsEmoji)
+	PrintTypingChat(tokenUsageMSG, TypingDelay)
+}
+
+// printVisualSeparator prints a visual separator to the standard output.
+func printVisualSeparator() {
 	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 }
 
@@ -217,7 +244,7 @@ func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string)
 	showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
 
 	// Print the footer separator
-	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+	printVisualSeparator()
 
 	// Print prompt feedback if enabled
 	if showPromptFeedback && resp.PromptFeedback != nil {
