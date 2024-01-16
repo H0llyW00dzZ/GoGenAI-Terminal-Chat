@@ -365,6 +365,8 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 // However, Go's type system allows us to elegantly manipulate these settings directly through struct methods,
 // bypassing the need for repetitive JSON serialization and deserialization hahaha.
 func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Note: The code in "safety_settings.go" employs advanced idiomatic Go practices. 🤪
+	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, SafetyCommand, parts)
 	if !cmd.IsValid(parts) {
