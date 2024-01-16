@@ -206,6 +206,8 @@ func printAIResponse(colorized string) {
 }
 
 // printResponseFooter prints the footer after the AI response and includes prompt feedback and token count if enabled.
+//
+// Note: this functionality are powerful, it won't break session of conversation hahaha.
 func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string) {
 	showPromptFeedback := os.Getenv(SHOW_PROMPT_FEEDBACK) == "true"
 	showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
