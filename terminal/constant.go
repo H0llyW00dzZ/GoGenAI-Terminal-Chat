@@ -74,7 +74,7 @@ const (
 		"Can you provide help information for the available commands?\n" +
 		// Better Response for AI instead of "Hard Coded" hahaha
 		"List Command Available:\n**%s** or **%s**\n**%s** or **%s**\n" +
-		"**%s** or **%s**\n**%s %s**"
+		"**%s** or **%s**\n**%s** - **%s**, **%s**, **%s**\n\n**%s %s**"
 )
 
 // Defined constants for commands
