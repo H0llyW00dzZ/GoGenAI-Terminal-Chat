@@ -87,11 +87,14 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 
 ### 🔓 Environment Variables
 
+Environment variables are key-value pairs that can affect the behavior of your application. Below is a table of environment variables used in the GoGenAI-Terminal-Chat application, along with their descriptions and whether they are required.
+
 | Variable               | Description                                                                 | Required |
 |------------------------|-----------------------------------------------------------------------------|:--------:|
 | `API_KEY`              | Your API key for accessing the generative AI model.                         |   Yes    |
 | `DEBUG_MODE`           | Set to `true` to enable `DEBUG_MODE`, or `false` to disable it.             |   No     |
 | `SHOW_PROMPT_FEEDBACK` | Set to `true` to display prompt feedback in the response footer, or `false` to hide it. |   No     |
+| `SHOW_TOKEN_COUNT`     | Set to `true` to display the token count used in the AI's response and chat history, or `false` to hide it. |   No     |
 
 
 ## 📸 Screenshot
