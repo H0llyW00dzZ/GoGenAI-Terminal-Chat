@@ -87,10 +87,11 @@ This command will start the GoGenAI Terminal Chat application in interactive mod
 
 ### 🔓 Environment Variables
 
-| Variable      | Description                                                   | Required |
-|---------------|---------------------------------------------------------------|:--------:|
-| `API_KEY`     | Your API key for accessing the generative AI model.           |   Yes    |
-| `DEBUG_MODE`  | Set to `true` to enable `DEBUG_MODE`, or `false` to disable it.|   No     |
+| Variable               | Description                                                                 | Required |
+|------------------------|-----------------------------------------------------------------------------|:--------:|
+| `API_KEY`              | Your API key for accessing the generative AI model.                         |   Yes    |
+| `DEBUG_MODE`           | Set to `true` to enable `DEBUG_MODE`, or `false` to disable it.             |   No     |
+| `SHOW_PROMPT_FEEDBACK` | Set to `true` to display prompt feedback in the response footer, or `false` to hide it. |   No     |
 
 
 ## 📸 Screenshot
@@ -255,7 +256,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Convert Result Table**
 > [!NOTE]
 > The `Convert Result Table` feature is designed to reformat output from the AI into a tabular structure.
-- [ ] **Enabling Additional Response**
+- [X] **Enabling Additional Response**
 > [!NOTE]
 > The `Enabling Additional Response` feature is designed to permit additional responses from the AI, such as prompt feedback. To activate this feature, use the `Environment Variable Configuration`.
 
