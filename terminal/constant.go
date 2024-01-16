@@ -164,7 +164,7 @@ const (
 		ColorHex95b806 + "%#v" + ColorReset
 	SHOW_PROMPT_FEEDBACK = "SHOW_PROMPT_FEEDBACK"
 	PROMPTFEEDBACK       = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
-		ColorHex95b806 + "%s\r" + ColorReset
+		ColorHex95b806 + "%s\n" + ColorReset
 	SHOW_TOKEN_COUNT = "SHOW_TOKEN_COUNT"
 	TokenCount       = "Token count: %d\n"
 	TotalTokenCount  = "Total Token usage of this Session: %d"
