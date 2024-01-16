@@ -79,6 +79,9 @@ docker pull ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
 
 To start a chat session with GoGenAI, run the following command in your terminal. Make sure to replace `YOUR_API_KEY` with the actual API key provided to you.
 
+> [!WARNING]  
+> Due this issue [`here`](https://github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/issues/120)  To start a chat session with `GoGenAI`, use a better `terminal` that can handle a `constant` in this repository or build your own os with better kernel that can handle `constant` in this repository
+
 ```sh
 docker run -it --rm --name mychatapp -e API_KEY=YOUR_API_KEY ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
 ```
