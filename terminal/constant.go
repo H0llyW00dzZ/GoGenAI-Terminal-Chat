@@ -88,17 +88,17 @@ const (
 // Note: will add more in future based on the need,
 // for example, to change the model, or to change the delay, another thing is syncing ai with goroutine (known as gopher)
 const (
-	QuitCommand            = ":quit"
-	ShortQuitCommand       = ":q" // Short quit command
-	VersionCommand         = ":checkversion"
-	HelpCommand            = ":help"
-	ShortHelpCommand       = ":h" // Short help command
-	SafetyCommand          = ":safety"
-	AITranslateCommand     = ":aitranslate"
-	AITranslateCommandsArg = ":lang"
-	PingCommand            = ":ping" // Currently marked as TODO
-	ClearCommand           = ":clear"
-	PrefixChar             = ":"
+	QuitCommand        = ":quit"
+	ShortQuitCommand   = ":q" // Short quit command
+	VersionCommand     = ":checkversion"
+	HelpCommand        = ":help"
+	ShortHelpCommand   = ":h" // Short help command
+	SafetyCommand      = ":safety"
+	AITranslateCommand = ":aitranslate"
+	LangArgs           = ":lang"
+	PingCommand        = ":ping" // Currently marked as TODO
+	ClearCommand       = ":clear"
+	PrefixChar         = ":"
 	// List args
 	ClearChatHistoryArgs = "chat history"
 )

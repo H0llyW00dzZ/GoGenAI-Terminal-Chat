@@ -100,7 +100,7 @@ func (cmd *handleAITranslateCommand) IsValid(parts []string) bool {
 		return false
 	}
 	languageFlagIndex := len(parts) - 2
-	return parts[languageFlagIndex] == AITranslateCommandsArg
+	return parts[languageFlagIndex] == LangArgs
 }
 
 // Note: this unimplemented
