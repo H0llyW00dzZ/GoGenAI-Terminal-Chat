@@ -362,6 +362,8 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 	// Ensure SafetySettings is initialized.
 	if cmd.SafetySettings == nil {
 		cmd.SafetySettings = DefaultSafetySettings()
+		// Pass ContextPrompt just incase
+		session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	}
 
 	// Set the safety level based on the command argument.
@@ -369,6 +371,8 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 
 	// Apply the updated safety settings and notify the user.
 	cmd.SafetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi))
+	// Pass ContextPrompt
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
 	PrintTypingChat(fmt.Sprintf(SystemSafety, parts[1]), TypingDelay)
 	fmt.Println()

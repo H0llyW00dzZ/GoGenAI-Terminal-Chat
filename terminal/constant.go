@@ -86,11 +86,11 @@ const (
 	ShortQuitCommand = ":q" // Short quit command
 	VersionCommand   = ":checkversion"
 	HelpCommand      = ":help"
-	ShortHelpCommand = ":h"    // Short help command
+	ShortHelpCommand = ":h" // Short help command
+	SafetyCommand    = ":safety"
 	PingCommand      = ":ping" // Currently marked as TODO
 	ClearCommand     = ":clear"
 	PrefixChar       = ":"
-	SafetyCommand    = ":safety"
 	// List args
 	ClearChatHistoryArgs = "chat history"
 )
