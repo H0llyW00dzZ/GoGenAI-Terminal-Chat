@@ -359,6 +359,11 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 }
 
 // Execute processes the ":safety" command within a chat session.
+//
+// Note: The flexibility demonstrated in this function is quite powerful. In many programming languages,
+// changing safety settings would typically require constructing and parsing JSON structures for each request.
+// However, Go's type system allows us to elegantly manipulate these settings directly through struct methods,
+// bypassing the need for repetitive JSON serialization and deserialization hahaha.
 func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, SafetyCommand, parts)
