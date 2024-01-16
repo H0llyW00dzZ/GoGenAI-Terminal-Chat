@@ -80,6 +80,9 @@ var nl = NewLineChar{
 	NewLineChars: NewLineChars,
 }
 
+// totalTokenCount is a package-level variable that holds the total number of tokens
+var totalTokenCount int = 0
+
 // ansiRegex is a compiled regular expression that matches ANSI color codes.
 // It is compiled once when the package is initialized.
 // Note: Removing Struct now, this a `Go` not a `Rust`
