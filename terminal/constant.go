@@ -75,6 +75,12 @@ const (
 		// Better Response for AI instead of "Hard Coded" hahaha
 		"List Command Available:\n**%s** or **%s**\n**%s** or **%s**\n" +
 		"**%s** or **%s**\n**%s** - **%s**, **%s**, **%s**\n\n**%s %s**"
+	// TranslateCommandPrompt commands
+	AITranslateCommandPrompt = "**This a System messages**:**%s**\n\n" +
+		"The user attempted an command: **%s**\n" +
+		"Can you translate requested by user?\n" +
+		"Text:\n**%s**\n" +
+		"Translate To:\n **%s**"
 )
 
 // Defined constants for commands
@@ -82,15 +88,17 @@ const (
 // Note: will add more in future based on the need,
 // for example, to change the model, or to change the delay, another thing is syncing ai with goroutine (known as gopher)
 const (
-	QuitCommand      = ":quit"
-	ShortQuitCommand = ":q" // Short quit command
-	VersionCommand   = ":checkversion"
-	HelpCommand      = ":help"
-	ShortHelpCommand = ":h" // Short help command
-	SafetyCommand    = ":safety"
-	PingCommand      = ":ping" // Currently marked as TODO
-	ClearCommand     = ":clear"
-	PrefixChar       = ":"
+	QuitCommand            = ":quit"
+	ShortQuitCommand       = ":q" // Short quit command
+	VersionCommand         = ":checkversion"
+	HelpCommand            = ":help"
+	ShortHelpCommand       = ":h" // Short help command
+	SafetyCommand          = ":safety"
+	AITranslateCommand     = ":aitranslate"
+	AITranslateCommandsArg = ":lang"
+	PingCommand            = ":ping" // Currently marked as TODO
+	ClearCommand           = ":clear"
+	PrefixChar             = ":"
 	// List args
 	ClearChatHistoryArgs = "chat history"
 )
