@@ -357,6 +357,8 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 
 // Execute processes the ":safety" command within a chat session.
 func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, SafetyCommand, parts)
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs)
 		fmt.Println()
