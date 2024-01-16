@@ -108,7 +108,7 @@ const (
 const (
 	ErrorGettingShutdownMessage               = "Error getting shutdown message from AI: %v"
 	ErrorHandlingCommand                      = "Error handling command: %v"
-	ErrorCountingTokens                       = "Error counting tokens: %v"
+	ErrorCountingTokens                       = "Error counting tokens: %v\n"
 	ErrorSendingMessage                       = "Error sending message to AI: %v"
 	ErrorReadingUserInput                     = "Error reading user input: %v"
 	ErrorFailedToFetchReleaseInfo             = "Failed to fetch the latest release info: %v"
@@ -159,6 +159,10 @@ const (
 		ColorHex95b806 + "%#v" + ColorReset
 	SHOW_PROMPT_FEEDBACK = "SHOW_PROMPT_FEEDBACK"
 	PROMPTFEEDBACK       = "Safety Rating for category %s: %s\n"
+	SHOW_TOKEN_COUNT     = "SHOW_TOKEN_COUNT"
+	TokenCount           = "Token count: %d\n"
+	// Note: This is separate from the main package and is used for the token counter. The token counter is external and not a part of the Gemini session.
+	API_KEY = "API_KEY"
 )
 
 // Defined Prefix System
