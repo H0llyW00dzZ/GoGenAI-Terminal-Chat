@@ -201,6 +201,7 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Define the help prompt to be sent to the AI, including the list of available commands.
 	aiPrompt := fmt.Sprintf(HelpCommandPrompt,
+		// Note: This doesn't look complex, as the complex one looks way better than the "hardcoded" one LOL
 		ApplicationName,
 		HelpCommand,
 		ShortHelpCommand,
@@ -213,6 +214,8 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		Low,
 		Default,
 		High,
+		AITranslateCommand,
+		LangArgs,
 		ClearCommand,
 		ClearChatHistoryArgs)
 	// Sanitize the message before sending it to the AI
