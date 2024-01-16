@@ -120,7 +120,7 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 	// print the prompt feedback if it's present
 	// why this so simple ? because it's more efficient and faster.
 	// get good get "Go" hahaha
-	printResponseFooter(resp)
+	printResponseFooter(resp, aiResponse)
 	return aiResponse
 }
 
@@ -133,6 +133,24 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 	// Iterate over safety ratings and print them.
 	for _, rating := range feedback.SafetyRatings {
 		fmt.Printf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+	}
+}
+
+// printTokenCount prints the number of tokens used in the AI's response, including the chat history.
+func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
+	// Concatenate chat history and AI response for token counting
+	fullText := aiResponse
+	if len(chatHistory) > 0 {
+		fullText = chatHistory[0] + StringNewLine + aiResponse
+	}
+
+	tokenCount, err := CountTokens(apiKey, fullText)
+	fmt.Print(StringNewLine)
+	if err != nil {
+		// Handle the error appropriately
+		logger.Error(ErrorCountingTokens, err)
+	} else {
+		fmt.Printf(TokenCount, tokenCount)
 	}
 }
 
@@ -176,16 +194,26 @@ func printAIResponse(colorized string) {
 	PrintTypingChat(colorized, TypingDelay)
 }
 
-// printResponseFooter prints the footer after the AI response and includes prompt feedback if enabled.
-func printResponseFooter(resp *genai.GenerateContentResponse) {
-	// Check the environment variable to decide whether to show prompt feedback.
+// printResponseFooter prints the footer after the AI response and includes prompt feedback and token count if enabled.
+func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string) {
 	showPromptFeedback := os.Getenv(SHOW_PROMPT_FEEDBACK) == "true"
+	showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
+
+	// Print the footer separator
+	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+
+	// Print prompt feedback if enabled
 	if showPromptFeedback && resp.PromptFeedback != nil {
-		fmt.Print(StringNewLine)
-		fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 		printPromptFeedback(resp.PromptFeedback)
 	}
 
+	// Print token count if enabled
+	if showTokenCount {
+		apiKey := os.Getenv(API_KEY) // Retrieve the API_KEY from the environment
+		printTokenCount(apiKey, aiResponse)
+	}
+
+	// Print the closing footer separator
 	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 	fmt.Print(StringNewLine)
 }
