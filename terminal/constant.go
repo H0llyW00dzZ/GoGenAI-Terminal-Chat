@@ -90,6 +90,7 @@ const (
 	PingCommand      = ":ping" // Currently marked as TODO
 	ClearCommand     = ":clear"
 	PrefixChar       = ":"
+	SafetyCommand    = ":safety"
 	// List args
 	ClearChatHistoryArgs = "chat history"
 )
