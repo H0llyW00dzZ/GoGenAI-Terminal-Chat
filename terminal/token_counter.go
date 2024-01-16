@@ -29,9 +29,6 @@ import (
 // The function creates a new client for each call, which is then closed before
 // returning. It is designed to be a self-contained operation that does not require
 // the caller to manage the lifecycle of the generative AI client.
-//
-// Note: This function marked as TODO for now, since it is not used in the main because,
-// a current version of chat system it's consider fully stable with better logic.
 func CountTokens(apiKey, input string) (int, error) {
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
