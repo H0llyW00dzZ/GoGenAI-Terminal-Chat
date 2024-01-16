@@ -88,6 +88,21 @@ func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
 	}
 }
 
+// handleAITranslateCommand is the command to translate text using the AI model.
+type handleAITranslateCommand struct{}
+
+// IsValid checks if the translate command is valid based on the input parts.
+// The translate command is expected to follow the pattern: :aitranslate <text> :lang <targetlanguage>
+func (cmd *handleAITranslateCommand) IsValid(parts []string) bool {
+	// There should be at least 4 parts: the command itself, the text to translate, the language flag, and the target language.
+	// Additionally, check for the presence of the language flag ":lang".
+	if len(parts) < 4 {
+		return false
+	}
+	languageFlagIndex := len(parts) - 2
+	return parts[languageFlagIndex] == LangArgs
+}
+
 // Note: this unimplemented
 // Now even it's unimplemented, it wont detected in deadcode indicate that "unreachable func"
 type handleK8sCommand struct{}

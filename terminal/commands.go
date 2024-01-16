@@ -385,3 +385,33 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 
 	return false, nil // Continue the session after setting safety levels
 }
+
+// Execute processes the ":aitranslate" command within a chat session.
+func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, AITranslateCommand, parts)
+	// Find the index of the language flag ":lang" to separate text and target language.
+	languageFlagIndex := len(parts) - 2
+	textToTranslate := strings.Join(parts[1:languageFlagIndex], " ")
+	targetLanguage := parts[languageFlagIndex+1]
+
+	// Define the translation prompt to be sent to the AI.
+	aiPrompt := fmt.Sprintf(AITranslateCommandPrompt,
+		ApplicationName,
+		AITranslateCommand,
+		textToTranslate,
+		targetLanguage)
+
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+	// Send the constructed message to the AI and get the response.
+	aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
+	if err != nil {
+		logger.Error(ErrorSendingMessage, err)
+		return false, err
+	}
+
+	// Add the AI's response to the chat history
+	session.ChatHistory.AddMessage(AiNerd, aiResponse)
+	return false, nil
+}
