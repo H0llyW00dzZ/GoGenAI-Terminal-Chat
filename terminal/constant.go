@@ -157,6 +157,8 @@ const (
 		" command with parts: " +
 		// Better Readability use Custom HEX color
 		ColorHex95b806 + "%#v" + ColorReset
+	SHOW_PROMPT_FEEDBACK = "SHOW_PROMPT_FEEDBACK"
+	PROMPTFEEDBACK       = "Safety Rating for category %s: %s\n"
 )
 
 // Defined Prefix System
