@@ -134,6 +134,8 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 	for _, rating := range feedback.SafetyRatings {
 		fmt.Printf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
 	}
+	// fix front end lmao
+	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 }
 
 // printTokenCount prints the number of tokens used in the AI's response, including the chat history.
@@ -163,6 +165,8 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 		PrintPrefixWithTimeStamp(StatisticsEmoji + " ")
 		PrintTypingChat(tokenusageMSG, TypingDelay)
 	}
+	// fix front end lmao
+	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 }
 
 // removeAIPrefix checks for and removes the AI prefix if it's present in the response.
@@ -227,6 +231,5 @@ func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string)
 	}
 
 	// Print the closing footer separator
-	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 	fmt.Print(StringNewLine)
 }
