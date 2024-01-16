@@ -137,6 +137,7 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 }
 
 // printTokenCount prints the number of tokens used in the AI's response, including the chat history.
+// It also updates and prints the total token count for the session.
 func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	// Concatenate chat history and AI response for token counting
 	fullText := aiResponse
@@ -150,7 +151,11 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 		// Handle the error appropriately
 		logger.Error(ErrorCountingTokens, err)
 	} else {
+		// Update the total token count
+		totalTokenCount += tokenCount
+		// Print the current and total token count
 		fmt.Printf(TokenCount, tokenCount)
+		fmt.Printf(TotalTokenCount, totalTokenCount)
 	}
 }
 
