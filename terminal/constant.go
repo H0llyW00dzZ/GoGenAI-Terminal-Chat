@@ -75,7 +75,9 @@ const (
 		// Better Response for AI instead of "Hard Coded" hahaha
 		"List Command Available:\n**%s** or **%s**\n**%s** or **%s**\n" +
 		"**%s** or **%s**\n**%s** - **%s**, **%s**, **%s**" +
-		"**%s** <text> **%s** <targetlanguage>\n\n**%s %s**"
+		"**%s** <text> **%s** <targetlanguage>\n\n**%s %s**\n\n" +
+		"**Additional Note**: There are no additional commands or HTML Markdown available" +
+		" because it is in a terminal and is limited.\n"
 	// TranslateCommandPrompt commands
 	AITranslateCommandPrompt = "**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +
