@@ -41,6 +41,8 @@ const (
 	// Pass Context to LLM's Google AI
 	youNerd                = "🤓"
 	aiNerd                 = "🤖"
+	TokenEmoji             = "🪙  "
+	StatisticsEmoji        = "📈 "
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
 	UnknownCommand         = "Unknown command."
@@ -163,6 +165,7 @@ const (
 	PROMPTFEEDBACK       = "Safety Rating for category %s: %s\n"
 	SHOW_TOKEN_COUNT     = "SHOW_TOKEN_COUNT"
 	TokenCount           = "Token count: %d\n"
+	TotalTokenCount      = "Total Token usage of this Session: %d"
 	// Note: This is separate from the main package and is used for the token counter. The token counter is external and not a part of the Gemini session.
 	API_KEY = "API_KEY"
 )
