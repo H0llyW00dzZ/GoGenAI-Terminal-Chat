@@ -47,3 +47,9 @@ func (cmd *fixDocsFormattingCommand) Execute(session *Session) (bool, error) {
 	// currently unimplemented
 	return true, nil
 }
+
+// handleTokecountingCommand would be a handler function for a hypothetical ":tokencount <text>" or ":tokencount -f <file.txt>" command.
+func (cmd *handleTokecountingCommand) Execute(session *Session) (bool, error) {
+	// currently unimplemented
+	return true, nil
+}
