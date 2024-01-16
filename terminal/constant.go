@@ -41,7 +41,7 @@ const (
 	// Pass Context to LLM's Google AI
 	youNerd                = "🤓"
 	aiNerd                 = "🤖"
-	TokenEmoji             = "🪙 "
+	TokenEmoji             = "🪙  "
 	StatisticsEmoji        = "📈 "
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
