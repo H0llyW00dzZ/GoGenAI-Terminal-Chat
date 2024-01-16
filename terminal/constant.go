@@ -43,6 +43,7 @@ const (
 	aiNerd                 = "🤖"
 	TokenEmoji             = "🪙  "
 	StatisticsEmoji        = "📈 "
+	ShieldEmoji            = "🛡️  Safety:"
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
 	UnknownCommand         = "Unknown command."
@@ -162,10 +163,11 @@ const (
 		// Better Readability use Custom HEX color
 		ColorHex95b806 + "%#v" + ColorReset
 	SHOW_PROMPT_FEEDBACK = "SHOW_PROMPT_FEEDBACK"
-	PROMPTFEEDBACK       = "Safety Rating for category %s: %s\n"
-	SHOW_TOKEN_COUNT     = "SHOW_TOKEN_COUNT"
-	TokenCount           = "Token count: %d\n"
-	TotalTokenCount      = "Total Token usage of this Session: %d"
+	PROMPTFEEDBACK       = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
+		ColorHex95b806 + "%s\r" + ColorReset
+	SHOW_TOKEN_COUNT = "SHOW_TOKEN_COUNT"
+	TokenCount       = "Token count: %d\n"
+	TotalTokenCount  = "Total Token usage of this Session: %d"
 	// Note: This is separate from the main package and is used for the token counter. The token counter is external and not a part of the Gemini session.
 	API_KEY = "API_KEY"
 )

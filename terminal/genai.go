@@ -132,7 +132,10 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 	}
 	// Iterate over safety ratings and print them.
 	for _, rating := range feedback.SafetyRatings {
-		fmt.Printf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+		safetyPrefix := ShieldEmoji
+		PrintPrefixWithTimeStamp(safetyPrefix)
+		promptFeedback := fmt.Sprintf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+		PrintTypingChat(promptFeedback, TypingDelay)
 	}
 	// fix front end lmao
 	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
