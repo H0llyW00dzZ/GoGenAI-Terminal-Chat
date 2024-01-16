@@ -66,6 +66,28 @@ func (cmd *handleClearCommand) IsValid(parts []string) bool {
 	return len(parts) > 1 && args == ClearChatHistoryArgs
 }
 
+// handleSafetyCommand is the command to adjust safety settings.
+type handleSafetyCommand struct {
+	SafetySettings *SafetySettings
+}
+
+// IsValid checks if the safety command is valid based on the input parts.
+func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
+	return len(parts) == 2 && (parts[1] == Low || parts[1] == High || parts[1] == Default)
+}
+
+// setSafetyLevel updates the safety settings based on the command argument.
+func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
+	switch level {
+	case Low:
+		cmd.SafetySettings.SetLowSafety()
+	case High:
+		cmd.SafetySettings.SetHighSafety()
+	case Default:
+		*cmd.SafetySettings = *DefaultSafetySettings()
+	}
+}
+
 // Note: this unimplemented
 // Now even it's unimplemented, it wont detected in deadcode indicate that "unreachable func"
 type handleK8sCommand struct{}

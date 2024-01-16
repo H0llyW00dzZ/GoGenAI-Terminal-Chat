@@ -350,3 +350,28 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 		return false, nil
 	}
 }
+
+// Execute processes the ":safety" command within a chat session.
+func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool, error) {
+	if !cmd.IsValid(parts) {
+		logger.Error(HumanErrorWhileTypingCommandArgs)
+		fmt.Println()
+		return true, nil
+	}
+
+	// Ensure SafetySettings is initialized.
+	if cmd.SafetySettings == nil {
+		cmd.SafetySettings = DefaultSafetySettings()
+	}
+
+	// Set the safety level based on the command argument.
+	cmd.setSafetyLevel(parts[1])
+
+	// Apply the updated safety settings and notify the user.
+	cmd.SafetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi))
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	PrintTypingChat(fmt.Sprintf(SystemSafety, parts[1]), TypingDelay)
+	fmt.Println()
+
+	return false, nil // Continue the session after setting safety levels
+}
