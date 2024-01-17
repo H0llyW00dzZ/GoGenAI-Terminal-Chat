@@ -87,12 +87,14 @@ func ApplyBold(text string, delimiter string, color string) string {
 // input is detected as a command but does not match any of the known command handlers.
 //
 // Parameters:
-// - command string: The unrecognized command input by the user.
-// - session *Session: The current chat session containing state and context, including the AI client.
+//
+//	command string: The unrecognized command input by the user.
+//	session *Session: The current chat session containing state and context, including the AI client.
 //
 // Returns:
-// - bool: Always returns false as this function does not result in a command execution.
-// - error: Returns an error if sending the message to the AI fails; otherwise, nil.
+//
+//	bool: Always returns false as this function does not result in a command execution.
+//	error: Returns an error if sending the message to the AI fails; otherwise, nil.
 //
 // The function constructs an error prompt using the application's name and the unrecognized command,
 // retrieves the current chat history, and sends this information to the AI service. If an error occurs
