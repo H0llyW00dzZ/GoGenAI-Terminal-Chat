@@ -5,6 +5,73 @@ package terminal
 
 import "strings"
 
+// CommandRegistry is a centralized registry to manage chat commands.
+// It maps command names to their corresponding CommandHandler implementations.
+// This allows for a scalable and maintainable way to manage chat commands
+// and their execution within a chat session.
+type CommandRegistry struct {
+	commands map[string]CommandHandler // commands holds the association of command names to their handlers.
+}
+
+// NewCommandRegistry initializes a new instance of CommandRegistry.
+// It creates a CommandRegistry with an empty map ready to register command handlers.
+//
+// Returns:
+//
+//	*CommandRegistry: A pointer to a newly created CommandRegistry with initialized command map.
+func NewCommandRegistry() *CommandRegistry {
+	return &CommandRegistry{
+		commands: make(map[string]CommandHandler),
+	}
+}
+
+// Register adds a new command and its associated handler to the registry.
+// If a command with the same name is already registered, it will be overwritten.
+//
+// Parameters:
+//
+//	name string: The name of the command to register.
+//	cmd  CommandHandler: The handler that will be associated with the command.
+func (r *CommandRegistry) Register(name string, cmd CommandHandler) {
+	r.commands[name] = cmd
+}
+
+// ExecuteCommand looks up and executes a command based on its name.
+// It first validates the command arguments using the IsValid method of the command handler.
+// If the command is valid, it executes the command using the Execute method.
+// If the command name is not registered, it logs an error.
+//
+// Parameters:
+//
+//	name    string: The name of the command to execute.
+//	session *Session: The current chat session, providing context for the command execution.
+//	parts   []string: The arguments passed along with the command.
+//
+// Returns:
+//
+//	bool: A boolean indicating if the command execution should terminate the session.
+//	error: An error if one occurs during command validation or execution. Returns nil if no error occurs.
+//
+// Note:
+//
+//	If the command is unrecognized, it logs an error but does not return it,
+//	as the error is already handled within the method.
+func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []string) (bool, error) {
+	if cmd, exists := r.commands[name]; exists {
+		// First, validate the command arguments.
+		if !cmd.IsValid(parts) {
+			// If the command is not valid, log the error and return.
+			logger.Error(HumanErrorWhileTypingCommandArgs, parts)
+			return false, nil
+		}
+		// If the command is valid, execute it.
+		return cmd.Execute(session, parts)
+	}
+	// If the command does not exist, log the error and return.
+	logger.Error(ErrorUnrecognizedCommand, name)
+	return false, nil // Return nil error since it's already handled.
+}
+
 // Note: This list of commands has already been implemented.
 // It is now located here for ease of maintenance and to avoid unnecessary complexity.
 // This approach questions why many developers write Go code in an overly complex manner (that I don't fucking understand),
