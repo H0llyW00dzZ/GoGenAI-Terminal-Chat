@@ -43,7 +43,7 @@ const (
 	aiNerd                 = "🤖"
 	TokenEmoji             = "🪙  Token count: "
 	StatisticsEmoji        = "📈 Total Token: "
-	ShieldEmoji            = "🛡️  Safety:"
+	ShieldEmoji            = "☠️  Safety: "
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
 	UnknownCommand         = "Unknown command."
