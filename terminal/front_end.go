@@ -159,5 +159,5 @@ func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string)
 	}
 
 	// Print the closing footer separator
-	fmt.Print(StringNewLine)
+	fmt.Println() // fix front end issue lmao
 }
