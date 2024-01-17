@@ -138,6 +138,7 @@ const (
 	ErrorUnrecognizedCommand                  = "Unrecognized command: %s"
 	ErrorLowLevelCommand                      = "command cannot be empty"
 	ErrorUnknown                              = "An error occurred: %v"
+	ErrorUnknownSafetyLevel                   = "Unknown safety level: %s"
 )
 
 // Defined List of characters
