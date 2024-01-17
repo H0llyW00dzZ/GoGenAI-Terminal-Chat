@@ -128,3 +128,5 @@ type translateCommand struct{}
 type fixDocsFormattingCommand struct{}
 
 type handleTokecountingCommand struct{}
+
+type handlePromptfileCommand struct{}
