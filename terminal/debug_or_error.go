@@ -71,8 +71,8 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 	// Add the error prefix in color
 	errorPrefix := colors.ColorRed + message + colors.ColorReset
 
-	// Print the error prefix without a newline
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	// Print the error prefix with a timestamp
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX + " ")
 
 	// Simulate typing the error message
 	PrintTypingChat(errorPrefix, TypingDelay)
