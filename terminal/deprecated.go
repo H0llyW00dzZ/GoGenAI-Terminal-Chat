@@ -80,3 +80,42 @@ func ApplyBold(text string, delimiter string, color string) string {
 	}
 	return color + text + ColorReset
 }
+
+// HandleUnrecognizedCommand takes an unrecognized command and the current session,
+// constructs a prompt to inform the AI about the unrecognized command, and sends
+// this information to the AI service. This function is typically called when a user
+// input is detected as a command but does not match any of the known command handlers.
+//
+// Parameters:
+// - command string: The unrecognized command input by the user.
+// - session *Session: The current chat session containing state and context, including the AI client.
+//
+// Returns:
+// - bool: Always returns false as this function does not result in a command execution.
+// - error: Returns an error if sending the message to the AI fails; otherwise, nil.
+//
+// The function constructs an error prompt using the application's name and the unrecognized command,
+// retrieves the current chat history, and sends this information to the AI service. If an error occurs
+// while sending the message, the function logs the error and returns an error to the caller.
+//
+// Deprecated: This method is no longer used, and was replaced by CommandRegistry.
+func HandleUnrecognizedCommand(command string, session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, command, parts)
+	// Pass ContextPrompt
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+	// If the command is not recognized, inform the AI about the unrecognized command.
+	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, command)
+	chatHistory := session.ChatHistory.GetHistory()
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+
+	// Send the constructed message to the AI and get the response.
+	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
+	if err != nil {
+		errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
+		logger.Error(errMsg)
+		return false, fmt.Errorf(errMsg)
+	}
+	return false, nil
+}
