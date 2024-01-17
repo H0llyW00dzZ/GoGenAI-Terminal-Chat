@@ -105,14 +105,23 @@ func (s *Session) Start() {
 // shutdown of the session. It listens for SIGINT and SIGTERM signals.
 func (s *Session) setupSignalHandling() {
 	sigChan := make(chan os.Signal, 1)
+	// Note: by refactoring a logic like this, it easier monitoring other signal in linux/unix or windows, also it easier catch other signal.
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
-	// Goroutine Officer (Known as Gopher Officer) to handle graceful shutdown
+	// Gopher Officer to handle graceful shutdown, and monitoring other signal in linux/unix or windows.
 	go func() {
-		<-sigChan // Block until a signal is received
-		fmt.Println(SignalMessage)
-		s.cleanup()
-		os.Exit(0)
+		for {
+			sig := <-sigChan // Block until a signal is received
+			switch sig {
+			case syscall.SIGINT, syscall.SIGTERM:
+				// Perform cleanup and exit only on SIGINT and SIGTERM.
+				fmt.Println(SignalMessage)
+				s.cleanup()
+				os.Exit(0)
+			default:
+				fmt.Printf(MonitoringSignal, sig)
+			}
+		}
 	}()
 }
 

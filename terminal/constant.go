@@ -175,9 +175,10 @@ const (
 // Defined Prefix System
 const (
 	// Note: This is a prefix for the system
-	SYSTEMPREFIX = "⚙️  SYSTEM: "
-	SystemSafety = "Safety level set to " + ColorHex95b806 + "%s" + ColorReset + "."
-	Low          = "low"
-	Default      = "default"
-	High         = "high"
+	SYSTEMPREFIX     = "⚙️  SYSTEM: "
+	SystemSafety     = "Safety level set to " + ColorHex95b806 + "%s" + ColorReset + "."
+	Low              = "low"
+	Default          = "default"
+	High             = "high"
+	MonitoringSignal = "Received signal: %v.\n"
 )
