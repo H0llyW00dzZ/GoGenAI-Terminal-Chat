@@ -145,13 +145,11 @@ func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
 
 // setSafetyLevel updates the safety settings based on the command argument.
 func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
-	switch level {
-	case Low:
-		cmd.SafetySettings.SetLowSafety()
-	case High:
-		cmd.SafetySettings.SetHighSafety()
-	case Default:
-		*cmd.SafetySettings = *DefaultSafetySettings()
+	if setter, exists := safetySetters[level]; exists {
+		setter(cmd.SafetySettings)
+	} else {
+		// Handle unknown level, possibly log it or return an error
+		logger.Error(ErrorUnknownSafetyLevel, level)
 	}
 }
 

@@ -77,6 +77,13 @@ var ansiRegex *regexp.Regexp
 
 var tripleBacktickColor string
 
+// scalable safetySetters maps safety level strings to functions that apply the safety settings.
+var safetySetters = map[string]SafetySetter{
+	Low:     func(s *SafetySettings) { s.SetLowSafety() },
+	High:    func(s *SafetySettings) { s.SetHighSafety() },
+	Default: func(s *SafetySettings) { *s = *DefaultSafetySettings() },
+}
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()

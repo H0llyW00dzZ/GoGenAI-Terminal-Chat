@@ -7,6 +7,13 @@ import (
 	genai "github.com/google/generative-ai-go/genai"
 )
 
+// SafetySetter is a function type that takes a pointer to a SafetySettings
+// instance and applies a specific safety configuration to it. It is used
+// to abstract the different safety level settings (e.g., low, high, default)
+// and allows for a flexible and scalable way to manage safety configurations
+// through function mapping.
+type SafetySetter func(*SafetySettings)
+
 // SafetySettings encapsulates the content safety configuration for the AI model.
 // It defines thresholds for various categories of potentially harmful content,
 // allowing users to set the desired level of content filtering based on the
