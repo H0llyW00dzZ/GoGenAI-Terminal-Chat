@@ -307,7 +307,6 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 		PrintTypingChat(ChatHistoryClear, TypingDelay)
 		// Added back the context prompt after clearing the chat history
 		session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
-		fmt.Println()
 		return false, nil
 	} else {
 		// Log the error using the logger instead of returning fmt.Errorf
@@ -351,7 +350,6 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
 	PrintTypingChat(fmt.Sprintf(SystemSafety, parts[1]), TypingDelay)
-	fmt.Println()
 
 	return false, nil // Continue the session after setting safety levels
 }
