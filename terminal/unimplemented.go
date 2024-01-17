@@ -55,7 +55,7 @@ func (cmd *handleTokecountingCommand) Execute(session *Session) (bool, error) {
 	return true, nil
 }
 
-// handlePromptfileCommand would be a handler function for a hypothetical ":prompt -f <file.txt>" command.
+// handlePromptfileCommand would be a handler function for a hypothetical ":prompt -f <file.txt> or <file.md>" command.
 // Note: this would be used to load the prompt from file, can be used for start the conversation with Google AI.
 func (cmd *handlePromptfileCommand) Execute(session *Session) (bool, error) {
 	// currently unimplemented
