@@ -261,22 +261,38 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	// Get the entire chat history as a string
 	// adding back this hahaha
 	chatHistory := session.ChatHistory.GetHistory()
+	// Check if the current version is the latest.
+	aiPrompt, err := c.checkVersionAndGetPrompt()
+	if err != nil {
+		logger.Error(ErrorFailedTosendmessagesToAI, err)
+		return false, err
+	}
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+	_, err = SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
+	if err != nil {
+		logger.Error(ErrorFailedTosendmessagesToAI, err)
+		return false, err
+	}
+	// Indicate that the command was handled; return false to continue the session.
+	return false, nil
+}
 
+// checkVersionAndGetPrompt checks if the current version of the software is the latest and informs the user accordingly.
+func (c *handleCheckVersionCommand) checkVersionAndGetPrompt() (aiPrompt string, err error) {
 	// Check if the current version is the latest.
 	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
 	if err != nil {
-		return false, err
+		return "", err
 	}
-	// this avoid duplicate logic, by adding variable in this function
-	// unlike quit or help command which is already functionality used variable in `init.go`
-	var aiPrompt string
+
 	if isLatest {
 		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, CurrentVersion, ApplicationName)
 	} else {
 		// Fetch the release information for the latest version.
 		releaseInfo, err := GetFullReleaseInfo(latestVersion)
 		if err != nil {
-			return false, err
+			return "", err
 		}
 		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
 			VersionCommand,
@@ -286,18 +302,8 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 			releaseInfo.Name,
 			releaseInfo.Body)
 	}
-
-	// Sanitize the message before sending it to the AI
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
-
-	// Send the sanitized message to the AI and get the response.
-	_, err = SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
-	if err != nil {
-		logger.Error(ErrorFailedTosendmessagesToAI, err)
-		return false, err
-	}
-	// Indicate that the command was handled; return false to continue the session.
-	return false, nil
+	// return the prompt to the caller
+	return aiPrompt, nil
 }
 
 // Execute performs the ping operation on the provided IP address.
