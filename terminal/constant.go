@@ -16,7 +16,7 @@ const (
 
 // Defined constants for the terminal package
 const (
-	SignalMessage               = "RReceived an interrupt, shutting down gracefully..."
+	SignalMessage               = " Received an interrupt, shutting down gracefully..." // fix formatting ^C in linux/unix
 	RecoverGopher               = "%sRecovered from panic:%s %s%v%s"
 	ObjectHighLevelString       = "%s %s"  // Catch High level string
 	ObjectTripleHighLevelString = "%%%s%%" // Catch High level triple string
