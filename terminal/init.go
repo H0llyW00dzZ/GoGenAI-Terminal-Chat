@@ -20,6 +20,8 @@ var apiKey string
 // logger is a package-level variable that can be used throughout the terminal package.
 var logger *DebugOrErrorLogger
 
+// this is a package-level variable that holds the command registry.
+// Caution is advised: if you're not familiar with these practices, improper handling in this "CommandRegistry" could lead to frequent panics 24/7 🤪.
 var registry *CommandRegistry
 
 // checkVersion is a package-level variable that holds the latest release information
