@@ -18,14 +18,11 @@ func isCommand(input string) bool {
 
 // handleCommand processes the input as a command and returns true if the session should end.
 func (s *Session) handleCommand(input string) bool {
-	if isCommand, err := HandleCommand(input, s); isCommand {
-		if err != nil {
-			logger.Error(ErrorHandlingCommand, err)
-		}
-		// If it's a command, whether it's handled successfully or not, we continue the session
-		return false
+	handled, err := HandleCommand(input, s)
+	if err != nil {
+		logger.Error(ErrorUnknown, err)
 	}
-	return false
+	return handled
 }
 
 // CommandHandler defines the function signature for handling chat commands.
@@ -58,27 +55,21 @@ func HandleCommand(input string, session *Session) (bool, error) {
 
 	parts := strings.Fields(trimmedInput)
 	if len(parts) == 0 {
-		logger.Error(UnknownCommand)
-		return true, nil
-	}
-
-	// Retrieve the command handler and check if it exists.
-	commandHandler, exists := commandHandlers[parts[0]]
-	if !exists {
-		// Handle unrecognized commands.
-		return handleUnrecognizedCommand(parts[0], session, parts)
+		// Note: this low-level error and should be not happen, but just in case
+		return true, fmt.Errorf(ErrorLowLevelCommand)
 	}
 
 	// Validate the command arguments.
-	if !commandHandler.IsValid(parts) {
-		logger.Debug(DEBUGEXECUTINGCMD, parts[0], parts)
-		logger.Error(HumanErrorWhileTypingCommandArgs)
-		fmt.Println()
-		return true, nil
-	}
-
-	// Execute the command if it is recognized and valid.
-	return commandHandler.Execute(session, parts)
+	commandName := parts[0]
+	// Use Magic identifier "_" to ignore the error element, since it duplicates the error handling.
+	handled, _ := registry.ExecuteCommand(commandName, session, parts)
+	// if err != nil {
+	// 	// Since ExecuteCommand already logs errors,
+	// 	// keep like this for now, because this palace are low-level error
+	// 	return false, err
+	// }
+	fmt.Println()
+	return handled, nil
 }
 
 // handleUnrecognizedCommand takes an unrecognized command and the current session,
@@ -319,7 +310,7 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, e
 	// Note: WIP
 	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
-		logger.Error(HumanErrorWhileTypingCommandArgs)
+		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 		fmt.Println()
 		return true, nil
 	}
@@ -376,7 +367,7 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, SafetyCommand, parts)
 	if !cmd.IsValid(parts) {
-		logger.Error(HumanErrorWhileTypingCommandArgs)
+		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 		fmt.Println()
 		return true, nil
 	}
