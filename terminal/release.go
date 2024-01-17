@@ -6,8 +6,8 @@ package terminal
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
+	"time"
 )
 
 // GitHubRelease represents the metadata of a software release from GitHub.
@@ -33,7 +33,11 @@ type GitHubRelease struct {
 //	latestVersion string: The tag name of the latest release, if newer than current; otherwise, an empty string.
 //	err error: An error if the request fails or if there is an issue parsing the response.
 func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion string, err error) {
-	resp, err := http.Get(GitHubAPIURL)
+	client := &http.Client{
+		Timeout: time.Second * 10, // Set a timeout to avoid hanging forever
+	}
+
+	resp, err := client.Get(GitHubAPIURL)
 	if err != nil {
 		logger.Error(ErrorFailedToFetchReleaseInfo, err)
 		return false, "", err
@@ -46,19 +50,14 @@ func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion str
 		return false, "", fmt.Errorf(errMsg)
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		logger.Error(ErrorFailedToReadTheResponseBody, err)
-		return false, "", err
-	}
-
-	if err := json.Unmarshal(body, &checkVersion); err != nil {
+	var release GitHubRelease
+	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
 		logger.Error(ErrorFaileduUnmarshalTheReleaseData, err)
 		return false, "", err
 	}
 
-	isLatest = currentVersion == checkVersion.TagName
-	return isLatest, checkVersion.TagName, nil
+	isLatest = currentVersion == release.TagName
+	return isLatest, release.TagName, nil
 }
 
 // GetFullReleaseInfo retrieves detailed information about a specific release from GitHub.
