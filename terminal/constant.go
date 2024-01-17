@@ -47,7 +47,6 @@ const (
 	ShieldEmoji            = "☠️  Safety: "
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
-	UnknownCommand         = "Unknown command."
 	ContextCancel          = "Context canceled, shutting down..." // sending a messages to gopher officer
 	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
 	ReleaseName            = "- %s\n\n"
@@ -134,8 +133,11 @@ const (
 	ErrorLowLevelFailedtoStartAiChatSession   = "failed to start a new AI chat session: %w"
 	ErrorUserAttemptUnrecognizedCommandPrompt = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
 	ErrorFailedtoSendUnrecognizedCommandToAI  = "Failed to send unrecognized command to AI: %v"
-	HumanErrorWhileTypingCommandArgs          = "Invalid Command Arguments"
+	HumanErrorWhileTypingCommandArgs          = "Invalid Command Arguments: %v"
 	ErrorPingFailed                           = "Ping failed: %v"
+	ErrorUnrecognizedCommand                  = "Unrecognized command: %s"
+	ErrorLowLevelCommand                      = "command cannot be empty"
+	ErrorUnknown                              = "An error occurred: %v"
 )
 
 // Defined List of characters
