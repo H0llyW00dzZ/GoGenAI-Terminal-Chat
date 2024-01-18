@@ -68,7 +68,6 @@ func HandleCommand(input string, session *Session) (bool, error) {
 	// 	// keep like this for now, because this palace are low-level error
 	// 	return false, err
 	// }
-	fmt.Println()
 	return handled, nil
 }
 
