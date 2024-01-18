@@ -16,6 +16,12 @@ import (
 // through function mapping.
 type SafetySetter func(*SafetySettings)
 
+// SafetyOption includes both the setter function and a validity flag.
+type SafetyOption struct {
+	Setter func(s *SafetySettings)
+	Valid  bool
+}
+
 // SafetySettings encapsulates the content safety configuration for the AI model.
 // It defines thresholds for various categories of potentially harmful content,
 // allowing users to set the desired level of content filtering based on the
