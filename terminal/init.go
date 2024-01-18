@@ -77,18 +77,20 @@ var ansiRegex *regexp.Regexp
 
 var tripleBacktickColor string
 
-// scalable safetySetters maps safety level strings to functions that apply the safety settings.
-var safetySetters = map[string]SafetySetter{
-	Low:     func(s *SafetySettings) { s.SetLowSafety() },
-	High:    func(s *SafetySettings) { s.SetHighSafety() },
-	Default: func(s *SafetySettings) { *s = *DefaultSafetySettings() },
-}
-
-// safetyLevels is a map that defines the valid safety options.
-var safetyLevels = map[string]bool{
-	Low:     true,
-	High:    true,
-	Default: true,
+// scalable safetyOptions maps safety level strings to their corresponding setter functions and validity.
+var safetyOptions = map[string]SafetyOption{
+	Low: {
+		Setter: func(s *SafetySettings) { s.SetLowSafety() },
+		Valid:  true,
+	},
+	High: {
+		Setter: func(s *SafetySettings) { s.SetHighSafety() },
+		Valid:  true,
+	},
+	Default: {
+		Setter: func(s *SafetySettings) { *s = *DefaultSafetySettings() },
+		Valid:  true,
+	},
 }
 
 func init() {

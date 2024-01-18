@@ -121,3 +121,6 @@ func HandleUnrecognizedCommand(command string, session *Session, parts []string)
 	}
 	return false, nil
 }
+
+// Deprecated: This method is no longer used, and was replaced by SafetyOption.
+type SafetySetter func(*SafetySettings)

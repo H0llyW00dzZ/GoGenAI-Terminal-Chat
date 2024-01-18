@@ -140,18 +140,24 @@ type handleSafetyCommand struct {
 
 // IsValid checks if the safety command is valid based on the input parts.
 func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
-	_, valid := safetyLevels[parts[1]]
-	return len(parts) == 2 && valid
+	if len(parts) != 2 {
+		return false
+	}
+	option, exists := safetyOptions[parts[1]]
+	return exists && option.Valid
 }
 
 // setSafetyLevel updates the safety settings based on the command argument.
 func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
-	if setter, exists := safetySetters[level]; exists {
-		setter(cmd.SafetySettings)
-	} else {
-		// Handle unknown level, possibly log it or return an error
+	option, exists := safetyOptions[level]
+	if !exists || !option.Valid {
+		// Handle unknown or invalid level, possibly log it or return an error
 		logger.Error(ErrorUnknownSafetyLevel, level)
+		return
 	}
+
+	// Call the setter function associated with the safety level
+	option.Setter(cmd.SafetySettings)
 }
 
 // handleAITranslateCommand is the command to translate text using the AI model.
