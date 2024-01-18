@@ -15,7 +15,7 @@ func ConvertToBinary(input string) string {
 	var binaryRepresentation string
 	for _, runeValue := range input {
 		// Convert each rune (Unicode code point) in the input string to a binary string.
-		binaryRepresentation += fmt.Sprintf(BinaryHighLevel, runeValue)
+		binaryRepresentation += fmt.Sprintf(BinaryCharHighLevel, runeValue)
 	}
 	// Trim the trailing space for a cleaner output.
 	return binaryRepresentation[:len(binaryRepresentation)-1]
