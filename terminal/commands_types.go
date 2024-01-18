@@ -140,7 +140,8 @@ type handleSafetyCommand struct {
 
 // IsValid checks if the safety command is valid based on the input parts.
 func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
-	return len(parts) == 2 && (parts[1] == Low || parts[1] == High || parts[1] == Default)
+	_, valid := safetyLevels[parts[1]]
+	return len(parts) == 2 && valid
 }
 
 // setSafetyLevel updates the safety settings based on the command argument.
