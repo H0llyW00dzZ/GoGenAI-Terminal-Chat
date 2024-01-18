@@ -25,10 +25,10 @@ func main() {
 		return // Exit the main function if there's no API key
 	}
 
-	session, err := terminal.NewSession(apiKey)
-	if err != nil {
-		logger.Error("Failed to start session: %v", err)
-		return // Exit the main function if session creation fails
+	session := terminal.NewSession(apiKey)
+	if session == nil {
+		// Handle the error appropriately, knowing it's already been logged
+		return // Exit the main function since session creation failed
 	}
 
 	session.Start()

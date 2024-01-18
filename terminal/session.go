@@ -44,14 +44,22 @@ type Session struct {
 // Returns:
 //
 //	*Session: A pointer to the newly created Session object.
-//	error: An error object if initialization fails.
-func NewSession(apiKey string) (*Session, error) {
+func NewSession(apiKey string) *Session {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
 	if err != nil {
 		cancel()
-		return nil, err
+		logger.Error(ErrorFailedToCreateNewAiClient, err)
+		return nil
+	}
+
+	// Perform a simple request to validate the API key.
+	valid, err := SendDummyMessage(client)
+	if err != nil || !valid {
+		cancel()
+		logger.Error(ErrorInvalidApiKey, err)
+		return nil
 	}
 	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
 	// So if you're wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
@@ -60,7 +68,32 @@ func NewSession(apiKey string) (*Session, error) {
 		ChatHistory: ChatHistory{},
 		Ctx:         ctx,
 		Cancel:      cancel,
-	}, nil
+	}
+}
+
+// SendDummyMessage verifies the validity of the API key by sending a dummy message.
+//
+// Parameters:
+//
+//	client *genai.Client: The AI client used to send the message.
+//
+// Returns:
+//
+//	A boolean indicating the validity of the API key.
+//	An error if sending the dummy message fails.
+func SendDummyMessage(client *genai.Client) (bool, error) {
+	// Initialize a dummy chat session or use an appropriate lightweight method.
+	model := client.GenerativeModel(ModelAi)
+	cs := model.StartChat()
+
+	// Attempt to send a dummy message.
+	resp, err := cs.SendMessage(context.Background(), genai.Text(DummyMessages))
+	if err != nil {
+		return false, err
+	}
+
+	// A non-nil response indicates a valid API key.
+	return resp != nil, nil
 }
 
 // Start begins the chat session, managing user input and AI responses.

@@ -51,6 +51,7 @@ const (
 	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
 	ReleaseName            = "- %s\n\n"
 	FullChangeLog          = "**%s**\n"
+	DummyMessages          = "Hello, AI! from @H0llyW00dzZ"
 	// Better prompt instead of typing manually hahaha
 	//
 	// Note: These prompts are not persisted in the chat history retrieved by the ChatHistory.GetHistory() method.
@@ -139,6 +140,8 @@ const (
 	ErrorLowLevelCommand                      = "command cannot be empty"
 	ErrorUnknown                              = "An error occurred: %v"
 	ErrorUnknownSafetyLevel                   = "Unknown safety level: %s"
+	ErrorInvalidApiKey                        = "Invalid API key: %v"
+	ErrorLowLevelNoResponse                   = "no response from AI service"
 )
 
 // Defined List of characters
