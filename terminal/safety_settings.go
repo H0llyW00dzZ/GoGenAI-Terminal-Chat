@@ -9,14 +9,11 @@ import (
 	genai "github.com/google/generative-ai-go/genai"
 )
 
-// SafetySetter is a function type that takes a pointer to a SafetySettings
+// SafetyOption is a function type that takes a pointer to a SafetySettings
 // instance and applies a specific safety configuration to it. It is used
 // to abstract the different safety level settings (e.g., low, high, default)
 // and allows for a flexible and scalable way to manage safety configurations
 // through function mapping.
-type SafetySetter func(*SafetySettings)
-
-// SafetyOption includes both the setter function and a validity flag.
 type SafetyOption struct {
 	Setter func(s *SafetySettings)
 	Valid  bool
