@@ -84,6 +84,13 @@ var safetySetters = map[string]SafetySetter{
 	Default: func(s *SafetySettings) { *s = *DefaultSafetySettings() },
 }
 
+// safetyLevels is a map that defines the valid safety options.
+var safetyLevels = map[string]bool{
+	Low:     true,
+	High:    true,
+	Default: true,
+}
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
