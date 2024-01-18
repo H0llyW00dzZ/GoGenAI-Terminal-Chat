@@ -152,7 +152,7 @@ func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
 	option, exists := safetyOptions[level]
 	if !exists || !option.Valid {
 		// Handle unknown or invalid level, possibly log it or return an error
-		logger.Error(ErrorUnknownSafetyLevel, level)
+		logger.Error(ErrorUnknownSafetyLevel, level) // This low-level error won't be shown since it is already handled by the error `IsValid` method
 		return
 	}
 
