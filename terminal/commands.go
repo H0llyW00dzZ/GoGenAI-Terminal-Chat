@@ -98,6 +98,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, QuitCommand, parts)
 	// Clear the chat history in ram's labyrinth, before sending the shutdown message to the AI
+	// Note: This only for passing the ContextPrompt.
 	session.ChatHistory.Clear()
 	// Pass ContextPrompt
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
