@@ -46,6 +46,9 @@ The `DebugOrErrorLogger` package offers a streamlined and efficient logging syst
 
 - 🔓 ⚙️ **Environment Variable Configuration**: The debug mode can be easily toggled on or off through an environment variable, allowing for flexible configuration without the need to recompile the application.
 
+> [!NOTE]
+> The `Current Features` listed above may be outdated. For the most recent feature updates, please read the documentation [`here`](https://pkg.go.dev/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal).
+
 
 ## ⚖️ Enhanced Scalability
 
