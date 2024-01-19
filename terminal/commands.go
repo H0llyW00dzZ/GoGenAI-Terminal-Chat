@@ -388,5 +388,6 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 
 	// Add the AI's response to the chat history
 	session.ChatHistory.AddMessage(AiNerd, aiResponse)
+	fmt.Println() // fix front end issue
 	return false, nil
 }
