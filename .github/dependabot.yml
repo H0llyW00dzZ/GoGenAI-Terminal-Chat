@@ -6,7 +6,7 @@ updates:
   - package-ecosystem: "gomod" # for Go modules
     directory: "/" # Location of the go.mod file
     schedule:
-      interval: "weekly" # How often to check for updates
+      interval: "daily" # How often to check for updates
 
     # Optional: Open pull requests only for the main branch
     target-branch: "master"
