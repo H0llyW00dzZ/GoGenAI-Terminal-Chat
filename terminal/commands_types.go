@@ -202,3 +202,5 @@ type fixDocsFormattingCommand struct{}
 type handleTokecountingCommand struct{}
 
 type handlePromptfileCommand struct{}
+
+type handleKaliDocsCommand struct{}

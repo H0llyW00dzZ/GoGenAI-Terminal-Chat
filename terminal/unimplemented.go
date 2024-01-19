@@ -61,3 +61,10 @@ func (cmd *handlePromptfileCommand) Execute(session *Session) (bool, error) {
 	// currently unimplemented
 	return true, nil
 }
+
+// handleKaliDocsCommand would be a handler function for a hypothetical ":kalidocs -t <tools name> command.
+// Note: professional only
+func (cmd *handleKaliDocsCommand) Execute(session *Session) (bool, error) {
+	// currently unimplemented
+	return true, nil
+}
