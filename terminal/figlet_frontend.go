@@ -23,6 +23,7 @@ var asciiPatterns = map[rune][]string{
 		"",
 		"",
 		"Current Version: " + CurrentVersion,
+		"Copyright (c) 2024 @H0llyW00dzZ",
 	},
 }
 
