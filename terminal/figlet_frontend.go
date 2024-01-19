@@ -1,3 +1,6 @@
+// Copyright (c) 2024 H0llyW00dzZ
+// License: MIT License
+
 package terminal
 
 import (
@@ -7,6 +10,7 @@ import (
 // Define the ASCII patterns for the 'slant' font for the characters
 var asciiPatterns = map[rune][]string{
 	// Figlet in a compiled language, not an interpreted language.
+	// This literally header in your machine lmao.
 	'G': {
 		"   ______      ______           ___    ____  ",
 		"  / ____/___  / ____/__  ____  /   |  /  _/  ",
@@ -14,24 +18,50 @@ var asciiPatterns = map[rune][]string{
 		"/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     ",
 		"\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     ",
 	},
+	'V': {
+		"",
+		"",
+		"",
+		"Current Version: " + CurrentVersion,
+	},
+}
+
+// Define a map for character colors
+var asciiColors = map[rune]string{
+	'G': BoldText + colors.ColorHex95b806,
+	'V': BoldText + colors.ColorCyan24Bit,
+}
+
+// applyColor applies a color to a given line if the hacker color exists.
+func applyColor(char rune, line string) string {
+	color, colorOK := asciiColors[char]
+	if !colorOK {
+		return line // No color to apply
+	}
+	return color + line + colors.ColorReset
+}
+
+// appendPatternLine appends a pattern line to the output with the proper color.
+func appendPatternLine(output []string, char rune, pattern []string) []string {
+	for i, line := range pattern {
+		coloredLine := applyColor(char, line)
+		output[i] += coloredLine
+	}
+	return output
 }
 
 // Convert a string to ASCII art using the slant font and colorize it hacker colors
 func toASCIIArt(input string) string {
-	// Prepare a slice of strings to hold each line of the ASCII art
 	output := make([]string, len(asciiPatterns['G']))
-	// Iterate over each character in the input text
+
 	for _, char := range input {
-		// Get the pattern for the current character
 		pattern, ok := asciiPatterns[char]
 		if !ok {
-			continue // Skip characters we don't have a pattern for
+			continue // Skip characters without a pattern
 		}
-		// Append the pattern to the output line by line
-		for i, line := range pattern {
-			output[i] += line
-		}
+
+		output = appendPatternLine(output, char, pattern)
 	}
-	// Join the lines into a single string and colorize it
-	return colors.ColorHex95b806 + strings.Join(output, "\n") + colors.ColorReset
+
+	return strings.Join(output, "\n")
 }

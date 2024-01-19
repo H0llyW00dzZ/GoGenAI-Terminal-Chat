@@ -106,7 +106,7 @@ func SendDummyMessage(client *genai.Client) (bool, error) {
 // It ensures resources are cleaned up properly on exit by deferring the cancellation of the session's context
 // and the closure of the AI client.
 func (s *Session) Start() {
-	text := "G"
+	text := "G V"
 	asciiArt := toASCIIArt(text)
 	fmt.Println(asciiArt)
 	fmt.Println()
