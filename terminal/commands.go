@@ -356,7 +356,7 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
 	PrintTypingChat(fmt.Sprintf(SystemSafety, parts[1]), TypingDelay)
-
+	fmt.Println()     // this correct, fix front end issue
 	return false, nil // Continue the session after setting safety levels
 }
 
