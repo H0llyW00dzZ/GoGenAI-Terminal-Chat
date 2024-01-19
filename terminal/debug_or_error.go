@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 // DebugOrErrorLogger provides a simple logger with support for debug and error logging.
@@ -103,5 +104,20 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 	if r := recover(); r != nil {
 		msg := fmt.Sprintf(RecoverGopher, colors.ColorHex95b806, colors.ColorReset, colors.ColorRed, r, colors.ColorReset)
 		l.logger.Println(msg)
+	}
+}
+
+// HandleGoogleAPIError checks for the Google API Error 500 and logs it.
+//
+// Parameters:
+//
+//	err error: The error returned from a Google API call.
+func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) {
+	if err != nil {
+		// Check if the error message contains "googleapi: Error 500:"
+		if strings.Contains(err.Error(), Error500GoogleApi) {
+			// Log the Google Internal Error with the error message
+			l.Error(ErrorGoogleInternal, err)
+		}
 	}
 }
