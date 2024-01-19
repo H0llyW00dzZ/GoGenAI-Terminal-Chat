@@ -21,7 +21,8 @@ var asciiPatterns = map[rune][]string{
 	'V': {
 		"",
 		"",
-		"",
+		"", // TODO: Implement a notification to display here when a new version is available.
+		//			 For checking the version and viewing the change log, implement the command ":checkversion".
 		"Current Version: " + CurrentVersion,
 		"Copyright (c) 2024 @H0llyW00dzZ",
 	},
