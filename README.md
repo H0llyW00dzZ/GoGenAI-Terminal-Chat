@@ -20,7 +20,7 @@ Interesting to built it in terminal after touring journey through the Go program
 
 ### 🛠️ Continued Development: Rationale and Benefits
 
-Embarking on a development journey that combines the robustness of the Go programming language with Google's cutting-edge AI capabilities (presently in beta with the Gemini model) offers several compelling advantages. This decision to develop a terminal-based application stems from a thorough exploration of Go's features and Google AI's potential.
+- Embarking on a development journey that combines the robustness of the Go programming language with Google's cutting-edge AI capabilities (presently in beta with the Gemini model) offers several compelling advantages. This decision to develop a terminal-based application stems from a thorough exploration of Go's features and Google AI's potential.
 
 ### ⚖️ Scalability & Stability
 
@@ -33,12 +33,12 @@ Embarking on a development journey that combines the robustness of the Go progra
 
 ### 🛡️ Security
 
-Go's strong typing and compilation checks contribute to a more secure codebase, effectively minimizing critical security issues often encountered in dynamically typed languages,
+- Go's strong typing and compilation checks contribute to a more secure codebase, effectively minimizing critical security issues often encountered in dynamically typed languages,
 for example in `GitHub` that I don't fucking understand.
 
 ### 🚨 Problem Isolation
 
-When issues arise, Go's explicit error handling makes it easier to compare and isolate problems. This clarity ensures that when an issue occurs, it can often be determined that the cause is external to the Go application, such as an issue with the Operating System.
+- When issues arise, Go's explicit error handling makes it easier to compare and isolate problems. This clarity ensures that when an issue occurs, it can often be determined that the cause is external to the Go application, such as an issue with the Operating System.
 
 
 ***Fun Fact***: ***Did You Know?*** If your `Go` code resembles a jungle of `if` statements (think 10+ nested layers – a big no-no!), it's less `Go` and more `Stop-and-ask-for-directions`. Flatten those conditionals and let your code run as smoothly as a greased `gopher` on a slip 'n slide! 🤪
