@@ -73,7 +73,7 @@ The `DebugOrErrorLogger` package offers a streamlined and efficient logging syst
 > The `Current Features` listed above may be outdated. For the most recent feature updates, please read the documentation [`here`](https://pkg.go.dev/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal).
 
 
-## ⚖️ Enhanced Scalability
+### ⚖️ Enhanced Scalability
 
 - **Modular Command Framework**: The system now employs a modular command framework that maps commands to dedicated handler functions. This design simplifies the addition of new commands and the modification of existing ones, reducing complexity and improving maintainability. It's a scalable approach that can easily grow with the application's functionality, accommodating an expanding set of features without cluttering the command processing logic.
 - **Streamlined Codebase**: By decoupling command logic from the main interaction flow, the codebase becomes more organized and easier to navigate. Developers can quickly identify where to add new command handlers and understand how commands are processed, leading to a more developer-friendly experience.
