@@ -18,28 +18,25 @@ Interesting to built it in terminal after touring journey through the Go program
 > [!NOTE]
 > This repository is specifically designed to adhere to idiomatic Go principles. 🤪
 
-### Continued Development: Rationale and Benefits
+### 🛠️ Continued Development: Rationale and Benefits
 
 Embarking on a development journey that combines the robustness of the Go programming language with Google's cutting-edge AI capabilities (presently in beta with the Gemini model) offers several compelling advantages. This decision to develop a terminal-based application stems from a thorough exploration of Go's features and Google AI's potential.
 
-### Scalability
+### ⚖️ Scalability & Stability
 
-Developing in Go promotes scalability. Its performance-centric design supports concurrent processing and efficient resource management, making it an excellent choice for applications that need to scale seamlessly with increasing demand.
+- Developing in Go promotes scalability. Its performance-centric design supports concurrent processing and efficient resource management, making it an excellent choice for applications that need to scale seamlessly with increasing demand.
 
-### Security
-
-Go's strong typing and compilation checks contribute to a more secure codebase, effectively minimizing critical security issues often encountered in dynamically typed languages,
-for example in `GitHub` that I don't fucking understand.
-
-
-### Stability
-
-Go's memory management and static typing significantly reduce the occurrence of critical bugs such as memory leaks, which are prevalent in interpreted languages. This stability is crucial for long-running terminal applications that interact with AI services.
+- Go's memory management and static typing significantly reduce the occurrence of critical bugs such as memory leaks, which are prevalent in interpreted languages. This stability is crucial for long-running terminal applications that interact with AI services.
 
 > [!NOTE]
 > `Memory leaks` are a critical concern, particularly in AI development. Go's approach to memory management sets it apart, as it mitigates such issues more effectively than some other languages. This is in stark contrast to numerous repositories in other languages where memory leaks are a frequent and often confusing problem (that I don't fucking understand when looks other repo in `github`).
 
-### Problem Isolation
+### 🛡️ Security
+
+Go's strong typing and compilation checks contribute to a more secure codebase, effectively minimizing critical security issues often encountered in dynamically typed languages,
+for example in `GitHub` that I don't fucking understand.
+
+### 🚨 Problem Isolation
 
 When issues arise, Go's explicit error handling makes it easier to compare and isolate problems. This clarity ensures that when an issue occurs, it can often be determined that the cause is external to the Go application, such as an issue with the Operating System.
 
