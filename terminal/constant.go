@@ -11,7 +11,7 @@ const (
 	GitHubAPIURL      = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
 	GitHubReleaseFUll = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/tags/%s"
 	// CurrentVersion represents the current version of the application.
-	CurrentVersion = "v0.4.3"
+	CurrentVersion = "v0.4.4"
 )
 
 // Defined constants for the terminal package
@@ -143,7 +143,7 @@ const (
 	ErrorInvalidApiKey                        = "Invalid API key: %v"
 	ErrorLowLevelNoResponse                   = "no response from AI service"
 	// List Error not because of this go codes, it literally google issue
-	Error500GoogleApi   = "googleapi: Error 500"
+	Error500GoogleApi   = "googleapi: Error 500:"
 	ErrorGoogleInternal = "Google Internal Error: %s"
 )
 
