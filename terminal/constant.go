@@ -142,6 +142,9 @@ const (
 	ErrorUnknownSafetyLevel                   = "Unknown safety level: %s"
 	ErrorInvalidApiKey                        = "Invalid API key: %v"
 	ErrorLowLevelNoResponse                   = "no response from AI service"
+	// List Error not because of this go codes, it literally google issue
+	Error500GoogleApi   = "googleapi: Error 500"
+	ErrorGoogleInternal = "Google Internal Error: %s"
 )
 
 // Defined List of characters

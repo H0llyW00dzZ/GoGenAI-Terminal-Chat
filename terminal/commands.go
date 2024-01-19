@@ -113,6 +113,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	if err != nil {
 		// If there's an error sending the message, log it
 		logger.Error(ErrorGettingShutdownMessage, err)
+		logger.HandleGoogleAPIError(err)
 	}
 
 	// Proceed with shutdown
@@ -184,6 +185,7 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
+		logger.HandleGoogleAPIError(err)
 		return false, err
 	}
 	// Indicate that the command was handled; return false to continue the session.
@@ -221,6 +223,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	aiPrompt, err := c.checkVersionAndGetPrompt()
 	if err != nil {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
+		logger.HandleGoogleAPIError(err)
 		return false, err
 	}
 	// Sanitize the message before sending it to the AI
@@ -228,6 +231,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	_, err = SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
 	if err != nil {
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
+		logger.HandleGoogleAPIError(err)
 		return false, err
 	}
 	// Indicate that the command was handled; return false to continue the session.
@@ -378,6 +382,7 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 	aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
+		logger.HandleGoogleAPIError(err)
 		return false, err
 	}
 

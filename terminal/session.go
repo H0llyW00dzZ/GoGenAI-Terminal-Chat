@@ -51,6 +51,7 @@ func NewSession(apiKey string) *Session {
 	if err != nil {
 		cancel()
 		logger.Error(ErrorFailedToCreateNewAiClient, err)
+		logger.HandleGoogleAPIError(err)
 		return nil
 	}
 
@@ -59,6 +60,7 @@ func NewSession(apiKey string) *Session {
 	if err != nil || !valid {
 		cancel()
 		logger.Error(ErrorInvalidApiKey, err)
+		logger.HandleGoogleAPIError(err)
 		return nil
 	}
 	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
@@ -165,6 +167,7 @@ func (s *Session) processInput() bool {
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(byte(nl.NewLineChars))
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
+		logger.HandleGoogleAPIError(err)
 		return false // Continue the loop, hoping for a successful read next time
 	}
 
@@ -187,6 +190,7 @@ func (s *Session) handleUserInput(input string) bool {
 		if err := s.RenewSession(apiKey); err != nil {
 			// Handle the error, possibly by logging and returning true to signal the session should end
 			logger.Error(ErrorFailedToRenewSession, err)
+			logger.HandleGoogleAPIError(err)
 			return true // Signal to end the session
 		}
 	}
@@ -202,6 +206,7 @@ func (s *Session) handleUserInput(input string) bool {
 	aiResponse, err := SendMessage(s.Ctx, s.Client, input, chatHistory)
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
+		logger.HandleGoogleAPIError(err)
 		return true // End the session if there's an error sending the message
 	}
 
