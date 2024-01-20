@@ -149,3 +149,11 @@ var AsciiPatterns = map[rune][]string{
 		Copyright,
 	},
 }
+
+// Define a map for character Ascii colors
+//
+// Deprecated: This variable is no longer used, and was replaced by NewASCIIArtStyle().
+var AsciiColors = map[rune]string{
+	G: BoldText + colors.ColorHex95b806,
+	V: BoldText + colors.ColorCyan24Bit,
+}
