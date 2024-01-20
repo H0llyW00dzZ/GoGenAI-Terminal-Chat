@@ -1,6 +1,6 @@
 // Copyright (c) 2024 H0llyW00dzZ
 // License: MIT License
-// Note: The safety settings listed below will not affect complexity (same as Command Registery), unlike 'if', 'for', 'case', '&&' or '||' which would increase complexity.
+// Note: The safety settings listed below will not affect complexity (same as Command Registry), unlike 'if', 'for', 'case', '&&' or '||' which would increase complexity.
 // For instance, you can introduce numerous settings (e.g., low, high, default, etc) here without impacting the complexity.
 
 package terminal
