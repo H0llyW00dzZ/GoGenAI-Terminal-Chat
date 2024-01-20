@@ -145,6 +145,11 @@ const (
 	// List Error not because of this go codes, it literally google issue
 	Error500GoogleApi   = "googleapi: Error 500:"
 	ErrorGoogleInternal = "Google Internal Error: %s"
+	// List Error Figlet include high and low level error
+	ErrorStyleIsEmpty             = "style is empty"                   // low level
+	ErrorCharacterNotFoundinStyle = "character %q not found in style"  // low level
+	ErrorToASCIIArtbuildOutput    = "ToASCIIArt buildOutput error: %v" // High Level
+	ErrorToASCIIArtcheckstyle     = "ToASCIIArt checkStyle error: %v"  // High Level
 )
 
 // Defined List of characters

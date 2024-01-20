@@ -93,6 +93,9 @@ var safetyOptions = map[string]SafetyOption{
 	},
 }
 
+// scalable a global variable for the ASCII slant style.
+var slantStyle = NewASCIIArtStyle()
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
@@ -114,4 +117,21 @@ func init() {
 	//TODO: Will add more commands here, example: :help, :about, :credits, :k8s, syncing AI With Go Routines (Known as Gopher hahaha) etc.
 	// Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line
 
+	// ASCII Scalable mode 🤪
+	// Additional Note: let me know if scalable logic like this are possible in other language that can avoid complexity "overhead" for human and the machine hahaahahahaa
+	slantStyle.AddChar(G, []string{
+		_G,
+		_O,
+		_GEN,
+		A_,
+		I_,
+	}, BoldText+colors.ColorHex95b806)
+	// Initialize the text style patterns for 'V'.
+	slantStyle.AddChar(V, []string{
+		BLANK_,
+		BLANK_,
+		BLANK_, // TODO: Implement a notification to display here when a new version is available.
+		Current_Version,
+		Copyright,
+	}, BoldText+ColorCyan24Bit)
 }
