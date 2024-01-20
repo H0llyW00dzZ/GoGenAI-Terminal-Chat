@@ -121,3 +121,20 @@ func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) {
 		}
 	}
 }
+
+// Info logs a formatted information message. It behaves like Println and allows for formatted messages.
+//
+// Parameters:
+//
+//	format string: The format string for the information message.
+//	v ...interface{}: The values to be formatted according to the format string.
+func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
+	message := fmt.Sprintf(format, v...)
+
+	infoColor := colors.ColorBlue
+	colorizedMsg := infoColor + message + colors.ColorReset
+
+	// Print the message with a timestamp and colored output.
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX + " ")
+	PrintTypingChat(colorizedMsg, TypingDelay)
+}

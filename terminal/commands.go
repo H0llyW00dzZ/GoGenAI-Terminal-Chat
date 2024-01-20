@@ -5,9 +5,11 @@ package terminal
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal/fun_stuff"
+	"github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal/tools"
 )
 
 // isCommand checks if the input is a command based on the prefix.
@@ -388,5 +390,28 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 
 	// Add the AI's response to the chat history
 	session.ChatHistory.AddMessage(AiNerd, aiResponse)
+	return false, nil
+}
+
+func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (bool, error) {
+	text := parts[1]
+	lengthStr := parts[3]
+	length, err := strconv.Atoi(lengthStr)
+	if err != nil {
+		logger.Error(ErrorInvalidLengthArgs, err)
+		return false, fmt.Errorf(errorinvalidlengthArgs, err)
+	}
+
+	randomString, err := tools.GenerateRandomString(length)
+	if err != nil {
+		logger.Error(ErrorFailedtoGenerateRandomString, err)
+		return false, fmt.Errorf(errorfailedtogeneraterandomstring, err)
+	}
+
+	logger.Debug(CryptoRandText, text)
+	logger.Debug(CryptoRandStringRes, randomString)
+
+	logger.Info(CryptoRandRes, text, randomString)
+
 	return false, nil
 }

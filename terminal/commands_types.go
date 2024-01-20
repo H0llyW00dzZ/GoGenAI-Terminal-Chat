@@ -175,6 +175,13 @@ func (cmd *handleAITranslateCommand) IsValid(parts []string) bool {
 	return parts[languageFlagIndex] == LangArgs
 }
 
+type handleCryptoRandCommand struct{}
+
+func (cmd *handleCryptoRandCommand) IsValid(parts []string) bool {
+	// The cryptorand command should have exactly three parts: the command itself, the text, and the length.
+	return len(parts) == 4 && parts[2] == LengthArgs
+}
+
 // Note: this unimplemented
 // Now even it's unimplemented, it wont detected in deadcode indicate that "unreachable func"
 type handleK8sCommand struct{}
