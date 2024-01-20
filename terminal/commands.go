@@ -394,8 +394,7 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 }
 
 func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (bool, error) {
-	text := parts[1]
-	lengthStr := parts[3]
+	lengthStr := parts[2] // The length argument is now the second part of the command
 	length, err := strconv.Atoi(lengthStr)
 	if err != nil {
 		logger.Error(ErrorInvalidLengthArgs, err)
@@ -408,10 +407,10 @@ func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (b
 		return false, fmt.Errorf(errorfailedtogeneraterandomstring, err)
 	}
 
-	logger.Debug(CryptoRandText, text)
+	logger.Debug(CryptoRandLength, lengthStr)
 	logger.Debug(CryptoRandStringRes, randomString)
 
-	logger.Info(CryptoRandRes, text, randomString)
+	logger.Info(CryptoRandRes, lengthStr, randomString)
 
 	return false, nil
 }

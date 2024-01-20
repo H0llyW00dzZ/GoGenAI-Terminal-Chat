@@ -207,9 +207,9 @@ const (
 
 // Defined Tools
 const (
-	CryptoRandText      = "Text: %s"
+	CryptoRandLength    = "Length: %s"
 	CryptoRandStringRes = "Random String: %s"
-	CryptoRandRes       = "Text: %s\n\nRandom String: %s"
+	CryptoRandRes       = "Length: %s\n\nRandom String: %s"
 )
 
 // ASCII Art
