@@ -93,12 +93,6 @@ var safetyOptions = map[string]SafetyOption{
 	},
 }
 
-// Define a map for character colors
-var asciiColors = map[rune]string{
-	G: BoldText + colors.ColorHex95b806,
-	V: BoldText + colors.ColorCyan24Bit,
-}
-
 // scalable a global variable for the ASCII slant style.
 var slantStyle = NewASCIIArtStyle()
 
