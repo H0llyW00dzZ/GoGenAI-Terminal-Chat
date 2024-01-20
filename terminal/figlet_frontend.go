@@ -7,31 +7,54 @@ import (
 	"strings"
 )
 
+// ASCII Art
+const (
+	// NOTE: ' is rune not a string
+	G = 'G'
+	V = 'V'
+	// ASCII slant font
+	_G   = "   ______      ______           ___    ____  "
+	_O   = "  / ____/___  / ____/__  ____  /   |  /  _/  "
+	_GEN = " / / __/ __ \\/ / __/ _ \\/ __ \\/ /| |  / /    "
+	A_   = "/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     "
+	I_   = "\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     "
+	// Blank Art
+	BLANK_ = "                                      "
+)
+
+// Text
+const (
+	Current_Version = "Current Version: " + CurrentVersion
+	Copyright       = "Copyright (c) 2024 @H0llyW00dzZ"
+)
+
 // Define the ASCII patterns for the 'slant' font for the characters
 var asciiPatterns = map[rune][]string{
 	// Figlet in a compiled language, not an interpreted language.
 	// This literally header in your machine lmao.
-	'G': {
-		"   ______      ______           ___    ____  ",
-		"  / ____/___  / ____/__  ____  /   |  /  _/  ",
-		" / / __/ __ \\/ / __/ _ \\/ __ \\/ /| |  / /    ",
-		"/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     ",
-		"\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     ",
+	// It so easy implement Header like this in go, also it possible to made it animated drawing/human typing this ascii art
+	// unlike "interpreted language" 🤪
+	G: {
+		_G,
+		_O,
+		_GEN,
+		A_,
+		I_,
 	},
-	'V': {
-		"",
-		"",
-		"", // TODO: Implement a notification to display here when a new version is available.
+	V: {
+		BLANK_,
+		BLANK_,
+		BLANK_, // TODO: Implement a notification to display here when a new version is available.
 		//			 For checking the version and viewing the change log, implement the command ":checkversion".
-		"Current Version: " + CurrentVersion,
-		"Copyright (c) 2024 @H0llyW00dzZ",
+		Current_Version,
+		Copyright,
 	},
 }
 
 // Define a map for character colors
 var asciiColors = map[rune]string{
-	'G': BoldText + colors.ColorHex95b806,
-	'V': BoldText + colors.ColorCyan24Bit,
+	G: BoldText + colors.ColorHex95b806,
+	V: BoldText + colors.ColorCyan24Bit,
 }
 
 // applyColor applies a color to a given line if the hacker color exists.
@@ -80,7 +103,7 @@ func appendPatternLine(output []string, char rune, pattern []string) []string {
 // This will output the ASCII art representation of "G" using the slant font
 // and hacker-style colors.
 func ToASCIIArt(input string) string {
-	output := make([]string, len(asciiPatterns['G']))
+	output := make([]string, len(asciiPatterns[G]))
 
 	for _, char := range input {
 		pattern, ok := asciiPatterns[char]
