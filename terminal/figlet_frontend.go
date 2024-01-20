@@ -114,5 +114,5 @@ func ToASCIIArt(input string) string {
 		output = appendPatternLine(output, char, pattern)
 	}
 
-	return strings.Join(output, "\n")
+	return strings.Join(output, StringNewLine)
 }
