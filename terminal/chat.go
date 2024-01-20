@@ -4,8 +4,9 @@
 package terminal
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
-	"hash/maphash"
 	"strings"
 	"sync"
 )
@@ -18,8 +19,7 @@ const MaxChatHistory = 5 // Maximum number of messages to keep in history
 // the current state of the conversation.
 type ChatHistory struct {
 	Messages []string
-	Hashes   map[uint64]int // Maps hash values to indices in the Messages slice
-	Seed     maphash.Seed   // Seed for the maphash, ensuring unique hash values per instance
+	Hashes   map[string]int // Maps hash values (as hex strings) to indices in the Messages slice
 	mu       sync.RWMutex   // Explicit 🤪
 
 }
@@ -35,8 +35,7 @@ type ChatHistory struct {
 func NewChatHistory() *ChatHistory {
 	return &ChatHistory{
 		Messages: make([]string, 0),
-		Hashes:   make(map[uint64]int),
-		Seed:     maphash.MakeSeed(),
+		Hashes:   make(map[string]int),
 	}
 }
 
@@ -123,12 +122,11 @@ func (h *ChatHistory) GetHistory() string {
 	return buildeR.String() // Return the complete, concatenated chat history
 }
 
-// hashMessage generates a hash for a given message.
-func (h *ChatHistory) hashMessage(message string) uint64 {
-	var mh maphash.Hash
-	mh.SetSeed(h.Seed)
-	_, _ = mh.WriteString(message)
-	return mh.Sum64()
+// hashMessage generates a SHA-256 hash for a given message.
+func (h *ChatHistory) hashMessage(message string) string {
+	hasher := sha256.New()
+	hasher.Write([]byte(message))
+	return hex.EncodeToString(hasher.Sum(nil))
 }
 
 // RemoveMessages removes messages from the chat history. If a specific message is provided,
@@ -220,6 +218,9 @@ func (h *ChatHistory) FilterMessages(predicate func(string) bool) []string {
 
 // Clear removes all messages from the chat history, effectively resetting it.
 func (h *ChatHistory) Clear() {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
 	h.Messages = []string{}
-	h.Hashes = make(map[uint64]int)
+	h.Hashes = make(map[string]int)
 }
