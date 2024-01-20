@@ -135,6 +135,8 @@ func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
 	colorizedMsg := infoColor + message + colors.ColorReset
 
 	// Print the message with a timestamp and colored output.
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX + " ")
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX + "")
 	PrintTypingChat(colorizedMsg, TypingDelay)
+	// Print a newline after the message
+	fmt.Println()
 }

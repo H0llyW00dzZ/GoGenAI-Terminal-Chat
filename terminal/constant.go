@@ -209,7 +209,7 @@ const (
 const (
 	CryptoRandText      = "Text: %s"
 	CryptoRandStringRes = "Random String: %s"
-	CryptoRandRes       = "Text: %s\nRandom String: %s"
+	CryptoRandRes       = "Text: %s\n\nRandom String: %s"
 )
 
 // ASCII Art
