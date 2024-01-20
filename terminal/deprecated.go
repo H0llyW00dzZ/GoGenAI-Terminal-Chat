@@ -124,3 +124,28 @@ func HandleUnrecognizedCommand(command string, session *Session, parts []string)
 
 // Deprecated: This method is no longer used, and was replaced by SafetyOption.
 type SafetySetter func(*SafetySettings)
+
+// Define the ASCII patterns for the 'slant' font for the characters
+//
+// Deprecated: This variable is no longer used, and was replaced by NewASCIIArtStyle().
+var AsciiPatterns = map[rune][]string{
+	// Figlet in a compiled language, not an interpreted language.
+	// This literally header in your machine lmao.
+	// It so easy implement Header like this in go, also it possible to made it animated drawing/human typing this ascii art
+	// unlike "interpreted language" 🤪
+	G: {
+		_G,
+		_O,
+		_GEN,
+		A_,
+		I_,
+	},
+	V: {
+		BLANK_,
+		BLANK_,
+		BLANK_, // TODO: Implement a notification to display here when a new version is available.
+		//			 For checking the version and viewing the change log, implement the command ":checkversion".
+		Current_Version,
+		Copyright,
+	},
+}
