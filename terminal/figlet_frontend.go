@@ -91,7 +91,7 @@ func ToASCIIArt(input string, style ASCIIArtStyle) (string, error) {
 		}
 	}
 
-	return strings.Join(output, "\n"), nil
+	return strings.Join(output, StringNewLine), nil
 }
 
 // checkStyle verifies that the provided ASCIIArtStyle is not empty.

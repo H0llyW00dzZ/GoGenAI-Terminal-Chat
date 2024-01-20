@@ -136,8 +136,9 @@ func init() {
 	slantStyle.AddChar(V, []string{
 		BLANK_,
 		BLANK_,
-		BLANK_, // TODO: Implement a notification to display here when a new version is available.
+		BLANK_, // TODO: Implement a notification to be displayed here when a new version is available.
 		Current_Version,
 		Copyright,
-	}, BoldText+ColorCyan24Bit)
+		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
+	}, BoldText+colors.ColorCyan24Bit)
 }
