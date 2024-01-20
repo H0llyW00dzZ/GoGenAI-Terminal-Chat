@@ -21,7 +21,7 @@ import (
 // It holds the AI client, chat history, and context for managing the session lifecycle.
 type Session struct {
 	Client      *genai.Client      // Client is the generative AI client used to communicate with the AI model.
-	ChatHistory ChatHistory        // ChatHistory stores the history of the chat session.
+	ChatHistory *ChatHistory       // ChatHistory stores the history of the chat session.
 	Ctx         context.Context    // Ctx is the context governing the session, used for cancellation.
 	Cancel      context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
 	Ended       bool               // Ended indicates whether the session has ended.
@@ -65,9 +65,11 @@ func NewSession(apiKey string) *Session {
 	}
 	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
 	// So if you're wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
+	// Initialize the ChatHistory here instead of using an empty struct
+	chatHistory := NewChatHistory() // Hash RAM's labyrinth, hahaha!
 	return &Session{
 		Client:      client,
-		ChatHistory: ChatHistory{},
+		ChatHistory: chatHistory, // Store the pointer to ChatHistory in RAM's labyrinth
 		Ctx:         ctx,
 		Cancel:      cancel,
 	}
