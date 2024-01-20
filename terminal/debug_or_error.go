@@ -78,6 +78,9 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 	// Simulate typing the error message
 	PrintTypingChat(errorPrefix, TypingDelay)
 
+	// Print a newline after the message
+	fmt.Println()
+
 }
 
 // RecoverFromPanic should be deferred at the beginning of a function or goroutine
