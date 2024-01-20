@@ -41,27 +41,6 @@ func (style ASCIIArtStyle) AddChar(char rune, pattern []string, color string) {
 	style[char] = ASCIIArtChar{Pattern: pattern, Color: color}
 }
 
-// ASCII Art
-const (
-	// NOTE: ' is rune not a string
-	G = 'G'
-	V = 'V'
-	// ASCII slant font
-	_G   = "   ______      ______           ___    ____  "
-	_O   = "  / ____/___  / ____/__  ____  /   |  /  _/  "
-	_GEN = " / / __/ __ \\/ / __/ _ \\/ __ \\/ /| |  / /    "
-	A_   = "/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     "
-	I_   = "\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     "
-	// Blank Art
-	BLANK_ = "                                      "
-)
-
-// Text
-const (
-	Current_Version = "Current Version: " + CurrentVersion
-	Copyright       = "Copyright (c) 2024 @H0llyW00dzZ"
-)
-
 // applyColor applies a color to a given line if the color exists.
 func applyColor(artChar ASCIIArtChar, line string) string {
 	if artChar.Color == "" {
