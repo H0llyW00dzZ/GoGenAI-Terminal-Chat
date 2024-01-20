@@ -1,0 +1,18 @@
+############################
+# Author : H0llyW00dzZ     #
+############################
+name: Automated Delete Merged Branch
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+    steps:
+    - name: delete branch
+      uses: SvanBoxel/delete-merged-branch@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
