@@ -103,6 +103,8 @@ const (
 	SafetyCommand      = ":safety"
 	AITranslateCommand = ":aitranslate"
 	LangArgs           = ":lang"
+	CryptoRandCommand  = ":cryptorand"
+	LengthArgs         = ":length"
 	PingCommand        = ":ping" // Currently marked as TODO
 	ClearCommand       = ":clear"
 	PrefixChar         = ":"
@@ -150,6 +152,11 @@ const (
 	ErrorCharacterNotFoundinStyle = "character %q not found in style"  // low level
 	ErrorToASCIIArtbuildOutput    = "ToASCIIArt buildOutput error: %v" // High Level
 	ErrorToASCIIArtcheckstyle     = "ToASCIIArt checkStyle error: %v"  // High Level
+	// List Error Tools
+	ErrorInvalidLengthArgs            = "Invalid length argument: %v"          // high level
+	errorinvalidlengthArgs            = "invalid length argument: %v"          // low level
+	ErrorFailedtoGenerateRandomString = "Failed to generate random string: %v" // high level
+	errorfailedtogeneraterandomstring = "failed to generate random string: %v" // low level
 )
 
 // Defined List of characters
@@ -196,6 +203,13 @@ const (
 	Default          = "default"
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
+)
+
+// Defined Tools
+const (
+	CryptoRandText      = "Text: %s"
+	CryptoRandStringRes = "Random String: %s"
+	CryptoRandRes       = "Text: %s\n\nRandom String: %s"
 )
 
 // ASCII Art
