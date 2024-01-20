@@ -197,3 +197,24 @@ const (
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
 )
+
+// ASCII Art
+const (
+	// NOTE: ' is rune not a string
+	G = 'G'
+	V = 'V'
+	// ASCII slant font
+	_G   = "   ______      ______           ___    ____  "
+	_O   = "  / ____/___  / ____/__  ____  /   |  /  _/  "
+	_GEN = " / / __/ __ \\/ / __/ _ \\/ __ \\/ /| |  / /    "
+	A_   = "/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     "
+	I_   = "\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     "
+	// Blank Art
+	BLANK_ = "                                      "
+)
+
+// Text
+const (
+	Current_Version = "Current Version: " + CurrentVersion
+	Copyright       = "Copyright (c) 2024 @H0llyW00dzZ"
+)
