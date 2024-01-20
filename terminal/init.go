@@ -5,7 +5,6 @@ package terminal
 
 import (
 	"regexp"
-	"strings"
 )
 
 // apiKey holds the API key used for authenticating requests to the generative
@@ -29,9 +28,6 @@ var registry *CommandRegistry
 // to avoid multiple API calls when checking for updates within the application's
 // lifecycle. This variable should be updated only through the CheckLatestVersion function.
 var checkVersion GitHubRelease
-
-// This consider stable to avoid memory allocation overhead.
-var buildeR strings.Builder
 
 var aiPrompt string
 

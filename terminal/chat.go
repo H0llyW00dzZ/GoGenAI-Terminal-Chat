@@ -112,14 +112,16 @@ func (h *ChatHistory) GetHistory() string {
 	// The issue lies with the AI's attempt to apply formatting, which fails due to incorrect ANSI sequences, reminiscent of issues one might encounter with "PYTHON" or Your Machine is bad LMAO.
 	h.mu.RLock()         // Lock for reading
 	defer h.mu.RUnlock() // Unlock when the function returns
+	// fix concurrency issue
+	var builder strings.Builder // Create a new builder for this method call
 
 	for _, msg := range h.Messages {
 		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
-		buildeR.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
-		buildeR.WriteRune(nl.NewLineChars)     // Append a newline character after each message
+		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
+		builder.WriteRune(nl.NewLineChars)     // Append a newline character after each message
 	}
 
-	return buildeR.String() // Return the complete, concatenated chat history
+	return builder.String() // Return the complete, concatenated chat history
 }
 
 // hashMessage generates a SHA-256 hash for a given message.
