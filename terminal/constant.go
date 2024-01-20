@@ -216,5 +216,6 @@ const (
 // Text
 const (
 	Current_Version = "Current Version: " + CurrentVersion
-	Copyright       = "Copyright (©️) 2024 @H0llyW00dzZ" // Respect the Original Author since this develop on open-source
+	// Acknowledgment of the original author is appreciated as this project is developed in an open-source environment.
+	Copyright = "Copyright (©️) 2024 @H0llyW00dzZ All rights reserved."
 )
