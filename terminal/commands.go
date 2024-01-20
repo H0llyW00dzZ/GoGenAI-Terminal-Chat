@@ -393,6 +393,7 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 	return false, nil
 }
 
+// Execute processes the ":cryptorand" command within a chat session.
 func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (bool, error) {
 	lengthStr := parts[2] // The length argument is now the second part of the command
 	length, err := strconv.Atoi(lengthStr)
