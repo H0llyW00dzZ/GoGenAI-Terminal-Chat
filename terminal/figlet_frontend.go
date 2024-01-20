@@ -110,7 +110,7 @@ func applyColor(artChar ASCIIArtChar, line string) string {
 //
 // Example usage:
 //
-//	art, err := ToASCIIArt("GV", slantStyle)
+//	art, err := ToASCIIArt("G", slantStyle)
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
