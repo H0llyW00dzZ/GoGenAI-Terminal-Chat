@@ -109,7 +109,9 @@ func printResponse(resp *genai.GenerateContentResponse) string {
 			for _, part := range cand.Content.Parts {
 				content := fmt.Sprint(part)
 				content = removeAIPrefix(content)
-				colorized := colorizeResponse(content)
+				// Filter out the language identifier from code blocks before any other processing
+				filteredContent := FilterLanguageFromCodeBlock(content)
+				colorized := colorizeResponse(filteredContent)
 				colorized = handleSingleAsterisks(colorized)
 				printAIResponse(colorized)
 				aiResponse += colorized
