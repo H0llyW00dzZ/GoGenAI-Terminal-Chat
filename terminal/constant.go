@@ -232,7 +232,11 @@ const (
 
 // Text
 const (
-	Current_Version = "Current Version: " + CurrentVersion
+	Current_Version = "Current Version: " + ColorHex95b806 + CurrentVersion + ColorReset
 	// Acknowledgment of the original author is appreciated as this project is developed in an open-source environment.
 	Copyright = "Copyright (©️) 2024 @H0llyW00dzZ All rights reserved."
+	TIP       = "* " + ColorHex95b806 + "Use the commands " + ColorReset +
+		ColorYellow + ShortHelpCommand + ColorYellow +
+		ColorHex95b806 + " or " + ColorReset + ColorYellow + HelpCommand + ColorReset +
+		ColorHex95b806 + " to display a list of available commands." + ColorReset
 )

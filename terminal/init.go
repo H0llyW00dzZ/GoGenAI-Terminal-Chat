@@ -131,6 +131,8 @@ func init() {
 		BLANK_,
 		BLANK_, // TODO: Implement a notification to be displayed here when a new version is available.
 		Current_Version,
+		TIP,
+		BLANK_,
 		Copyright,
 		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
 	}, BoldText+colors.ColorCyan24Bit)
