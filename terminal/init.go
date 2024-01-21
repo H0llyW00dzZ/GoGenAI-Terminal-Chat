@@ -136,7 +136,7 @@ func init() {
 	// Initialize the text style patterns for 'V'.
 	// Note: Although it may appear that patterns are duplicated, they are, in fact, distinct. This structure ensures scalability that powered by Go 🤪.
 	stripStyle.AddChar(V, []string{
-		eMpty,
+		eMpty, // this better unlike hardcoded "\n" lmao.
 		StripChars,
 		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
 	}, BoldText+colors.ColorCyan24Bit)
