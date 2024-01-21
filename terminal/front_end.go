@@ -30,7 +30,6 @@ func PrintPrefixWithTimeStamp(prefix string) {
 
 // printPromptFeedback formats and prints the prompt feedback received from the AI.
 func printPromptFeedback(feedback *genai.PromptFeedback) {
-	fmt.Print(StringNewLine)
 	if feedback == nil {
 		return
 	}
