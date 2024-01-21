@@ -12,6 +12,33 @@ import (
 	genai "github.com/google/generative-ai-go/genai"
 )
 
+// FilterLanguageFromCodeBlock searches for Markdown code block delimiters with a language identifier
+// (e.g., "```go") and removes the language identifier, leaving just the code block delimiters.
+// This function is useful when the language identifier is not required, such as when rendering
+// plain text or when the syntax highlighting is not supported.
+//
+// The function uses a precompiled regular expression `filterCodeBlock` that matches the pattern
+// of triple backticks followed by any word characters (representing the language identifier).
+// It replaces this pattern with just the triple backticks, effectively stripping the language
+// identifier from the code block.
+//
+// Parameters:
+//
+//	text (string): The input text containing Markdown code blocks with language identifiers.
+//
+// Returns:
+//
+//	string: The modified text with language identifiers removed from all code blocks.
+//
+// Example:
+//
+//	input := "Here is some Go code:\n```go\nfmt.Println(\"Hello, World!\")\n```"
+//	output := FilterLanguageFromCodeBlock(input)
+//	// output now contains "Here is some Go code:\n```\nfmt.Println(\"Hello, World!\")\n```"
+func FilterLanguageFromCodeBlock(text string) string {
+	return filterCodeBlock.ReplaceAllString(text, TripleBacktick)
+}
+
 // PrintPrefixWithTimeStamp prints a message to the terminal, prefixed with a formatted timestamp.
 // The timestamp is formatted according to the TimeFormat constant.
 //

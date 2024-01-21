@@ -71,6 +71,20 @@ var totalTokenCount int = 0
 // Note: Removing Struct now, this a `Go` not a `Rust`
 var ansiRegex *regexp.Regexp
 
+// filterCodeBlock is a compiled regular expression that is used to identify and
+// remove language identifiers from Markdown code blocks. A Markdown code block is
+// typically indicated by triple backticks (```) followed by an optional language
+// identifier (e.g., ```go). This regular expression matches the pattern of triple
+// backticks followed by any sequence of word characters, which represents the
+// language identifier. It is used to transform code blocks to a neutral format
+// without language hints, which may be desirable for output that does not support
+// syntax highlighting or in scenarios where the language identifier is not needed.
+//
+// The regular expression is compiled once at package initialization for efficiency,
+// allowing it to be reused throughout the application without the overhead of
+// recompiling it with each use.
+var filterCodeBlock *regexp.Regexp
+
 var tripleBacktickColor string
 
 // scalable safetyOptions maps safety level strings to their corresponding setter functions and validity.
@@ -99,6 +113,7 @@ func init() {
 	logger = NewDebugOrErrorLogger()
 	// Compile the ANSI color code regular expression pattern.
 	ansiRegex = regexp.MustCompile(BinaryRegexAnsi)
+	filterCodeBlock = regexp.MustCompile(CodeBlockRegex)
 
 	// Initialize the command registry.
 	// Note: This NewCommandRegistry offers excellent scalability. For Example: You can easily add numerous commands without impacting

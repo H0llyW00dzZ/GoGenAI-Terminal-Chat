@@ -172,6 +172,7 @@ const (
 	BinaryAnsiSquenseChar   = 'm'
 	BinaryAnsiSquenseString = "m"
 	BinaryRegexAnsi         = `\x1b\[[0-9;]*m`
+	CodeBlockRegex          = "```\\w+"
 )
 
 // Defined List of Environment variables
