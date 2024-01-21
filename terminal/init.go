@@ -89,7 +89,7 @@ var safetyOptions = map[string]SafetyOption{
 	},
 }
 
-// scalable a global variable for the ASCII slant style.
+// scalable a global variable for the ASCII style.
 var slantStyle = NewASCIIArtStyle()
 var stripStyle = NewASCIIArtStyle()
 
