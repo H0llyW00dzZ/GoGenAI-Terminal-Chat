@@ -42,7 +42,7 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 		PrintTypingChat(promptFeedback, TypingDelay)
 	}
 	// fix front end lmao
-	printAnotherVisualSeparator()
+	printVisualSeparator()
 }
 
 // printTokenCount prints the number of tokens used in the AI's response, including the chat history.
@@ -90,12 +90,9 @@ func updateAndPrintTotalTokenCount(tokenCount int) {
 
 // printVisualSeparator prints a visual separator to the standard output.
 func printVisualSeparator() {
-	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
-}
-
-// printAnotherVisualSeparator prints a visual separator to the standard output.
-func printAnotherVisualSeparator() {
-	fmt.Println(colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+	text := "V"
+	asciiArt, _ := ToASCIIArt(text, stripStyle)
+	fmt.Println(asciiArt)
 }
 
 // removeAIPrefix checks for and removes the AI prefix if it's present in the response.
