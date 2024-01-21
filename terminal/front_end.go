@@ -30,14 +30,20 @@ func PrintPrefixWithTimeStamp(prefix string) {
 
 // printPromptFeedback formats and prints the prompt feedback received from the AI.
 func printPromptFeedback(feedback *genai.PromptFeedback) {
+	text := "N" // this better new line instead of "\n" for front end hahaha
+	asciiArt, _ := ToASCIIArt(text, newLine)
+	fmt.Println(asciiArt)
 	if feedback == nil {
 		return
 	}
 	// Iterate over safety ratings and print them.
-	for _, rating := range feedback.SafetyRatings {
+	for i, rating := range feedback.SafetyRatings {
 		safetyPrefix := ShieldEmoji
 		PrintPrefixWithTimeStamp(safetyPrefix)
 		promptFeedback := fmt.Sprintf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+		if i < len(feedback.SafetyRatings)-1 {
+			promptFeedback += StringNewLine
+		}
 		PrintTypingChat(promptFeedback, TypingDelay)
 	}
 	// fix front end lmao

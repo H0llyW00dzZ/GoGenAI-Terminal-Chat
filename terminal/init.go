@@ -92,6 +92,7 @@ var safetyOptions = map[string]SafetyOption{
 // scalable a global variable for the ASCII style.
 var slantStyle = NewASCIIArtStyle()
 var stripStyle = NewASCIIArtStyle()
+var newLine = NewASCIIArtStyle()
 
 func init() {
 	// Initialize the logger when the package is imported.
@@ -140,4 +141,7 @@ func init() {
 		StripChars,
 		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
 	}, BoldText+colors.ColorCyan24Bit)
+	newLine.AddChar(N, []string{
+		eMpty, // this better unlike hardcoded "\n" lmao.
+	}, colors.ColorReset)
 }
