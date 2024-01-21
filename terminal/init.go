@@ -89,8 +89,10 @@ var safetyOptions = map[string]SafetyOption{
 	},
 }
 
-// scalable a global variable for the ASCII slant style.
+// scalable a global variable for the ASCII style.
 var slantStyle = NewASCIIArtStyle()
+var stripStyle = NewASCIIArtStyle()
+var newLine = NewASCIIArtStyle()
 
 func init() {
 	// Initialize the logger when the package is imported.
@@ -132,4 +134,14 @@ func init() {
 		Copyright,
 		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
 	}, BoldText+colors.ColorCyan24Bit)
+	// Initialize the text style patterns for 'V'.
+	// Note: Although it may appear that patterns are duplicated, they are, in fact, distinct. This structure ensures scalability that powered by Go 🤪.
+	stripStyle.AddChar(V, []string{
+		eMpty, // this better unlike hardcoded "\n" lmao.
+		StripChars,
+		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
+	}, BoldText+colors.ColorCyan24Bit)
+	newLine.AddChar(N, []string{
+		eMpty, // this better unlike hardcoded "\n" lmao.
+	}, colors.ColorReset)
 }

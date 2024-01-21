@@ -187,7 +187,7 @@ const (
 		ColorHex95b806 + "%#v" + ColorReset
 	SHOW_PROMPT_FEEDBACK = "SHOW_PROMPT_FEEDBACK"
 	PROMPTFEEDBACK       = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
-		ColorHex95b806 + "%s\n" + ColorReset
+		ColorHex95b806 + "%s" + ColorReset
 	SHOW_TOKEN_COUNT = "SHOW_TOKEN_COUNT"
 	TokenCount       = ColorHex95b806 + "%d" + ColorReset + " tokens\n"
 	TotalTokenCount  = "usage of this Session " + ColorHex95b806 + "%d" + ColorReset + " tokens"
@@ -218,6 +218,7 @@ const (
 	// NOTE: ' is rune not a string
 	G = 'G'
 	V = 'V'
+	N = 'N'
 	// ASCII slant font
 	_G   = "   ______      ______           ___    ____  "
 	_O   = "  / ____/___  / ____/__  ____  /   |  /  _/  "
@@ -226,6 +227,7 @@ const (
 	I_   = "\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     "
 	// Blank Art
 	BLANK_ = "                                      "
+	eMpty  = ""
 )
 
 // Text

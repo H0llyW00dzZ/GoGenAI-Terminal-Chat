@@ -157,3 +157,10 @@ var AsciiColors = map[rune]string{
 	G: BoldText + colors.ColorHex95b806,
 	V: BoldText + colors.ColorCyan24Bit,
 }
+
+// PrintAnotherVisualSeparator prints a visual separator to the standard output.
+//
+// Deprecated: This method is no longer used, and was replaced by NewASCIIArtStyle().
+func PrintAnotherVisualSeparator() {
+	fmt.Println(colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+}

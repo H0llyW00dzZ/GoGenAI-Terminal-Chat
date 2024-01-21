@@ -30,19 +30,24 @@ func PrintPrefixWithTimeStamp(prefix string) {
 
 // printPromptFeedback formats and prints the prompt feedback received from the AI.
 func printPromptFeedback(feedback *genai.PromptFeedback) {
-	fmt.Print(StringNewLine)
+	text := "N" // this better new line instead of "\n" for front end hahaha
+	asciiArt, _ := ToASCIIArt(text, newLine)
+	fmt.Println(asciiArt)
 	if feedback == nil {
 		return
 	}
 	// Iterate over safety ratings and print them.
-	for _, rating := range feedback.SafetyRatings {
+	for i, rating := range feedback.SafetyRatings {
 		safetyPrefix := ShieldEmoji
 		PrintPrefixWithTimeStamp(safetyPrefix)
 		promptFeedback := fmt.Sprintf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
+		if i < len(feedback.SafetyRatings)-1 {
+			promptFeedback += StringNewLine
+		}
 		PrintTypingChat(promptFeedback, TypingDelay)
 	}
 	// fix front end lmao
-	printAnotherVisualSeparator()
+	printVisualSeparator()
 }
 
 // printTokenCount prints the number of tokens used in the AI's response, including the chat history.
@@ -90,12 +95,9 @@ func updateAndPrintTotalTokenCount(tokenCount int) {
 
 // printVisualSeparator prints a visual separator to the standard output.
 func printVisualSeparator() {
-	fmt.Println(StringNewLine + colors.ColorCyan24Bit + StripChars + colors.ColorReset)
-}
-
-// printAnotherVisualSeparator prints a visual separator to the standard output.
-func printAnotherVisualSeparator() {
-	fmt.Println(colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+	text := "V"
+	asciiArt, _ := ToASCIIArt(text, stripStyle)
+	fmt.Println(asciiArt)
 }
 
 // removeAIPrefix checks for and removes the AI prefix if it's present in the response.
