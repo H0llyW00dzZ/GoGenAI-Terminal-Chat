@@ -302,6 +302,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 ### Back-End:
 - [ ] **Any unimplemented**
 - [ ] **Spawn Another Go Routines**
+- [ ] **Pinned Each Messages Messages for ContextPrompt but are simpler.**
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](SECURITY.md)
