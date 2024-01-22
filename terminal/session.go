@@ -51,7 +51,6 @@ func NewSession(apiKey string) *Session {
 	if err != nil {
 		cancel()
 		logger.Error(ErrorFailedToCreateNewAiClient, err)
-		logger.HandleGoogleAPIError(err)
 		return nil
 	}
 
