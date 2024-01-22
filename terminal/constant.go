@@ -169,6 +169,7 @@ const (
 	DoubleAsterisk          = "**"
 	SingleBacktick          = "`"
 	TripleBacktick          = "```"
+	SingleUnderscore        = "_"
 	StringNewLine           = "\n"
 	BinaryAnsiChar          = '\x1b'
 	BinaryLeftSquareBracket = '['

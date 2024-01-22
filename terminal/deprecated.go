@@ -77,7 +77,7 @@ func PrintANSISequence(runes []rune, index int) int {
 // It used to be used for formatting text.
 func ApplyBold(text string, delimiter string, color string) string {
 	if delimiter == DoubleAsterisk {
-		return color + BoldText + text + ResetText + ColorReset
+		return color + BoldText + text + ResetBoldText + ColorReset
 	}
 	return color + text + ColorReset
 }
