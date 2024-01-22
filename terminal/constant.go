@@ -183,13 +183,14 @@ const (
 const (
 	DEBUG_MODE  = "DEBUG_MODE"
 	DEBUGPREFIX = "🔎 DEBUG:"
-	// Note: Currently only executing CMD, will add more later
+	// Note: Currently only executing CMD,RetryPolicy, will add more later
 	DEBUGEXECUTINGCMD = "Executing " +
 		// Better Readability use Custom HEX color
 		ColorHex95b806 + "%s" + ColorReset +
 		" command with parts: " +
 		// Better Readability use Custom HEX color
 		ColorHex95b806 + "%#v" + ColorReset
+	DEBUGRETRYPOLICY     = "Retry Policy Attempt %d: error occurred - %v"
 	SHOW_PROMPT_FEEDBACK = "SHOW_PROMPT_FEEDBACK"
 	PROMPTFEEDBACK       = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
 		ColorHex95b806 + "%s" + ColorReset
