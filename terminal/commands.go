@@ -273,44 +273,6 @@ func (c *handleCheckVersionCommand) checkVersionAndGetPrompt() (aiPrompt string,
 	return aiPrompt, nil
 }
 
-// checkLatestVersionWithBackoff wraps the CheckLatestVersion call with retry logic.
-func checkLatestVersionWithBackoff() (isLatest bool, latestVersion string, err error) {
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		isLatest, latestVersion, err = CheckLatestVersion(CurrentVersion)
-		return err == nil, err
-	})
-
-	if err != nil || !success {
-		return false, "", err
-	}
-
-	return isLatest, latestVersion, nil
-}
-
-// fetchAndFormatReleaseInfo retrieves and formats the release information.
-func fetchAndFormatReleaseInfo(latestVersion string) (aiPrompt string, err error) {
-	var releaseInfo *GitHubRelease
-
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		releaseInfo, err = GetFullReleaseInfo(latestVersion)
-		return err == nil, err
-	})
-
-	if err != nil || !success {
-		return "", err
-	}
-
-	aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
-		VersionCommand,
-		CurrentVersion,
-		ApplicationName,
-		releaseInfo.TagName,
-		releaseInfo.Name,
-		releaseInfo.Body)
-
-	return aiPrompt, nil
-}
-
 // Execute performs the ping operation on the provided IP address.
 // It uses system utilities to send ICMP packets to the IP and returns the result.
 //
