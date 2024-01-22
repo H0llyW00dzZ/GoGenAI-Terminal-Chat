@@ -241,10 +241,18 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	}
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
-	_, err = SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
+	// Wrap the SendMessage call within retryWithExponentialBackoff
+	_, err = retryWithExponentialBackoff(func() (bool, error) {
+		_, err := SendMessage(session.Ctx, session.Client, chatHistory, sanitizedMessage)
+		if err != nil {
+			return false, err
+		}
+
+		return true, nil
+	})
+
 	if err != nil {
-		logger.Error(ErrorFailedTosendmessagesToAI, err)
-		logger.HandleGoogleAPIError(err)
+		logger.Error(ErrorSendingMessage, err)
 		return false, err
 	}
 	// Indicate that the command was handled; return false to continue the session.
