@@ -6,6 +6,7 @@ package terminal
 import (
 	"fmt"
 	"log"
+	"strings"
 )
 
 // PrintHistory outputs all messages in the chat history to the standard output,
@@ -163,4 +164,18 @@ var AsciiColors = map[rune]string{
 // Deprecated: This method is no longer used, and was replaced by NewASCIIArtStyle().
 func PrintAnotherVisualSeparator() {
 	fmt.Println(colors.ColorCyan24Bit + StripChars + colors.ColorReset)
+}
+
+// ReplaceTripleBackticks replaces all occurrences of triple backticks with a placeholder.
+//
+// Deprecated: This method is no longer used, and was replaced by Colorize().
+func ReplaceTripleBackticks(text, placeholder string) string {
+	for {
+		index := strings.Index(text, TripleBacktick)
+		if index == -1 {
+			break
+		}
+		text = strings.Replace(text, TripleBacktick, placeholder, 1)
+	}
+	return text
 }
