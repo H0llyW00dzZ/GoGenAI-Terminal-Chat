@@ -66,37 +66,80 @@ const (
 // support for ANSI color codes. It is designed for terminals that support ANSI, such as those
 // in Linux/Unix environments.
 func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool, formatting map[string]string) string {
-	tripleBacktickPlaceholder := ObjectTripleHighLevelString
-	text = replaceTripleBackticks(text, tripleBacktickPlaceholder)
+	// Replace actual triple backticks with the placeholder
+	text = strings.ReplaceAll(text, TripleBacktick, ObjectTripleHighLevelString)
 
+	var result strings.Builder
+	result.Grow(len(text) * 2) // Preallocate with an estimated size
+
+	// Process each color pair separately
 	for i := 0; i < len(colorPairs); i += 2 {
 		delimiter := colorPairs[i]
 		color := colorPairs[i+1]
+		text = applyColorToDelimitedText(text, delimiter, color, keepDelimiters, formatting)
 		if delimiter == TripleBacktick {
 			tripleBacktickColor = color
 		}
 		text = processDelimiters(text, delimiter, color, keepDelimiters, formatting)
 	}
+	result.WriteString(text)
+	processedText := result.String()
 
-	if tripleBacktickColor != "" {
-		// Append the ResetColor after the colorizedTripleBacktick to reset color formatting
-		colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + colors.ColorReset
-		text = strings.Replace(text, tripleBacktickPlaceholder, colorizedTripleBacktick, -1)
-	}
+	// Replace the placeholder with the colorized triple backtick sequence
+	colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + ColorReset
+	processedText = strings.ReplaceAll(processedText, ObjectTripleHighLevelString, colorizedTripleBacktick)
 
-	return text
+	return processedText
 }
 
-// replaceTripleBackticks replaces all occurrences of triple backticks with a placeholder.
-func replaceTripleBackticks(text, placeholder string) string {
-	for {
-		index := strings.Index(text, TripleBacktick)
-		if index == -1 {
-			break
-		}
-		text = strings.Replace(text, TripleBacktick, placeholder, 1)
+// applyColorToDelimitedText applies the specified color to delimited sections of the given text.
+func applyColorToDelimitedText(text, delimiter, color string, keepDelimiters map[string]bool, formatting map[string]string) string {
+	var result strings.Builder
+	parts := strings.Split(text, delimiter)
+	partsLen := len(parts) // Get the length of parts once and pass it to processPart
+
+	// Process parts with a consistent pattern to avoid complex conditionals
+	for i, part := range parts {
+		processPart(&result, i, partsLen, part, delimiter, color, keepDelimiters, formatting)
 	}
-	return text
+	return result.String()
+}
+
+// processPart processes an individual part of the text, applying color if necessary.
+func processPart(result *strings.Builder, index, partsLen int, part, delimiter, color string, keepDelimiters map[string]bool, formatting map[string]string) {
+	if index%2 == 0 { // Even index, regular text
+		result.WriteString(part)
+	} else { // Odd index, colorized text
+		colorizePart(result, part, delimiter, color, formatting)
+	}
+	appendDelimiterIfNeeded(result, index, partsLen, delimiter, keepDelimiters)
+}
+
+// colorizePart applies color and formatting to a part of the text.
+func colorizePart(result *strings.Builder, part, delimiter, color string, formatting map[string]string) {
+	format, hasFormat := formatting[delimiter]
+	if hasFormat {
+		result.WriteString(format)
+	}
+	result.WriteString(color)
+	result.WriteString(part)
+	result.WriteString(ColorReset)
+	if hasFormat {
+		result.WriteString(ResetText)
+	}
+}
+
+// appendDelimiterIfNeeded appends the delimiter to the result if the conditions are met.
+func appendDelimiterIfNeeded(result *strings.Builder, index, partsLen int, delimiter string, keepDelimiters map[string]bool) {
+	if shouldKeepDelimiter(delimiter, keepDelimiters) && index < partsLen-1 {
+		result.WriteString(delimiter)
+	}
+}
+
+// shouldKeepDelimiter checks if a delimiter should be kept in the final result.
+func shouldKeepDelimiter(delimiter string, keepDelimiters map[string]bool) bool {
+	keep, exists := keepDelimiters[delimiter]
+	return exists && keep
 }
 
 // ApplyFormatting applies text formatting based on the provided delimiter.
