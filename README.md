@@ -161,6 +161,10 @@ Environment variables are key-value pairs that can affect the behavior of your a
 
 ### 🤖 Better LLM's:
 <p align="center">
+  <img src="https://i.imgur.com/2URKO1K.png" alt="terminal" />
+</p>
+
+<p align="center">
   <img src="https://i.imgur.com/ge884rb.png" alt="terminal" />
 </p>
 
