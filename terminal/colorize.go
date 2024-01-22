@@ -43,8 +43,12 @@ const (
 const (
 	// bold text.
 	BoldText = "\x1b[1m"
-	// reset text formatting.
-	ResetText = "\x1b[22m"
+	// reset bold text formatting.
+	ResetBoldText = "\x1b[22m"
+	// italic text
+	ItalicText = "\x1B[3m"
+	// reset italic text formatting.
+	ResetItalicText = "\x1B[23m"
 )
 
 // Colorize applies ANSI color codes to the text surrounded by specified delimiters.
@@ -118,15 +122,20 @@ func processPart(result *strings.Builder, index, partsLen int, part, delimiter, 
 
 // colorizePart applies color and formatting to a part of the text.
 func colorizePart(result *strings.Builder, part, delimiter, color string, formatting map[string]string) {
-	format, hasFormat := formatting[delimiter]
-	if hasFormat {
+	// Apply any formatting (bold, italic, etc.) before the color
+	if format, hasFormat := formatting[delimiter]; hasFormat {
 		result.WriteString(format)
 	}
+	// Apply the color
 	result.WriteString(color)
+	// Append the actual text
 	result.WriteString(part)
+	// Reset the color first
 	result.WriteString(ColorReset)
-	if hasFormat {
-		result.WriteString(ResetText)
+	// Reset any formatting (bold, italic, etc.) if it was applied
+	if _, hasFormat := formatting[delimiter]; hasFormat {
+		result.WriteString(ResetBoldText)
+		result.WriteString(ResetItalicText)
 	}
 }
 
@@ -158,7 +167,7 @@ func shouldKeepDelimiter(delimiter string, keepDelimiters map[string]bool) bool 
 //	string: The formatted text.
 func ApplyFormatting(text string, delimiter string, color string, formatting map[string]string) string {
 	if formatCode, ok := formatting[delimiter]; ok {
-		return color + formatCode + text + ResetText + ColorReset
+		return color + formatCode + text + ResetBoldText + ResetItalicText + ColorReset
 	}
 	return color + text + ColorReset
 }
