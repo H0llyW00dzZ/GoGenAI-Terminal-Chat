@@ -119,10 +119,10 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 //
 // Returns:
 //
-//	bool: Indicates whether the error is a server error (5xx).
+//	bool: Indicates whether the error is a server error (500).
 func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) bool {
 	if err != nil {
-		// Check if the error message contains a 5xx status code.
+		// Check if the error message contains a 500 status code.
 		if strings.Contains(err.Error(), Error500GoogleApi) {
 			// Log the Google Internal Error with the error message
 			l.Error(ErrorGoogleInternal, err)
