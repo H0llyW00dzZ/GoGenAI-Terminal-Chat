@@ -56,11 +56,14 @@ func NewSession(apiKey string) *Session {
 	}
 
 	// Perform a simple request to validate the API key.
-	valid, err := SendDummyMessage(client)
+	valid, err := retryWithExponentialBackoff(func() (bool, error) {
+		return SendDummyMessage(client)
+	})
+
+	// Handle the result of retryWithExponentialBackoff
 	if err != nil || !valid {
 		cancel()
 		logger.Error(ErrorInvalidApiKey, err)
-		logger.HandleGoogleAPIError(err)
 		return nil
 	}
 	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
@@ -175,7 +178,6 @@ func (s *Session) processInput() bool {
 	userInput, err := bufio.NewReader(os.Stdin).ReadString(byte(nl.NewLineChars))
 	if err != nil {
 		logger.Error(ErrorReadingUserInput, err)
-		logger.HandleGoogleAPIError(err)
 		return false // Continue the loop, hoping for a successful read next time
 	}
 
@@ -192,35 +194,53 @@ func (s *Session) processInput() bool {
 // accordingly. Otherwise, the input is sent to the AI for a response. It returns true
 // if the session should end.
 func (s *Session) handleUserInput(input string) bool {
-	// Check if the session is still valid
-	if s.Client == nil {
-		// Attempt to renew the session
-		if err := s.RenewSession(apiKey); err != nil {
-			// Handle the error, possibly by logging and returning true to signal the session should end
-			logger.Error(ErrorFailedToRenewSession, err)
-			logger.HandleGoogleAPIError(err)
-			return true // Signal to end the session
-		}
+	if !s.ensureClientIsValid() {
+		return true // End the session if the client is not valid
 	}
 
-	// Add the user's input to the chat history
-	s.ChatHistory.AddMessage(YouNerd, input)
+	s.ChatHistory.AddMessage(YouNerd, input) // Add the user's input to the chat history
 
-	// Get the entire chat history as a string
-	chatHistory := s.ChatHistory.GetHistory()
-
-	// Pass Better LLm's Send the user input along with the chat history to the AI
-	// Note: This not using json struct of candidate (e.g, User and model in json struct), lmao but it more better.
-	aiResponse, err := SendMessage(s.Ctx, s.Client, input, chatHistory)
-	if err != nil {
-		logger.Error(ErrorSendingMessage, err)
-		logger.HandleGoogleAPIError(err)
-		return true // End the session if there's an error sending the message
+	if success := s.sendInputToAI(input); !success {
+		return true // End the session if sending input to AI failed
 	}
 
-	// Add the AI's response to the chat history
-	s.ChatHistory.AddMessage(AiNerd, aiResponse)
 	return false // Continue the session
+}
+
+// ensureClientIsValid checks the validity of the current client and renews it if necessary.
+// It returns true if the client is valid or has been successfully renewed, otherwise false.
+func (s *Session) ensureClientIsValid() bool {
+	if s.Client != nil {
+		return true // Client is valid, no action needed
+	}
+	// Attempt to renew the session if the client is not initialized.
+	if err := s.RenewSession(apiKey); err != nil {
+		logger.Error(ErrorFailedToRenewSession, err)
+		return false // Client is not valid and renewal failed
+	}
+	return true // Client was successfully renewed
+}
+
+// sendInputToAI sends the user input to the AI and updates the chat history with the AI's response.
+// It returns true if the input was successfully sent and the response was received, otherwise false.
+func (s *Session) sendInputToAI(input string) bool {
+	chatHistory := s.ChatHistory.GetHistory() // Get the entire chat history as a string
+	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
+	success, err := retryWithExponentialBackoff(func() (bool, error) {
+		aiResponse, err := SendMessage(s.Ctx, s.Client, input, chatHistory)
+		if err != nil {
+			return false, err
+		}
+		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add the AI's response to the chat history
+		return true, nil
+	})
+
+	if err != nil || !success {
+		logger.Error(ErrorSendingMessage, err)
+		return false // Sending input to AI failed
+	}
+
+	return true // Input was successfully sent to AI
 }
 
 // cleanup releases resources used by the session. It cancels the context and closes

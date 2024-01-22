@@ -145,9 +145,12 @@ const (
 	ErrorUnknownSafetyLevel                   = "Unknown safety level: %s"
 	ErrorInvalidApiKey                        = "Invalid API key: %v"
 	ErrorLowLevelNoResponse                   = "no response from AI service"
-	// List Error not because of this go codes, it literally google issue
-	Error500GoogleApi   = "googleapi: Error 500:"
-	ErrorGoogleInternal = "Google Internal Error: %s"
+	ErrorLowLevelMaximumRetries               = "exceeded maximum retries" // low level
+	// List Error not because of this go codes, it literally google apis issue
+	// that so bad can't handle this a powerful terminal
+	Error500GoogleApi                                           = "googleapi: Error 500:"
+	ErrorGoogleInternal                                         = "Google Internal Error: %s"
+	ErrorFailedToSendMessagesAfterRetryingonInternalServerError = "Failed to send message after retrying on internal server error: %v"
 	// List Error Figlet include high and low level error
 	ErrorStyleIsEmpty             = "style is empty"                   // low level
 	ErrorCharacterNotFoundinStyle = "character %q not found in style"  // low level
