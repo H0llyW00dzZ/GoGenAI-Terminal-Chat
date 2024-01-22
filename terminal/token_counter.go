@@ -5,6 +5,7 @@ package terminal
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/generative-ai-go/genai"
 	"google.golang.org/api/option"
@@ -30,20 +31,33 @@ import (
 // returning. It is designed to be a self-contained operation that does not require
 // the caller to manage the lifecycle of the generative AI client.
 func CountTokens(apiKey, input string) (int, error) {
-	ctx := context.Background()
-	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+	var tokenCount int
+	retryFunc := func() (bool, error) {
+		ctx := context.Background()
+		client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+		if err != nil {
+			return false, err
+		}
+		defer client.Close()
+
+		model := client.GenerativeModel(ModelAi)
+		resp, err := model.CountTokens(ctx, genai.Text(input))
+		if err != nil {
+			return false, err
+		}
+
+		tokenCount = int(resp.TotalTokens)
+		return true, nil
+	}
+
+	success, err := retryWithExponentialBackoff(retryFunc)
 	if err != nil {
 		return 0, err
 	}
-	defer client.Close()
-
-	model := client.GenerativeModel(ModelAi)
-
-	resp, err := model.CountTokens(ctx, genai.Text(input))
-	if err != nil {
-		return 0, err
+	if !success {
+		errMsg := fmt.Errorf(ErrorLowLevelFailedToCountTokensAfterRetries)
+		logger.Error(errMsg.Error()) // Log the error message
+		return 0, errMsg             // Return the error
 	}
-
-	// Convert int32 to int
-	return int(resp.TotalTokens), nil
+	return tokenCount, nil
 }
