@@ -86,6 +86,7 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool, 
 	processedText := result.String()
 
 	// Replace the placeholder with the colorized triple backtick sequence
+	// Note: This can refactor easily, for example changing color inside a triple backtick
 	colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + ColorReset
 	processedText = strings.ReplaceAll(processedText, ObjectTripleHighLevelString, colorizedTripleBacktick)
 
