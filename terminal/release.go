@@ -14,9 +14,10 @@ import (
 // It includes information such as the tag name, release name, and a description body,
 // typically containing the changelog or release notes.
 type GitHubRelease struct {
-	TagName string `json:"tag_name"` // The tag associated with the release, e.g., "v1.2.3"
-	Name    string `json:"name"`     // The official name of the release
-	Body    string `json:"body"`     // Detailed description or changelog for the release
+	TagName string `json:"tag_name"`     // The tag associated with the release, e.g., "v1.2.3"
+	Name    string `json:"name"`         // The official name of the release
+	Body    string `json:"body"`         // Detailed description or changelog for the release
+	Date    string `json:"published_at"` // Published Date
 }
 
 // CheckLatestVersion compares the current application version against the latest
@@ -123,12 +124,21 @@ func fetchAndFormatReleaseInfo(latestVersion string) (aiPrompt string, err error
 		return "", err
 	}
 
+	if releaseInfo != nil {
+		t, err := time.Parse(time.RFC3339, releaseInfo.Date)
+		if err != nil {
+			return "", err
+		}
+		releaseInfo.Date = t.Format(OtherTimeFormat)
+	}
+
 	aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
 		VersionCommand,
 		CurrentVersion,
 		ApplicationName,
 		releaseInfo.TagName,
 		releaseInfo.Name,
+		releaseInfo.Date,
 		releaseInfo.Body)
 
 	return aiPrompt, nil

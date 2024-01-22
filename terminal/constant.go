@@ -22,9 +22,10 @@ const (
 	ObjectTripleHighLevelString  = "%%%s%%" // Catch High level triple string
 	ObjectHighLevelContextString = "%s\n%s" // Catch High level context string
 	// TimeFormat is tailored for AI responses, providing a layout conducive to formatting chat transcripts.
-	TimeFormat   = "2006/01/02 15:04:05"
-	StripChars   = "---"
-	NewLineChars = '\n'
+	TimeFormat      = "2006/01/02 15:04:05"
+	OtherTimeFormat = "January 2, 2006 at 15:04:05"
+	StripChars      = "---"
+	NewLineChars    = '\n'
 	// this animated chars is magic, it used to show the user that the AI is typing just like human would type
 	AnimatedChars = "%c"
 	// this model is subject to changed in future
@@ -68,7 +69,7 @@ const (
 		"A newer version is available: **%s**\n" +
 		"Can you tell\n" +
 		"Release Name: **%s**\n" +
-		"%s" // Better Response for AI
+		"Published Date: **%s**\n\n%s" // Better Response for AI
 	// Quit Prompt commands
 	ContextPromptShutdown = "a user attempted an command: **%s** of **%s**\n" +
 		"Please provide a shutdown message as you are AI."
