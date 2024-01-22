@@ -236,10 +236,13 @@ func (s *Session) handleUserInput(input string) bool {
 	return false // Continue the session
 }
 
+// ensureClientIsValid checks the validity of the current client and renews it if necessary.
+// It returns true if the client is valid or has been successfully renewed, otherwise false.
 func (s *Session) ensureClientIsValid() bool {
 	if s.Client != nil {
 		return true // Client is valid, no action needed
 	}
+	// Attempt to renew the session if the client is not initialized.
 	if err := s.RenewSession(apiKey); err != nil {
 		logger.Error(ErrorFailedToRenewSession, err)
 		return false // Client is not valid and renewal failed
@@ -247,9 +250,11 @@ func (s *Session) ensureClientIsValid() bool {
 	return true // Client was successfully renewed
 }
 
+// sendInputToAI sends the user input to the AI and updates the chat history with the AI's response.
+// It returns true if the input was successfully sent and the response was received, otherwise false.
 func (s *Session) sendInputToAI(input string) bool {
 	chatHistory := s.ChatHistory.GetHistory() // Get the entire chat history as a string
-
+	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		aiResponse, err := SendMessage(s.Ctx, s.Client, input, chatHistory)
 		if err != nil {
