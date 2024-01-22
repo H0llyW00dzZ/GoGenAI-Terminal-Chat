@@ -9,10 +9,11 @@ import (
 	"time"
 )
 
-// RetrypolicyFunc is a type that represents a function that can be retried.
+// RetryableFunc is a type that represents a function that can be retried.
 type RetryableFunc func() (bool, error)
 
 // retryWithExponentialBackoff attempts to execute a RetryableFunc with a retry policy.
+// It applies exponential backoff between retries and logs an error if the maximum number of retries is reached.
 func retryWithExponentialBackoff(retryFunc RetryableFunc) (bool, error) {
 	const maxRetries = 3
 	baseDelay := time.Second
@@ -29,9 +30,13 @@ func retryWithExponentialBackoff(retryFunc RetryableFunc) (bool, error) {
 			continue // Retry the request
 		} else {
 			// Non-retryable error or max retries exceeded
+			logger.Error(ErrorFailedToSendMessagesAfterRetryingonInternalServerError, err)
 			return false, err
 		}
 	}
 
-	return false, fmt.Errorf(ErrorLowLevelMaximumRetries)
+	// If this point is reached, retries have been exhausted without success.
+	err := fmt.Errorf(ErrorLowLevelMaximumRetries)
+	logger.Error(err.Error())
+	return false, err
 }
