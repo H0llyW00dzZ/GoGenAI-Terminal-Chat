@@ -110,19 +110,26 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 	}
 }
 
-// HandleGoogleAPIError checks for the Google API Error 500 and logs it.
+// HandleGoogleAPIError checks for Google API server errors and logs them.
+// If it's a server error, it returns true, indicating a retry might be warranted.
 //
 // Parameters:
 //
 //	err error: The error returned from a Google API call.
-func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) {
+//
+// Returns:
+//
+//	bool: Indicates whether the error is a server error (5xx).
+func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) bool {
 	if err != nil {
-		// Check if the error message contains "googleapi: Error 500:"
+		// Check if the error message contains a 5xx status code.
 		if strings.Contains(err.Error(), Error500GoogleApi) {
 			// Log the Google Internal Error with the error message
 			l.Error(ErrorGoogleInternal, err)
+			return true // Indicate that this is a server error so bad hahaha
 		}
 	}
+	return false // Not a server error
 }
 
 // Info logs a formatted information message. It behaves like Println and allows for formatted messages.
