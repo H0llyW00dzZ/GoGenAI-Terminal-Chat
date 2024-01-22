@@ -98,34 +98,41 @@ func HandleCommand(input string, session *Session) (bool, error) {
 func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, QuitCommand, parts)
-	// Clear the chat history in ram's labyrinth, before sending the shutdown message to the AI
-	// Note: This only for passing the ContextPrompt.
-	session.ChatHistory.Clear()
-	// Pass ContextPrompt
-	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
+
+	// Add the context prompt to the chat history for the shutdown message
+	chatHistoryWithPrompt := chatHistory + StringNewLine + ContextPrompt
+
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(QuitCommand)
 
-	// Send a shutdown message to the AI including the chat history
-	// this method better instead of hardcode LOL
+	// Send a shutdown message to the AI including the chat history with the context prompt
 	aiPrompt := fmt.Sprintf(ContextPromptShutdown, sanitizedMessage, ApplicationName)
-	_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistory)
+
+	// Attempt to send the shutdown message to the AI
+	_, err := retryWithExponentialBackoff(func() (bool, error) {
+		_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistoryWithPrompt)
+		return err == nil, err
+	})
+
 	if err != nil {
 		// If there's an error sending the message, log it
 		logger.Error(ErrorGettingShutdownMessage, err)
-		logger.HandleGoogleAPIError(err)
 	}
 
 	// Proceed with shutdown
 	fmt.Println(ShutdownMessage)
 
+	// Clear the chat history now that the shutdown message has been sent
+	session.ChatHistory.Clear()
+
 	// End the session and perform cleanup
 	session.endSession()
 
 	// Signal to the main loop that it's time to exit
-	return true, nil // Return true to end the session.
+	return true, err // Always return true to end the session.
 }
 
 // Execute processes the ":help" command within a chat session. It constructs a help prompt
@@ -182,17 +189,19 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
-	// Get the entire chat history as a string.
-	chatHistory := session.ChatHistory.GetHistory()
+	// Send the help prompt to the AI within retryWithExponentialBackoff
+	_, err := retryWithExponentialBackoff(func() (bool, error) {
+		_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
+		return err == nil, err
+	})
 
-	// Send the constructed message to the AI and get the response.
-	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
-		logger.HandleGoogleAPIError(err)
+		// Return false to indicate the session should continue, but there was an error.
 		return false, err
 	}
-	// Indicate that the command was handled; return false to continue the session.
+
+	// Indicate that the command was handled successfully; return false to continue the session.
 	return false, nil
 }
 
@@ -245,7 +254,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 // checkVersionAndGetPrompt checks if the current version of the software is the latest and informs the user accordingly.
 func (c *handleCheckVersionCommand) checkVersionAndGetPrompt() (aiPrompt string, err error) {
 	// Check if the current version is the latest.
-	isLatest, latestVersion, err := CheckLatestVersion(CurrentVersion)
+	isLatest, latestVersion, err := checkLatestVersionWithBackoff()
 	if err != nil {
 		return "", err
 	}
@@ -253,20 +262,14 @@ func (c *handleCheckVersionCommand) checkVersionAndGetPrompt() (aiPrompt string,
 	if isLatest {
 		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, CurrentVersion, ApplicationName)
 	} else {
-		// Fetch the release information for the latest version.
-		releaseInfo, err := GetFullReleaseInfo(latestVersion)
+		// Fetch and format the release information for the latest version.
+		aiPrompt, err = fetchAndFormatReleaseInfo(latestVersion)
 		if err != nil {
 			return "", err
 		}
-		aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
-			VersionCommand,
-			CurrentVersion,
-			ApplicationName,
-			releaseInfo.TagName,
-			releaseInfo.Name,
-			releaseInfo.Body)
 	}
-	// return the prompt to the caller
+
+	// Return the prompt to the caller.
 	return aiPrompt, nil
 }
 
@@ -368,6 +371,7 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, AITranslateCommand, parts)
+
 	// Find the index of the language flag ":lang" to separate text and target language.
 	languageFlagIndex := len(parts) - 2
 	textToTranslate := strings.Join(parts[1:languageFlagIndex], " ")
@@ -382,16 +386,26 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
-	// Send the constructed message to the AI and get the response.
-	aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
+
+	// Wrap the SendMessage call within retryWithExponentialBackoff
+	_, err := retryWithExponentialBackoff(func() (bool, error) {
+		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
+		if err != nil {
+			return false, err
+		}
+		// Add a message to the chat history in RAM's labyrinth indicating the translation command was invoked
+		translationCommandMessage := fmt.Sprintf(ContextUserInvokeTranslateCommands, targetLanguage, textToTranslate)
+		session.ChatHistory.AddMessage(YouNerd, translationCommandMessage)
+		// Add the AI's response to the chat history
+		session.ChatHistory.AddMessage(AiNerd, aiResponse)
+		return true, nil
+	})
+
 	if err != nil {
 		logger.Error(ErrorSendingMessage, err)
-		logger.HandleGoogleAPIError(err)
 		return false, err
 	}
-
-	// Add the AI's response to the chat history
-	session.ChatHistory.AddMessage(AiNerd, aiResponse)
+	// Indicate that the command was handled; return false to continue the session.
 	return false, nil
 }
 

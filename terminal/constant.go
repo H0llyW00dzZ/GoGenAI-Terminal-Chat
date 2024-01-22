@@ -247,3 +247,8 @@ const (
 		BoldText + ColorHex95b806 + " or " + ColorReset + BoldText + ColorYellow + HelpCommand + ColorReset +
 		BoldText + ColorHex95b806 + " to display a list of available commands." + ColorReset
 )
+
+// Context RAM's labyrinth
+const (
+	ContextUserInvokeTranslateCommands = "Translating to %s: %s"
+)
