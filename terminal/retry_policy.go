@@ -23,7 +23,9 @@ func retryWithExponentialBackoff(retryFunc RetryableFunc) (bool, error) {
 		if err == nil {
 			return success, nil
 		}
-
+		// log debug
+		logger.Debug(fmt.Sprintf(DEBUGRETRYPOLICY, attempt+1, err))
+		// Log the error and the attempt number if debug mode is enabled.
 		if logger.HandleGoogleAPIError(err) {
 			delay := baseDelay * time.Duration(math.Pow(2, float64(attempt)))
 			time.Sleep(delay)
