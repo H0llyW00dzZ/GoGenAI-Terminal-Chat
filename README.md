@@ -168,6 +168,14 @@ Environment variables are key-value pairs that can affect the behavior of your a
 </p>
 
 <p align="center">
+  <img src="https://i.imgur.com/V4yV3kJ.png" alt="terminal" />
+</p>
+
+<p align="center">
+  <img src="https://i.imgur.com/N4sNfvL.png" alt="terminal" />
+</p>
+
+<p align="center">
   <img src="https://i.imgur.com/ge884rb.png" alt="terminal" />
 </p>
 
