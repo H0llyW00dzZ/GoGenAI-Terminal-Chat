@@ -129,6 +129,7 @@ func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) bool {
 			return true // Indicate that this is a server error so bad hahaha
 		}
 	}
+	// TODO: adding more 500 status code not only google apis
 	return false // Not a server error
 }
 
