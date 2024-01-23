@@ -120,12 +120,28 @@ func checkLatestVersionWithBackoff() (isLatest bool, latestVersion string, err e
 
 // fetchAndFormatReleaseInfo retrieves and formats the release information.
 func fetchAndFormatReleaseInfo(latestVersion string) (aiPrompt string, err error) {
-	var releaseInfo *GitHubRelease
+	releaseInfo, err := fetchReleaseWithBackoff(latestVersion)
+	if err != nil {
+		return "", err
+	}
 
-	// Define an error handler for non-specific API errors
-	apiErrorHandler := func(err error) bool {
-		// Retry on 500 status code
-		return strings.Contains(err.Error(), Code500)
+	formattedDate, err := formatReleaseDate(releaseInfo.Date)
+	if err != nil {
+		return "", err
+	}
+	releaseInfo.Date = formattedDate
+
+	aiPrompt = formatReleasePrompt(releaseInfo)
+	return aiPrompt, nil
+}
+
+// fetchReleaseWithBackoff tries to fetch the release information with exponential backoff.
+func fetchReleaseWithBackoff(latestVersion string) (*GitHubRelease, error) {
+	var releaseInfo *GitHubRelease
+	var err error // Declare err variable to use it in the function scope
+
+	apiErrorHandler := func(e error) bool {
+		return strings.Contains(e.Error(), Code500)
 	}
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
@@ -134,18 +150,24 @@ func fetchAndFormatReleaseInfo(latestVersion string) (aiPrompt string, err error
 	}, apiErrorHandler)
 
 	if err != nil || !success {
+		return nil, err
+	}
+
+	return releaseInfo, nil
+}
+
+// formatReleaseDate takes a date string and returns it in the desired format.
+func formatReleaseDate(dateStr string) (string, error) {
+	t, err := time.Parse(time.RFC3339, dateStr)
+	if err != nil {
 		return "", err
 	}
+	return t.Format(OtherTimeFormat), nil
+}
 
-	if releaseInfo != nil {
-		t, err := time.Parse(time.RFC3339, releaseInfo.Date)
-		if err != nil {
-			return "", err
-		}
-		releaseInfo.Date = t.Format(OtherTimeFormat)
-	}
-
-	aiPrompt = fmt.Sprintf(ReleaseNotesPrompt,
+// formatReleasePrompt formats the release information into a prompt.
+func formatReleasePrompt(releaseInfo *GitHubRelease) string {
+	return fmt.Sprintf(ReleaseNotesPrompt,
 		VersionCommand,
 		CurrentVersion,
 		ApplicationName,
@@ -154,5 +176,4 @@ func fetchAndFormatReleaseInfo(latestVersion string) (aiPrompt string, err error
 		releaseInfo.Date,
 		releaseInfo.Body)
 
-	return aiPrompt, nil
 }
