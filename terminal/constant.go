@@ -122,7 +122,7 @@ const (
 	ErrorSendingMessage                          = "Error sending message to AI: %v"
 	ErrorReadingUserInput                        = "Error reading user input: %v"
 	ErrorFailedToFetchReleaseInfo                = "Failed to fetch the latest release info: %v"
-	ErrorReceivedNon200StatusCode                = "Received non-200 status code: %v"
+	ErrorReceivedNon200StatusCode                = "[Github] [Check Version] Received non-200 status code: %v Skip Retrying" // Github non 500 lmao
 	ErrorFailedToReadTheResponseBody             = "Failed to read the response body: %v"
 	ErrorFaileduUnmarshalTheReleaseData          = "Failed to unmarshal the release data: %v"
 	ErrorFailedTagToFetchReleaseInfo             = "Failed to fetch release info for tag '%s': %v"
