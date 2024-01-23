@@ -55,7 +55,7 @@ func NewSession(apiKey string) *Session {
 	}
 	apiErrorHandler := func(err error) bool {
 		// Retry on 500 status code
-		return strings.Contains(err.Error(), Code500)
+		return strings.Contains(err.Error(), Error500GoogleApi)
 	}
 	// Perform a simple request to validate the API key.
 	valid, err := retryWithExponentialBackoff(func() (bool, error) {
