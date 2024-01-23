@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -99,10 +100,16 @@ func GetFullReleaseInfo(tagName string) (release *GitHubRelease, err error) {
 
 // checkLatestVersionWithBackoff wraps the CheckLatestVersion call with retry logic.
 func checkLatestVersionWithBackoff() (isLatest bool, latestVersion string, err error) {
+	// Define an error handler for non-specific API errors
+	apiErrorHandler := func(err error) bool {
+		// Retry on 500 status code
+		return strings.Contains(err.Error(), Code500)
+	}
+
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		isLatest, latestVersion, err = CheckLatestVersion(CurrentVersion)
-		return err == nil, err
-	})
+		return isLatest, err
+	}, apiErrorHandler)
 
 	if err != nil || !success {
 		return false, "", err
@@ -112,13 +119,19 @@ func checkLatestVersionWithBackoff() (isLatest bool, latestVersion string, err e
 }
 
 // fetchAndFormatReleaseInfo retrieves and formats the release information.
-func fetchAndFormatReleaseInfo(latestVersion string) (aiPrompt string, err error) {
+func fetchAndFormatReleaseInfo(latestVersion string) (formattedInfo string, err error) {
+	// Define an error handler for non-specific API errors
+	apiErrorHandler := func(err error) bool {
+		// Retry on 500 status code
+		return strings.Contains(err.Error(), Code500)
+	}
+
 	var releaseInfo *GitHubRelease
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		releaseInfo, err = GetFullReleaseInfo(latestVersion)
-		return err == nil, err
-	})
+		return releaseInfo != nil, err
+	}, apiErrorHandler)
 
 	if err != nil || !success {
 		return "", err
