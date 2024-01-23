@@ -318,7 +318,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Any unimplemented**
 - [ ] **Spawn Another Go Routines**
 - [ ] **Pinned Each Messages for ContextPrompt but are simpler.**
-- [ ] **Improve the structuring of ChatHistory Logic.**
+- [ ] **Improve the structuring of ChatHistory Logic for ContextPrompt.**
 > [!NOTE]
 > So easy written in `go`, plus `Scalability` & `Stability` 🤪
 
