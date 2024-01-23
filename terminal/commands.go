@@ -111,28 +111,30 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	// Send a shutdown message to the AI including the chat history with the context prompt
 	aiPrompt := fmt.Sprintf(ContextPromptShutdown, sanitizedMessage, ApplicationName)
 
-	// Attempt to send the shutdown message to the AI
+	// Retry logic for sending the shutdown message to the AI.
+	apiErrorHandler := func(err error) bool {
+		// Error 500 Google Api
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+
+	// Attempt to send the shutdown message to the AI with retry logic
 	_, err := retryWithExponentialBackoff(func() (bool, error) {
 		_, err := SendMessage(session.Ctx, session.Client, aiPrompt, chatHistoryWithPrompt)
 		return err == nil, err
-	})
+	}, apiErrorHandler)
 
 	if err != nil {
 		// If there's an error sending the message, log it
-		logger.Error(ErrorGettingShutdownMessage, err)
+		logger.Error(ErrorFailedToSendShutdownMessage, err)
 	}
 
-	// Proceed with shutdown
+	// Proceed with shutdown regardless of the error
 	fmt.Println(ShutdownMessage)
-
-	// Clear the chat history now that the shutdown message has been sent
-	session.ChatHistory.Clear()
-
-	// End the session and perform cleanup
-	session.endSession()
+	session.ChatHistory.Clear() // Clear the chat history now that the shutdown message has been sent
+	session.endSession()        // End the session and perform cleanup
 
 	// Signal to the main loop that it's time to exit
-	return true, err // Always return true to end the session.
+	return true, nil // Always return true to end the session, and nil for error since we handle it above.
 }
 
 // Execute processes the ":help" command within a chat session. It constructs a help prompt
@@ -189,16 +191,24 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
-	// Send the help prompt to the AI within retryWithExponentialBackoff
-	_, err := retryWithExponentialBackoff(func() (bool, error) {
+	// Retry logic for sending the help prompt to the AI.
+	apiErrorHandler := func(err error) bool {
+		// Error 500 Google Api
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+
+	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
 		return err == nil, err
-	})
+	}, apiErrorHandler)
 
 	if err != nil {
-		logger.Error(ErrorSendingMessage, err)
-		// Return false to indicate the session should continue, but there was an error.
+		logger.Error(ErrorFailedToSendHelpMessage, err)
 		return false, err
+	}
+
+	if !success {
+		return false, fmt.Errorf(ErrorFailedToSendHelpMessagesAfterRetries)
 	}
 
 	// Indicate that the command was handled successfully; return false to continue the session.
@@ -230,8 +240,8 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 	// Get the entire chat history as a string
-	// adding back this hahaha
 	chatHistory := session.ChatHistory.GetHistory()
+
 	// Check if the current version is the latest.
 	aiPrompt, err := c.checkVersionAndGetPrompt()
 	if err != nil {
@@ -239,22 +249,30 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 		logger.HandleGoogleAPIError(err)
 		return false, err
 	}
+
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
-	// Wrap the SendMessage call within retryWithExponentialBackoff
-	_, err = retryWithExponentialBackoff(func() (bool, error) {
-		_, err := SendMessage(session.Ctx, session.Client, chatHistory, sanitizedMessage)
-		if err != nil {
-			return false, err
-		}
 
-		return true, nil
-	})
+	// Retry logic for sending the version check prompt to the AI.
+	apiErrorHandler := func(err error) bool {
+		// Error 500 Google Api
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+
+	success, err := retryWithExponentialBackoff(func() (bool, error) {
+		_, err := SendMessage(session.Ctx, session.Client, chatHistory, sanitizedMessage)
+		return err == nil, err
+	}, apiErrorHandler)
 
 	if err != nil {
-		logger.Error(ErrorSendingMessage, err)
+		logger.Error(ErrorFailedToSendVersionCheckMessage, err)
 		return false, err
 	}
+
+	if !success {
+		return false, fmt.Errorf(ErrorFailedToSendVersionCheckMessageAfterReties)
+	}
+
 	// Indicate that the command was handled; return false to continue the session.
 	return false, nil
 }
@@ -395,8 +413,14 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
+	// Retry logic for sending the translation prompt to the AI.
+	apiErrorHandler := func(err error) bool {
+		// Error 500 Google Api
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+
 	// Wrap the SendMessage call within retryWithExponentialBackoff
-	_, err := retryWithExponentialBackoff(func() (bool, error) {
+	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
 		if err != nil {
 			return false, err
@@ -407,12 +431,17 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 		// Add the AI's response to the chat history
 		session.ChatHistory.AddMessage(AiNerd, aiResponse)
 		return true, nil
-	})
+	}, apiErrorHandler)
 
 	if err != nil {
-		logger.Error(ErrorSendingMessage, err)
+		logger.Error(ErrorFailedToSendTranslationMessage, err)
 		return false, err
 	}
+
+	if !success {
+		return false, fmt.Errorf(ErrorFailedToSendTranslationMessageAfterRetries)
+	}
+
 	// Indicate that the command was handled; return false to continue the session.
 	return false, nil
 }

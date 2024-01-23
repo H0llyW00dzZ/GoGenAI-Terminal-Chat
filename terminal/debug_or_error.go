@@ -129,7 +129,29 @@ func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) bool {
 			return true // Indicate that this is a server error so bad hahaha
 		}
 	}
-	// TODO: adding more 500 status code not only google apis
+	return false // Not a server error
+}
+
+// HandleOtherStupidAPIError checks for non-Google API 500 server errors and logs them.
+// If it's a server error, it returns true, indicating a retry might be warranted.
+//
+// Parameters:
+//
+//	err error: The error returned from an API call.
+//	apiName string: The name of the API for logging purposes.
+//
+// Returns:
+//
+//	bool: Indicates whether the error is a bad server error (500).
+func (l *DebugOrErrorLogger) HandleOtherStupidAPIError(err error, apiName string) bool {
+	if err != nil {
+		// Check if the error message contains a 500 status code, but is not from Google API.
+		if strings.Contains(err.Error(), Code500) && !strings.Contains(err.Error(), Error500GoogleApi) {
+			// Log the Internal Error with the error message
+			l.Error(ErrorOtherAPI, apiName, err)
+			return true // Indicate that this is a bad server error
+		}
+	}
 	return false // Not a server error
 }
 

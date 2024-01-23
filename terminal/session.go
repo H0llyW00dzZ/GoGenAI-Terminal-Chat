@@ -53,11 +53,14 @@ func NewSession(apiKey string) *Session {
 		logger.Error(ErrorFailedToCreateNewAiClient, err)
 		return nil
 	}
-
+	apiErrorHandler := func(err error) bool {
+		// Retry on 500 status code
+		return strings.Contains(err.Error(), Code500)
+	}
 	// Perform a simple request to validate the API key.
 	valid, err := retryWithExponentialBackoff(func() (bool, error) {
 		return SendDummyMessage(client)
-	})
+	}, apiErrorHandler)
 
 	// Handle the result of retryWithExponentialBackoff
 	if err != nil || !valid {
@@ -225,6 +228,12 @@ func (s *Session) ensureClientIsValid() bool {
 func (s *Session) sendInputToAI(input string) bool {
 	chatHistory := s.ChatHistory.GetHistory() // Get the entire chat history as a string
 	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
+	apiErrorHandler := func(err error) bool {
+		// Retry on 500 status code
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+
+	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		aiResponse, err := SendMessage(s.Ctx, s.Client, input, chatHistory)
 		if err != nil {
@@ -232,7 +241,7 @@ func (s *Session) sendInputToAI(input string) bool {
 		}
 		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add the AI's response to the chat history
 		return true, nil
-	})
+	}, apiErrorHandler)
 
 	if err != nil || !success {
 		logger.Error(ErrorSendingMessage, err)

@@ -116,43 +116,50 @@ const (
 
 // Defined List error message
 const (
-	ErrorGettingShutdownMessage                  = "Error getting shutdown message from AI: %v"
-	ErrorHandlingCommand                         = "Error handling command: %v"
-	ErrorCountingTokens                          = "Error counting tokens: %v\n"
-	ErrorSendingMessage                          = "Error sending message to AI: %v"
-	ErrorReadingUserInput                        = "Error reading user input: %v"
-	ErrorFailedToFetchReleaseInfo                = "Failed to fetch the latest release info: %v"
-	ErrorReceivedNon200StatusCode                = "[Github] [Check Version] Received non-200 status code: %v Skip Retrying" // Github non 500 lmao
-	ErrorFailedToReadTheResponseBody             = "Failed to read the response body: %v"
-	ErrorFaileduUnmarshalTheReleaseData          = "Failed to unmarshal the release data: %v"
-	ErrorFailedTagToFetchReleaseInfo             = "Failed to fetch release info for tag '%s': %v"
-	ErrorFailedTagUnmarshalTheReleaseData        = "Failed to unmarshal release data for tag '%s': %v"
-	ErrorFailedTosendmessagesToAI                = "Failed to send messages to AI: %v"
-	ErrorFailedToCreateNewAiClient               = "Failed to create new AI client: %v"
-	ErrorFailedToStartAIChatSessionAttempt       = "Failed to start AI chat session, attempt %d/%d"
-	ErrorFailedtoStartAiChatSessionAfter         = "Failed to start AI chat session after %d attempts"
-	ErrorChatSessionisnill                       = "chat session is nil"
-	ErrorFailedtoStartAiChatSession              = "failed to start AI chat session"
-	ErrorFailedToRenewSession                    = "Failed to renew session: %v"
-	ErrorAiChatSessionStillNill                  = "AI chat session is still nil after renewal attempt"
-	ErrorLowLevelFailedtoStartAiChatSession      = "failed to start a new AI chat session: %w"
-	ErrorUserAttemptUnrecognizedCommandPrompt    = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
-	ErrorFailedtoSendUnrecognizedCommandToAI     = "Failed to send unrecognized command to AI: %v"
-	HumanErrorWhileTypingCommandArgs             = "Invalid Command Arguments: %v"
-	ErrorPingFailed                              = "Ping failed: %v"
-	ErrorUnrecognizedCommand                     = "Unrecognized command: %s"
-	ErrorLowLevelCommand                         = "command cannot be empty"
-	ErrorUnknown                                 = "An error occurred: %v"
-	ErrorUnknownSafetyLevel                      = "Unknown safety level: %s"
-	ErrorInvalidApiKey                           = "Invalid API key: %v"
-	ErrorLowLevelNoResponse                      = "no response from AI service"
-	ErrorLowLevelMaximumRetries                  = "exceeded maximum retries"             // low level
-	ErrorLowLevelFailedToCountTokensAfterRetries = "failed to count tokens after retries" // low level
+	ErrorGettingShutdownMessage                     = "Error getting shutdown message from AI: %v"
+	ErrorHandlingCommand                            = "Error handling command: %v"
+	ErrorCountingTokens                             = "Error counting tokens: %v\n"
+	ErrorSendingMessage                             = "Error sending message to AI: %v"
+	ErrorReadingUserInput                           = "Error reading user input: %v"
+	ErrorFailedToFetchReleaseInfo                   = "Failed to fetch the latest release info: %v"
+	ErrorReceivedNon200StatusCode                   = "[Github] [Check Version] Received non-200 status code: %v Skip Retrying" // Github non 500 lmao
+	ErrorFailedToReadTheResponseBody                = "Failed to read the response body: %v"
+	ErrorFaileduUnmarshalTheReleaseData             = "Failed to unmarshal the release data: %v"
+	ErrorFailedTagToFetchReleaseInfo                = "Failed to fetch release info for tag '%s': %v"
+	ErrorFailedTagUnmarshalTheReleaseData           = "Failed to unmarshal release data for tag '%s': %v"
+	ErrorFailedTosendmessagesToAI                   = "Failed to send messages to AI: %v"
+	ErrorFailedToCreateNewAiClient                  = "Failed to create new AI client: %v"
+	ErrorFailedToStartAIChatSessionAttempt          = "Failed to start AI chat session, attempt %d/%d"
+	ErrorFailedtoStartAiChatSessionAfter            = "Failed to start AI chat session after %d attempts"
+	ErrorChatSessionisnill                          = "chat session is nil"
+	ErrorFailedtoStartAiChatSession                 = "failed to start AI chat session"
+	ErrorFailedToRenewSession                       = "Failed to renew session: %v"
+	ErrorAiChatSessionStillNill                     = "AI chat session is still nil after renewal attempt"
+	ErrorLowLevelFailedtoStartAiChatSession         = "failed to start a new AI chat session: %w"
+	ErrorUserAttemptUnrecognizedCommandPrompt       = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
+	ErrorFailedtoSendUnrecognizedCommandToAI        = "Failed to send unrecognized command to AI: %v"
+	HumanErrorWhileTypingCommandArgs                = "Invalid Command Arguments: %v"
+	ErrorPingFailed                                 = "Ping failed: %v"
+	ErrorUnrecognizedCommand                        = "Unrecognized command: %s"
+	ErrorLowLevelCommand                            = "command cannot be empty"
+	ErrorUnknown                                    = "An error occurred: %v"
+	ErrorUnknownSafetyLevel                         = "Unknown safety level: %s"
+	ErrorInvalidApiKey                              = "Invalid API key: %v"
+	ErrorLowLevelNoResponse                         = "no response from AI service"
+	ErrorLowLevelMaximumRetries                     = "maximum retries reached without success" // low level
+	ErrorLowLevelFailedToCountTokensAfterRetries    = "failed to count tokens after retries"    // low level
+	ErrorNonretryableerror                          = "Failed to send messages after %d retries due to a non-retryable error: %v"
+	ErrorFailedToSendHelpMessage                    = "Failed to send help message: %v"
+	ErrorFailedToSendHelpMessagesAfterRetries       = "Failed to send help message after retries" // low level
+	ErrorFailedToSendShutdownMessage                = "Failed to send shutdown message: %v"
+	ErrorFailedToSendVersionCheckMessage            = "Failed to send version check message: %v"
+	ErrorFailedToSendVersionCheckMessageAfterReties = "Failed to send version check message after retries" // low level
+	ErrorFailedToSendTranslationMessage             = "Failed to send translation message: %v"
+	ErrorFailedToSendTranslationMessageAfterRetries = "Failed to send translation message after retries" // low level
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
-	Error500GoogleApi                                           = "googleapi: Error 500:"
-	ErrorGoogleInternal                                         = "Google Internal Error: %s"
-	ErrorFailedToSendMessagesAfterRetryingonInternalServerError = "Failed to send message after retrying on internal server error: %v"
+	Error500GoogleApi   = "googleapi: Error 500:"
+	ErrorGoogleInternal = "Google Internal Error: %s"
 	// List Error Figlet include high and low level error
 	ErrorStyleIsEmpty             = "style is empty"                   // low level
 	ErrorCharacterNotFoundinStyle = "character %q not found in style"  // low level
@@ -163,6 +170,9 @@ const (
 	errorinvalidlengthArgs            = "invalid length argument: %v"          // low level
 	ErrorFailedtoGenerateRandomString = "Failed to generate random string: %v" // high level
 	errorfailedtogeneraterandomstring = "failed to generate random string: %v" // low level
+	// List Other Error not because of this go codes
+	// Note: This other error indicate that server is so bad for example is causing 500 error
+	ErrorOtherAPI = "Error: %s API server error: %v"
 )
 
 // Defined List of characters
@@ -252,4 +262,9 @@ const (
 // Context RAM's labyrinth
 const (
 	ContextUserInvokeTranslateCommands = "Translating to %s: %s"
+)
+
+// List RestfulAPI Error
+const (
+	Code500 = "500" // indicate that server so bad hahaha
 )

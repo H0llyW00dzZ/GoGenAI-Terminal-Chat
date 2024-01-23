@@ -6,6 +6,7 @@ package terminal
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/google/generative-ai-go/genai"
 	"google.golang.org/api/option"
@@ -32,6 +33,11 @@ import (
 // the caller to manage the lifecycle of the generative AI client.
 func CountTokens(apiKey, input string) (int, error) {
 	var tokenCount int
+	// Define an error handler for transient API errors
+	apiErrorHandler := func(err error) bool {
+		// Retry on 500 status code
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
 	retryFunc := func() (bool, error) {
 		ctx := context.Background()
 		client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
@@ -50,7 +56,7 @@ func CountTokens(apiKey, input string) (int, error) {
 		return true, nil
 	}
 
-	success, err := retryWithExponentialBackoff(retryFunc)
+	success, err := retryWithExponentialBackoff(retryFunc, apiErrorHandler)
 	if err != nil {
 		return 0, err
 	}
