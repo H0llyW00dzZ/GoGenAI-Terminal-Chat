@@ -163,6 +163,9 @@ const (
 	errorinvalidlengthArgs            = "invalid length argument: %v"          // low level
 	ErrorFailedtoGenerateRandomString = "Failed to generate random string: %v" // high level
 	errorfailedtogeneraterandomstring = "failed to generate random string: %v" // low level
+	// List Other Error not because of this go codes
+	// Note: This other error indicate that server is so bad for example is causing 500 error
+	ErrorOtherAPI = "Error: %s API server error: %v"
 )
 
 // Defined List of characters
@@ -252,4 +255,9 @@ const (
 // Context RAM's labyrinth
 const (
 	ContextUserInvokeTranslateCommands = "Translating to %s: %s"
+)
+
+// List RestfulAPI Error
+const (
+	Code500 = "500" // indicate that server so bad hahaha
 )
