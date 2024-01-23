@@ -101,7 +101,6 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 // handleTokenCountError handles errors that occur while counting tokens.
 func handleTokenCountError(err error) {
 	logger.Error(ErrorCountingTokens, err)
-	logger.HandleGoogleAPIError(err)
 }
 
 // printCurrentTokenCount prints the number of tokens used in the AI's response.
