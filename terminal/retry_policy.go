@@ -14,6 +14,8 @@ type RetryableFunc func() (bool, error)
 
 // retryWithExponentialBackoff attempts to execute a RetryableFunc with a retry policy.
 // It applies exponential backoff between retries and logs an error if the maximum number of retries is reached.
+//
+// Note: this a powerful retry policy, unlike that shitty complex go codes
 func retryWithExponentialBackoff(retryFunc RetryableFunc) (bool, error) {
 	const maxRetries = 3
 	baseDelay := time.Second
