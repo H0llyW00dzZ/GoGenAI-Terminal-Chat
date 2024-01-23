@@ -171,7 +171,8 @@ const (
 	ErrorFailedtoGenerateRandomString = "Failed to generate random string: %v" // high level
 	errorfailedtogeneraterandomstring = "failed to generate random string: %v" // low level
 	// List Other Error not because of this go codes
-	// Note: This other error indicate that server is so bad for example is causing 500 error
+	// ErrorOtherAPI represents an error received from an external API server.
+	// It indicates non-client-related issues, such as server-side errors (e.g., HTTP 500 errors) indicate that so fucking bad hahaha.
 	ErrorOtherAPI = "Error: %s API server error: %v"
 )
 
