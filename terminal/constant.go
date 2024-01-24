@@ -61,16 +61,17 @@ const (
 	// the conversation will resume from the point prior to the invocation of these commands.
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
-	YouAreusingLatest = "a User attempted a command: **%s**\n" +
-		"The user is using Version **%s** of **%s**\n" +
-		"This is the latest version.\n" +
-		"Tell the user, No need to update." // Better Response for AI
-	ReleaseNotesPrompt = "a user attempted a command: **%s**\n" +
-		"The user is using Version **%s** of **%s**\n" +
-		"A newer version is available: **%s**\n" +
-		"Can you tell\n" +
-		"Release Name: **%s**\n" +
-		"Published Date: **%s**\n\n%s" // Better Response for AI
+	YouAreusingLatest = "The user invoked the command: **%s**\n" +
+		"The current version of **%s** is: **%s**.\n" +
+		"This is the latest version available.\n" +
+		"Please inform the user that no update is necessary at this time." // Better Response for AI
+	ReleaseNotesPrompt = "The user invoked the command: **%s**\n" +
+		"The current version of the application **%s** is: **%s**.\n" +
+		"There is a newer version available: **%s**.\n\n" +
+		"Details of the latest release:\n" +
+		"- Release Name: **%s**\n" +
+		"- Published Date: **%s**\n\n" +
+		"Release Notes:\n%s\n" // Better Response for AI
 	// Quit Prompt commands
 	ContextPromptShutdown = "a user attempted an command: **%s** of **%s**\n" +
 		"Please provide a shutdown message as you are AI."

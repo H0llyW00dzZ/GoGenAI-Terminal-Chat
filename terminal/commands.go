@@ -302,7 +302,7 @@ func (c *handleCheckVersionCommand) checkVersionAndGetPrompt() (aiPrompt string,
 	}
 
 	if isLatest {
-		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, CurrentVersion, ApplicationName)
+		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, ApplicationName, CurrentVersion)
 	} else {
 		// Fetch and format the release information for the latest version.
 		aiPrompt, err = fetchAndFormatReleaseInfo(latestVersion)
