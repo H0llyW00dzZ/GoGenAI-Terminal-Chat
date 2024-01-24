@@ -73,8 +73,8 @@ const (
 		"- Published Date: **%s**\n\n" +
 		"Release Notes:\n%s\n" // Better Response for AI
 	// Quit Prompt commands
-	ContextPromptShutdown = "a user attempted an command: **%s** of **%s**\n" +
-		"Please provide a shutdown message as you are AI."
+	ContextPromptShutdown = "The user has attempted the command: **%s** in **%s**.\n" +
+		"AI, please provide an appropriate shutdown message."
 	// Help Prompt commands
 	HelpCommandPrompt = "**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +
