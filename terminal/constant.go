@@ -225,7 +225,7 @@ const (
 	Default          = "default"
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
-	ShowChatHistory  = "Chat History:\n%s"
+	ShowChatHistory  = "Chat History:\n\n%s"
 )
 
 // Defined Tools
