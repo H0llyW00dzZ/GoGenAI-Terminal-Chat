@@ -171,8 +171,6 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	aiPrompt := fmt.Sprintf(HelpCommandPrompt,
 		// Note: This doesn't look complex, as the complex one looks way better than the "hardcoded" one LOL
 		ApplicationName,
-		HelpCommand,
-		ShortHelpCommand,
 		QuitCommand,
 		ShortQuitCommand,
 		VersionCommand,
