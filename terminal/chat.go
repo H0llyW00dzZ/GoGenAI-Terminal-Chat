@@ -70,9 +70,17 @@ func (h *ChatHistory) AddMessage(user string, text string) {
 		// Note: The fixed history size might be increased in the future. Currently, the application's memory usage is minimal, consuming only 16 MB (Average).
 		// then keep a maximum of 5 history entries for transmission to Google AI.
 		if len(h.Messages) >= MaxChatHistory {
+			// Remove the oldest message and its hash
 			oldestHash := h.hashMessage(h.Messages[0])
 			delete(h.Hashes, oldestHash) // Remove the hash of the oldest message
 			h.Messages = h.Messages[1:]  // Remove the oldest message
+
+			// Update the indices of the remaining hashes
+			for hash, index := range h.Hashes {
+				if index > 0 {
+					h.Hashes[hash] = index - 1
+				}
+			}
 		}
 		// Note: this remove the oldest message are automated handle by Garbage Collector.
 		// For example, free memory to avoid memory leak.
@@ -115,10 +123,23 @@ func (h *ChatHistory) GetHistory() string {
 	// fix concurrency issue
 	var builder strings.Builder // Create a new builder for this method call
 
-	for _, msg := range h.Messages {
+	for i, msg := range h.Messages {
 		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
 		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
 		builder.WriteRune(nl.NewLineChars)     // Append a newline character after each message
+		// After printing an AI message and if it's not the last message, add a separator
+		// Note: This a better way instead of structuring it then stored in RAM's labyrinth.
+		// For example how it work it's like this
+		//
+		// 🤓 You: :checkversion
+		//
+		// 🤖 AI: You are using the latest version, v0.5.0 of GoGenAI Terminal Chat. There is no need to update at the moment. Is there anything else I can help you with today?
+		//
+		// ---
+		if i%2 == 1 && i < len(h.Messages)-1 {
+			builder.WriteString(StripChars)    // Insert a separator
+			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
+		}
 	}
 
 	return builder.String() // Return the complete, concatenated chat history
