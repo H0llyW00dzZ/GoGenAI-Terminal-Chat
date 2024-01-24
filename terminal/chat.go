@@ -11,8 +11,8 @@ import (
 	"sync"
 )
 
-// Note: This is subject to change (for example, it can be customized in commands). For now, it's stable. Additionally, a token is inexpensive since, with Google AI's Gemini-Pro model, the maximum is 32K tokens.
-const MaxChatHistory = 5 // Maximum number of messages to keep in history
+// Note: This is subject to change (for example, it can be customized in commands). For now, it's stable. Additionally, a token is inexpensive since, with Google AI's Gemini-Pro model, the maximum is 30k+ tokens.
+const MaxChatHistory = 10 // Maximum number of messages to keep in history, It's stable
 
 // ChatHistory holds the chat messages exchanged during a session.
 // It provides methods to add new messages to the history and to retrieve
@@ -61,26 +61,21 @@ func (h *ChatHistory) AddMessage(user string, text string) {
 
 	// Sanitize and format the message before adding it to the history of RAM's labyrinth.
 	sanitizedText := h.SanitizeMessage(text)
-	message := fmt.Sprintf(ObjectHighLevelString, user, sanitizedText)
+	message := fmt.Sprintf(ObjectHighLevelStringWithNewLine, user, sanitizedText) // Add newlines around the message
 	hashValue := h.hashMessage(sanitizedText)
 
 	// Check if the message hash already exists to prevent duplicates
 	if _, exists := h.Hashes[hashValue]; !exists {
-		// Remove the oldest message to maintain a fixed history size in RAM's labyrinth.
+		// Remove the oldest two messages (one user and one AI) to maintain a fixed history size in RAM's labyrinth.
 		// Note: The fixed history size might be increased in the future. Currently, the application's memory usage is minimal, consuming only 16 MB (Average).
 		// then keep a maximum of 5 history entries for transmission to Google AI.
-		if len(h.Messages) >= MaxChatHistory {
+		if len(h.Messages) >= MaxChatHistory*2 { // Multiply by 2 because we're considering pairs of messages
 			// Remove the oldest message and its hash
-			oldestHash := h.hashMessage(h.Messages[0])
-			delete(h.Hashes, oldestHash) // Remove the hash of the oldest message
-			h.Messages = h.Messages[1:]  // Remove the oldest message
-
-			// Update the indices of the remaining hashes
-			for hash, index := range h.Hashes {
-				if index > 0 {
-					h.Hashes[hash] = index - 1
-				}
-			}
+			oldestUserHash := h.hashMessage(h.Messages[0])
+			oldestAIHash := h.hashMessage(h.Messages[1])
+			delete(h.Hashes, oldestUserHash) // Remove the hash of the oldest user message
+			delete(h.Hashes, oldestAIHash)   // Remove the hash of the oldest AI message
+			h.Messages = h.Messages[2:]      // Remove the oldest two messages
 		}
 		// Note: this remove the oldest message are automated handle by Garbage Collector.
 		// For example, free memory to avoid memory leak.
@@ -136,13 +131,24 @@ func (h *ChatHistory) GetHistory() string {
 		// 🤖 AI: You are using the latest version, v0.5.0 of GoGenAI Terminal Chat. There is no need to update at the moment. Is there anything else I can help you with today?
 		//
 		// ---
-		if i%2 == 1 && i < len(h.Messages)-1 {
-			builder.WriteString(StringNewLine + StripChars + StringNewLine) // Insert a separator
-			builder.WriteRune(nl.NewLineChars)                              // Append a newline character after the separator
+		// Add a separator after each AI message, except for the last message
+		if isAIMessage(sanitizedMsg) && !isLastMessage(i, h.Messages) {
+			builder.WriteString(StripChars)    // Append the separator
+			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
 		}
 	}
 
 	return builder.String() // Return the complete, concatenated chat history
+}
+
+// isAIMessage checks if the message is from the AI
+func isAIMessage(message string) bool {
+	return strings.HasPrefix(message, AiNerd)
+}
+
+// isLastMessage checks if the current index is the last message in the slice
+func isLastMessage(index int, messages []string) bool {
+	return index == len(messages)-1
 }
 
 // hashMessage generates a SHA-256 hash for a given message.
