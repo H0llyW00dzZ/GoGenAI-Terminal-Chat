@@ -319,6 +319,10 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Spawn Another Go Routines**
 - [ ] **Pinned Each Messages for ContextPrompt but are simpler.**
 - [X] **Improve the structuring of ChatHistory Logic for ContextPrompt.**
+- [ ] **Implement Gemini-Pro Vision Capabilities**
+> [!NOTE]
+> The `Implement Gemini-Pro Vision Capabilities` feature is strategically integrated within command functionalities, such as image comparison, image analysis, and more.
+
 > [!NOTE]
 > So easy written in `go`, plus `Scalability` & `Stability` 🤪
 
