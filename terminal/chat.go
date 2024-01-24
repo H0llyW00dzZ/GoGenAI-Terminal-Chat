@@ -115,10 +115,14 @@ func (h *ChatHistory) GetHistory() string {
 	// fix concurrency issue
 	var builder strings.Builder // Create a new builder for this method call
 
-	for _, msg := range h.Messages {
+	for i, msg := range h.Messages {
 		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
 		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
 		builder.WriteRune(nl.NewLineChars)     // Append a newline character after each message
+		// After printing an AI message and if it's not the last message, add a separator
+		if i%2 == 1 && i < len(h.Messages)-1 {
+			builder.WriteString(StripChars) // Insert a separator
+		}
 	}
 
 	return builder.String() // Return the complete, concatenated chat history
