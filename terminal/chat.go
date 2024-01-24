@@ -129,7 +129,8 @@ func (h *ChatHistory) GetHistory() string {
 		//
 		// ---
 		if i%2 == 1 && i < len(h.Messages)-1 {
-			builder.WriteString(StripChars) // Insert a separator
+			builder.WriteString(StripChars)    // Insert a separator
+			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
 		}
 	}
 
