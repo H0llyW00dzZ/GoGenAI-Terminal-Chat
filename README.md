@@ -1,3 +1,13 @@
+<pre>
+   ______      ______           ___    ____
+  / ____/___  / ____/__  ____  /   |  /  _/
+ / / __/ __ \/ / __/ _ \/ __ \/ /| |  / /  
+/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     Terminal Chat
+\____/\____/\____/\___/_/ /_/_/  |_/___/  
+
+Copyright (©️) 2024 @H0llyW00dzZ All rights reserved.
+</pre>
+
 # GoGenAI-Terminal-Chat
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)](https://goreportcard.com/report/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)
