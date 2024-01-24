@@ -52,7 +52,7 @@ func FilterLanguageFromCodeBlock(text string) string {
 // or any other string that aids in categorizing or highlighting the message.
 func PrintPrefixWithTimeStamp(prefix string) {
 	currentTime := time.Now().Format(TimeFormat)
-	fmt.Printf(ObjectHighLevelString, currentTime, prefix)
+	fmt.Printf(ObjectHighLevelString+" ", currentTime, prefix)
 }
 
 // printPromptFeedback formats and prints the prompt feedback received from the AI.
