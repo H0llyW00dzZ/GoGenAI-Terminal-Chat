@@ -84,7 +84,9 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
 
 	tokenCount, err := CountTokens(apiKey, fullText)
-	fmt.Print(StringNewLine)
+	text := "N" // a better one, instead of "\n"
+	asciiArt, _ := ToASCIIArt(text, newLine)
+	fmt.Println(asciiArt)
 	if err != nil {
 		handleTokenCountError(err)
 		return
