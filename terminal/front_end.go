@@ -124,7 +124,7 @@ func printVisualSeparator() {
 	fmt.Println(asciiArt)
 }
 
-// printnewlineAscii prints a visual separator to the standard output.
+// printNewlineAscii prints a newline character as an ASCII art visual separator to the standard output.
 func printnewlineAscii() {
 	text := "N"
 	asciiArt, _ := ToASCIIArt(text, newLine)
