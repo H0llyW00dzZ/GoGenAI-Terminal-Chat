@@ -61,30 +61,35 @@ const (
 	// the conversation will resume from the point prior to the invocation of these commands.
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
-	YouAreusingLatest = "a User attempted a command: **%s**\n" +
-		"The user is using Version **%s** of **%s**\n" +
-		"This is the latest version.\n" +
-		"Tell the user, No need to update." // Better Response for AI
-	ReleaseNotesPrompt = "a user attempted a command: **%s**\n" +
-		"The user is using Version **%s** of **%s**\n" +
-		"A newer version is available: **%s**\n" +
-		"Can you tell\n" +
-		"Release Name: **%s**\n" +
-		"Published Date: **%s**\n\n%s" // Better Response for AI
+	YouAreusingLatest = "The user invoked the command: **%s**\n" +
+		"The current version of **%s** is: **%s**.\n" +
+		"This is the latest version available.\n" +
+		"Please inform the user that no update is necessary at this time." // Better Response for AI
+	ReleaseNotesPrompt = "The user invoked the command: **%s**\n" +
+		"The current version of the application **%s** is: **%s**.\n" +
+		"There is a newer version available: **%s**.\n\n" +
+		"Details of the latest release:\n" +
+		"- Release Name: **%s**\n" +
+		"- Published Date: **%s**\n\n" +
+		"Release Notes:\n%s\n" // Better Response for AI
 	// Quit Prompt commands
-	ContextPromptShutdown = "a user attempted an command: **%s** of **%s**\n" +
-		"Please provide a shutdown message as you are AI."
+	ContextPromptShutdown = "The user has attempted the command: **%s** in **%s**.\n" +
+		"AI, please provide an appropriate shutdown message."
 	// Help Prompt commands
 	HelpCommandPrompt = "**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +
-		"Can you provide help information for the available commands?\n" +
-		// Better Response for AI instead of "Hard Coded" hahaha
-		"List Command Available:\n**%s** or **%s**\n * Quit Commands\n" +
-		"**%s** or **%s**\n * Help Commands\n**%s** - **%s**, **%s**, **%s**\n" +
-		"**%s** <text> **%s** <targetlanguage>\n" +
-		"**%s** **%s** <number>\n\n**%s %s**\n\n**%s %s**\n\n" +
-		"**Additional Note**: There are no **additional commands** or **HTML Markdown** available" +
-		" because it is in a terminal and is limited.\n"
+		"Can you provide help information for the available commands?\n\n" +
+		"List of Available Commands:\n" +
+		"**%s** or **%s**: Quit the application.\n" +
+		"**%s** or **%s**: Show this help information.\n" +
+		"**%s**: Check the application version.\n" +
+		"**%s**: Set the safety level - **%s** (low), **%s** (default), **%s** (high).\n" +
+		"**%s** <text> **%s** <target language>: Translate text to the specified language.\n" +
+		"**%s** **%s** <number>: Generate a random string of the specified length.\n" +
+		"**%s** **%s**: Show the chat history.\n\n" +
+		"**%s** **%s**: Clear the chat history.\n\n" +
+		"**Additional Note**: There are no additional commands or HTML Markdown available " +
+		"because this is a terminal application and is limited.\n"
 	// TranslateCommandPrompt commands
 	AITranslateCommandPrompt = "**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +

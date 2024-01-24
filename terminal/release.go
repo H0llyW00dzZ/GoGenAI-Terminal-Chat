@@ -169,11 +169,12 @@ func formatReleaseDate(dateStr string) (string, error) {
 func formatReleasePrompt(releaseInfo *GitHubRelease) string {
 	return fmt.Sprintf(ReleaseNotesPrompt,
 		VersionCommand,
-		CurrentVersion,
 		ApplicationName,
+		CurrentVersion,
 		releaseInfo.TagName,
 		releaseInfo.Name,
 		releaseInfo.Date,
-		releaseInfo.Body)
+		releaseInfo.Body,
+	)
 
 }
