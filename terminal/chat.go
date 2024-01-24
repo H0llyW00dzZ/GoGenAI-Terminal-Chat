@@ -120,6 +120,14 @@ func (h *ChatHistory) GetHistory() string {
 		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
 		builder.WriteRune(nl.NewLineChars)     // Append a newline character after each message
 		// After printing an AI message and if it's not the last message, add a separator
+		// Note: This a better way instead of structuring it then stored in RAM's labyrinth.
+		// For example how it work it's like this
+		//
+		// 🤓 You: :checkversion
+		//
+		// 🤖 AI: You are using the latest version, v0.5.0 of GoGenAI Terminal Chat. There is no need to update at the moment. Is there anything else I can help you with today?
+		//
+		// ---
 		if i%2 == 1 && i < len(h.Messages)-1 {
 			builder.WriteString(StripChars) // Insert a separator
 		}
