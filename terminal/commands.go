@@ -5,6 +5,7 @@ package terminal
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -358,8 +359,18 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
 	if cmd.IsValid(parts) {
 		session.ChatHistory.Clear()
+		// Prepare the full message to be printed
+		clearMessage := ChatHistoryClear
+		showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
+		// Append token reset message if SHOW_TOKEN_COUNT is true
+		if showTokenCount {
+			totalTokenCount = 0 // Reset the total token count to zero
+			clearMessage += "\n" + ResetTotalTokenUsage
+		}
+
+		// Print the message(s) with timestamp and typing effect
 		PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-		PrintTypingChat(ChatHistoryClear, TypingDelay)
+		PrintTypingChat(clearMessage, TypingDelay)
 		// Added back the context prompt after clearing the chat history
 		session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
 		fmt.Println()
