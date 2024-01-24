@@ -239,7 +239,8 @@ func (s *Session) sendInputToAI(input string) bool {
 		if err != nil {
 			return false, err
 		}
-		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add the AI's response to the chat history
+		aiResponse = sanitizeAIResponse(aiResponse)  // Sanitize AI's response to remove any separators
+		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add the sanitized AI's response to the chat history
 		return true, nil
 	}, apiErrorHandler)
 
