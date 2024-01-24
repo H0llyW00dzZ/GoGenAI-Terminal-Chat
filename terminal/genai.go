@@ -77,7 +77,7 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 
 	fullContext := chatContext
 	if len(chatHistory) > 0 {
-		fullContext = chatHistory[0] + StringNewLine + chatContext
+		fullContext = chatHistory[0] + StringNewLine + chatContext + StripChars
 	}
 
 	resp, err := cs.SendMessage(ctx, genai.Text(fullContext))
@@ -131,4 +131,15 @@ func concatenateChatHistory(aiResponse string, chatHistory ...string) string {
 		return strings.Join(chatHistory, StringNewLine) + StringNewLine + aiResponse
 	}
 	return aiResponse
+}
+
+// sanitizeAIResponse removes unwanted separators from the AI's response.
+func sanitizeAIResponse(response string) string {
+	// Split the response by the separator
+	parts := strings.Split(response, SanitizeTextAIResponse)
+
+	// Rejoin the parts without the separator to get the sanitized response
+	sanitizedResponse := strings.Join(parts, StringNewLine)
+
+	return sanitizedResponse
 }

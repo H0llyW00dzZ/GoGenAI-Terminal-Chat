@@ -428,10 +428,12 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 		if err != nil {
 			return false, err
 		}
-		// Add a message to the chat history in RAM's labyrinth indicating the translation command was invoked
+		// Sanitize AI's response to remove any separators
+		aiResponse = sanitizeAIResponse(aiResponse)
+		// Add a message to the chat history indicating the translation command was invoked
 		translationCommandMessage := fmt.Sprintf(ContextUserInvokeTranslateCommands, targetLanguage, textToTranslate)
 		session.ChatHistory.AddMessage(YouNerd, translationCommandMessage)
-		// Add the AI's response to the chat history
+		// Add the sanitized AI's response to the chat history
 		session.ChatHistory.AddMessage(AiNerd, aiResponse)
 		return true, nil
 	}, apiErrorHandler)
