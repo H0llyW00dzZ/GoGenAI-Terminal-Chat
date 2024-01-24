@@ -81,7 +81,7 @@ const (
 		"List Command Available:\n**%s** or **%s**\n**%s** or **%s**\n" +
 		"**%s** or **%s**\n**%s** - **%s**, **%s**, **%s**\n" +
 		"**%s** <text> **%s** <targetlanguage>\n" +
-		"**%s** **%s** <number>\n\n**%s %s**\n\n" +
+		"**%s** **%s** <number>\n\n**%s %s**\n\n**%s %s**\n\n" +
 		"**Additional Note**: There are no **additional commands** or **HTML Markdown** available" +
 		" because it is in a terminal and is limited.\n"
 	// TranslateCommandPrompt commands
@@ -107,11 +107,13 @@ const (
 	LangArgs           = ":lang"
 	CryptoRandCommand  = ":cryptorand"
 	LengthArgs         = ":length"
+	ShowCommands       = ":show"
+	ChatArgs           = ":chat"
 	PingCommand        = ":ping" // Currently marked as TODO
 	ClearCommand       = ":clear"
 	PrefixChar         = ":"
 	// List args
-	ClearChatHistoryArgs = "chat history"
+	ChatHistoryArgs = "chat history"
 )
 
 // Defined List error message
@@ -223,6 +225,7 @@ const (
 	Default          = "default"
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
+	ShowChatHistory  = "Chat History:\n%s"
 )
 
 // Defined Tools
