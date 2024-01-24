@@ -57,9 +57,7 @@ func PrintPrefixWithTimeStamp(prefix string) {
 
 // printPromptFeedback formats and prints the prompt feedback received from the AI.
 func printPromptFeedback(feedback *genai.PromptFeedback) {
-	text := "N" // this better new line instead of "\n" for front end hahaha
-	asciiArt, _ := ToASCIIArt(text, newLine)
-	fmt.Println(asciiArt)
+	printnewlineAscii() // this better new line instead of "\n" for front end hahaha
 	if feedback == nil {
 		return
 	}
@@ -84,9 +82,7 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
 
 	tokenCount, err := CountTokens(apiKey, fullText)
-	text := "N" // a better one, instead of "\n"
-	asciiArt, _ := ToASCIIArt(text, newLine)
-	fmt.Println(asciiArt)
+	printnewlineAscii() // a better one, instead of "\n"
 	if err != nil {
 		handleTokenCountError(err)
 		return
@@ -125,6 +121,13 @@ func updateAndPrintTotalTokenCount(tokenCount int) {
 func printVisualSeparator() {
 	text := "V"
 	asciiArt, _ := ToASCIIArt(text, stripStyle)
+	fmt.Println(asciiArt)
+}
+
+// printnewlineAscii prints a visual separator to the standard output.
+func printnewlineAscii() {
+	text := "N"
+	asciiArt, _ := ToASCIIArt(text, newLine)
 	fmt.Println(asciiArt)
 }
 
