@@ -187,7 +187,9 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		CryptoRandCommand,
 		LengthArgs,
 		ClearCommand,
-		ClearChatHistoryArgs)
+		ChatHistoryArgs,
+		ShowCommands,
+		ChatHistoryArgs)
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
@@ -467,4 +469,26 @@ func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (b
 	logger.Info(CryptoRandRes, lengthStr, randomString)
 
 	return false, nil
+}
+
+// Execute displays the entire chat history.
+//
+// session *Session: The current chat session containing state and context.
+// parts   []string: The slice containing the command and its arguments.
+//
+// Returns false to indicate the session should continue, and an error if there is an issue.
+func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, ShowCommands, parts)
+	if !cmd.IsValid(parts) {
+		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
+		fmt.Println()
+		return true, nil
+	}
+
+	// Retrieve and log the entire chat history.
+	history := session.ChatHistory.GetHistory()
+	logger.Info(ShowChatHistory, history)
+
+	return false, nil // Return false to indicate the session should continue.
 }

@@ -130,7 +130,7 @@ type handleClearCommand struct{}
 func (cmd *handleClearCommand) IsValid(parts []string) bool {
 	// Combine the parts after the command keyword to match the ClearChatHistoryArgs
 	args := strings.Join(parts[1:], " ")
-	return len(parts) > 1 && args == ClearChatHistoryArgs
+	return len(parts) > 1 && args == ChatHistoryArgs
 }
 
 // handleSafetyCommand is the command to adjust safety settings.
@@ -183,6 +183,22 @@ type handleCryptoRandCommand struct{}
 func (cmd *handleCryptoRandCommand) IsValid(parts []string) bool {
 	// The cryptorand command should have exactly two parts: the command itself and the length argument.
 	return len(parts) == 3 && parts[1] == LengthArgs
+}
+
+// handleChatShowCommand is responsible for executing the ":show chat history" command.
+type handleShowChatCommand struct{}
+
+// IsValid checks if the chat show command is valid based on the input parts.
+// The chat show command is valid only if there are no additional arguments, hence
+// the length of parts must be exactly 1.
+//
+// parts []string: The slice containing the command and its arguments.
+//
+// Returns true if the command is valid, otherwise false.
+func (cmd *handleShowChatCommand) IsValid(parts []string) bool {
+	// Combine the parts after the command keyword to match the ClearChatHistoryArgs
+	args := strings.Join(parts[1:], " ")
+	return len(parts) > 1 && args == ChatHistoryArgs
 }
 
 // Note: this unimplemented
