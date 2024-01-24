@@ -77,14 +77,18 @@ const (
 	// Help Prompt commands
 	HelpCommandPrompt = "**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +
-		"Can you provide help information for the available commands?\n" +
-		// Better Response for AI instead of "Hard Coded" hahaha
-		"List Command Available:\n**%s** or **%s**\n * Quit Commands\n" +
-		"**%s** or **%s**\n * Help Commands\n**%s** - **%s**, **%s**, **%s**\n" +
-		"**%s** <text> **%s** <targetlanguage>\n" +
-		"**%s** **%s** <number>\n\n**%s %s**\n\n**%s %s**\n\n" +
-		"**Additional Note**: There are no **additional commands** or **HTML Markdown** available" +
-		" because it is in a terminal and is limited.\n"
+		"Can you provide help information for the available commands?\n\n" +
+		"List of Available Commands:\n" +
+		"**%s** or **%s**: Quit the application.\n" +
+		"**%s** or **%s**: Show this help information.\n" +
+		"**%s**: Check the application version.\n" +
+		"**%s**: Set the safety level - **%s** (low), **%s** (default), **%s** (high).\n" +
+		"**%s** <text> **%s** <target language>: Translate text to the specified language.\n" +
+		"**%s** **%s** <number>: Generate a random string of the specified length.\n" +
+		"**%s** **%s**: Show the chat history.\n\n" +
+		"**%s** **%s**: Clear the chat history.\n\n" +
+		"**Additional Note**: There are no additional commands or HTML Markdown available " +
+		"because this is a terminal application and is limited.\n"
 	// TranslateCommandPrompt commands
 	AITranslateCommandPrompt = "**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +

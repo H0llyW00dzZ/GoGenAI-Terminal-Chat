@@ -99,6 +99,9 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, QuitCommand, parts)
 
+	// Context
+	session.ChatHistory.AddMessage(StringNewLine+YouNerd, HelpCommand)
+
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 
@@ -167,15 +170,17 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	logger.Debug(DEBUGEXECUTINGCMD, HelpCommand, parts)
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+	session.ChatHistory.AddMessage(StringNewLine+YouNerd, HelpCommand)
 	// Define the help prompt to be sent to the AI, including the list of available commands.
 	aiPrompt := fmt.Sprintf(HelpCommandPrompt,
 		// Note: This doesn't look complex, as the complex one looks way better than the "hardcoded" one LOL
 		ApplicationName,
+		HelpCommand,
 		QuitCommand,
 		ShortQuitCommand,
-		VersionCommand,
 		HelpCommand,
 		ShortHelpCommand,
+		VersionCommand,
 		SafetyCommand,
 		Low,
 		Default,
@@ -184,10 +189,12 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		LangArgs,
 		CryptoRandCommand,
 		LengthArgs,
+		ShowCommands,
+		ChatHistoryArgs,
 		ClearCommand,
 		ChatHistoryArgs,
-		ShowCommands,
-		ChatHistoryArgs)
+	)
+
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
@@ -198,7 +205,11 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 	}
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
+		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage)
+		// Sanitize AI's response to remove any separators
+		aiResponse = sanitizeAIResponse(aiResponse)
+		// Add the sanitized AI's response to the chat history
+		session.ChatHistory.AddMessage(AiNerd, aiResponse)
 		return err == nil, err
 	}, apiErrorHandler)
 
@@ -239,6 +250,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	logger.Debug(DEBUGEXECUTINGCMD, VersionCommand, parts)
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+	session.ChatHistory.AddMessage(StringNewLine+YouNerd, VersionCommand)
 	// Get the entire chat history as a string
 	chatHistory := session.ChatHistory.GetHistory()
 
@@ -260,7 +272,11 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	}
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		_, err := SendMessage(session.Ctx, session.Client, chatHistory, sanitizedMessage)
+		aiResponse, err := SendMessage(session.Ctx, session.Client, chatHistory, sanitizedMessage)
+		// Sanitize AI's response to remove any separators
+		aiResponse = sanitizeAIResponse(aiResponse)
+		// Add the sanitized AI's response to the chat history
+		session.ChatHistory.AddMessage(AiNerd, aiResponse)
 		return err == nil, err
 	}, apiErrorHandler)
 
@@ -430,7 +446,7 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 		aiResponse = sanitizeAIResponse(aiResponse)
 		// Add a message to the chat history indicating the translation command was invoked
 		translationCommandMessage := fmt.Sprintf(ContextUserInvokeTranslateCommands, targetLanguage, textToTranslate)
-		session.ChatHistory.AddMessage(YouNerd, translationCommandMessage)
+		session.ChatHistory.AddMessage(StringNewLine+YouNerd, translationCommandMessage)
 		// Add the sanitized AI's response to the chat history
 		session.ChatHistory.AddMessage(AiNerd, aiResponse)
 		return true, nil
