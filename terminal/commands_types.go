@@ -196,7 +196,7 @@ type handleShowChatCommand struct{}
 //
 // Returns true if the command is valid, otherwise false.
 func (cmd *handleShowChatCommand) IsValid(parts []string) bool {
-	// Combine the parts after the command keyword to match the ClearChatHistoryArgs
+	// Combine the parts after the command keyword to match the ChatHistoryArgs
 	args := strings.Join(parts[1:], " ")
 	return len(parts) > 1 && args == ChatHistoryArgs
 }
