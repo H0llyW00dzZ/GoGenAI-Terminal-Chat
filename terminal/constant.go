@@ -35,6 +35,8 @@ const (
 	TypingDelay = 60 * time.Millisecond
 	// this clearing chat history in secret storage
 	ChatHistoryClear = ColorHex95b806 + "All Chat history cleared." + ColorReset
+	// reset total token usage
+	ResetTotalTokenUsage = ColorHex95b806 + "Total token usage has been reset." + ColorReset
 )
 
 // Defined constants for language
@@ -55,10 +57,6 @@ const (
 	FullChangeLog          = "**%s**\n"
 	DummyMessages          = "Hello, AI! from @H0llyW00dzZ"
 	// Better prompt instead of typing manually hahaha
-	//
-	// Note: These prompts are not persisted in the chat history retrieved by the ChatHistory.GetHistory() method.
-	// Therefore, if you continue interacting with the AI after using these command prompts,
-	// the conversation will resume from the point prior to the invocation of these commands.
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
 	YouAreusingLatest = "The user invoked the command: **%s**\n" +
@@ -87,7 +85,7 @@ const (
 		"**%s** <text> **%s** <target language>: Translate text to the specified language.\n" +
 		"**%s** **%s** <number>: Generate a random string of the specified length.\n" +
 		"**%s** **%s**: Show the chat history.\n\n" +
-		"**%s** **%s**: Clear the chat history.\n\n" +
+		"**%s** **%s**: Clear all chat history and reset the total token usage count if enabled.\n\n" +
 		"**Additional Note**: There are no additional commands or HTML Markdown available " +
 		"because this is a terminal application and is limited.\n"
 	// TranslateCommandPrompt commands
