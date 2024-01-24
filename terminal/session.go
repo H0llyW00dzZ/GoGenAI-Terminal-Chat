@@ -200,7 +200,7 @@ func (s *Session) handleUserInput(input string) bool {
 		return true // End the session if the client is not valid
 	}
 
-	s.ChatHistory.AddMessage(YouNerd, input) // Add the user's input to the chat history
+	s.ChatHistory.AddMessage(StringNewLine+YouNerd, input) // Add the user's input to the chat history
 
 	if success := s.sendInputToAI(input); !success {
 		return true // End the session if sending input to AI failed

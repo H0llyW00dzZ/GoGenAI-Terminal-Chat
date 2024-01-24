@@ -38,14 +38,14 @@ const (
 
 // Defined constants for language
 const (
-	YouNerd = "🤓 You: "
-	AiNerd  = "🤖 AI: "
+	YouNerd = "🤓 You:"
+	AiNerd  = "🤖 AI:"
 	// Pass Context to LLM's Google AI
 	youNerd                = "🤓"
 	aiNerd                 = "🤖"
-	TokenEmoji             = "🪙  Token count: "
-	StatisticsEmoji        = "📈 Total Token: "
-	ShieldEmoji            = "☠️  Safety: "
+	TokenEmoji             = "🪙  Token count:"
+	StatisticsEmoji        = "📈 Total Token:"
+	ShieldEmoji            = "☠️  Safety:"
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
 	ContextCancel          = "Context canceled, shutting down..." // sending a messages to gopher officer
@@ -225,7 +225,7 @@ const (
 	Default          = "default"
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
-	ShowChatHistory  = "Chat History:\n%s"
+	ShowChatHistory  = "Chat History:\n\n%s"
 )
 
 // Defined Tools
