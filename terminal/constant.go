@@ -79,8 +79,8 @@ const (
 		"The user attempted an command: **%s**\n" +
 		"Can you provide help information for the available commands?\n" +
 		// Better Response for AI instead of "Hard Coded" hahaha
-		"List Command Available:\n**%s** or **%s**\n**%s** or **%s**\n" +
-		"**%s** or **%s**\n**%s** - **%s**, **%s**, **%s**\n" +
+		"List Command Available:\n**%s** or **%s**\n * Quit Commands\n" +
+		"**%s** or **%s**\n * Help Commands\n**%s** - **%s**, **%s**, **%s**\n" +
 		"**%s** <text> **%s** <targetlanguage>\n" +
 		"**%s** **%s** <number>\n\n**%s %s**\n\n**%s %s**\n\n" +
 		"**Additional Note**: There are no **additional commands** or **HTML Markdown** available" +

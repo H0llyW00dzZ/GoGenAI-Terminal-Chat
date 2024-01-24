@@ -49,6 +49,7 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 		builder.WriteString(colors.ColorHex95b806)
 		builder.WriteString(DEBUGPREFIX)
 		builder.WriteString(colors.ColorReset)
+		builder.WriteString(" ") // adding back this
 		builder.WriteString(message)
 
 		// Simulate typing the debug message
