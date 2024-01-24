@@ -41,17 +41,19 @@ func NewDebugOrErrorLogger() *DebugOrErrorLogger {
 //	v ...interface{}: The values to be formatted according to the format string.
 func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 	if l.debugMode {
+		// Use strings.Builder for efficient string concatenation
+		var builder strings.Builder
+
 		// Format the debug message
 		message := fmt.Sprintf(format, v...)
-
-		// Add the debug prefix in color
-		debugPrefix := colors.ColorHex95b806 + DEBUGPREFIX + colors.ColorReset
-
-		// Print the debug prefix without a newline
-		PrintPrefixWithTimeStamp(debugPrefix + " ")
+		builder.WriteString(colors.ColorHex95b806)
+		builder.WriteString(DEBUGPREFIX)
+		builder.WriteString(colors.ColorReset)
+		builder.WriteString(" ")
+		builder.WriteString(message)
 
 		// Simulate typing the debug message
-		PrintTypingChat(message, TypingDelay)
+		PrintTypingChat(builder.String(), TypingDelay)
 
 		// Print a newline after the message
 		fmt.Println()
@@ -66,21 +68,22 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 //	format string: The format string for the error message.
 //	v ...interface{}: The values to be formatted according to the format string.
 func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
+	var builder strings.Builder
+
 	// Format the error message
 	message := fmt.Sprintf(format, v...)
-
-	// Add the error prefix in color
-	errorPrefix := colors.ColorRed + message + colors.ColorReset
+	builder.WriteString(colors.ColorRed)
+	builder.WriteString(message)
+	builder.WriteString(colors.ColorReset)
 
 	// Print the error prefix with a timestamp
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX + "")
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX + " ")
 
 	// Simulate typing the error message
-	PrintTypingChat(errorPrefix, TypingDelay)
+	PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
 	fmt.Println()
-
 }
 
 // RecoverFromPanic should be deferred at the beginning of a function or goroutine
@@ -162,14 +165,17 @@ func (l *DebugOrErrorLogger) HandleOtherStupidAPIError(err error, apiName string
 //	format string: The format string for the information message.
 //	v ...interface{}: The values to be formatted according to the format string.
 func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
-	message := fmt.Sprintf(format, v...)
+	var builder strings.Builder
 
-	infoColor := colors.ColorBlue
-	colorizedMsg := infoColor + message + colors.ColorReset
+	message := fmt.Sprintf(format, v...)
+	builder.WriteString(colors.ColorBlue)
+	builder.WriteString(message)
+	builder.WriteString(colors.ColorReset)
 
 	// Print the message with a timestamp and colored output.
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX + "")
-	PrintTypingChat(colorizedMsg, TypingDelay)
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX + " ")
+	PrintTypingChat(builder.String(), TypingDelay)
+
 	// Print a newline after the message
 	fmt.Println()
 }
