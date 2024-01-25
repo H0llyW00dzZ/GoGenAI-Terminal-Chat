@@ -101,7 +101,11 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	logger.Debug(DEBUGEXECUTINGCMD, QuitCommand, parts)
 
 	// Context
-	session.ChatHistory.AddMessage(StringNewLine+YouNerd, QuitCommand, session.ChatConfig) // should be accurate now
+	// Clear the chat history now that the shutdown message has been sent
+	session.ChatHistory.Clear()
+	session.ChatHistory.AddMessage(StringNewLine+YouNerd,
+		QuitCommand,
+		session.ChatConfig) // should be accurate now
 
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(QuitCommand)
@@ -128,8 +132,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 
 	// Proceed with shutdown regardless of the error
 	fmt.Println(ShutdownMessage)
-	session.ChatHistory.Clear() // Clear the chat history now that the shutdown message has been sent
-	session.endSession()        // End the session and perform cleanup
+	session.endSession() // End the session and perform cleanup
 
 	// Signal to the main loop that it's time to exit
 	return true, nil // Always return true to end the session, and nil for error since we handle it above.

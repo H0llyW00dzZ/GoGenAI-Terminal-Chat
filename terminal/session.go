@@ -258,6 +258,7 @@ func (s *Session) sendInputToAI(input string) bool {
 // cleanup releases resources used by the session. It cancels the context and closes
 // the AI client connection.
 func (s *Session) cleanup() {
+	s.ChatHistory.cleanup() // Perform Clean
 	s.Cancel()
 	s.Client.Close()
 }
