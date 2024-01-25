@@ -106,15 +106,14 @@ func HandleUnrecognizedCommand(command string, session *Session, parts []string)
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, command, parts)
 	// Pass ContextPrompt
-	session.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
 	// If the command is not recognized, inform the AI about the unrecognized command.
 	aiPrompt := fmt.Sprintf(ErrorUserAttemptUnrecognizedCommandPrompt, ApplicationName, command)
-	chatHistory := session.ChatHistory.GetHistory()
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
 	// Send the constructed message to the AI and get the response.
-	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, chatHistory)
+	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
 	if err != nil {
 		errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
 		logger.Error(errMsg)
