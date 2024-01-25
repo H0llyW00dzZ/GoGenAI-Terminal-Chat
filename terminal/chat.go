@@ -115,6 +115,8 @@ func (h *ChatHistory) GetHistory(config *ChatConfig) string {
 	defer h.mu.RUnlock() // Unlock when the function returns
 
 	// Determine the starting index based on the number of messages to include.
+	// Additional Note: This required go1.21.0 ~ latest
+	// Ref: https://pkg.go.dev/builtin#max
 	startIndex := max(0, len(h.Messages)-config.HistorySize)
 	historySubset := h.Messages[startIndex:]
 
