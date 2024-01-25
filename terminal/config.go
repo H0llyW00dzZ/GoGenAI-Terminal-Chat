@@ -3,7 +3,9 @@
 
 package terminal
 
-import genai "github.com/google/generative-ai-go/genai"
+import (
+	genai "github.com/google/generative-ai-go/genai"
+)
 
 // ChatConfig encapsulates settings that affect the management of chat history
 // during a session with the generative AI. It determines the amount of chat history
@@ -27,8 +29,7 @@ type ChatConfig struct {
 //
 // Returns:
 //
-//  *ChatConfig: A pointer to a ChatConfig instance populated with default settings.
-//
+//	*ChatConfig: A pointer to a ChatConfig instance populated with default settings.
 func DefaultChatConfig() *ChatConfig {
 	return &ChatConfig{
 		// Note: This history size is stable. It is automatically handled by the garbage collector.
