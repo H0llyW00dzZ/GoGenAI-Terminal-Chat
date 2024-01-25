@@ -101,7 +101,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	logger.Debug(DEBUGEXECUTINGCMD, QuitCommand, parts)
 
 	// Context
-	session.ChatHistory.AddMessage(StringNewLine+YouNerd, HelpCommand, session.ChatConfig)
+	session.ChatHistory.AddMessage(StringNewLine+YouNerd, QuitCommand, session.ChatConfig) // should be accurate now
 
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(QuitCommand)
