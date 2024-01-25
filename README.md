@@ -335,6 +335,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Scalable Configuration System**
 > [!NOTE]
 > So easy written in `go`, plus `Scalability` & `Stability` 🤪
+- [ ] **Improve Contextual Prompts for AI when the user invokes other commands like `:help`**
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](SECURITY.md)
