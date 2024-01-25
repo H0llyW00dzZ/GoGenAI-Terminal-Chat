@@ -332,7 +332,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Implement Gemini-Pro Vision Capabilities**
 > [!NOTE]
 > The `Implement Gemini-Pro Vision Capabilities` feature is strategically integrated within command functionalities, such as image comparison, image analysis, and more.
-
+- [ ] **Scalable Configuration System**
 > [!NOTE]
 > So easy written in `go`, plus `Scalability` & `Stability` 🤪
 
