@@ -29,7 +29,7 @@ type ChatConfig struct {
 //
 func DefaultChatConfig() *ChatConfig {
 	return &ChatConfig{
-		// Note: This History Size are stable, it automated handle by Garbage Collector
+		// Note: This history size is stable. It is automatically handled by the garbage collector.
 		// Ref: https://tip.golang.org/doc/gc-guide
 		HistorySize: 10, // Default to retaining the last 10 messages
 		// Note: HistorySendToAI currently is unimplemented, will implemented it later when I am free
