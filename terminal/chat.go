@@ -258,3 +258,12 @@ func (h *ChatHistory) Clear() {
 	h.Messages = []string{}
 	h.Hashes = make(map[string]int)
 }
+
+// Note: This a different way unlike "Clear"
+func (h *ChatHistory) cleanup() {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	h.Messages = nil
+	h.Hashes = nil
+}
