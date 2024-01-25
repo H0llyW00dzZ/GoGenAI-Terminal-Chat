@@ -75,7 +75,11 @@ func PrintTypingChat(message string, delay time.Duration) {
 func SendMessage(ctx context.Context, client *genai.Client, chatContext string, session *Session) (string, error) {
 	model := client.GenerativeModel(ModelAi)
 	cs := model.StartChat()
-
+	// Note: This is a good balance between safety and readability.
+	// It allows for a wider range of content to be generated while still maintaining a reasonable level of safety.
+	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
+	safetySettings := DefaultSafetySettings()
+	safetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi))
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
 
