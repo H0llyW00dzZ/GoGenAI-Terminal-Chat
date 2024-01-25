@@ -218,14 +218,6 @@ func (h *ChatHistory) removeRecentMessages(num int) {
 	h.Messages = h.Messages[:len(h.Messages)-numToRemove]
 }
 
-// min returns the smaller of x or y.
-func min(x, y int) int {
-	if x < y {
-		return x
-	}
-	return y
-}
-
 // FilterMessages returns a slice of messages that match the predicate function.
 //
 // Parameters:
