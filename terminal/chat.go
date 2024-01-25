@@ -52,10 +52,11 @@ type NewLineChar struct {
 //
 //	user string: The username of the individual sending the message.
 //	text string: The content of the message to be added to the history.
+//	config *ChatConfig: Configuration parameters for the chat session, including history size.
 //
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
-func (h *ChatHistory) AddMessage(user string, text string) {
+func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 	h.mu.Lock()         // Lock for writing
 	defer h.mu.Unlock() // Unlock when the function returns
 
@@ -69,8 +70,8 @@ func (h *ChatHistory) AddMessage(user string, text string) {
 		// Remove the oldest two messages (one user and one AI) to maintain a fixed history size in RAM's labyrinth.
 		// Note: The fixed history size might be increased in the future. Currently, the application's memory usage is minimal, consuming only 16 MB (Average).
 		// then keep a maximum of 10 history entries for transmission to Google AI.
-		if len(h.Messages) >= MaxChatHistory*2 { // Multiply by 2 because we're considering pairs of messages
-			// Remove the oldest message and its hash
+		for len(h.Messages) > config.HistorySize*2 {
+			// Remove the oldest pair of messages (one user and one AI) to maintain the fixed history size.
 			oldestUserHash := h.hashMessage(h.Messages[0])
 			oldestAIHash := h.hashMessage(h.Messages[1])
 			delete(h.Hashes, oldestUserHash) // Remove the hash of the oldest user message
@@ -108,17 +109,22 @@ func (h *ChatHistory) SanitizeMessage(message string) string {
 // Returns:
 //
 //	string: A newline-separated string of all messages in the chat history.
-func (h *ChatHistory) GetHistory() string {
+func (h *ChatHistory) GetHistory(config *ChatConfig) string {
 	// Note: if you're still wondering where this is all stored, it's in a place you won't find—somewhere in the RAM's labyrinth, hahaha!
 	// Define the prefixes to be removed
 	// Additional Note: If issues still arise due to ANSI color codes in AI responses, it's not because of the 'this' or 'Colorize' function in Genai.go.
 	// The issue lies with the AI's attempt to apply formatting, which fails due to incorrect ANSI sequences, reminiscent of issues one might encounter with "PYTHON" or Your Machine is bad LMAO.
 	h.mu.RLock()         // Lock for reading
 	defer h.mu.RUnlock() // Unlock when the function returns
-	// fix concurrency issue
-	var builder strings.Builder // Create a new builder for this method call
 
-	for i, msg := range h.Messages {
+	// Determine the starting index based on the number of messages to include.
+	startIndex := max(0, len(h.Messages)-config.HistorySize)
+	historySubset := h.Messages[startIndex:]
+
+	// Use a strings.Builder to build the chat history string efficiently.
+	var builder strings.Builder
+
+	for i, msg := range historySubset {
 		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
 		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
 		builder.WriteRune(nl.NewLineChars)     // Append a newline character after each message
@@ -132,13 +138,13 @@ func (h *ChatHistory) GetHistory() string {
 		//
 		// ---
 		// Add a separator after each AI message, except for the last message
-		if isAIMessage(sanitizedMsg) && !isLastMessage(i, h.Messages) {
+		if isAIMessage(sanitizedMsg) && i < len(historySubset)-1 {
 			builder.WriteString(StripChars)    // Append the separator
 			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
 		}
 	}
 
-	return builder.String() // Return the complete, concatenated chat history
+	return builder.String() // Return the sanitized chat history subset as a string
 }
 
 // isAIMessage checks if the message is from the AI
