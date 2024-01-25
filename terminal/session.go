@@ -22,6 +22,7 @@ import (
 type Session struct {
 	Client      *genai.Client      // Client is the generative AI client used to communicate with the AI model.
 	ChatHistory *ChatHistory       // ChatHistory stores the history of the chat session.
+	ChatConfig  *ChatConfig        // ChatConfig contains the settings for managing the chat history size.
 	Ctx         context.Context    // Ctx is the context governing the session, used for cancellation.
 	Cancel      context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
 	Ended       bool               // Ended indicates whether the session has ended.
@@ -45,6 +46,8 @@ type Session struct {
 //
 //	*Session: A pointer to the newly created Session object.
 func NewSession(apiKey string) *Session {
+	// Initialize ChatConfig with default values
+	chatConfig := DefaultChatConfig()
 	ctx, cancel := context.WithCancel(context.Background())
 
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
@@ -75,6 +78,7 @@ func NewSession(apiKey string) *Session {
 	return &Session{
 		Client:      client,
 		ChatHistory: chatHistory, // Store the pointer to ChatHistory in RAM's labyrinth
+		ChatConfig:  chatConfig,  // Initialize ChatConfig
 		Ctx:         ctx,
 		Cancel:      cancel,
 	}
@@ -132,7 +136,7 @@ func (s *Session) Start() {
 	fmt.Println() // Ensure there's a newline after the AI's initial message
 
 	// Add AI's initial message to chat history
-	s.ChatHistory.AddMessage(AiNerd, ContextPrompt)
+	s.ChatHistory.AddMessage(AiNerd, ContextPrompt, s.ChatConfig)
 
 	// Main loop for processing user input
 	for {
@@ -200,7 +204,7 @@ func (s *Session) handleUserInput(input string) bool {
 		return true // End the session if the client is not valid
 	}
 
-	s.ChatHistory.AddMessage(StringNewLine+YouNerd, input) // Add the user's input to the chat history
+	s.ChatHistory.AddMessage(StringNewLine+YouNerd, input, s.ChatConfig) // Add the user's input to the chat history
 
 	if success := s.sendInputToAI(input); !success {
 		return true // End the session if sending input to AI failed
@@ -226,7 +230,6 @@ func (s *Session) ensureClientIsValid() bool {
 // sendInputToAI sends the user input to the AI and updates the chat history with the AI's response.
 // It returns true if the input was successfully sent and the response was received, otherwise false.
 func (s *Session) sendInputToAI(input string) bool {
-	chatHistory := s.ChatHistory.GetHistory() // Get the entire chat history as a string
 	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
 	apiErrorHandler := func(err error) bool {
 		// Retry on 500 status code
@@ -235,12 +238,12 @@ func (s *Session) sendInputToAI(input string) bool {
 
 	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := SendMessage(s.Ctx, s.Client, input, chatHistory)
+		aiResponse, err := SendMessage(s.Ctx, s.Client, input, s)
 		if err != nil {
 			return false, err
 		}
-		aiResponse = sanitizeAIResponse(aiResponse)  // Sanitize AI's response to remove any separators
-		s.ChatHistory.AddMessage(AiNerd, aiResponse) // Add the sanitized AI's response to the chat history
+		aiResponse = sanitizeAIResponse(aiResponse)                // Sanitize AI's response to remove any separators
+		s.ChatHistory.AddMessage(AiNerd, aiResponse, s.ChatConfig) // Add the sanitized AI's response to the chat history
 		return true, nil
 	}, apiErrorHandler)
 
