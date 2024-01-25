@@ -38,6 +38,8 @@ type SafetySettings struct {
 	HateSpeechThreshold genai.HarmBlockThreshold
 	// ToxicityThreshold defines the threshold for filtering toxic content.
 	ToxicityThreshold genai.HarmBlockThreshold
+	// DerogatoryThershold defines the threshold for filtering derogatory content.
+	DerogatoryThershold genai.HarmBlockThreshold
 }
 
 // DefaultSafetySettings returns a SafetySettings instance with a default
@@ -53,6 +55,7 @@ func DefaultSafetySettings() *SafetySettings {
 		ViolenceThreshold:                genai.HarmBlockMediumAndAbove,
 		HateSpeechThreshold:              genai.HarmBlockMediumAndAbove,
 		ToxicityThreshold:                genai.HarmBlockMediumAndAbove,
+		DerogatoryThershold:              genai.HarmBlockMediumAndAbove,
 	}
 }
 
@@ -68,6 +71,7 @@ func (s *SafetySettings) SetLowSafety() {
 	s.ViolenceThreshold = genai.HarmBlockLowAndAbove
 	s.HateSpeechThreshold = genai.HarmBlockLowAndAbove
 	s.ToxicityThreshold = genai.HarmBlockLowAndAbove
+	s.DerogatoryThershold = genai.HarmBlockLowAndAbove
 }
 
 // SetHighSafety raises the safety settings to a higher threshold, providing
@@ -82,6 +86,7 @@ func (s *SafetySettings) SetHighSafety() {
 	s.ViolenceThreshold = genai.HarmBlockOnlyHigh
 	s.HateSpeechThreshold = genai.HarmBlockOnlyHigh
 	s.ToxicityThreshold = genai.HarmBlockOnlyHigh
+	s.DerogatoryThershold = genai.HarmBlockOnlyHigh
 }
 
 // ApplyToModel applies the configured safety settings to a given generative AI model.
@@ -116,6 +121,10 @@ func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel) {
 		{
 			Category:  genai.HarmCategoryToxicity,
 			Threshold: s.ToxicityThreshold,
+		},
+		{
+			Category:  genai.HarmCategoryDerogatory,
+			Threshold: s.DerogatoryThershold,
 		},
 	}
 }
