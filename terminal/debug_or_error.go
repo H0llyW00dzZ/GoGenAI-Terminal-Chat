@@ -108,8 +108,18 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 // function or goroutine.
 func (l *DebugOrErrorLogger) RecoverFromPanic() {
 	if r := recover(); r != nil {
-		msg := fmt.Sprintf(RecoverGopher, colors.ColorHex95b806, colors.ColorReset, colors.ColorRed, r, colors.ColorReset)
-		l.logger.Println(msg)
+		var builder strings.Builder
+		// Format the message for panic
+		builder.WriteString(fmt.Sprintf(
+			RecoverGopher,
+			colors.ColorHex95b806,
+			colors.ColorReset,
+			colors.ColorRed,
+			r,
+			colors.ColorReset))
+
+		// Output the message to the logger
+		l.logger.Println(builder.String())
 	}
 }
 
