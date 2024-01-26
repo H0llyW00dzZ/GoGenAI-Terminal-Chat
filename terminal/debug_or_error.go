@@ -8,14 +8,16 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 )
 
 // DebugOrErrorLogger provides a simple logger with support for debug and error logging.
 // It encapsulates a standard log.Logger and adds functionality for conditional debug
 // logging and colorized error output.
 type DebugOrErrorLogger struct {
-	logger    *log.Logger
-	debugMode bool
+	logger          *log.Logger
+	debugMode       bool
+	PrintTypingChat func(string, time.Duration)
 }
 
 // NewDebugOrErrorLogger initializes a new DebugOrErrorLogger with a logger that writes
@@ -27,8 +29,9 @@ type DebugOrErrorLogger struct {
 func NewDebugOrErrorLogger() *DebugOrErrorLogger {
 	debugMode := os.Getenv(DEBUG_MODE) == "true" // Read the environment variable once
 	return &DebugOrErrorLogger{
-		logger:    log.New(os.Stderr, "", log.LstdFlags),
-		debugMode: debugMode,
+		logger:          log.New(os.Stderr, "", log.LstdFlags),
+		debugMode:       debugMode,
+		PrintTypingChat: PrintTypingChat,
 	}
 }
 
@@ -53,7 +56,7 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 		builder.WriteString(message)
 
 		// Simulate typing the debug message
-		PrintTypingChat(builder.String(), TypingDelay)
+		l.PrintTypingChat(builder.String(), TypingDelay)
 
 		// Print a newline after the message
 		fmt.Println()
@@ -80,7 +83,7 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
 
 	// Simulate typing the error message
-	PrintTypingChat(builder.String(), TypingDelay)
+	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
 	fmt.Println()
@@ -119,7 +122,7 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 			colors.ColorReset))
 
 		// Output the message to the logger
-		l.logger.Println(builder.String())
+		l.PrintTypingChat(builder.String(), TypingDelay)
 	}
 }
 
@@ -184,7 +187,7 @@ func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
 
 	// Print the message with a timestamp and colored output.
 	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-	PrintTypingChat(builder.String(), TypingDelay)
+	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
 	fmt.Println()
