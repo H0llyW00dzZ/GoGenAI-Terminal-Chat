@@ -42,40 +42,103 @@ func DefaultChatConfig() *ChatConfig {
 	}
 }
 
-// Option is a function type that takes a pointer to a GenerativeModel instance and applies a specific configuration to it.
-type Option func(m *genai.GenerativeModel)
-
-// WithTemperature sets the temperature parameter of the model.
-func WithTemperature(temperature float32) Option {
-	return func(m *genai.GenerativeModel) {
-		m.SetTemperature(float32(temperature))
+// ConfigureModel applies a series of configuration options to a GenerativeModel.
+// This function is variadic, meaning it can accept multiple configuration options
+// that will be applied in the order they are provided.
+//
+// Parameters:
+//
+//	model *genai.GenerativeModel: The generative AI model to configure.
+//	opts ...ModelConfig: A variadic number of configuration options.
+func ConfigureModel(model *genai.GenerativeModel, opts ...ModelConfig) {
+	for _, opt := range opts {
+		opt(model)
 	}
 }
 
-// WithTopP sets the top_p parameter of the model.
-func WithTopP(topP float32) Option {
+// ModelConfig defines a function type for configuring a GenerativeModel.
+// Functions of this type take a pointer to a GenerativeModel and apply
+// specific settings to it.
+type ModelConfig func(m *genai.GenerativeModel)
+
+// WithTemperature creates a ModelConfig function to set the temperature
+// of a GenerativeModel. Temperature controls the randomness of the AI's
+// responses, with higher values leading to more varied output.
+//
+// Parameters:
+//
+//	temperature float32: The temperature value to set.
+//
+// Returns:
+//
+//	ModelConfig: A function that sets the temperature when applied to a model.
+func WithTemperature(temperature float32) ModelConfig {
 	return func(m *genai.GenerativeModel) {
-		m.SetTopP(float32(topP))
+		m.SetTemperature(temperature)
 	}
 }
 
-// WithTopK sets the top_k parameter of the model.
-func WithTopK(topK int32) Option {
+// WithTopP creates a ModelConfig function to set the top_p parameter
+// of a GenerativeModel. Top_p controls the nucleus sampling strategy, where
+// a smaller value leads to less randomness in token selection.
+//
+// Parameters:
+//
+//	topP float32: The top_p value to set.
+//
+// Returns:
+//
+//	ModelConfig: A function that sets the top_p value when applied to a model.
+func WithTopP(topP float32) ModelConfig {
 	return func(m *genai.GenerativeModel) {
-		m.SetTopK(int32(topK))
+		m.SetTopP(topP)
 	}
 }
 
-// WithMaxOutputTokens sets the max_output_tokens parameter of the model.
-func WithMaxOutputTokens(maxOutputTokens int32) Option {
+// WithTopK creates a ModelConfig function to set the top_k parameter
+// of a GenerativeModel. Top_k restricts the sampling pool to the k most likely
+// tokens, where a lower value increases the likelihood of high-probability tokens.
+//
+// Parameters:
+//
+//	topK int32: The top_k value to set.
+//
+// Returns:
+//
+//	ModelConfig: A function that sets the top_k value when applied to a model.
+func WithTopK(topK int32) ModelConfig {
 	return func(m *genai.GenerativeModel) {
-		m.SetMaxOutputTokens(int32(maxOutputTokens))
+		m.SetTopK(topK)
 	}
 }
 
-// ApplyOptions applies the provided options to the given generative AI model.
-func ApplyOptions(m *genai.GenerativeModel, options ...Option) {
-	for _, option := range options {
+// WithMaxOutputTokens creates a ModelConfig function to set the maximum number
+// of output tokens for a GenerativeModel. This parameter limits the length of
+// the AI's responses.
+//
+// Parameters:
+//
+//	maxOutputTokens int32: The maximum number of tokens to set.
+//
+// Returns:
+//
+//	ModelConfig: A function that sets the maximum number of output tokens when applied to a model.
+func WithMaxOutputTokens(maxOutputTokens int32) ModelConfig {
+	return func(m *genai.GenerativeModel) {
+		m.SetMaxOutputTokens(maxOutputTokens)
+	}
+}
+
+// ApplyOptions is a convenience function that applies a series of configuration
+// options to a GenerativeModel. This allows for flexible and dynamic model
+// configuration at runtime.
+//
+// Parameters:
+//
+//	m *genai.GenerativeModel: The generative AI model to configure.
+//	configs ...ModelConfig: A variadic number of configuration options.
+func ApplyOptions(m *genai.GenerativeModel, configs ...ModelConfig) {
+	for _, option := range configs {
 		option(m)
 	}
 }
