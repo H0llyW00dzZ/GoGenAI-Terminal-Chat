@@ -97,6 +97,17 @@ func NewSession(apiKey string) *Session {
 func SendDummyMessage(client *genai.Client) (bool, error) {
 	// Initialize a dummy chat session or use an appropriate lightweight method.
 	model := client.GenerativeModel(ModelAi)
+	// Configure the model with options.
+	// Apply the configurations to the model.
+	// Note: This a testing in live production by sending a Dummy messages lmao
+	ApplyOptions(model,
+		WithTemperature(0.9),
+		WithTopP(0.5),
+		WithTopK(20),
+		// Exercise caution: setting the max output tokens below 50 may cause a panic.
+		// This could be a bug in official genai package or an unintended issue from Google's side.
+		WithMaxOutputTokens(50),
+	)
 	cs := model.StartChat()
 
 	// Attempt to send a dummy message.
