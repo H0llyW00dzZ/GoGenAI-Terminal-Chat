@@ -339,6 +339,9 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > So easy written in `go`, plus `Scalability` & `Stability` 🤪
 - [ ] **Improve Contextual Prompts for AI when the user invokes other commands like `:help`**
+- [ ] **Automated Summarize a Conversation**
+> [!NOTE]
+> The `Automated Summarize a Conversation` feature is designed to automatically summarize a conversation similar to [ChatGPTNextWeb](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web), but it is built in a terminal.
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](SECURITY.md)
