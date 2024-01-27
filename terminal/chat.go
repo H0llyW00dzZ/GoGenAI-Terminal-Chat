@@ -149,11 +149,25 @@ func (h *ChatHistory) GetHistory(config *ChatConfig) string {
 	// Ref: https://pkg.go.dev/builtin#max
 	startIndex := max(0, len(h.Messages)-config.HistorySize)
 	historySubset := h.Messages[startIndex:]
+
+	return h.buildHistoryString(historySubset)
+}
+
+// buildHistoryString builds the chat history string from a subset of messages.
+func (h *ChatHistory) buildHistoryString(historySubset []string) string {
 	// Use a strings.Builder to build the chat history string efficiently.
 	builder := strings.Builder{}
 
 	// Check for system messages and prepend them to the history.
 	sysMsgs, chatMsgs := h.separateSystemMessages(historySubset)
+	h.appendSystemMessages(&builder, sysMsgs)
+	h.appendChatMessages(&builder, chatMsgs)
+
+	return builder.String()
+}
+
+// appendSystemMessages appends system messages to the StringBuilder.
+func (h *ChatHistory) appendSystemMessages(builder *strings.Builder, sysMsgs []string) {
 	for _, sysMsg := range sysMsgs {
 		builder.WriteString(sysMsg)
 		builder.WriteRune(nl.NewLineChars)
@@ -161,8 +175,10 @@ func (h *ChatHistory) GetHistory(config *ChatConfig) string {
 		builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
 		builder.WriteRune(nl.NewLineChars) // Append an extra newline character after the system message
 	}
+}
 
-	// Build the rest of the chat history.
+// appendChatMessages appends chat messages to the StringBuilder, adding separators as needed.
+func (h *ChatHistory) appendChatMessages(builder *strings.Builder, chatMsgs []string) {
 	for i, msg := range chatMsgs {
 		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
 		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
@@ -185,8 +201,6 @@ func (h *ChatHistory) GetHistory(config *ChatConfig) string {
 			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
 		}
 	}
-
-	return builder.String() // Return the chat history with the system message at the top
 }
 
 // separateSystemMessages separates system messages from chat messages.
