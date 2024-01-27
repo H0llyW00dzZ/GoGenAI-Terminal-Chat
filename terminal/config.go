@@ -4,6 +4,8 @@
 package terminal
 
 import (
+	"fmt"
+
 	genai "github.com/google/generative-ai-go/genai"
 )
 
@@ -123,10 +125,14 @@ func WithTopK(topK int32) ModelConfig {
 // Returns:
 //
 //	ModelConfig: A function that sets the maximum number of output tokens when applied to a model.
-func WithMaxOutputTokens(maxOutputTokens int32) ModelConfig {
+//	error: An error if maxOutputTokens is below 50.
+func WithMaxOutputTokens(maxOutputTokens int32) (ModelConfig, error) {
+	if maxOutputTokens < 50 {
+		return nil, fmt.Errorf(ErrorMaxOutputTokenMustbe, maxOutputTokens)
+	}
 	return func(m *genai.GenerativeModel) {
 		m.SetMaxOutputTokens(maxOutputTokens)
-	}
+	}, nil
 }
 
 // ApplyOptions is a convenience function that applies a series of configuration
@@ -137,8 +143,17 @@ func WithMaxOutputTokens(maxOutputTokens int32) ModelConfig {
 //
 //	m *genai.GenerativeModel: The generative AI model to configure.
 //	configs ...ModelConfig: A variadic number of configuration options.
-func ApplyOptions(m *genai.GenerativeModel, configs ...ModelConfig) {
+//
+// Returns:
+//
+//	bool: A boolean indicating whether the options were applied successfully.
+//	error: An error if any of the configuration options are nil.
+func ApplyOptions(m *genai.GenerativeModel, configs ...ModelConfig) (bool, error) {
 	for _, option := range configs {
+		if option == nil {
+			return false, fmt.Errorf(ErrorGenAiReceiveNil)
+		}
 		option(m)
 	}
+	return true, nil
 }

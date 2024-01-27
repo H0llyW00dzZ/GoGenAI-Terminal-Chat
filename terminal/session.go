@@ -68,7 +68,7 @@ func NewSession(apiKey string) *Session {
 	// Handle the result of retryWithExponentialBackoff
 	if err != nil || !valid {
 		cancel()
-		logger.Error(ErrorInvalidApiKey, err)
+		logger.Error(ErrorFailedToStartSession, err)
 		return nil
 	}
 	// Note: This doesn't use a storage system like a database or file system to keep the chat history, nor does it use a JSON structure (as a front-end might) for sending request to Google AI.
@@ -100,20 +100,27 @@ func SendDummyMessage(client *genai.Client) (bool, error) {
 	// Configure the model with options.
 	// Apply the configurations to the model.
 	// Note: This a testing in live production by sending a Dummy messages lmao
-	ApplyOptions(model,
-		WithTemperature(0.9),
-		WithTopP(0.5),
-		WithTopK(20),
-		// Exercise caution: setting the max output tokens below 50 may cause a panic.
-		// This could be a bug in official genai package or an unintended issue from Google's side.
-		WithMaxOutputTokens(50),
-	)
+	tempOption := WithTemperature(0.9)
+	topPOption := WithTopP(0.5)
+	topKOption := WithTopK(20)
+	// Exercise caution: setting the max output tokens below 50 may cause a panic.
+	// This could be a bug in official genai package or an unintended issue from Google's side.
+	maxOutputTokensOption, err := WithMaxOutputTokens(10)
+	if err != nil {
+		return handleGenAIError(err)
+	}
+
+	success, err := ApplyOptions(model, tempOption, topPOption, topKOption, maxOutputTokensOption)
+	if !success {
+		return false, fmt.Errorf(ErrorFailedToApplyModelConfiguration)
+	}
+
 	cs := model.StartChat()
 
 	// Attempt to send a dummy message.
 	resp, err := cs.SendMessage(context.Background(), genai.Text(DummyMessages))
 	if err != nil {
-		return false, err
+		return handleGenAIError(err)
 	}
 
 	// A non-nil response indicates a valid API key.
@@ -336,4 +343,22 @@ func (s *Session) RenewSession(apiKey string) error {
 	}
 
 	return nil
+}
+
+// handleGenAIError is a utility function that handles errors by logging them and returning an error value.
+//
+// Parameters:
+//
+//	err error: The error to handle.
+//
+// Returns:
+//
+//	bool: A boolean indicating whether the error was handled successfully.
+//	error: The original error value.
+func handleGenAIError(err error) (bool, error) {
+	if err != nil {
+		logger.Error(ErrorGenAI, err)
+		return false, err
+	}
+	return true, nil
 }
