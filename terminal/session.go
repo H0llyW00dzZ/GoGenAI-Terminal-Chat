@@ -105,7 +105,7 @@ func SendDummyMessage(client *genai.Client) (bool, error) {
 	topKOption := WithTopK(20)
 	// Exercise caution: setting the max output tokens below 50 may cause a panic.
 	// This could be a bug in official genai package or an unintended issue from Google's side.
-	maxOutputTokensOption, err := WithMaxOutputTokens(10)
+	maxOutputTokensOption, err := WithMaxOutputTokens(50)
 	if err != nil {
 		return handleGenAIError(err)
 	}
