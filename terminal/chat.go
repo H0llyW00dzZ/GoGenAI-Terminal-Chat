@@ -185,11 +185,6 @@ func isSysMessage(message string) bool {
 	return strings.HasPrefix(message, SYSTEMPREFIX)
 }
 
-// isLastMessage checks if the current index is the last message in the slice
-func isLastMessage(index int, messages []string) bool {
-	return index == len(messages)-1
-}
-
 // hashMessage generates a SHA-256 hash for a given message.
 func (h *ChatHistory) hashMessage(message string) string {
 	hasher := sha256.New()

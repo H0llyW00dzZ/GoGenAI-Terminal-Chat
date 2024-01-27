@@ -178,3 +178,10 @@ func ReplaceTripleBackticks(text, placeholder string) string {
 	}
 	return text
 }
+
+// IsLastMessage checks if the current index is the last message in the slice
+//
+// Deprecated: This method is no longer used, and was replaced by separateSystemMessages
+func IsLastMessage(index int, messages []string) bool {
+	return index == len(messages)-1
+}
