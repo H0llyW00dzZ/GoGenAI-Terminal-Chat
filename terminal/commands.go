@@ -535,11 +535,14 @@ func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool
 	}
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
+		// Note: This is subject to change, for example,
+		// to implement another functionality without displaying AI response in the terminal,
+		// but only adding it to the chat history.
 		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
 		if err != nil {
 			return false, err
 		}
-		// Add the AI response to the chat history
+		// Add the AI response to the chat history.
 		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
 		return true, nil
 	}, apiErrorHandler)
