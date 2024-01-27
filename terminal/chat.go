@@ -123,17 +123,30 @@ func (h *ChatHistory) GetHistory(config *ChatConfig) string {
 	// Ref: https://pkg.go.dev/builtin#max
 	startIndex := max(0, len(h.Messages)-config.HistorySize)
 	historySubset := h.Messages[startIndex:]
-
 	// Use a strings.Builder to build the chat history string efficiently.
-	var builder strings.Builder
+	builder := strings.Builder{}
 
-	for i, msg := range historySubset {
+	// Check for system messages and prepend them to the history.
+	sysMsgs, chatMsgs := h.separateSystemMessages(historySubset)
+	for _, sysMsg := range sysMsgs {
+		builder.WriteString(sysMsg)
+		builder.WriteRune(nl.NewLineChars)
+		builder.WriteString(StripChars)    // Append the separator
+		builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
+		builder.WriteRune(nl.NewLineChars) // Append an extra newline character after the system message
+	}
+
+	// Build the rest of the chat history.
+	for i, msg := range chatMsgs {
 		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
 		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
 		builder.WriteRune(nl.NewLineChars)     // Append a newline character after each message
 		// After printing an AI message and if it's not the last message, add a separator
 		// Note: This a better way instead of structuring it then stored in RAM's labyrinth.
 		// For example how it work it's like this
+		// ⚙️  SYSTEM: Discussion Summary:
+		//
+		// ---
 		//
 		// 🤓 You: :checkversion
 		//
@@ -141,18 +154,35 @@ func (h *ChatHistory) GetHistory(config *ChatConfig) string {
 		//
 		// ---
 		// Add a separator after each AI message, except for the last message
-		if isAIMessage(sanitizedMsg) && i < len(historySubset)-1 {
+		if isAIMessage(sanitizedMsg) && i < len(chatMsgs)-1 {
 			builder.WriteString(StripChars)    // Append the separator
 			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
 		}
 	}
 
-	return builder.String() // Return the sanitized chat history subset as a string
+	return builder.String() // Return the chat history with the system message at the top
+}
+
+// separateSystemMessages separates system messages from chat messages.
+func (h *ChatHistory) separateSystemMessages(messages []string) (sysMsgs, chatMsgs []string) {
+	for _, msg := range messages {
+		if isSysMessage(msg) {
+			sysMsgs = append(sysMsgs, msg)
+		} else {
+			chatMsgs = append(chatMsgs, msg)
+		}
+	}
+	return sysMsgs, chatMsgs
 }
 
 // isAIMessage checks if the message is from the AI
 func isAIMessage(message string) bool {
 	return strings.HasPrefix(message, AiNerd)
+}
+
+// isSysMessage checks if the message is from the System
+func isSysMessage(message string) bool {
+	return strings.HasPrefix(message, SYSTEMPREFIX)
 }
 
 // isLastMessage checks if the current index is the last message in the slice
