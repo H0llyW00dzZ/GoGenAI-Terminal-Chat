@@ -64,21 +64,25 @@ func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 
 	// Check if the message hash already exists to prevent duplicates
 	if _, exists := h.Hashes[hashValue]; !exists {
-		// Remove the oldest two messages (one user and one AI) to maintain a fixed history size in RAM's labyrinth.
-		// Note: The fixed history size might be increased in the future. Currently, the application's memory usage is minimal, consuming only 16 MB (Average).
-		// then keep a maximum of 10 history entries for transmission to Google AI.
-		for len(h.Messages) > config.HistorySize*2 {
-			// Remove the oldest pair of messages (one user and one AI) to maintain the fixed history size.
-			oldestUserHash := h.hashMessage(h.Messages[0])
-			oldestAIHash := h.hashMessage(h.Messages[1])
-			delete(h.Hashes, oldestUserHash) // Remove the hash of the oldest user message
-			delete(h.Hashes, oldestAIHash)   // Remove the hash of the oldest AI message
-			h.Messages = h.Messages[2:]      // Remove the oldest two messages
-		}
+		h.manageHistorySize(config)
 		// Note: this remove the oldest message are automated handle by Garbage Collector.
 		// For example, free memory to avoid memory leak.
 		h.Messages = append(h.Messages, message)  // Add the new message
 		h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
+	}
+}
+
+// manageHistorySize manages the size of the chat history based on the ChatConfig.
+func (h *ChatHistory) manageHistorySize(config *ChatConfig) {
+	// Remove the oldest two messages (one user and one AI) to maintain a fixed history size in RAM's labyrinth.
+	// Note: The fixed history size might be increased in the future. Currently, the application's memory usage is minimal, consuming only 16 MB (Average).
+	// then keep a maximum of 10 history entries for transmission to Google AI.
+	for len(h.Messages) > config.HistorySize*2 {
+		oldestUserHash := h.hashMessage(h.Messages[0])
+		oldestAIHash := h.hashMessage(h.Messages[1])
+		delete(h.Hashes, oldestUserHash) // Remove the hash of the oldest user message
+		delete(h.Hashes, oldestAIHash)   // Remove the hash of the oldest AI message
+		h.Messages = h.Messages[2:]      // Remove the oldest two messages
 	}
 }
 
