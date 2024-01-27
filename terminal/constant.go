@@ -163,14 +163,14 @@ const (
 	ErrorFailedToSendVersionCheckMessageAfterReties = "Failed to send version check message after retries" // low level
 	ErrorFailedToSendTranslationMessage             = "Failed to send translation message: %v"
 	ErrorFailedToSendTranslationMessageAfterRetries = "Failed to send translation message after retries" // low level
-	ErrorGenAI                                      = "GenAI Error: %v"
-	ErrorFailedToApplyModelConfiguration            = "failed to apply model configuration"          // low level
-	ErrorMaxOutputTokenMustbe                       = "maxOutputTokens must be 50 or higher, got %d" // low level
+	ErrorFailedToApplyModelConfiguration            = "failed to apply model configuration"              // low level
+	ErrorMaxOutputTokenMustbe                       = "maxOutputTokens must be 50 or higher, got %d"     // low level
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
 	Error500GoogleApi    = "googleapi: Error 500:"
 	ErrorGoogleInternal  = "Google Internal Error: %s"
 	ErrorGenAiReceiveNil = "received a nil option function" // low level
+	ErrorGenAI           = "GenAI Error: %v"
 	// List Error Figlet include high and low level error
 	ErrorStyleIsEmpty             = "style is empty"                   // low level
 	ErrorCharacterNotFoundinStyle = "character %q not found in style"  // low level
