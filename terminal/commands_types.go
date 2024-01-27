@@ -201,6 +201,13 @@ func (cmd *handleShowChatCommand) IsValid(parts []string) bool {
 	return len(parts) > 1 && args == ChatHistoryArgs
 }
 
+type handleSummarizeCommand struct{}
+
+func (cmd *handleSummarizeCommand) IsValid(parts []string) bool {
+	// The summarize command should not have any arguments.
+	return len(parts) == 1
+}
+
 // Note: this unimplemented
 // Now even it's unimplemented, it wont detected in deadcode indicate that "unreachable func"
 type handleK8sCommand struct{}

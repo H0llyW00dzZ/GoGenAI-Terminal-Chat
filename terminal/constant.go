@@ -167,6 +167,8 @@ const (
 	ErrorFailedToSendTranslationMessageAfterRetries = "Failed to send translation message after retries" // low level
 	ErrorFailedToApplyModelConfiguration            = "failed to apply model configuration"              // low level
 	ErrorMaxOutputTokenMustbe                       = "maxOutputTokens must be 50 or higher, got %d"     // low level
+	ErrorFailedToSendSummarizeMessage               = "Failed To Send Summarize Message: %v"
+	ErrorFailedToSendSummarizeMessageAfterRetries   = "failed to send summarize message after retries" // low level
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
 	Error500GoogleApi    = "googleapi: Error 500:"
