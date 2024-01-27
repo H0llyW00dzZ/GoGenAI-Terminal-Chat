@@ -84,6 +84,7 @@ const (
 		"**%s**: Set the safety level - **%s** (low), **%s** (default), **%s** (high).\n" +
 		"**%s** <text> **%s** <target language>: Translate text to the specified language.\n" +
 		"**%s** **%s** <number>: Generate a random string of the specified length.\n" +
+		"**%s**: Summarize a current conversation\n\n" +
 		"**%s** **%s**: Show the chat history.\n\n" +
 		"**%s** **%s**: Clear all chat history and reset the total token usage count if enabled.\n\n" +
 		"**Additional Note**: There are no additional commands or HTML Markdown available " +
@@ -113,8 +114,9 @@ const (
 	LengthArgs         = ":length"
 	ShowCommands       = ":show"
 	ChatArgs           = ":chat"
-	PingCommand        = ":ping" // Currently marked as TODO
+	SummarizeCommands  = ":summarize"
 	ClearCommand       = ":clear"
+	PingCommand        = ":ping" // Currently marked as TODO
 	PrefixChar         = ":"
 	// List args
 	ChatHistoryArgs = "chat history"

@@ -187,6 +187,7 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		LangArgs,
 		CryptoRandCommand,
 		LengthArgs,
+		SummarizeCommands,
 		ShowCommands,
 		ChatHistoryArgs,
 		ClearCommand,
