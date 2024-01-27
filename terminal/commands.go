@@ -522,7 +522,7 @@ func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (boo
 func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, SummarizeCommands, parts)
-	// Define the summarize prompt to be sent to the AI, including the list of available commands.
+	// Define the summarize prompt to be sent to the AI.
 	aiPrompt := fmt.Sprintf(SummarizePrompt)
 
 	// Sanitize the message before sending it to the AI
