@@ -74,8 +74,10 @@ func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 	if _, exists := h.Hashes[hashValue]; !exists {
 		// Check if the message hash already exists to prevent duplicates
 		h.manageHistorySize(config)
-		h.Messages = append(h.Messages, message)
-		h.Hashes[hashValue] = len(h.Messages) - 1
+		// Note: this remove the oldest message are automated handle by Garbage Collector.
+		// For example, free memory to avoid memory leak.
+		h.Messages = append(h.Messages, message)  // Add the new message
+		h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
 	}
 }
 
