@@ -84,6 +84,7 @@ const (
 		"**%s**: Set the safety level - **%s** (low), **%s** (default), **%s** (high).\n" +
 		"**%s** <text> **%s** <target language>: Translate text to the specified language.\n" +
 		"**%s** **%s** <number>: Generate a random string of the specified length.\n" +
+		"**%s**: Summarize a current conversation\n\n" +
 		"**%s** **%s**: Show the chat history.\n\n" +
 		"**%s** **%s**: Clear all chat history and reset the total token usage count if enabled.\n\n" +
 		"**Additional Note**: There are no additional commands or HTML Markdown available " +
@@ -113,8 +114,9 @@ const (
 	LengthArgs         = ":length"
 	ShowCommands       = ":show"
 	ChatArgs           = ":chat"
-	PingCommand        = ":ping" // Currently marked as TODO
+	SummarizeCommands  = ":summarize"
 	ClearCommand       = ":clear"
+	PingCommand        = ":ping" // Currently marked as TODO
 	PrefixChar         = ":"
 	// List args
 	ChatHistoryArgs = "chat history"
@@ -165,6 +167,8 @@ const (
 	ErrorFailedToSendTranslationMessageAfterRetries = "Failed to send translation message after retries" // low level
 	ErrorFailedToApplyModelConfiguration            = "failed to apply model configuration"              // low level
 	ErrorMaxOutputTokenMustbe                       = "maxOutputTokens must be 50 or higher, got %d"     // low level
+	ErrorFailedToSendSummarizeMessage               = "Failed To Send Summarize Message: %v"
+	ErrorFailedToSendSummarizeMessageAfterRetries   = "failed to send summarize message after retries" // low level
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
 	Error500GoogleApi    = "googleapi: Error 500:"
@@ -236,6 +240,8 @@ const (
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
 	ShowChatHistory  = "Chat History:\n\n%s"
+	SummarizePrompt  = "Summarize the discussion briefly in 200 words or " +
+		"less to use as a prompt for future context:\n"
 )
 
 // Defined Tools

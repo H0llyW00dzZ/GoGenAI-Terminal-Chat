@@ -187,6 +187,7 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		LangArgs,
 		CryptoRandCommand,
 		LengthArgs,
+		SummarizeCommands,
 		ShowCommands,
 		ChatHistoryArgs,
 		ClearCommand,
@@ -515,4 +516,43 @@ func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (boo
 	logger.Info(ShowChatHistory, history)
 
 	return false, nil // Return false to indicate the session should continue.
+}
+
+// Execute processes the ":summarize" command within a chat session.
+func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, SummarizeCommands, parts)
+	// Define the summarize prompt to be sent to the AI, including the list of available commands.
+	aiPrompt := fmt.Sprintf(SummarizePrompt)
+
+	// Sanitize the message before sending it to the AI
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+
+	// Retry logic for sending the help prompt to the AI.
+	apiErrorHandler := func(err error) bool {
+		// Error 500 Google Api
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+
+	success, err := retryWithExponentialBackoff(func() (bool, error) {
+		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+		if err != nil {
+			return false, err
+		}
+		// Add the AI response to the chat history
+		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+		return true, nil
+	}, apiErrorHandler)
+
+	if err != nil {
+		logger.Error(ErrorFailedToSendHelpMessage, err)
+		return false, err
+	}
+
+	if !success {
+		return false, fmt.Errorf(ErrorFailedToSendHelpMessagesAfterRetries)
+	}
+
+	// Indicate that the command was handled successfully; return false to continue the session.
+	return false, nil
 }
