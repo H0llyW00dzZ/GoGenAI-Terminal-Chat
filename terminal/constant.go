@@ -236,6 +236,8 @@ const (
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
 	ShowChatHistory  = "Chat History:\n\n%s"
+	SummarizePrompt  = "Summarize the discussion briefly in 200 words or " +
+		"less to use as a prompt for future context:\n"
 )
 
 // Defined Tools
