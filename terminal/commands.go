@@ -528,7 +528,7 @@ func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
-	// Retry logic for sending the help prompt to the AI.
+	// Retry logic for sending the summarize prompt to the AI.
 	apiErrorHandler := func(err error) bool {
 		// Error 500 Google Api
 		return strings.Contains(err.Error(), Error500GoogleApi)
