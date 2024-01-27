@@ -201,8 +201,10 @@ func (cmd *handleShowChatCommand) IsValid(parts []string) bool {
 	return len(parts) > 1 && args == ChatHistoryArgs
 }
 
+// handleSummarizeCommand executes the ":summarize" command.
 type handleSummarizeCommand struct{}
 
+// IsValid checks if the summarize command is valid.
 func (cmd *handleSummarizeCommand) IsValid(parts []string) bool {
 	// The summarize command should not have any arguments.
 	return len(parts) == 1
