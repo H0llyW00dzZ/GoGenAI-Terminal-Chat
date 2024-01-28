@@ -118,7 +118,7 @@ const (
 	CryptoRandCommand  = ":cryptorand"
 	LengthArgs         = ":length"
 	ShowCommands       = ":show"
-	ChatArgs           = ":chat"
+	ChatCommands       = ":chat"
 	SummarizeCommands  = ":summarize"
 	ClearCommand       = ":clear"
 	PingCommand        = ":ping" // Currently marked as TODO
