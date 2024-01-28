@@ -124,7 +124,7 @@ func init() {
 	registry.Register(VersionCommand, &handleCheckVersionCommand{})
 	registry.Register(HelpCommand, &handleHelpCommand{})
 	registry.Register(ShortHelpCommand, &handleHelpCommand{})
-	registry.Register(ClearCommand, &handleClearCommand{})
+	registry.Register(ChatCommands, &handleClearCommand{})
 	registry.Register(SafetyCommand, &handleSafetyCommand{})
 	registry.Register(AITranslateCommand, &handleAITranslateCommand{})
 	registry.Register(CryptoRandCommand, &handleCryptoRandCommand{})

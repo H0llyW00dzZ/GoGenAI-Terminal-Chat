@@ -192,8 +192,8 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		ChatHistoryArgs,
 		ClearCommand,
 		SummarizeCommands,
+		ChatCommands,
 		ClearCommand,
-		ChatHistoryArgs,
 	)
 
 	// Sanitize the message before sending it to the AI

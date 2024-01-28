@@ -128,9 +128,7 @@ type handleClearCommand struct{}
 //
 // Returns true if the command is valid, otherwise false.
 func (cmd *handleClearCommand) IsValid(parts []string) bool {
-	// Combine the parts after the command keyword to match the ClearChatHistoryArgs
-	args := strings.Join(parts[1:], " ")
-	return len(parts) > 1 && args == ChatHistoryArgs
+	return len(parts) == 2 && parts[0] == ChatCommands && parts[1] == ClearCommand
 }
 
 // handleSafetyCommand is the command to adjust safety settings.
@@ -216,7 +214,7 @@ type handleClearAllSystemMessagesCommand struct{}
 // IsValid checks if the clear system messages command is valid based on the input parts.
 // This command is valid only if it exactly matches ":clear :summarize".
 func (cmd *handleClearAllSystemMessagesCommand) IsValid(parts []string) bool {
-	return len(parts) == 2 && parts[0] == ClearCommand && parts[1] == SummarizeCommands
+	return len(parts) == 2 && parts[0] == SummarizeCommands && parts[1] == SummarizeCommands
 }
 
 // Note: this unimplemented
