@@ -90,27 +90,44 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 	// Warning!!! Explicit 🤪
 	h.mu.Lock()         // Lock for writing
 	defer h.mu.Unlock() // Ensure unlocking
-
 	// Check if there is an existing system message
-	existingIndex, exists := h.Hashes[hashValue]
-	if exists && isSysMessage(h.Messages[existingIndex]) {
-		// Replace the existing system message with the new one
-		h.Messages[existingIndex] = message
+	if h.isExistingSysMessage(hashValue) {
+		h.replaceExistingSysMessage(message, hashValue)
 	} else {
-		// Add the new system message
-		h.Messages = append(h.Messages, message)
-		h.Hashes[hashValue] = len(h.Messages) - 1
+		h.addNewSysMessage(message, hashValue)
 	}
 
-	// Remove older system messages
+	h.cleanupOldSysMessages()
+
+	return true // Indicate a system message was handled.
+}
+
+// isExistingSysMessage checks if there is an existing system message with the same hash.
+func (h *ChatHistory) isExistingSysMessage(hashValue string) bool {
+	_, exists := h.Hashes[hashValue]
+	return exists && isSysMessage(h.Messages[h.Hashes[hashValue]])
+}
+
+// replaceExistingSysMessage replaces the existing system message with the new one.
+func (h *ChatHistory) replaceExistingSysMessage(message, hashValue string) {
+	existingIndex := h.Hashes[hashValue]
+	h.Messages[existingIndex] = message
+}
+
+// addNewSysMessage adds a new system message to the history.
+func (h *ChatHistory) addNewSysMessage(message, hashValue string) {
+	h.Messages = append(h.Messages, message)
+	h.Hashes[hashValue] = len(h.Messages) - 1
+}
+
+// cleanupOldSysMessages removes older system messages from the history.
+func (h *ChatHistory) cleanupOldSysMessages() {
 	for i := len(h.Messages) - 2; i >= 0; i-- {
 		if isSysMessage(h.Messages[i]) {
 			h.Messages = append(h.Messages[:i], h.Messages[i+1:]...)
 			break // Assuming only one system message exists at a time.
 		}
 	}
-
-	return true // Indicate a system message was handled.
 }
 
 // manageHistorySize manages the size of the chat history based on the ChatConfig.
