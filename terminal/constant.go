@@ -11,7 +11,7 @@ const (
 	GitHubAPIURL      = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
 	GitHubReleaseFUll = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/tags/%s"
 	// CurrentVersion represents the current version of the application.
-	CurrentVersion = "v0.5.9"
+	CurrentVersion = "v0.5.10"
 )
 
 // Defined constants for the terminal package
@@ -38,7 +38,7 @@ const (
 	ChatHistoryClear = ColorHex95b806 + "All Chat history cleared." + ColorReset
 	// reset total token usage
 	ResetTotalTokenUsage = ColorHex95b806 + "Total token usage has been reset." + ColorReset
-	// clear sys messagess
+	// clear sys summary messagess
 	ChatSysSummaryMessages = ColorHex95b806 + "All System Summary Messages have been cleared." + ColorReset
 )
 
