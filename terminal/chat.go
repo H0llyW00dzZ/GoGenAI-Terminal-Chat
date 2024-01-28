@@ -91,24 +91,24 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 	h.mu.Lock()         // Lock for writing
 	defer h.mu.Unlock() // Ensure unlocking
 
-	// Attempt to find and remove the existing system message.
-	for i, msg := range h.Messages {
-		if isSysMessage(msg) {
-			// Remove the system message from the slice.
+	// Check if there is an existing system message
+	existingIndex, exists := h.Hashes[hashValue]
+	if exists && isSysMessage(h.Messages[existingIndex]) {
+		// Replace the existing system message with the new one
+		h.Messages[existingIndex] = message
+	} else {
+		// Add the new system message
+		h.Messages = append(h.Messages, message)
+		h.Hashes[hashValue] = len(h.Messages) - 1
+	}
+
+	// Remove older system messages
+	for i := len(h.Messages) - 2; i >= 0; i-- {
+		if isSysMessage(h.Messages[i]) {
 			h.Messages = append(h.Messages[:i], h.Messages[i+1:]...)
-
-			// Remove the corresponding hash entry. This requires knowing the hash of the removed message.
-			// Assuming the hash of the message can be recalculated or is stored such that it can be identified.
-			oldHash := h.hashMessage(msg)
-			delete(h.Hashes, oldHash)
-
 			break // Assuming only one system message exists at a time.
 		}
 	}
-
-	// Append the new system message and update the hash map.
-	h.Messages = append(h.Messages, message)
-	h.Hashes[hashValue] = len(h.Messages) - 1
 
 	return true // Indicate a system message was handled.
 }
@@ -183,7 +183,23 @@ func (h *ChatHistory) buildHistoryString(historySubset []string) string {
 
 // appendSystemMessages appends system messages to the StringBuilder.
 func (h *ChatHistory) appendSystemMessages(builder *strings.Builder, sysMsgs []string) {
-	for _, sysMsg := range sysMsgs {
+	// Keep track of the latest system message index
+	latestSysMsgIndex := -1
+
+	for i, sysMsg := range sysMsgs {
+		if !isSysMessage(sysMsg) {
+			continue // Skip non-system messages
+		}
+
+		// Check if this system message is the latest one
+		if latestSysMsgIndex == -1 {
+			latestSysMsgIndex = i
+		} else {
+			// Remove the older system message
+			builder.Reset()
+			latestSysMsgIndex = i
+		}
+
 		builder.WriteString(sysMsg)
 		builder.WriteRune(nl.NewLineChars)
 		builder.WriteString(StripChars)    // Append the separator
