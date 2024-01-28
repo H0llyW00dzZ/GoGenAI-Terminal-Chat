@@ -38,6 +38,8 @@ const (
 	ChatHistoryClear = ColorHex95b806 + "All Chat history cleared." + ColorReset
 	// reset total token usage
 	ResetTotalTokenUsage = ColorHex95b806 + "Total token usage has been reset." + ColorReset
+	// clear sys messagess
+	ChatSysMessages = ColorHex95b806 + "System Messages have been cleared." + ColorReset
 )
 
 // Defined constants for language
@@ -88,6 +90,7 @@ const (
 		"**%s**: Summarize a current conversation\n\n" +
 		"**Note**: When you summarize a current conversation, it will be displayed at the top of the chat history.\n\n" +
 		"**%s** **%s**: Show the chat history.\n\n" +
+		"**%s** **%s**: Clear all system summary messages from the chat history.\n\n" +
 		"**%s** **%s**: Clear all chat history and reset the total token usage count if enabled.\n\n" +
 		"**Additional Note**: There are no additional commands or HTML Markdown available " +
 		"because this is a terminal application and is limited.\n"

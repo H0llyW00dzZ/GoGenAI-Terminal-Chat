@@ -191,6 +191,8 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		ShowCommands,
 		ChatHistoryArgs,
 		ClearCommand,
+		SummarizeCommands,
+		ClearCommand,
 		ChatHistoryArgs,
 	)
 
@@ -576,4 +578,24 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 		// add the new system message to the chat history.
 		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
 	}
+}
+
+// Execute clears the system messages from the chat history.
+func (cmd *handleClearAllSystemMessagesCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Debug logging before executing the command.
+	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
+
+	// Assuming session.ChatHistory has the method ClearAllSystemMessages to clear system messages.
+	// This action is directly performed without re-checking IsValid, as Execute is called post-validation.
+	session.ChatHistory.ClearAllSystemMessages()
+
+	// Print the message indicating successful clearing, with timestamp and typing effect.
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	PrintTypingChat(ChatSysMessages, TypingDelay)
+
+	// Ensure the prompt context is visible after the operation.
+	fmt.Println()
+
+	// Return false to indicate the session should not terminate, and nil for error as the operation is expected to succeed.
+	return false, nil
 }
