@@ -102,24 +102,25 @@ func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 	sanitizedText := h.SanitizeMessage(text)
 	message := fmt.Sprintf(ObjectHighLevelStringWithNewLine, user, sanitizedText) // Add newlines around the message
 	hashValue := h.hashMessage(sanitizedText)
+	messageType := DetermineMessageType(sanitizedText)
 
-	if h.handleSystemMessage(sanitizedText, message, hashValue) {
+	if messageType == SystemMessage {
 		// Check if the message hash already exists to prevent duplicates
-		if _, exists := h.Hashes[hashValue]; !exists {
-			h.manageHistorySize(config)
+		if h.handleSystemMessage(sanitizedText, message, hashValue) {
+			return // Exit if it was a system message
 		}
-		return // Exit if it was a system message
 	}
-
 	// For non-system messages or new system messages
-	if _, exists := h.Hashes[hashValue]; !exists {
-		// Check if the message hash already exists to prevent duplicates
-		h.manageHistorySize(config)
-		// Note: this remove the oldest message are automated handle by Garbage Collector.
-		// For example, free memory to avoid memory leak.
-		h.Messages = append(h.Messages, message)  // Add the new message
-		h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
+	if _, exists := h.Hashes[hashValue]; exists {
+		return // Skip duplicate messages
 	}
+	// Check if the message hash already exists to prevent duplicates
+	h.manageHistorySize(config)
+	// Note: this remove the oldest message are automated handle by Garbage Collector.
+	// For example, free memory to avoid memory leak.
+	h.Messages = append(h.Messages, message)  // Add the new message
+	h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
+	h.IncrementMessageTypeCount(messageType)  // Count the message
 }
 
 // handleSystemMessage checks and replaces an existing system message.
