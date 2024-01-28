@@ -542,8 +542,13 @@ func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool
 		if err != nil {
 			return false, err
 		}
-		// Add the AI response to the chat history.
-		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+		// Instead of directly adding, check if a system message already exists and replace it.
+		formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
+		if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
+			// If it was not a system message or no existing system message was found to replace,
+			// add the new system message to the chat history.
+			session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+		}
 		return true, nil
 	}, apiErrorHandler)
 
