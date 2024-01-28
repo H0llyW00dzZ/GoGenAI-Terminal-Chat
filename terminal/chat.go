@@ -11,14 +11,55 @@ import (
 	"sync"
 )
 
-// ChatHistory holds the chat messages exchanged during a session.
-// It provides methods to add new messages to the history and to retrieve
-// the current state of the conversation.
+// ChatHistory manages the state of chat messages exchanged during a session.
+// It tracks the messages, their unique hashes, and counts of different types of messages (user, AI, system).
+// This struct also ensures concurrent access safety using a read-write mutex.
 type ChatHistory struct {
-	Messages []string
-	Hashes   map[string]int // Maps hash values (as hex strings) to indices in the Messages slice
-	mu       sync.RWMutex   // Explicit 🤪
+	Messages           []string       // Messages contains all the chat messages in chronological order.
+	Hashes             map[string]int // Hashes maps the SHA-256 hash of each message to its index in Messages.
+	UserMessageCount   int            // UserMessageCount holds the total number of user messages.
+	AIMessageCount     int            // AIMessageCount holds the total number of AI messages.
+	SystemMessageCount int            // SystemMessageCount holds the total number of system messages.
+	mu                 sync.RWMutex   // Explicit 🤪
+}
 
+// MessageType categorizes the source of a chat message.
+type MessageType int
+
+const (
+	// UserMessage indicates a message that originates from a human user.
+	UserMessage MessageType = iota // magic
+	// AIMessage indicates a message that originates from an AI or bot.
+	AIMessage
+	// SystemMessage indicates a message that provides system-level information.
+	SystemMessage
+)
+
+// IncrementMessageTypeCount updates the count of messages for the given type.
+// It specifically flags if a SystemMessage is encountered, as it may require special handling.
+// Returns true if the incremented message type is a system message.
+func (h *ChatHistory) IncrementMessageTypeCount(messageType MessageType) bool {
+	switch messageType {
+	case UserMessage:
+		h.UserMessageCount++
+	case AIMessage:
+		h.AIMessageCount++
+	case SystemMessage:
+		h.SystemMessageCount++
+		return true // Indicates that a system message has been processed.
+	}
+	return false
+}
+
+// DetermineMessageType analyzes the content of a message to classify its type.
+// It returns the MessageType based on predefined criteria for identifying user, AI, and system messages.
+func DetermineMessageType(message string) MessageType {
+	if isSysMessage(message) {
+		return SystemMessage
+	} else if isAIMessage(message) {
+		return AIMessage
+	}
+	return UserMessage
 }
 
 // NewChatHistory creates and initializes a new ChatHistory struct.
@@ -61,24 +102,25 @@ func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 	sanitizedText := h.SanitizeMessage(text)
 	message := fmt.Sprintf(ObjectHighLevelStringWithNewLine, user, sanitizedText) // Add newlines around the message
 	hashValue := h.hashMessage(sanitizedText)
+	messageType := DetermineMessageType(sanitizedText)
 
-	if h.handleSystemMessage(sanitizedText, message, hashValue) {
+	if messageType == SystemMessage {
 		// Check if the message hash already exists to prevent duplicates
-		if _, exists := h.Hashes[hashValue]; !exists {
-			h.manageHistorySize(config)
+		if h.handleSystemMessage(sanitizedText, message, hashValue) {
+			return // Exit if it was a system message
 		}
-		return // Exit if it was a system message
 	}
-
 	// For non-system messages or new system messages
-	if _, exists := h.Hashes[hashValue]; !exists {
-		// Check if the message hash already exists to prevent duplicates
-		h.manageHistorySize(config)
-		// Note: this remove the oldest message are automated handle by Garbage Collector.
-		// For example, free memory to avoid memory leak.
-		h.Messages = append(h.Messages, message)  // Add the new message
-		h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
+	if _, exists := h.Hashes[hashValue]; exists {
+		return // Skip duplicate messages
 	}
+	// Check if the message hash already exists to prevent duplicates
+	h.manageHistorySize(config)
+	// Note: this remove the oldest message are automated handle by Garbage Collector.
+	// For example, free memory to avoid memory leak.
+	h.Messages = append(h.Messages, message)  // Add the new message
+	h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
+	h.IncrementMessageTypeCount(messageType)  // Count the message
 }
 
 // handleSystemMessage checks and replaces an existing system message.
