@@ -347,7 +347,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 ### Other:
 - [ ] **Plan for Google Cloud Deployment**
 > [!NOTE]
-> The `Plan for Google Cloud Deployment` feature is intended to support cloud compatibility with Vertex AI capabilities once version v1.0.0 (this repository) is reached and considered stable.
+> The `Plan for Google Cloud Deployment` feature is intended to support cloud compatibility with Vertex AI capabilities once version v1.0.0 (this repository) is reached and considered stable [read here](https://pkg.go.dev/about#best-practices).
 
 **Reason?** To respect the `Terms of Service` and `Privacy Policy`.
 For example, `Vertex AI` capabilities can be used on a personal basis for tasks such as fine-tuning, using your own data, and more, without the complexity and overhead typically required.
