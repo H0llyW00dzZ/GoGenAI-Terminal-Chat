@@ -376,3 +376,25 @@ func (h *ChatHistory) cleanup() {
 	h.Messages = nil
 	h.Hashes = nil
 }
+
+// ClearAllSystemMessages removes all system messages from the chat history.
+func (h *ChatHistory) ClearAllSystemMessages() {
+	h.mu.Lock()         // Lock for writing
+	defer h.mu.Unlock() // Ensure unlocking
+
+	var newMessages []string
+	var newHashes = make(map[string]int)
+
+	for _, message := range h.Messages {
+		if !isSysMessage(message) {
+			// This is not a system message; keep it.
+			newMessages = append(newMessages, message)
+			hashValue := h.hashMessage(message)
+			newHashes[hashValue] = len(newMessages) - 1
+		}
+	}
+
+	// Replace the old Messages and Hashes with the new ones that exclude system messages.
+	h.Messages = newMessages
+	h.Hashes = newHashes
+}
