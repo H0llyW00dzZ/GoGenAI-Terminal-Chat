@@ -39,7 +39,7 @@ const (
 	// reset total token usage
 	ResetTotalTokenUsage = ColorHex95b806 + "Total token usage has been reset." + ColorReset
 	// clear sys messagess
-	ChatSysMessages = ColorHex95b806 + "System Messages have been cleared." + ColorReset
+	ChatSysSummaryMessages = ColorHex95b806 + "All System Summary Messages have been cleared." + ColorReset
 )
 
 // Defined constants for language

@@ -591,7 +591,7 @@ func (cmd *handleClearAllSystemMessagesCommand) Execute(session *Session, parts 
 
 	// Print the message indicating successful clearing, with timestamp and typing effect.
 	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-	PrintTypingChat(ChatSysMessages, TypingDelay)
+	PrintTypingChat(ChatSysSummaryMessages, TypingDelay)
 
 	// Ensure the prompt context is visible after the operation.
 	fmt.Println()
