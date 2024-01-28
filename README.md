@@ -343,6 +343,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > The `Automated Summarize a Conversation` feature is designed to automatically summarize a conversation similarly to [ChatGPTNextWeb](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web). However, it is built in a terminal interface, making it more accessible and affordable than `OpenAI` (`e.g. too expensive just for summarizing a conversation`). Additionally, since this terminal interface is written in Go, it enables the creation of simple, secure, and scalable systems 🤪.
 - [X] **Manually summarize a conversation using commands**
+- [ ] **Improve CommandRegistry to avoid bugs (`e.g., issues with executing a scalable command handler`)**
 
 ### Other:
 - [ ] **Plan for Google Cloud Deployment**
