@@ -90,27 +90,44 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 	// Warning!!! Explicit 🤪
 	h.mu.Lock()         // Lock for writing
 	defer h.mu.Unlock() // Ensure unlocking
+	// Check if there is an existing system message
+	if h.isExistingSysMessage(hashValue) {
+		h.replaceExistingSysMessage(message, hashValue)
+	} else {
+		h.addNewSysMessage(message, hashValue)
+	}
 
-	// Attempt to find and remove the existing system message.
-	for i, msg := range h.Messages {
-		if isSysMessage(msg) {
-			// Remove the system message from the slice.
+	h.cleanupOldSysMessages()
+
+	return true // Indicate a system message was handled.
+}
+
+// isExistingSysMessage checks if there is an existing system message with the same hash.
+func (h *ChatHistory) isExistingSysMessage(hashValue string) bool {
+	_, exists := h.Hashes[hashValue]
+	return exists && isSysMessage(h.Messages[h.Hashes[hashValue]])
+}
+
+// replaceExistingSysMessage replaces the existing system message with the new one.
+func (h *ChatHistory) replaceExistingSysMessage(message, hashValue string) {
+	existingIndex := h.Hashes[hashValue]
+	h.Messages[existingIndex] = message
+}
+
+// addNewSysMessage adds a new system message to the history.
+func (h *ChatHistory) addNewSysMessage(message, hashValue string) {
+	h.Messages = append(h.Messages, message)
+	h.Hashes[hashValue] = len(h.Messages) - 1
+}
+
+// cleanupOldSysMessages removes older system messages from the history.
+func (h *ChatHistory) cleanupOldSysMessages() {
+	for i := len(h.Messages) - 2; i >= 0; i-- {
+		if isSysMessage(h.Messages[i]) {
 			h.Messages = append(h.Messages[:i], h.Messages[i+1:]...)
-
-			// Remove the corresponding hash entry. This requires knowing the hash of the removed message.
-			// Assuming the hash of the message can be recalculated or is stored such that it can be identified.
-			oldHash := h.hashMessage(msg)
-			delete(h.Hashes, oldHash)
-
 			break // Assuming only one system message exists at a time.
 		}
 	}
-
-	// Append the new system message and update the hash map.
-	h.Messages = append(h.Messages, message)
-	h.Hashes[hashValue] = len(h.Messages) - 1
-
-	return true // Indicate a system message was handled.
 }
 
 // manageHistorySize manages the size of the chat history based on the ChatConfig.
@@ -183,7 +200,23 @@ func (h *ChatHistory) buildHistoryString(historySubset []string) string {
 
 // appendSystemMessages appends system messages to the StringBuilder.
 func (h *ChatHistory) appendSystemMessages(builder *strings.Builder, sysMsgs []string) {
-	for _, sysMsg := range sysMsgs {
+	// Keep track of the latest system message index
+	latestSysMsgIndex := -1
+
+	for i, sysMsg := range sysMsgs {
+		if !isSysMessage(sysMsg) {
+			continue // Skip non-system messages
+		}
+
+		// Check if this system message is the latest one
+		if latestSysMsgIndex == -1 {
+			latestSysMsgIndex = i
+		} else {
+			// Remove the older system message
+			builder.Reset()
+			latestSysMsgIndex = i
+		}
+
 		builder.WriteString(sysMsg)
 		builder.WriteRune(nl.NewLineChars)
 		builder.WriteString(StripChars)    // Append the separator
