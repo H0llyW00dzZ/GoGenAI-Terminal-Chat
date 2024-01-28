@@ -523,35 +523,11 @@ func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, SummarizeCommands, parts)
 	// Define the summarize prompt to be sent to the AI.
-	aiPrompt := fmt.Sprintf(SummarizePrompt)
-
+	aiPrompt := h.constructSummarizePrompt()
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
-	// Retry logic for sending the summarize prompt to the AI.
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		// Note: This is subject to change, for example,
-		// to implement another functionality without displaying AI response in the terminal,
-		// but only adding it to the chat history.
-		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
-		if err != nil {
-			return false, err
-		}
-		// Instead of directly adding, check if a system message already exists and replace it.
-		formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
-		if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
-			// If it was not a system message or no existing system message was found to replace,
-			// add the new system message to the chat history.
-			session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
-		}
-		return true, nil
-	}, apiErrorHandler)
-
+	success, err := h.sendSummarizePrompt(session, sanitizedMessage)
 	if err != nil {
 		logger.Error(ErrorFailedToSendHelpMessage, err)
 		return false, err
@@ -563,4 +539,41 @@ func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool
 
 	// Indicate that the command was handled successfully; return false to continue the session.
 	return false, nil
+}
+
+// constructSummarizePrompt constructs the prompt to be sent to the AI for summarization.
+func (h *handleSummarizeCommand) constructSummarizePrompt() string {
+	return fmt.Sprintf(SummarizePrompt)
+}
+
+// sendSummarizePrompt sends the summarize prompt to the AI and handles the response.
+func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitizedMessage string) (bool, error) {
+	apiErrorHandler := func(err error) bool {
+		// Error 500 Google Api
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+	// Retry logic for sending the summarize prompt to the AI.
+	return retryWithExponentialBackoff(func() (bool, error) {
+		// Note: This is subject to change, for example,
+		// to implement another functionality without displaying AI response in the terminal,
+		// but only adding it to the chat history.
+		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+		if err != nil {
+			return false, err
+		}
+
+		h.handleAIResponse(session, sanitizedMessage, aiResponse)
+		return true, nil
+	}, apiErrorHandler)
+}
+
+// handleAIResponse processes the AI's response to the summarize command.
+func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMessage, aiResponse string) {
+	// Instead of directly adding, check if a system message already exists and replace it.
+	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
+	if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
+		// If it was not a system message or no existing system message was found to replace,
+		// add the new system message to the chat history.
+		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+	}
 }
