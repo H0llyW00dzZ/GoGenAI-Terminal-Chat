@@ -11,14 +11,55 @@ import (
 	"sync"
 )
 
-// ChatHistory holds the chat messages exchanged during a session.
-// It provides methods to add new messages to the history and to retrieve
-// the current state of the conversation.
+// ChatHistory manages the state of chat messages exchanged during a session.
+// It tracks the messages, their unique hashes, and counts of different types of messages (user, AI, system).
+// This struct also ensures concurrent access safety using a read-write mutex.
 type ChatHistory struct {
-	Messages []string
-	Hashes   map[string]int // Maps hash values (as hex strings) to indices in the Messages slice
-	mu       sync.RWMutex   // Explicit 🤪
+	Messages           []string       // Messages contains all the chat messages in chronological order.
+	Hashes             map[string]int // Hashes maps the SHA-256 hash of each message to its index in Messages.
+	UserMessageCount   int            // UserMessageCount holds the total number of user messages.
+	AIMessageCount     int            // AIMessageCount holds the total number of AI messages.
+	SystemMessageCount int            // SystemMessageCount holds the total number of system messages.
+	mu                 sync.RWMutex   // Explicit 🤪
+}
 
+// MessageType categorizes the source of a chat message.
+type MessageType int
+
+const (
+	// UserMessage indicates a message that originates from a human user.
+	UserMessage MessageType = iota // magic
+	// AIMessage indicates a message that originates from an AI or bot.
+	AIMessage
+	// SystemMessage indicates a message that provides system-level information.
+	SystemMessage
+)
+
+// IncrementMessageTypeCount updates the count of messages for the given type.
+// It specifically flags if a SystemMessage is encountered, as it may require special handling.
+// Returns true if the incremented message type is a system message.
+func (h *ChatHistory) IncrementMessageTypeCount(messageType MessageType) bool {
+	switch messageType {
+	case UserMessage:
+		h.UserMessageCount++
+	case AIMessage:
+		h.AIMessageCount++
+	case SystemMessage:
+		h.SystemMessageCount++
+		return true // Indicates that a system message has been processed.
+	}
+	return false
+}
+
+// DetermineMessageType analyzes the content of a message to classify its type.
+// It returns the MessageType based on predefined criteria for identifying user, AI, and system messages.
+func DetermineMessageType(message string) MessageType {
+	if isSysMessage(message) {
+		return SystemMessage
+	} else if isAIMessage(message) {
+		return AIMessage
+	}
+	return UserMessage
 }
 
 // NewChatHistory creates and initializes a new ChatHistory struct.
