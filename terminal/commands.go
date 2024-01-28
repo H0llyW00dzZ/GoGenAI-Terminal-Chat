@@ -13,67 +13,6 @@ import (
 	"github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/terminal/tools"
 )
 
-// isCommand checks if the input is a command based on the prefix.
-func isCommand(input string) bool {
-	fmt.Println() // Add newline if it's a command or unrecognized command
-	return strings.HasPrefix(input, PrefixChar)
-}
-
-// handleCommand processes the input as a command and returns true if the session should end.
-func (s *Session) handleCommand(input string) bool {
-	handled, err := HandleCommand(input, s)
-	if err != nil {
-		logger.Error(ErrorUnknown, err)
-	}
-	return handled
-}
-
-// CommandHandler defines the function signature for handling chat commands.
-// Each command handler function must conform to this signature.
-type CommandHandler interface {
-	// Note: The list of command handlers here does not use os.Args; instead, it employs advanced idiomatic Go practices. 🤪
-	Execute(session *Session, parts []string) (bool, error) // new method
-	IsValid(parts []string) bool                            // new method
-}
-
-// HandleCommand interprets the user input as a command and executes the associated action.
-// It uses a map of command strings to their corresponding handler functions to manage
-// different commands and their execution. If the command is recognized, the respective
-// handler is called; otherwise, an unknown command message is displayed.
-//
-// Parameters:
-//
-//	input     string: The user input to be checked for commands.
-//	session *Session: The current chat session for context.
-//
-// Returns:
-//
-//	bool: A boolean indicating if the input was a command and was handled.
-//	error: An error that may occur while handling the command.
-func HandleCommand(input string, session *Session) (bool, error) {
-	trimmedInput := strings.TrimSpace(input)
-	if !strings.HasPrefix(trimmedInput, PrefixChar) {
-		return false, nil
-	}
-
-	parts := strings.Fields(trimmedInput)
-	if len(parts) == 0 {
-		// Note: this low-level error and should be not happen, but just in case
-		return true, fmt.Errorf(ErrorLowLevelCommand)
-	}
-
-	// Validate the command arguments.
-	commandName := parts[0]
-	// Use Magic identifier "_" to ignore the error element, since it duplicates the error handling.
-	handled, _ := registry.ExecuteCommand(commandName, session, parts)
-	// if err != nil {
-	// 	// Since ExecuteCommand already logs errors,
-	// 	// keep like this for now, because this palace are low-level error
-	// 	return false, err
-	// }
-	return handled, nil
-}
-
 // Execute gracefully terminates the chat session. It sends a shutdown message to the AI,
 // prints a farewell message to the user, and signals that the session should end. This method
 // is the designated handler for the ":quit" command.
