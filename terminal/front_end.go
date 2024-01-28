@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	genai "github.com/google/generative-ai-go/genai"
 )
@@ -52,7 +53,25 @@ func FilterLanguageFromCodeBlock(text string) string {
 // or any other string that aids in categorizing or highlighting the message.
 func PrintPrefixWithTimeStamp(prefix string) {
 	currentTime := time.Now().Format(TimeFormat)
-	fmt.Printf(ObjectHighLevelString+" ", currentTime, prefix)
+	// Check if the first character is potentially an emoji or wide character.
+	if isFirstCharacterWide(prefix) {
+		// Add an extra space after the prefix to ensure separation in terminals that might not handle wide characters well.
+		fmt.Printf(ObjectHighLevelStringWithSpace, currentTime, prefix)
+	} else {
+		fmt.Printf(ObjectHighLevelString, currentTime, prefix)
+	}
+}
+
+// isFirstCharacterWide checks if the first character of the string is wider than a standard character.
+// This is a simple heuristic based on the assumption that most emojis and wide characters
+// have a UTF-8 encoded length greater than 1. This won't cover all cases but works for many emojis.
+func isFirstCharacterWide(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
+	_, size := utf8.DecodeRuneInString(s)
+	// Assuming characters with a UTF-8 size greater than 1 are wide (e.g., most emojis).
+	return size > 1
 }
 
 // printPromptFeedback formats and prints the prompt feedback received from the AI.

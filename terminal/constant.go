@@ -19,6 +19,7 @@ const (
 	SignalMessage                    = " Received an interrupt, shutting down gracefully..." // fix formatting ^C in linux/unix
 	RecoverGopher                    = "%sRecovered from panic:%s %s%v%s"
 	ObjectHighLevelString            = "%s %s"   // Catch High level string
+	ObjectHighLevelStringWithSpace   = "%s %s "  // Catch High level string with space
 	ObjectHighLevelStringWithNewLine = "%s %s\n" // Catch High level string With NewLine
 	ObjectTripleHighLevelString      = "%%%s%%"  // Catch High level triple string
 	ObjectHighLevelContextString     = "%s\n%s"  // Catch High level context string
