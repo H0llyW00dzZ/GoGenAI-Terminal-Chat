@@ -136,7 +136,7 @@ Environment variables are key-value pairs that can affect the behavior of your a
 
 | Variable               | Description                                                                 | Required |
 |------------------------|-----------------------------------------------------------------------------|:--------:|
-| `API_KEY`              | Your API key for accessing the generative AI model.                         |   Yes    |
+| `API_KEY`              | Your API key for accessing the generative AI model. Obtain a free API key [here](https://ai.google.dev/). |   Yes    |
 | `DEBUG_MODE`           | Set to `true` to enable `DEBUG_MODE`, or `false` to disable it.             |   No     |
 | `SHOW_PROMPT_FEEDBACK` | Set to `true` to display prompt feedback in the response footer, or `false` to hide it. |   No     |
 | `SHOW_TOKEN_COUNT`     | Set to `true` to display the token count used in the AI's response and chat history, or `false` to hide it. |   No     |
@@ -349,7 +349,8 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > The `Plan for Google Cloud Deployment` feature is intended to support cloud compatibility with Vertex AI capabilities once version v1.0.0 (this repository) is reached and considered stable.
 
-**Reason?** To respect the Terms of Service and Privacy Policy of usage,etc.
+**Reason?** To respect the `Terms of Service` and `Privacy Policy`.
+For example, `Vertex AI` capabilities can be used on a personal basis for tasks such as fine-tuning, using your own data, and more, without the complexity and overhead typically required.
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](SECURITY.md)
