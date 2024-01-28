@@ -84,18 +84,33 @@ func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 // handleSystemMessage checks and replaces an existing system message.
 // Returns true if a system message was handled (either replaced or identified for addition).
 func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue string) bool {
-	if isSysMessage(sanitizedText) {
-		for i, msg := range h.Messages {
-			if isSysMessage(msg) {
-				h.Messages[i] = message
-				delete(h.Hashes, h.hashMessage(msg))
-				h.Hashes[hashValue] = i
-				return true // System message was replaced
-			}
-		}
-		return true // New system message to add
+	if !isSysMessage(sanitizedText) {
+		return false // Not a system message, no action required.
 	}
-	return false // Not a system message
+	// Warning!!! Explicit 🤪
+	h.mu.Lock()         // Lock for writing
+	defer h.mu.Unlock() // Ensure unlocking
+
+	// Attempt to find and remove the existing system message.
+	for i, msg := range h.Messages {
+		if isSysMessage(msg) {
+			// Remove the system message from the slice.
+			h.Messages = append(h.Messages[:i], h.Messages[i+1:]...)
+
+			// Remove the corresponding hash entry. This requires knowing the hash of the removed message.
+			// Assuming the hash of the message can be recalculated or is stored such that it can be identified.
+			oldHash := h.hashMessage(msg)
+			delete(h.Hashes, oldHash)
+
+			break // Assuming only one system message exists at a time.
+		}
+	}
+
+	// Append the new system message and update the hash map.
+	h.Messages = append(h.Messages, message)
+	h.Hashes[hashValue] = len(h.Messages) - 1
+
+	return true // Indicate a system message was handled.
 }
 
 // manageHistorySize manages the size of the chat history based on the ChatConfig.
