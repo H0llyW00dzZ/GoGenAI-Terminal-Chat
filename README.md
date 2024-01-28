@@ -2,8 +2,8 @@
    ______      ______           ___    ____
   / ____/___  / ____/__  ____  /   |  /  _/
  / / __/ __ \/ / __/ _ \/ __ \/ /| |  / /  
-/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     A Rich, Terminal Interface Chat
-\____/\____/\____/\___/_/ /_/_/  |_/___/     Written in Go
+/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     A Rich Terminal Interface Chat
+\____/\____/\____/\___/_/ /_/_/  |_/___/     Written in Go. Build Simple, Secure, Scalable Systems with Go.
 
 Copyright (©️) 2024 @H0llyW00dzZ All rights reserved.
 </pre>
