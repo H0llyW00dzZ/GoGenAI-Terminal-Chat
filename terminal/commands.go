@@ -36,9 +36,6 @@ import (
 // any necessary cleanup. The method's return value of true indicates to the calling code that the session loop
 // should exit and the application should terminate.
 func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, QuitCommand, parts)
-
 	// Context
 	// Clear the chat history now that the shutdown message has been sent
 	session.ChatHistory.Clear()
@@ -103,8 +100,6 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 // Note: The method does not add the AI's response to the chat history to avoid potential
 // loops in the AI's behavior.
 func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, HelpCommand, parts)
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
 	session.ChatHistory.AddMessage(StringNewLine+YouNerd, HelpCommand, session.ChatConfig)
@@ -186,8 +181,6 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 // for formatting messages to the AI (YouAreUsingLatest and ReleaseNotesPrompt) and relies on external
 // functions (CheckLatestVersion and GetFullReleaseInfo) to determine version information and fetch release details.
 func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug:
-	logger.Debug(DEBUGEXECUTINGCMD, VersionCommand, parts)
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
 	session.ChatHistory.AddMessage(StringNewLine+YouNerd, VersionCommand, session.ChatConfig)
@@ -262,8 +255,6 @@ func (c *handleCheckVersionCommand) checkVersionAndGetPrompt() (aiPrompt string,
 //
 // Returns true if the ping command was executed, and an error if there was an issue executing the command.
 func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, PingCommand, parts)
 	// Note: WIP
 	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
@@ -295,18 +286,12 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 
 	// Note: This place only, for commands doesn't have any subcommands/args, so it will return error hahaha
 
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
-
 	// Log the error if the command is not valid
 	logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 	return false, nil // Continue the session
 }
 
 func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
-
 	// Handle the subcommands of the clear command
 	switch subcommand {
 	case ChatCommands:
@@ -360,7 +345,6 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 	// Note: The code in "safety_settings.go" employs advanced idiomatic Go practices. 🤪
 	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
 	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, SafetyCommand, parts)
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 		fmt.Println()
@@ -389,9 +373,6 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 
 // Execute processes the ":aitranslate" command within a chat session.
 func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, AITranslateCommand, parts)
-
 	// Find the index of the language flag ":lang" to separate text and target language.
 	languageFlagIndex := len(parts) - 2
 	textToTranslate := strings.Join(parts[1:languageFlagIndex], " ")
@@ -472,8 +453,6 @@ func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (b
 //
 // Returns false to indicate the session should continue, and an error if there is an issue.
 func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, ShowCommands, parts)
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 		fmt.Println()
@@ -489,8 +468,6 @@ func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (boo
 
 // Execute processes the ":summarize" command within a chat session.
 func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug
-	logger.Debug(DEBUGEXECUTINGCMD, SummarizeCommands, parts)
 	// Define the summarize prompt to be sent to the AI.
 	aiPrompt := h.constructSummarizePrompt()
 	// Sanitize the message before sending it to the AI
