@@ -118,6 +118,7 @@ func init() {
 	// Initialize the command registry.
 	// Note: This NewCommandRegistry offers excellent scalability. For Example: You can easily add numerous commands without impacting
 	// the AI's performance or synchronization ai, such as `:quit` or `:checkversion`.
+	// Additional Note: The scalability of this setup allows the codebase to support a large volume of code, potentially billions of lines.
 	registry = NewCommandRegistry()
 	registry.Register(QuitCommand, &handleQuitCommand{})
 	registry.Register(ShortQuitCommand, &handleQuitCommand{})
