@@ -81,20 +81,30 @@ func (r *CommandRegistry) Register(name string, cmd CommandHandler) {
 func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []string) (bool, error) {
 	// Note: For better dynamic logging, further debugging is needed here.
 	logger.Debug(DEBUGEXECUTINGCMD, name, parts)
-	if cmd, exists := r.commands[name]; exists {
-		// Check for subcommands
-		if len(parts) > 1 && r.subcommands[name] != nil {
-			subcommand := parts[1]
-			if subcmd, ok := r.subcommands[name][subcommand]; ok {
-				return subcmd.HandleSubcommand(subcommand, session, parts)
-			}
-		}
-		// If the command is valid, execute it.
-		return cmd.Execute(session, parts)
+
+	cmd, exists := r.commands[name]
+	if !exists {
+		logger.Error(ErrorUnrecognizedCommand, name)
+		return false, nil
 	}
-	// If the command does not exist, log the error and return.
-	logger.Error(ErrorUnrecognizedCommand, name)
-	return false, nil // Return nil error since it's already handled.
+	// Check for subcommands
+	if len(parts) > 1 {
+		return r.executeSubcommand(name, session, parts)
+	}
+	// If the command is valid, execute it.
+	return cmd.Execute(session, parts)
+}
+
+func (r *CommandRegistry) executeSubcommand(baseCommand string, session *Session, parts []string) (bool, error) {
+	subcommand := parts[1]
+	subcmdHandler, ok := r.subcommands[baseCommand][subcommand]
+	if !ok {
+		// If the command does not exist, log the error and return.
+		logger.Error(ErrorUnrecognizedSubCommand, baseCommand, subcommand)
+		return false, nil
+	}
+
+	return subcmdHandler.HandleSubcommand(subcommand, session, parts)
 }
 
 // isCommand checks if the input is a command based on the prefix.
