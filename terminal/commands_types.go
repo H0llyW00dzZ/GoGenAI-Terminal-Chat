@@ -87,6 +87,7 @@ func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []
 				return subcmd.HandleSubcommand(subcommand, session, parts)
 			}
 		}
+		// If the command is valid, execute it.
 		return cmd.Execute(session, parts)
 	}
 	// If the command does not exist, log the error and return.
@@ -166,7 +167,7 @@ func (cmd *handleQuitCommand) IsValid(parts []string) bool {
 }
 
 func (h *handleQuitCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
+	// The quit command should not have any subcommand.
 	return true, nil
 }
 
@@ -185,14 +186,14 @@ func (cmd *handleHelpCommand) IsValid(parts []string) bool {
 }
 
 func (h *handleHelpCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
+	// The help command should not have any subcommand.
 	return true, nil
 }
 
 type handleCheckVersionCommand struct{}
 
 func (h *handleCheckVersionCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
+	// The checkversion command should not have any subcommand.
 	return true, nil
 }
 
@@ -250,7 +251,7 @@ func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
 }
 
 func (h *handleSafetyCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
+	// The safety command should not have any subcommand.
 	return true, nil
 }
 
@@ -327,7 +328,7 @@ func (cmd *handleShowChatCommand) IsValid(parts []string) bool {
 type handleSummarizeCommand struct{}
 
 func (h *handleSummarizeCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
+	// The summarize command should not have any subcommand.
 	return true, nil
 }
 
