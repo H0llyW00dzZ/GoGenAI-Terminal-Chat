@@ -336,13 +336,10 @@ func (cmd *handleSummarizeCommand) IsValid(parts []string) bool {
 	return len(parts) == 1
 }
 
-// handleClearAllSystemMessagesCommand handles the ":clear :summarize" command.
-type handleClearAllSystemMessagesCommand struct{}
+type handleStatsCommand struct{}
 
-// IsValid checks if the clear system messages command is valid based on the input parts.
-// This command is valid only if it exactly matches ":clear :summarize".
-func (cmd *handleClearAllSystemMessagesCommand) IsValid(parts []string) bool {
-	return len(parts) == 2 && parts[0] == ClearCommand && parts[1] == SummarizeCommands
+func (cmd *handleStatsCommand) IsValid(parts []string) bool {
+	return len(parts) == 1
 }
 
 // Note: this unimplemented

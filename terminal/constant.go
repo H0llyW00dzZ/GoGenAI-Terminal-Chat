@@ -121,6 +121,7 @@ const (
 	ChatCommands       = ":chat"
 	SummarizeCommands  = ":summarize"
 	ClearCommand       = ":clear"
+	StatsCommand       = ":stats"
 	PingCommand        = ":ping" // Currently marked as TODO
 	PrefixChar         = ":"
 	// List args
@@ -249,6 +250,10 @@ const (
 	ShowChatHistory  = "Chat History:\n\n%s"
 	SummarizePrompt  = "Summarize the discussion briefly in 200 words or " +
 		"less to use as a prompt for future context:\n"
+	ListChatStats     = "List Stats Chat of This Session:\n"
+	UserMessagesStats = "User messages: %d\n"
+	AiMessagesStats   = "AI messages: %d\n"
+	SysMessageSstats  = "System messages: %d"
 )
 
 // Defined Tools
