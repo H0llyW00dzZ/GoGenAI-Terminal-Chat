@@ -154,7 +154,7 @@ const (
 	HumanErrorWhileTypingCommandArgs                = "Invalid Command Arguments: %v"
 	ErrorPingFailed                                 = "Ping failed: %v"
 	ErrorUnrecognizedCommand                        = "Unrecognized command: %s"
-	ErrorUnrecognizedSubCommand                     = "Unrecognized %s command sub commands: %s"
+	ErrorUnrecognizedSubCommand                     = "Unrecognized %s command sub commands/args : %s"
 	ErrorLowLevelCommand                            = "command cannot be empty"
 	ErrorUnknown                                    = "An error occurred: %v"
 	ErrorUnknownSafetyLevel                         = "Unknown safety level: %s"
