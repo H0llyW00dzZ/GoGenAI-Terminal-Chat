@@ -313,7 +313,7 @@ func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Sess
 		return cmd.clearSummarizeHistory(session)
 	default:
 		// Handle unrecognized subcommand
-		logger.Error(ErrorUnrecognizedCommand, subcommand)
+		logger.Error(ErrorUnrecognizedSubcommandForClear, subcommand)
 		return false, nil
 	}
 }
