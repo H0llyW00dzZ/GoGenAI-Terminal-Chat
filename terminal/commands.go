@@ -293,33 +293,61 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	// Future enhancements might include targeted message purges—think selective user word-bombs or a full-on message-specific snipe hunt.
 	// But let's cross that bridge when we get to it. For now, we revel in the simplicity of our logic. Stay tuned, fellow code whisperers! 😜
 
+	// Note: This place only, for commands doesn't have any subcommands/args, so it will return error hahaha
+
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
-	if cmd.IsValid(parts) {
-		session.ChatHistory.Clear()
-		// Prepare the full message to be printed
-		clearMessage := ChatHistoryClear
-		showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
-		// Append token reset message if SHOW_TOKEN_COUNT is true
-		if showTokenCount {
-			totalTokenCount = 0 // Reset the total token count to zero
-			clearMessage += "\n" + ResetTotalTokenUsage
-		}
 
-		// Print the message(s) with timestamp and typing effect
-		PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-		PrintTypingChat(clearMessage, TypingDelay)
-		// Added back the context prompt after clearing the chat history
-		session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-		fmt.Println()
-		return false, nil
-	} else {
-		// Log the error using the logger instead of returning fmt.Errorf
-		errorMessage := HumanErrorWhileTypingCommandArgs
-		logger.Error(errorMessage)
-		// Return nil for the error since we've already logged it
+	// Log the error if the command is not valid
+	logger.Error(HumanErrorWhileTypingCommandArgs, parts)
+	return false, nil // Continue the session
+}
+
+func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
+
+	// Handle the subcommands of the clear command
+	switch subcommand {
+	case ChatCommands:
+		return cmd.clearChatHistory(session)
+	case SummarizeCommands:
+		return cmd.clearSummarizeHistory(session)
+	default:
+		// Handle unrecognized subcommand
+		logger.Error(ErrorUnrecognizedSubcommandForClear, subcommand)
 		return false, nil
 	}
+}
+
+// clearChatHistory clears the chat history.
+func (cmd *handleClearCommand) clearChatHistory(session *Session) (bool, error) {
+	session.ChatHistory.Clear()
+	// Prepare the full message to be printed
+	clearMessage := ChatHistoryClear
+	showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
+	// Append token reset message if SHOW_TOKEN_COUNT is true
+	if showTokenCount {
+		totalTokenCount = 0 // Reset the total token count to zero
+		clearMessage += "\n" + ResetTotalTokenUsage
+	}
+	// Print the message(s) with timestamp and typing effect
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	PrintTypingChat(clearMessage, TypingDelay)
+	// Added back the context prompt after clearing the chat history
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
+	fmt.Println()
+	return false, nil // Continue the session
+}
+
+// clearSummarizeHistory clears the summarized messages from the chat history.
+func (cmd *handleClearCommand) clearSummarizeHistory(session *Session) (bool, error) {
+	session.ChatHistory.ClearAllSystemMessages()
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	PrintTypingChat(ChatSysSummaryMessages, TypingDelay)
+	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
+	fmt.Println()
+	return false, nil // Continue the session
 }
 
 // Execute processes the ":safety" command within a chat session.
@@ -517,24 +545,4 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 		// add the new system message to the chat history.
 		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
 	}
-}
-
-// Execute clears the system messages from the chat history.
-func (cmd *handleClearAllSystemMessagesCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Debug logging before executing the command.
-	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
-
-	// Assuming session.ChatHistory has the method ClearAllSystemMessages to clear system messages.
-	// This action is directly performed without re-checking IsValid, as Execute is called post-validation.
-	session.ChatHistory.ClearAllSystemMessages()
-
-	// Print the message indicating successful clearing, with timestamp and typing effect.
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-	PrintTypingChat(ChatSysSummaryMessages, TypingDelay)
-
-	// Ensure the prompt context is visible after the operation.
-	fmt.Println()
-
-	// Return false to indicate the session should not terminate, and nil for error as the operation is expected to succeed.
-	return false, nil
 }
