@@ -422,6 +422,11 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 
 // Execute processes the ":cryptorand" command within a chat session.
 func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Continue the session without performing any action.
+	return false, nil
+}
+
+func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	lengthStr := parts[2] // The length argument is now the second part of the command
 	length, err := strconv.Atoi(lengthStr)
 	if err != nil {
@@ -434,12 +439,7 @@ func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (b
 		logger.Error(ErrorFailedtoGenerateRandomString, err)
 		return false, fmt.Errorf(errorfailedtogeneraterandomstring, err)
 	}
-
-	logger.Debug(CryptoRandLength, lengthStr)
-	logger.Debug(CryptoRandStringRes, randomString)
-
 	logger.Info(CryptoRandRes, lengthStr, randomString)
-
 	return false, nil
 }
 
