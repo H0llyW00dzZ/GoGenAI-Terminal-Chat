@@ -289,16 +289,11 @@ func (cmd *handleAITranslateCommand) IsValid(parts []string) bool {
 // handleCryptoRandCommand is the command to translate text using the AI model.
 type handleCryptoRandCommand struct{}
 
-func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
-	return true, nil
-}
-
 // IsValid checks if the cryptorand command is valid based on the input parts.
 // The cryptorand command is expected to follow the pattern: :cryptorand :length <number>
 func (cmd *handleCryptoRandCommand) IsValid(parts []string) bool {
 	// The cryptorand command should have exactly two parts: the command itself and the length argument.
-	return len(parts) == 3 && parts[1] == LengthArgs
+	return len(parts) == 1
 }
 
 // handleChatShowCommand is responsible for executing the ":show chat history" command.
