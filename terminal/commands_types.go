@@ -221,9 +221,18 @@ func (cmd *handleClearCommand) IsValid(parts []string) bool {
 	return len(parts) == 2 && parts[0] == ChatCommands && parts[1] == ClearCommand
 }
 
-func (h *handleClearCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
-	return true, nil
+func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// Handle the subcommands of the clear command
+	switch subcommand {
+	case ChatCommands:
+		return true, nil
+	case SummarizeCommands:
+		return true, nil
+	default:
+		// Handle unrecognized subcommand
+		logger.Error(ErrorUnrecognizedCommand, subcommand)
+		return false, nil
+	}
 }
 
 // handleSafetyCommand is the command to adjust safety settings.
