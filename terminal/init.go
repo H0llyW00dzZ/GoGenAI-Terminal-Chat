@@ -136,12 +136,15 @@ func init() {
 	registry.RegisterSubcommand(ClearCommand, SummarizeCommands, clearCommandHandler)
 	// Assume handleStatsCommand is capable of handling subcommands for ":stats"
 	statsCommandHandler := &handleStatsCommand{}
+	registry.Register(StatsCommand, &handleStatsCommand{})
 	registry.RegisterSubcommand(StatsCommand, ChatCommands, statsCommandHandler)
 	// Assume handleCryptoRandCommand is capable of handling subcommands for ":cryptorand"
 	cryptoRandCommandHandler := &handleCryptoRandCommand{}
+	registry.Register(CryptoRandCommand, &handleStatsCommand{})
 	registry.RegisterSubcommand(CryptoRandCommand, LengthArgs, cryptoRandCommandHandler)
 	// Assume safetySettingsCommandHandler is capable of handling subcommands for ":safety"
 	safetySettingsCommandHandler := &handleSafetyCommand{}
+	registry.Register(SafetyCommand, &handleSafetyCommand{})
 	registry.RegisterSubcommand(SafetyCommand, Low, safetySettingsCommandHandler)
 	registry.RegisterSubcommand(SafetyCommand, Default, safetySettingsCommandHandler)
 	registry.RegisterSubcommand(SafetyCommand, High, safetySettingsCommandHandler)
