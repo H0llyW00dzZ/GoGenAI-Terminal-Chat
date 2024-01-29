@@ -520,3 +520,55 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
 	}
 }
+
+// Execute processes the main command for handleStatsCommand. Since handleStatsCommand
+// is implemented with subcommands, this method does not perform any action and simply
+// returns false and nil to indicate that the session should continue without error.
+// The actual command logic is delegated to the HandleSubcommand method.
+func (cmd *handleStatsCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Continue the session without performing any action.
+	return false, nil
+}
+
+// HandleSubcommand dispatches the handling of specific subcommands for the stats command.
+// It takes a subcommand string, the current session, and the command parts as arguments.
+// Based on the subcommand, it calls the appropriate method to handle it.
+// If the subcommand is not recognized, it logs an error and continues the session.
+func (cmd *handleStatsCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// Dispatch handling based on the subcommand.
+	switch subcommand {
+	case ChatCommands:
+		// Handle the ':chat' subcommand to show chat statistics.
+		return cmd.showChatStats(session)
+	default:
+		// Log an error for unrecognized subcommands and continue the session.
+		logger.Error(ErrorUnrecognizedSubcommandForClear, subcommand)
+		return false, nil
+	}
+}
+
+// showChatStats displays the chat statistics in a session. It retrieves the statistics
+// from the session's ChatHistory and prints them to the console with a typing effect.
+// The typing delay is specified by the TypingDelay constant/variable.
+// The function prints a system message prefix with a timestamp before the stats.
+// After printing the stats, it continues the session without error.
+func (cmd *handleStatsCommand) showChatStats(session *Session) (bool, error) {
+	// Retrieve chat statistics from the session's ChatHistory.
+	stats := session.ChatHistory.GetMessageStats()
+
+	// Print the system message prefix with timestamp.
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+
+	// Print the title for the stats section.
+	PrintTypingChat(ListChatStats, TypingDelay)
+
+	// Print each statistic with a typing effect.
+	PrintTypingChat(fmt.Sprintf(UserMessagesStats, stats.UserMessages), TypingDelay)
+	PrintTypingChat(fmt.Sprintf(AiMessagesStats, stats.AIMessages), TypingDelay)
+	PrintTypingChat(fmt.Sprintf(SysMessageSstats, stats.SystemMessages), TypingDelay)
+
+	// Ensure there is a newline after the stats for visual separation.
+	fmt.Println()
+
+	return false, nil // Continue the session without error.
+}

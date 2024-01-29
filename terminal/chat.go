@@ -440,3 +440,26 @@ func (h *ChatHistory) ClearAllSystemMessages() {
 	h.Messages = newMessages
 	h.Hashes = newHashes
 }
+
+// MessageStats encapsulates the counts of different types of messages in the chat history.
+// It holds separate counts for user messages, AI messages, and system messages.
+type MessageStats struct {
+	UserMessages   int // UserMessages is the count of messages sent by users.
+	AIMessages     int // AIMessages is the count of messages sent by the AI.
+	SystemMessages int // SystemMessages is the count of system-generated messages.
+}
+
+// GetMessageStats safely retrieves the message counts from the ChatHistory instance.
+// It returns a MessageStats struct containing the counts of user, AI, and system messages.
+// Access to the ChatHistory's message counts is read-locked to ensure thread safety.
+func (h *ChatHistory) GetMessageStats() MessageStats {
+	h.mu.RLock()         // Lock for reading
+	defer h.mu.RUnlock() // Unlock when the function exits
+
+	// Return a new instance of MessageStats with the current counts.
+	return MessageStats{
+		UserMessages:   h.UserMessageCount,
+		AIMessages:     h.AIMessageCount,
+		SystemMessages: h.SystemMessageCount,
+	}
+}
