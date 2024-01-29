@@ -144,7 +144,7 @@ func init() {
 	registry.RegisterSubcommand(CryptoRandCommand, LengthArgs, cryptoRandCommandHandler)
 	// Assume safetySettingsCommandHandler is capable of handling subcommands for ":safety"
 	safetySettingsCommandHandler := &handleSafetyCommand{}
-	registry.Register(SafetyCommand, &handleStatsCommand{})
+	registry.Register(SafetyCommand, &handleSafetyCommand{})
 	registry.RegisterSubcommand(SafetyCommand, Low, safetySettingsCommandHandler)
 	registry.RegisterSubcommand(SafetyCommand, Default, safetySettingsCommandHandler)
 	registry.RegisterSubcommand(SafetyCommand, High, safetySettingsCommandHandler)
