@@ -42,7 +42,8 @@ func (r *CommandRegistry) RegisterSubcommand(baseCommand, subcommand string, han
 //	*CommandRegistry: A pointer to a newly created CommandRegistry with initialized command map.
 func NewCommandRegistry() *CommandRegistry {
 	return &CommandRegistry{
-		commands: make(map[string]CommandHandler),
+		commands:    make(map[string]CommandHandler),
+		subcommands: make(map[string]map[string]CommandHandler), // Initialize the subcommands map
 	}
 }
 
