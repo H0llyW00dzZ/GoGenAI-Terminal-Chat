@@ -285,9 +285,6 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	// But let's cross that bridge when we get to it. For now, we revel in the simplicity of our logic. Stay tuned, fellow code whisperers! 😜
 
 	// Note: This place only, for commands doesn't have any subcommands/args, so it will return error hahaha
-
-	// Log the error if the command is not valid
-	logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 	return false, nil // Continue the session
 }
 
