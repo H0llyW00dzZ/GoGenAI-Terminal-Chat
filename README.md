@@ -347,6 +347,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [X] **Manually summarize a conversation using commands**
 - [X] **Improve CommandRegistry to avoid bugs (`e.g., issues with executing a scalable command handler`)**
 - [X] **Improve Conditional Debug Logging for commands**
+- [ ] **Improve Chat Statistic**
 
 ### Other:
 - [ ] **Plan for Google Cloud Deployment**
