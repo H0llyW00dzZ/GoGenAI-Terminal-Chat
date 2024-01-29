@@ -296,24 +296,26 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
 
-	// Handle subcommands
-	if len(parts) == 2 {
-		subcommand := parts[1]
-		switch subcommand {
-		case ChatCommands:
-			return cmd.clearChatHistory(session)
-		case SummarizeCommands:
-			return cmd.clearSummarizeHistory(session)
-		default:
-			// Log the error for an unrecognized subcommand
-			logger.Error(ErrorUnrecognizedSubcommandForClear, subcommand)
-			return false, nil // Continue the session
-		}
-	}
-
 	// Log the error if the command is not valid
 	logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 	return false, nil // Continue the session
+}
+
+func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// Debug
+	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
+
+	// Handle the subcommands of the clear command
+	switch subcommand {
+	case ChatCommands:
+		return cmd.clearChatHistory(session)
+	case SummarizeCommands:
+		return cmd.clearSummarizeHistory(session)
+	default:
+		// Handle unrecognized subcommand
+		logger.Error(ErrorUnrecognizedCommand, subcommand)
+		return false, nil
+	}
 }
 
 // clearChatHistory clears the chat history.
