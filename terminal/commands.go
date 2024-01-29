@@ -346,11 +346,10 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	// Note: The code in "safety_settings.go" employs advanced idiomatic Go practices. 🤪
 	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
-	// Debug
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 		fmt.Println()
-		return true, nil
+		return false, nil
 	}
 
 	// Ensure SafetySettings is initialized.
