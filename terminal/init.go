@@ -124,7 +124,6 @@ func init() {
 	registry.Register(VersionCommand, &handleCheckVersionCommand{})
 	registry.Register(HelpCommand, &handleHelpCommand{})
 	registry.Register(ShortHelpCommand, &handleHelpCommand{})
-	registry.Register(SafetyCommand, &handleSafetyCommand{})
 	registry.Register(AITranslateCommand, &handleAITranslateCommand{})
 	registry.Register(ShowCommands, &handleShowChatCommand{})
 	registry.Register(SummarizeCommands, &handleSummarizeCommand{})
@@ -143,6 +142,12 @@ func init() {
 	cryptoRandCommandHandler := &handleCryptoRandCommand{}
 	registry.Register(CryptoRandCommand, &handleStatsCommand{})
 	registry.RegisterSubcommand(CryptoRandCommand, LengthArgs, cryptoRandCommandHandler)
+	// Assume safetySettingsCommandHandler is capable of handling subcommands for ":safety"
+	safetySettingsCommandHandler := &handleSafetyCommand{}
+	registry.Register(SafetyCommand, &handleStatsCommand{})
+	registry.RegisterSubcommand(SafetyCommand, Low, safetySettingsCommandHandler)
+	registry.RegisterSubcommand(SafetyCommand, Default, safetySettingsCommandHandler)
+	registry.RegisterSubcommand(SafetyCommand, High, safetySettingsCommandHandler)
 
 	//TODO: Will add more commands here, example: :help, :about, :credits, :k8s, syncing AI With Go Routines (Known as Gopher hahaha) etc.
 	// Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line

@@ -248,11 +248,6 @@ func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
 	return exists && option.Valid
 }
 
-func (h *handleSafetyCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// The safety command should not have any subcommand.
-	return true, nil
-}
-
 // setSafetyLevel updates the safety settings based on the command argument.
 func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
 	option, exists := safetyOptions[level]

@@ -339,13 +339,17 @@ func (cmd *handleClearCommand) clearSummarizeHistory(session *Session) (bool, er
 // However, Go's type system allows us to elegantly manipulate these settings directly through struct methods,
 // bypassing the need for repetitive JSON serialization and deserialization hahaha.
 func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Continue the session after setting safety levels
+	return false, nil
+}
+
+func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	// Note: The code in "safety_settings.go" employs advanced idiomatic Go practices. 🤪
 	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
-	// Debug
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 		fmt.Println()
-		return true, nil
+		return false, nil
 	}
 
 	// Ensure SafetySettings is initialized.
@@ -364,8 +368,8 @@ func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool,
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
 	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
 	PrintTypingChat(fmt.Sprintf(SystemSafety, parts[1]), TypingDelay)
-	fmt.Println()     // this correct, fix front end issue
-	return false, nil // Continue the session after setting safety levels
+	fmt.Println() // this correct, fix front end issue
+	return false, nil
 }
 
 // Execute processes the ":aitranslate" command within a chat session.
