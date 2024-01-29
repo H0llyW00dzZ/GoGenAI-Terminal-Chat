@@ -285,7 +285,7 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	// But let's cross that bridge when we get to it. For now, we revel in the simplicity of our logic. Stay tuned, fellow code whisperers! 😜
 
 	// Note: This place only, for commands doesn't have any subcommands/args, so it will return error hahaha
-	return false, nil // Continue the session
+	return cmd.HandleSubcommand("", session, parts) // Continue the session
 }
 
 func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
@@ -340,7 +340,7 @@ func (cmd *handleClearCommand) clearSummarizeHistory(session *Session) (bool, er
 // bypassing the need for repetitive JSON serialization and deserialization hahaha.
 func (cmd *handleSafetyCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Continue the session after setting safety levels
-	return false, nil
+	return cmd.HandleSubcommand("", session, parts) // Continue the session
 }
 
 func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
@@ -427,7 +427,7 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 // Execute processes the ":cryptorand" command within a chat session.
 func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Continue the session without performing any action.
-	return false, nil
+	return cmd.HandleSubcommand("", session, parts) // Continue the session
 }
 
 func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
@@ -455,7 +455,7 @@ func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *S
 // Returns false to indicate the session should continue, and an error if there is an issue.
 func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Return false to indicate the session should continue.
-	return false, nil
+	return cmd.HandleSubcommand("", session, parts) // Continue the session
 }
 
 func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
@@ -535,7 +535,7 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 // The actual command logic is delegated to the HandleSubcommand method.
 func (cmd *handleStatsCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Continue the session without performing any action.
-	return false, nil
+	return cmd.HandleSubcommand("", session, parts) // Continue the session
 }
 
 // HandleSubcommand dispatches the handling of specific subcommands for the stats command.
