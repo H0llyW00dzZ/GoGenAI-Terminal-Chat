@@ -293,6 +293,8 @@ func (cmd *handleClearCommand) Execute(session *Session, parts []string) (bool, 
 	// Future enhancements might include targeted message purges—think selective user word-bombs or a full-on message-specific snipe hunt.
 	// But let's cross that bridge when we get to it. For now, we revel in the simplicity of our logic. Stay tuned, fellow code whisperers! 😜
 
+	// Note: This place only, for commands doesn't have any subcommands/args, so it will return error hahaha
+
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, ClearCommand, parts)
 
