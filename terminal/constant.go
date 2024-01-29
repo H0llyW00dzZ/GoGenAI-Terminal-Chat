@@ -125,7 +125,7 @@ const (
 	PingCommand        = ":ping" // Currently marked as TODO
 	PrefixChar         = ":"
 	// List args
-	ChatHistoryArgs = "chat history"
+	ChatHistoryArgs = "history"
 )
 
 // Defined List error message

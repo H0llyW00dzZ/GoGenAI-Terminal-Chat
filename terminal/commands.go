@@ -454,16 +454,20 @@ func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *S
 //
 // Returns false to indicate the session should continue, and an error if there is an issue.
 func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Return false to indicate the session should continue.
+	return false, nil
+}
+
+func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
 		fmt.Println()
-		return true, nil
+		return false, nil
 	}
 
 	// Retrieve and log the entire chat history.
 	history := session.ChatHistory.GetHistory(session.ChatConfig)
 	logger.Info(ShowChatHistory, history)
-
 	return false, nil // Return false to indicate the session should continue.
 }
 

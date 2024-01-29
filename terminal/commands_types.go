@@ -294,11 +294,6 @@ func (cmd *handleCryptoRandCommand) IsValid(parts []string) bool {
 // handleChatShowCommand is responsible for executing the ":show chat history" command.
 type handleShowChatCommand struct{}
 
-func (h *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	// unimplemented
-	return true, nil
-}
-
 // IsValid checks if the chat show command is valid based on the input parts.
 // The chat show command is valid only if there are no additional arguments, hence
 // the length of parts must be exactly 1.
@@ -308,8 +303,8 @@ func (h *handleShowChatCommand) HandleSubcommand(subcommand string, session *Ses
 // Returns true if the command is valid, otherwise false.
 func (cmd *handleShowChatCommand) IsValid(parts []string) bool {
 	// Combine the parts after the command keyword to match the ChatHistoryArgs
-	args := strings.Join(parts[1:], " ")
-	return len(parts) > 1 && args == ChatHistoryArgs
+	args := strings.Join(parts[2:], " ")
+	return len(parts) > 2 && args == ChatHistoryArgs
 }
 
 // handleSummarizeCommand executes the ":summarize" command.
