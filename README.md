@@ -313,35 +313,37 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 
 ## 📝 TODO
 
+> [!NOTE]
+> This is a list of tasks to improve, fix, and enhance the features of this project. The tasks are added to this README.md file to ensure they are not forgotten during the development process.
+
 ### Front-End:
-- [ ] **UI Front-End Terminal**
-- [ ] **Reporting System**
+- [ ] **UI for Front-End Terminal**
+- [ ] **Implement a Reporting System**
 > [!NOTE]
 > The `Reporting System` is designed to capture and handle runtime panic events in the Go application, facilitating streamlined error reporting and analysis.
-- [X] **Debug System**
-- [ ] **Convert Result Table**
+- [X] **Develop a Debug System**
+- [ ] **Create a Convert Result Table feature**
 > [!NOTE]
-> The `Convert Result Table` feature is designed to reformat output from the AI into a tabular structure.
-- [X] **Enabling Additional Response**
+> The `Create a Convert Result Table feature` feature is designed to reformat output from the AI into a tabular structure.
+- [X] **Enable Additional Responses**
 > [!NOTE]
-> The `Enabling Additional Response` feature is designed to permit additional responses from the AI, such as prompt feedback. To activate this feature, use the `Environment Variable Configuration`.
-
+> The `Enable Additional Responses` feature is designed to permit additional responses from the AI, such as prompt feedback. To activate this feature, use the `Environment Variable Configuration`.
 
 ### Back-End:
-- [ ] **Any unimplemented**
-- [ ] **Spawn Another Go Routines**
-- [ ] **Pinned Each Messages for ContextPrompt but are simpler.**
-- [X] **Improve the structuring of ChatHistory Logic for ContextPrompt.**
+- [ ] **Implement any unimplemented features**
+- [ ] **Spawn Additional Go Routines**
+- [ ] **Pin Each Message for a Simpler ContextPrompt**
+- [X] **Improve the Structure of the ChatHistory Logic for ContextPrompt**
 - [ ] **Implement Gemini-Pro Vision Capabilities**
 > [!NOTE]
 > The `Implement Gemini-Pro Vision Capabilities` feature is strategically integrated within command functionalities, such as image comparison, image analysis, and more.
-- [ ] **Scalable Configuration System**
+- [ ] **Develop a Scalable Configuration System**
 > [!NOTE]
-> So easy written in `go`, plus `Scalability` & `Stability` 🤪
-- [ ] **Improve Contextual Prompts for AI when the user invokes other commands like `:help`**
-- [ ] **Automated Summarize a Conversation**
+> This system is written in `go`, ensuring `Scalability` & `Stability`.  🤪
+- [ ] **Improve Contextual Prompts for AI when the user invokes commands like `:help`**
+- [ ] **Automate Summarizing Conversations**
 > [!NOTE]
-> The `Automated Summarize a Conversation` feature is designed to automatically summarize a conversation similarly to [ChatGPTNextWeb](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web). However, it is built in a terminal interface, making it more accessible and affordable than `OpenAI` (`e.g. too expensive just for summarizing a conversation`). Additionally, since this terminal interface is written in Go, it enables the creation of simple, secure, and scalable systems 🤪.
+> The `Automate Summarizing Conversations` feature is designed to automatically summarize a conversation similarly to [ChatGPTNextWeb](https://github.com/ChatGPTNextWeb/ChatGPT-Next-Web). However, it is built in a terminal interface, making it more accessible and affordable than `OpenAI`. Furthermore, since this terminal interface is written in Go, it enables the creation of simple, secure, and scalable systems.
 - [X] **Manually summarize a conversation using commands**
 - [X] **Improve CommandRegistry to avoid bugs (`e.g., issues with executing a scalable command handler`)**
 - [ ] **Improve Conditional Debug Logging for commands**
@@ -351,8 +353,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > The `Plan for Google Cloud Deployment` feature is intended to support cloud compatibility with Vertex AI capabilities once version v1.0.0 (this repository) is reached and considered stable [read here](https://pkg.go.dev/about#best-practices).
 
-**Reason?** To respect the `Terms of Service` and `Privacy Policy`.
-For example, `Vertex AI` capabilities can be used on a personal basis for tasks such as fine-tuning, using your own data, and more, without the complexity and overhead typically required.
+**Why?** This project is developed in compliance with the `Terms of Service` and `Privacy Policy` for `personal use`. It's important to note that this project is developed on a personal basis during my free time and is not associated with any company or enterprise endeavors. This contrasts with many companies that primarily cater to enterprise needs. For instance, `Vertex AI` capabilities can be utilized on a personal basis for tasks such as fine-tuning and using your own data, without the complexity and overhead typically associated with enterprise-level requirements.
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](SECURITY.md)
