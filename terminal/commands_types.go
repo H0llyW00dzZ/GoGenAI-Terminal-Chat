@@ -12,8 +12,9 @@ import (
 // Each command handler function must conform to this signature.
 type CommandHandler interface {
 	// Note: The list of command handlers here does not use os.Args; instead, it employs advanced idiomatic Go practices. 🤪
-	Execute(session *Session, parts []string) (bool, error) // new method
-	IsValid(parts []string) bool                            // new method
+	Execute(session *Session, parts []string) (bool, error)                             // new method
+	IsValid(parts []string) bool                                                        // new method
+	HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) // New method
 }
 
 // CommandRegistry is a centralized registry to manage chat commands.
@@ -21,7 +22,16 @@ type CommandHandler interface {
 // This allows for a scalable and maintainable way to manage chat commands
 // and their execution within a chat session.
 type CommandRegistry struct {
-	commands map[string]CommandHandler // commands holds the association of command names to their handlers.
+	commands    map[string]CommandHandler            // commands holds the association of command names to their handlers.
+	subcommands map[string]map[string]CommandHandler // New field for subcommands
+}
+
+// Register a subcommand for a base command.
+func (r *CommandRegistry) RegisterSubcommand(baseCommand, subcommand string, handler CommandHandler) {
+	if _, exists := r.subcommands[baseCommand]; !exists {
+		r.subcommands[baseCommand] = make(map[string]CommandHandler)
+	}
+	r.subcommands[baseCommand][subcommand] = handler
 }
 
 // NewCommandRegistry initializes a new instance of CommandRegistry.
@@ -69,13 +79,13 @@ func (r *CommandRegistry) Register(name string, cmd CommandHandler) {
 //	as the error is already handled within the method.
 func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []string) (bool, error) {
 	if cmd, exists := r.commands[name]; exists {
-		// First, validate the command arguments.
-		if !cmd.IsValid(parts) {
-			// If the command is not valid, log the error and return.
-			logger.Error(HumanErrorWhileTypingCommandArgs, parts)
-			return false, nil
+		// Check for subcommands
+		if len(parts) > 1 && r.subcommands[name] != nil {
+			subcommand := parts[1]
+			if subcmd, ok := r.subcommands[name][subcommand]; ok {
+				return subcmd.HandleSubcommand(subcommand, session, parts)
+			}
 		}
-		// If the command is valid, execute it.
 		return cmd.Execute(session, parts)
 	}
 	// If the command does not exist, log the error and return.
@@ -154,6 +164,11 @@ func (cmd *handleQuitCommand) IsValid(parts []string) bool {
 	return len(parts) == 1
 }
 
+func (h *handleQuitCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
+
 type handleHelpCommand struct{}
 
 // IsValid checks if the help command is valid based on the input parts.
@@ -168,7 +183,17 @@ func (cmd *handleHelpCommand) IsValid(parts []string) bool {
 	return len(parts) == 1
 }
 
+func (h *handleHelpCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
+
 type handleCheckVersionCommand struct{}
+
+func (h *handleCheckVersionCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
 
 // IsValid checks if the checkversion command is valid based on the input parts.
 // The checkversion command is valid only if there are no additional arguments, hence
@@ -195,6 +220,11 @@ func (cmd *handleClearCommand) IsValid(parts []string) bool {
 	return len(parts) == 2 && parts[0] == ChatCommands && parts[1] == ClearCommand
 }
 
+func (h *handleClearCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
+
 // handleSafetyCommand is the command to adjust safety settings.
 type handleSafetyCommand struct {
 	SafetySettings *SafetySettings
@@ -207,6 +237,11 @@ func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
 	}
 	option, exists := safetyOptions[parts[1]]
 	return exists && option.Valid
+}
+
+func (h *handleSafetyCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
 }
 
 // setSafetyLevel updates the safety settings based on the command argument.
@@ -225,6 +260,11 @@ func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
 // handleAITranslateCommand is the command to translate text using the AI model.
 type handleAITranslateCommand struct{}
 
+func (h *handleAITranslateCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
+
 // IsValid checks if the translate command is valid based on the input parts.
 // The translate command is expected to follow the pattern: :aitranslate <text> :lang <targetlanguage>
 func (cmd *handleAITranslateCommand) IsValid(parts []string) bool {
@@ -240,6 +280,11 @@ func (cmd *handleAITranslateCommand) IsValid(parts []string) bool {
 // handleCryptoRandCommand is the command to translate text using the AI model.
 type handleCryptoRandCommand struct{}
 
+func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
+
 // IsValid checks if the cryptorand command is valid based on the input parts.
 // The cryptorand command is expected to follow the pattern: :cryptorand :length <number>
 func (cmd *handleCryptoRandCommand) IsValid(parts []string) bool {
@@ -249,6 +294,11 @@ func (cmd *handleCryptoRandCommand) IsValid(parts []string) bool {
 
 // handleChatShowCommand is responsible for executing the ":show chat history" command.
 type handleShowChatCommand struct{}
+
+func (h *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
 
 // IsValid checks if the chat show command is valid based on the input parts.
 // The chat show command is valid only if there are no additional arguments, hence
@@ -265,6 +315,11 @@ func (cmd *handleShowChatCommand) IsValid(parts []string) bool {
 
 // handleSummarizeCommand executes the ":summarize" command.
 type handleSummarizeCommand struct{}
+
+func (h *handleSummarizeCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// unimplemented
+	return true, nil
+}
 
 // IsValid checks if the summarize command is valid.
 func (cmd *handleSummarizeCommand) IsValid(parts []string) bool {
