@@ -87,11 +87,18 @@ func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []
 		logger.Error(ErrorUnrecognizedCommand, name)
 		return false, nil
 	}
-	// Check for subcommands
+
+	// If the command is :aitranslate, execute it directly without looking for subcommands.
+	if name == AITranslateCommand {
+		return cmd.Execute(session, parts)
+	}
+
+	// For other commands, check for subcommands.
 	if len(parts) > 1 {
 		return r.executeSubcommand(name, session, parts)
 	}
-	// If the command is valid, execute it.
+
+	// If no subcommands, execute the main command.
 	return cmd.Execute(session, parts)
 }
 
