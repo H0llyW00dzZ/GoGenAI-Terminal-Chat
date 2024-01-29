@@ -79,6 +79,8 @@ func (r *CommandRegistry) Register(name string, cmd CommandHandler) {
 //	If the command is unrecognized, it logs an error but does not return it,
 //	as the error is already handled within the method.
 func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []string) (bool, error) {
+	// Note: For better dynamic logging, further debugging is needed here.
+	logger.Debug(DEBUGEXECUTINGCMD, name, parts)
 	if cmd, exists := r.commands[name]; exists {
 		// Check for subcommands
 		if len(parts) > 1 && r.subcommands[name] != nil {
