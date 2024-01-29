@@ -133,6 +133,7 @@ func init() {
 	clearCommandHandler := &handleClearCommand{}
 	registry.Register(ClearCommand, &handleClearCommand{})
 	// Register subcommands for ":clear"
+	// Note: These subcommands are as scalable as the `NewCommandRegistry`.
 	registry.RegisterSubcommand(ClearCommand, ChatCommands, clearCommandHandler)
 	registry.RegisterSubcommand(ClearCommand, SummarizeCommands, clearCommandHandler)
 
