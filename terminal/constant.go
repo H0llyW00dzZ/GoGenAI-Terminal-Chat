@@ -252,7 +252,7 @@ const (
 	ShowChatHistory  = "Chat History:\n\n%s"
 	SummarizePrompt  = "Summarize the discussion briefly in 200 words or " +
 		"less to use as a prompt for future context:\n"
-	ListChatStats = "List Stats Chat of This Session:\n" +
+	ListChatStats = "List Stats Chat of This Session:\n\n" +
 		"User messages: %d\n" + "AI messages: %d\n" + "System messages: %d"
 )
 
