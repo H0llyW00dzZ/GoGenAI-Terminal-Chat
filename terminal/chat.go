@@ -35,22 +35,6 @@ const (
 	SystemMessage
 )
 
-// IncrementMessageTypeCount updates the count of messages for the given type.
-// It specifically flags if a SystemMessage is encountered, as it may require special handling.
-// Returns true if the incremented message type is a system message.
-func (h *ChatHistory) IncrementMessageTypeCount(messageType MessageType) bool {
-	switch messageType {
-	case UserMessage:
-		h.UserMessageCount++
-	case AIMessage:
-		h.AIMessageCount++
-	case SystemMessage:
-		h.SystemMessageCount++
-		return true // Indicates that a system message has been processed.
-	}
-	return false
-}
-
 // DetermineMessageType analyzes the content of a message to classify its type.
 // It returns the MessageType based on predefined criteria for identifying user, AI, and system messages.
 func DetermineMessageType(message string) MessageType {
@@ -95,6 +79,7 @@ type NewLineChar struct {
 // This method does not return any value or error. It assumes that all input
 // is valid and safe to add to the chat history.
 func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
+	// Warning!!! Explicit 🤪
 	h.mu.Lock()         // Lock for writing
 	defer h.mu.Unlock() // Unlock when the function returns
 
@@ -104,23 +89,17 @@ func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 	hashValue := h.hashMessage(sanitizedText)
 	messageType := DetermineMessageType(sanitizedText)
 
-	if messageType == SystemMessage {
-		// Check if the message hash already exists to prevent duplicates
-		if h.handleSystemMessage(sanitizedText, message, hashValue) {
-			return // Exit if it was a system message
-		}
-	}
-	// For non-system messages or new system messages
-	if _, exists := h.Hashes[hashValue]; exists {
-		return // Skip duplicate messages
+	// Delegate message handling based on type.
+	switch messageType {
+	case SystemMessage:
+		h.handleSystemMessage(sanitizedText, message, hashValue)
+	case AIMessage:
+		h.handleAIMessage(message, hashValue)
+	default:
+		h.handleUserMessage(user, message, hashValue)
 	}
 	// Check if the message hash already exists to prevent duplicates
 	h.manageHistorySize(config)
-	// Note: this remove the oldest message are automated handle by Garbage Collector.
-	// For example, free memory to avoid memory leak.
-	h.Messages = append(h.Messages, message)  // Add the new message
-	h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
-	h.IncrementMessageTypeCount(messageType)  // Count the message
 }
 
 // handleSystemMessage checks and replaces an existing system message.
@@ -138,10 +117,48 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 	} else {
 		h.addNewSysMessage(message, hashValue)
 	}
-
+	h.addNewSysMessage(message, hashValue)
 	h.cleanupOldSysMessages()
-
 	return true // Indicate a system message was handled.
+}
+
+// handleAIMessage processes an AI message.
+func (h *ChatHistory) handleAIMessage(message, hashValue string) {
+	// Warning!!! Explicit 🤪
+	h.mu.Lock()         // Lock for writing
+	defer h.mu.Unlock() // Ensure unlocking
+	if _, exists := h.Hashes[hashValue]; !exists {
+		h.addMessageToHistory(message, hashValue)
+		h.AIMessageCount++
+	}
+}
+
+// handleUserMessage processes a user message.
+func (h *ChatHistory) handleUserMessage(user, message, hashValue string) {
+	// Warning!!! Explicit 🤪
+	h.mu.Lock()         // Lock for writing
+	defer h.mu.Unlock() // Ensure unlocking
+	if _, exists := h.Hashes[hashValue]; !exists {
+		h.addMessageToHistory(message, hashValue)
+		if user == SYSTEMPREFIX {
+			h.SystemMessageCount++
+		}
+		if user == AiNerd {
+			h.AIMessageCount++
+		}
+		h.UserMessageCount++
+	}
+}
+
+// addMessageToHistory adds a message to the history.
+func (h *ChatHistory) addMessageToHistory(message, hashValue string) {
+	// Warning!!! Explicit 🤪
+	h.mu.Lock()         // Lock for writing
+	defer h.mu.Unlock() // Ensure unlocking
+	// Note: this remove the oldest message are automated handle by Garbage Collector.
+	// For example, free memory to avoid memory leak.
+	h.Messages = append(h.Messages, message)
+	h.Hashes[hashValue] = len(h.Messages) - 1
 }
 
 // isExistingSysMessage checks if there is an existing system message with the same hash.
@@ -408,6 +425,9 @@ func (h *ChatHistory) Clear() {
 
 	h.Messages = []string{}
 	h.Hashes = make(map[string]int)
+	h.AIMessageCount = 0
+	h.SystemMessageCount = 0
+	h.UserMessageCount = 0
 }
 
 // Note: This a different way unlike "Clear"
@@ -417,6 +437,9 @@ func (h *ChatHistory) cleanup() {
 
 	h.Messages = nil
 	h.Hashes = nil
+	h.AIMessageCount = 0
+	h.SystemMessageCount = 0
+	h.UserMessageCount = 0
 }
 
 // ClearAllSystemMessages removes all system messages from the chat history.

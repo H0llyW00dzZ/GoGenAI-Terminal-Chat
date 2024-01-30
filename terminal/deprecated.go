@@ -185,3 +185,21 @@ func ReplaceTripleBackticks(text, placeholder string) string {
 func IsLastMessage(index int, messages []string) bool {
 	return index == len(messages)-1
 }
+
+// IncrementMessageTypeCount updates the count of messages for the given type.
+// It specifically flags if a SystemMessage is encountered, as it may require special handling.
+// Returns true if the incremented message type is a system message.
+//
+// Deprecated: This method is no longer used, and was replaced by ChatHistory.AddMessage
+func (h *ChatHistory) IncrementMessageTypeCount(messageType MessageType) bool {
+	switch messageType {
+	case UserMessage:
+		h.UserMessageCount++
+	case AIMessage:
+		h.AIMessageCount++
+	case SystemMessage:
+		h.SystemMessageCount++
+		return true // Indicates that a system message has been processed.
+	}
+	return false
+}
