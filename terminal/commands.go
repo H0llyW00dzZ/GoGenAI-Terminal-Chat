@@ -568,16 +568,10 @@ func (cmd *handleStatsCommand) showChatStats(session *Session) (bool, error) {
 	// Retrieve chat statistics from the session's ChatHistory.
 	stats := session.ChatHistory.GetMessageStats()
 
-	// Print the system message prefix with timestamp.
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-
-	// Print the title for the stats section.
-	PrintTypingChat(ListChatStats, TypingDelay)
-
-	// Print each statistic with a typing effect.
-	PrintTypingChat(fmt.Sprintf(UserMessagesStats, stats.UserMessages), TypingDelay)
-	PrintTypingChat(fmt.Sprintf(AiMessagesStats, stats.AIMessages), TypingDelay)
-	PrintTypingChat(fmt.Sprintf(SysMessageSstats, stats.SystemMessages), TypingDelay)
+	// Use the logger's Any method to print the statistics without colorization.
+	// The SYSTEMPREFIX is included directly in the formatted message.
+	logger.Any(ListChatStats,
+		stats.UserMessages, stats.AIMessages, stats.SystemMessages)
 
 	// Ensure there is a newline after the stats for visual separation.
 	fmt.Println()
