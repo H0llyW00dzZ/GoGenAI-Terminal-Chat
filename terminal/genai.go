@@ -228,7 +228,13 @@ func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatConte
 
 	// Process the AI's response and add it to the chat history
 	aiResponse := processAIResponse(resp)
-	session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
+	if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
+		// If it was not a system message or no existing system message was found to replace,
+		// add the new system message to the chat history.
+		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+	}
 
 	return nil
 }
