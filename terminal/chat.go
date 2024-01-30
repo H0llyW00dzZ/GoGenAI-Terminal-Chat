@@ -145,8 +145,6 @@ func (h *ChatHistory) handleUserMessage(user, message, hashValue string) {
 
 // updateMessageCounts updates the message counts based on the user.
 func (h *ChatHistory) updateMessageCounts(user string) {
-	h.mu.Lock()
-	defer h.mu.Unlock()
 
 	if user == SYSTEMPREFIX {
 		h.updateSystemMessageCount()
