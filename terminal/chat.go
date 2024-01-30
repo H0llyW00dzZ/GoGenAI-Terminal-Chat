@@ -117,7 +117,10 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 		h.replaceExistingSysMessage(message, hashValue)
 	} else {
 		h.addNewSysMessage(message, hashValue)
-		h.SystemMessageCount = 1 // Reset to 1 as there should only be one system message
+		// Only increment SystemMessageCount if this is the first system message
+		if h.SystemMessageCount == 0 {
+			h.SystemMessageCount = 1 // There should only be one system message
+		}
 	}
 	h.cleanupOldSysMessages()
 	return true // Indicate a system message was handled.
