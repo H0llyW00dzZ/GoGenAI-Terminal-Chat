@@ -193,3 +193,23 @@ func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
 	// Print a newline after the message
 	fmt.Println()
 }
+
+// Any logs a general message without any colorization. It behaves like Println and allows for formatted messages.
+//
+// Parameters:
+//
+//	format string: The format string for the general message.
+//	v ...interface{}: The values to be formatted according to the format string.
+func (l *DebugOrErrorLogger) Any(format string, v ...interface{}) {
+	var builder strings.Builder
+
+	message := fmt.Sprintf(format, v...)
+	builder.WriteString(message)
+
+	// Print the message with a timestamp but without any color output.
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	l.PrintTypingChat(builder.String(), TypingDelay)
+
+	// Print a newline after the message
+	fmt.Println()
+}
