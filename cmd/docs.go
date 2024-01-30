@@ -1,3 +1,7 @@
+// Copyright (c) 2024 H0llyW00dzZ
+//
+// License: MIT License
+
 // Package cmd/main is the entry point of the GoGenAI-Terminal-Chat application.
 // It sets up the environment for the chat session and starts the interaction
 // between the user and the generative AI model.

@@ -1,3 +1,7 @@
+// Copyright (c) 2024 H0llyW00dzZ
+//
+// License: MIT License
+
 // Package tools encapsulates a collection of utility functions designed to support
 // various common operations throughout the application. These utilities provide
 // essential functionalities such as secure random string generation, data transformation,
