@@ -125,6 +125,8 @@ func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, err
 		ChatCommands,
 		ShowCommands,
 		ChatHistoryArgs,
+		StatsCommand,
+		ChatCommands,
 		ClearCommand,
 		SummarizeCommands,
 		ClearCommand,
