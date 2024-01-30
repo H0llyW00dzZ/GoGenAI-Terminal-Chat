@@ -332,7 +332,9 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 ### Back-End:
 - [ ] **Implement any unimplemented features**
 - [ ] **Spawn Additional Go Routines**
-- [ ] **Pin Each Message for a Simpler ContextPrompt**
+- [ ] **Pin Each Message for a Simpler Context Prompt**
+> [!NOTE]
+> The `Pin Each Message for a Simpler Context Prompt` feature is designed to pin messages loaded from files such as `json/txt/md`. This feature works exceptionally well with automated or manual summarization, as opposed to when written in an `interpreted language` hahaha.
 - [X] **Improve the Structure of the ChatHistory Logic for ContextPrompt**
 - [ ] **Implement Gemini-Pro Vision Capabilities**
 > [!NOTE]
