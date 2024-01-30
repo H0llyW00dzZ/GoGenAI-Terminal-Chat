@@ -90,6 +90,7 @@ func (h *ChatHistory) AddMessage(user string, text string, config *ChatConfig) {
 	messageType := DetermineMessageType(sanitizedText)
 
 	// Delegate message handling based on type.
+	// Note: This becomes easier to maintain by Go routines.
 	switch messageType {
 	case SystemMessage:
 		h.handleSystemMessage(sanitizedText, message, hashValue)
@@ -157,8 +158,8 @@ func (h *ChatHistory) addMessageToHistory(message, hashValue string) {
 	defer h.mu.Unlock() // Ensure unlocking
 	// Note: this remove the oldest message are automated handle by Garbage Collector.
 	// For example, free memory to avoid memory leak.
-	h.Messages = append(h.Messages, message)
-	h.Hashes[hashValue] = len(h.Messages) - 1
+	h.Messages = append(h.Messages, message)  // Add the new message
+	h.Hashes[hashValue] = len(h.Messages) - 1 // Map the hash to the new message index
 }
 
 // isExistingSysMessage checks if there is an existing system message with the same hash.
