@@ -117,7 +117,6 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 		h.replaceExistingSysMessage(message, hashValue)
 	} else {
 		h.addNewSysMessage(message, hashValue)
-		h.SystemMessageCount = 1 // Reset to 1 as there should only be one system message
 	}
 	h.cleanupOldSysMessages()
 	return true // Indicate a system message was handled.
@@ -136,16 +135,30 @@ func (h *ChatHistory) handleAIMessage(message, hashValue string) {
 
 // handleUserMessage processes a user message.
 func (h *ChatHistory) handleUserMessage(user, message, hashValue string) {
-	if _, exists := h.Hashes[hashValue]; !exists {
-		h.addMessageToHistory(message, hashValue)
-		if user == SYSTEMPREFIX {
-			h.SystemMessageCount++
-		}
-		if user == AiNerd {
-			h.AIMessageCount++
-		} else if user == StringNewLine+YouNerd {
-			h.UserMessageCount++
-		}
+	if _, exists := h.Hashes[hashValue]; exists {
+		return
+	}
+
+	h.addMessageToHistory(message, hashValue)
+	h.updateMessageCounts(user)
+}
+
+// updateMessageCounts updates the message counts based on the user.
+func (h *ChatHistory) updateMessageCounts(user string) {
+
+	if user == SYSTEMPREFIX {
+		h.updateSystemMessageCount()
+	} else if user == AiNerd {
+		h.AIMessageCount++
+	} else if user == StringNewLine+YouNerd {
+		h.UserMessageCount++
+	}
+}
+
+// updateSystemMessageCount increments the system message count if it's currently zero.
+func (h *ChatHistory) updateSystemMessageCount() {
+	if h.SystemMessageCount == 0 {
+		h.SystemMessageCount = 1
 	}
 }
 
