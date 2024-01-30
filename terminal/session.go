@@ -84,49 +84,6 @@ func NewSession(apiKey string) *Session {
 	}
 }
 
-// SendDummyMessage verifies the validity of the API key by sending a dummy message.
-//
-// Parameters:
-//
-//	client *genai.Client: The AI client used to send the message.
-//
-// Returns:
-//
-//	A boolean indicating the validity of the API key.
-//	An error if sending the dummy message fails.
-func SendDummyMessage(client *genai.Client) (bool, error) {
-	// Initialize a dummy chat session or use an appropriate lightweight method.
-	model := client.GenerativeModel(ModelAi)
-	// Configure the model with options.
-	// Apply the configurations to the model.
-	// Note: This a testing in live production by sending a Dummy messages lmao
-	tempOption := WithTemperature(0.9)
-	topPOption := WithTopP(0.5)
-	topKOption := WithTopK(20)
-	// Exercise caution: setting the max output tokens below 50 may cause a panic.
-	// This could be a bug in official genai package or an unintended issue from Google's side.
-	maxOutputTokensOption, err := WithMaxOutputTokens(50)
-	if err != nil {
-		return handleGenAIError(err)
-	}
-
-	success, err := ApplyOptions(model, tempOption, topPOption, topKOption, maxOutputTokensOption)
-	if !success {
-		return false, fmt.Errorf(ErrorFailedToApplyModelConfiguration)
-	}
-
-	cs := model.StartChat()
-
-	// Attempt to send a dummy message.
-	resp, err := cs.SendMessage(context.Background(), genai.Text(DummyMessages))
-	if err != nil {
-		return handleGenAIError(err)
-	}
-
-	// A non-nil response indicates a valid API key.
-	return resp != nil, nil
-}
-
 // Start begins the chat session, managing user input and AI responses.
 // It sets up a signal listener for graceful shutdown and enters a loop to
 // read user input and fetch AI responses indefinitely until an interrupt signal is received.
