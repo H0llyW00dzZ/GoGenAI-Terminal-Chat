@@ -257,7 +257,7 @@ const (
 	ListChatStats = statsEmoji + " List of Chat Statistics for This Session:\n\n" +
 		youNerd + " User messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
 		aiNerd + " AI messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
-		sysEmoji + " System messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n"
+		sysEmoji + " System messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 )
 
 // Defined Tools
