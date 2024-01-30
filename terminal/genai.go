@@ -197,3 +197,52 @@ func sanitizeAIResponse(response string) string {
 
 	return sanitizedResponse
 }
+
+// sendToAIWithoutDisplay sends a message to the AI, processes the response, and updates the chat history without displaying the response.
+//
+// Note: This function is currently unused, but it will be employed for automated summarization in the future.
+func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string, session *Session) error {
+	model := client.GenerativeModel(ModelAi)
+
+	// Apply safety settings to the model
+	safetySettings := DefaultSafetySettings()
+	safetySettings.ApplyToModel(model)
+
+	// Apply additional model configurations like TopP
+	tempOption := WithTemperature(0.9)
+	ApplyOptions(model, tempOption)
+	// Retrieve the relevant chat history using ChatConfig
+	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
+
+	fullContext := chatContext
+	if len(chatHistory) > 0 {
+		// Append the new message to the chat history to form the full context
+		fullContext = chatHistory + StringNewLine + chatContext
+	}
+
+	// Send the message to the AI
+	resp, err := model.StartChat().SendMessage(ctx, genai.Text(fullContext))
+	if err != nil {
+		return err
+	}
+
+	// Process the AI's response and add it to the chat history
+	aiResponse := processAIResponse(resp)
+	session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+
+	return nil
+}
+
+// processAIResponse processes the AI's response and returns it as a string.
+func processAIResponse(resp *genai.GenerateContentResponse) string {
+	var aiResponse strings.Builder
+	for _, cand := range resp.Candidates {
+		if cand.Content != nil {
+			for _, part := range cand.Content.Parts {
+				content := fmt.Sprint(part)
+				aiResponse.WriteString(content)
+			}
+		}
+	}
+	return aiResponse.String()
+}
