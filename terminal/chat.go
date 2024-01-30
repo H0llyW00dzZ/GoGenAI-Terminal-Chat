@@ -118,7 +118,6 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 	} else {
 		h.addNewSysMessage(message, hashValue)
 	}
-	h.addNewSysMessage(message, hashValue)
 	h.cleanupOldSysMessages()
 	return true // Indicate a system message was handled.
 }
