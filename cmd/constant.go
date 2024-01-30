@@ -1,3 +1,7 @@
+// Copyright (c) 2024 H0llyW00dzZ
+//
+// License: MIT License
+
 package main
 
 // currently unused

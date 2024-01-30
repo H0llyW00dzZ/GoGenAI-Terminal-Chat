@@ -1,3 +1,7 @@
+// Copyright (c) 2024 H0llyW00dzZ
+//
+// License: MIT License
+
 // Package terminal provides an interface to interact with a Generative AI model
 // in a terminal-based chat application. It manages the chat session, user input,
 // AI communication, and displays the chat history.

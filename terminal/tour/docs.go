@@ -1,4 +1,5 @@
 // Copyright (c) 2024 H0llyW00dzZ
+//
 // License: MIT License
 
 // Package tour provides a collection of string manipulation utilities.

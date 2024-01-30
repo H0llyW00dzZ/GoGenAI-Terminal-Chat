@@ -1,3 +1,7 @@
+// Copyright (c) 2024 H0llyW00dzZ
+//
+// License: MIT License
+
 package terminal
 
 // handleK8sCommand would be a handler function for a hypothetical ":k8s" command.
