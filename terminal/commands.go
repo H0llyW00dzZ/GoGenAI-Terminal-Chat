@@ -573,8 +573,5 @@ func (cmd *handleStatsCommand) showChatStats(session *Session) (bool, error) {
 	logger.Any(ListChatStats,
 		stats.UserMessages, stats.AIMessages, stats.SystemMessages)
 
-	// Ensure there is a newline after the stats for visual separation.
-	fmt.Println()
-
 	return false, nil // Continue the session without error.
 }
