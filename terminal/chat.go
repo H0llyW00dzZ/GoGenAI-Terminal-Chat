@@ -444,6 +444,7 @@ func (h *ChatHistory) ClearAllSystemMessages() {
 
 	var newMessages []string
 	var newHashes = make(map[string]int)
+	h.SystemMessageCount = 0
 
 	for _, message := range h.Messages {
 		if !isSysMessage(message) {

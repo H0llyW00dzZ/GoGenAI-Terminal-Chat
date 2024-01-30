@@ -80,6 +80,8 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
 	safetySettings := DefaultSafetySettings()
 	safetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi))
+	tempOption := WithTemperature(0.9) // Improved output, especially when using :summarize
+	ApplyOptions(model, tempOption)
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
 
