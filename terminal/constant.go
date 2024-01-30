@@ -90,6 +90,7 @@ const (
 		"**%s**: Summarize a current conversation\n\n" +
 		"**Note**: When you summarize a current conversation, it will be displayed at the top of the chat history.\n\n" +
 		"**%s %s** **%s**: Show the chat history.\n\n" +
+		"**%s** **%s**: Show the chat statistic.\n\n" +
 		"**%s** **%s**: Clear all system summary messages from the chat history.\n\n" +
 		"**%s** **%s**: Clear all chat history and reset the total token usage count if enabled.\n\n" +
 		"**Additional Note**: There are no additional commands or HTML Markdown available " +
