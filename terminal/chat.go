@@ -135,9 +135,6 @@ func (h *ChatHistory) handleAIMessage(message, hashValue string) {
 
 // handleUserMessage processes a user message.
 func (h *ChatHistory) handleUserMessage(user, message, hashValue string) {
-	// Warning!!! Explicit 🤪
-	h.mu.Lock()         // Lock for writing
-	defer h.mu.Unlock() // Ensure unlocking
 	if _, exists := h.Hashes[hashValue]; !exists {
 		h.addMessageToHistory(message, hashValue)
 		if user == SYSTEMPREFIX {
@@ -145,16 +142,14 @@ func (h *ChatHistory) handleUserMessage(user, message, hashValue string) {
 		}
 		if user == AiNerd {
 			h.AIMessageCount++
+		} else if user == StringNewLine+YouNerd {
+			h.UserMessageCount++
 		}
-		h.UserMessageCount++
 	}
 }
 
 // addMessageToHistory adds a message to the history.
 func (h *ChatHistory) addMessageToHistory(message, hashValue string) {
-	// Warning!!! Explicit 🤪
-	h.mu.Lock()         // Lock for writing
-	defer h.mu.Unlock() // Ensure unlocking
 	// Note: this remove the oldest message are automated handle by Garbage Collector.
 	// For example, free memory to avoid memory leak.
 	h.Messages = append(h.Messages, message)  // Add the new message
