@@ -447,7 +447,7 @@ func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *S
 		logger.Error(ErrorFailedtoGenerateRandomString, err)
 		return false, fmt.Errorf(errorfailedtogeneraterandomstring, err)
 	}
-	logger.Info(CryptoRandRes, lengthStr, randomString)
+	logger.Any(CryptoRandRes, lengthStr, randomString)
 	return false, nil
 }
 
