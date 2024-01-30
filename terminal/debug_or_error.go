@@ -1,6 +1,8 @@
 // Copyright (c) 2024 H0llyW00dzZ
 //
 // License: MIT License
+//
+// Note: This approach addresses the common issue of developers writing Go code in an unnecessarily complex way, particularly for logging operations hahahaha.
 
 package terminal
 
