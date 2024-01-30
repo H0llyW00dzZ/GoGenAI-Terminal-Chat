@@ -40,6 +40,9 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	// Context
 	// Clear the chat history now that the shutdown message has been sent
 	session.ChatHistory.Clear()
+	session.ChatHistory.AddMessage(AiNerd,
+		ContextPrompt,
+		session.ChatConfig)
 	session.ChatHistory.AddMessage(StringNewLine+YouNerd,
 		QuitCommand,
 		session.ChatConfig) // should be accurate now
