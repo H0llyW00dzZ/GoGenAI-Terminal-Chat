@@ -50,6 +50,8 @@ const (
 	// Pass Context to LLM's Google AI
 	youNerd                = "🤓"
 	aiNerd                 = "🤖"
+	sysEmoji               = "⚙️"
+	statsEmoji             = "📈"
 	TokenEmoji             = "🪙  Token count:"
 	StatisticsEmoji        = "📈 Total Token:"
 	ShieldEmoji            = "☠️  Safety:"
@@ -252,8 +254,10 @@ const (
 	ShowChatHistory  = "Chat History:\n\n%s"
 	SummarizePrompt  = "Summarize the discussion briefly in 200 words or " +
 		"less to use as a prompt for future context:\n"
-	ListChatStats = "List Stats Chat of This Session:\n\n" +
-		"User messages: %d\n" + "AI messages: %d\n" + "System messages: %d"
+	ListChatStats = statsEmoji + " List of Chat Statistics for This Session:\n\n" +
+		youNerd + " User messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
+		aiNerd + " AI messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
+		sysEmoji + " System messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 )
 
 // Defined Tools
