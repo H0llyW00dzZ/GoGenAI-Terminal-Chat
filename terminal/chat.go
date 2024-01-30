@@ -142,7 +142,7 @@ func (h *ChatHistory) handleUserMessage(user, message, hashValue string) {
 		}
 		if user == AiNerd {
 			h.AIMessageCount++
-		} else if user == YouNerd {
+		} else if user == StringNewLine+YouNerd {
 			h.UserMessageCount++
 		}
 	}
