@@ -203,8 +203,11 @@ Environment variables are key-value pairs that can affect the behavior of your a
 
 ### 🔓 ⚙️ Simple Debugging:
 <p align="center">
-  <img src="https://i.imgur.com/zAu5ORl.png" alt="simple debug" />
+  <img src="https://i.imgur.com/xrxNyzm.png" alt="simple debug" />
 </p>
+
+> [!NOTE]
+> This `🔓 ⚙️ Simple Debugging` are simple unlike shitty a complex logic `go codes` that increase of `cyclomatic complexity`
 
 ### 🤖 📝 Better LLM's Summarization:
 
@@ -212,8 +215,6 @@ Environment variables are key-value pairs that can affect the behavior of your a
   <img src="https://i.imgur.com/cAbmRqy.png" alt="summarization" />
 </p>
 
-> [!NOTE]
-> This `🔓 ⚙️ Simple Debugging` are simple unlike shitty a complex logic `go codes` that increase of `cyclomatic complexity`
 
 ### Solving Math in the Terminal:
 <p align="center">
