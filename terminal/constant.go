@@ -186,6 +186,8 @@ const (
 	ErrorFailedToReadFile                           = "Failed to read file: %v"
 	ErrorFailedToCountTokens                        = "Failed to count tokens: %v"
 	ErrorUnrecognizedSubcommandForTokenCount        = "Unrecognized subcommand for token count: %s"
+	ErrorInvalidFileExtension                       = "Invalid file extension: %v"
+	ErrorFileTypeNotSupported                       = "file type not supported: only .md, .mdx, and .txt files are allowed" // low level
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
@@ -311,4 +313,11 @@ const (
 // List RestfulAPI Error
 const (
 	Code500 = "500" // indicate that server so bad hahaha
+)
+
+// dotFiles
+const (
+	// a better way instead of stupid hardcoding
+	dotMD  = ".md"
+	dotTxt = ".txt"
 )

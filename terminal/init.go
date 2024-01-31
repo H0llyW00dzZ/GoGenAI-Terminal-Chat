@@ -5,7 +5,10 @@
 package terminal
 
 import (
+	"fmt"
+	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 // apiKey holds the API key used for authenticating requests to the generative
@@ -108,6 +111,24 @@ var safetyOptions = map[string]SafetyOption{
 var slantStyle = NewASCIIArtStyle()
 var stripStyle = NewASCIIArtStyle()
 var newLine = NewASCIIArtStyle()
+
+// helper function
+//
+// verifyFileExtension checks if the file has an allowed extension.
+func verifyFileExtension(filePath string) error {
+	allowedExtensions := map[string]bool{
+		dotMD:  true,
+		dotTxt: true,
+	}
+
+	// Extract the file extension and check if it's allowed.
+	fileExt := strings.ToLower(filepath.Ext(filePath))
+	if _, allowed := allowedExtensions[fileExt]; !allowed {
+		return fmt.Errorf(ErrorFileTypeNotSupported)
+	}
+
+	return nil
+}
 
 func init() {
 	// Initialize the logger when the package is imported.

@@ -599,6 +599,12 @@ func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, sessio
 }
 
 func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string) (bool, error) {
+	// Verify the file extension before reading the file.
+	if err := verifyFileExtension(filePath); err != nil {
+		logger.Error(ErrorInvalidFileExtension, err)
+		return false, nil
+	}
+
 	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
 		logger.Error(ErrorFailedToReadFile, err)
