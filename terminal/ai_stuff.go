@@ -41,7 +41,8 @@ func sendCommandToAI(session *Session, command string, constructPrompt func(stri
 
 // sendMessageToAI sends a message to the AI and handles the response.
 func sendMessageToAI(session *Session, message string) (bool, error) {
-	_, err := SendMessage(session.Ctx, session.Client, message, session)
+	aiResponse, err := SendMessage(session.Ctx, session.Client, message, session)
+	addMessageWithContext(session, AiNerd, aiResponse)
 	return err == nil, err
 }
 
