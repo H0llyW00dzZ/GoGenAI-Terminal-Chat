@@ -106,7 +106,7 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 	// Send the full context to the AI and get the response
 	resp, err := cs.SendMessage(ctx, genai.Text(fullContext))
 	if err != nil {
-		logger.Error("Failed to send message: %v", err)
+		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		return "", err
 	}
 
