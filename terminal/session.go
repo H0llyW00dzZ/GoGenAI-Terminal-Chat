@@ -58,14 +58,11 @@ func NewSession(apiKey string) *Session {
 		logger.Error(ErrorFailedToCreateNewAiClient, err)
 		return nil
 	}
-	apiErrorHandler := func(err error) bool {
-		// Retry on 500 status code
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
+
 	// Perform a simple request to validate the API key.
 	valid, err := retryWithExponentialBackoff(func() (bool, error) {
 		return SendDummyMessage(client)
-	}, apiErrorHandler)
+	}, standardAPIErrorHandler)
 
 	// Handle the result of retryWithExponentialBackoff
 	if err != nil || !valid {
@@ -208,12 +205,6 @@ func (s *Session) ensureClientIsValid() bool {
 // It returns true if the input was successfully sent and the response was received, otherwise false.
 func (s *Session) sendInputToAI(input string) bool {
 	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
-	apiErrorHandler := func(err error) bool {
-		// Retry on 500 status code
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
-	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		aiResponse, err := SendMessage(s.Ctx, s.Client, input, s)
 		if err != nil {
@@ -222,7 +213,7 @@ func (s *Session) sendInputToAI(input string) bool {
 		aiResponse = sanitizeAIResponse(aiResponse)                // Sanitize AI's response to remove any separators
 		s.ChatHistory.AddMessage(AiNerd, aiResponse, s.ChatConfig) // Add the sanitized AI's response to the chat history
 		return true, nil
-	}, apiErrorHandler)
+	}, standardAPIErrorHandler)
 
 	if err != nil || !success {
 		logger.Error(ErrorSendingMessage, err)

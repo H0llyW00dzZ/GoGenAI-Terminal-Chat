@@ -32,13 +32,9 @@ func sendCommandToAI(session *Session, command string, constructPrompt func(stri
 	sanitizedCommand := session.ChatHistory.SanitizeMessage(command)
 	aiPrompt := constructPrompt(sanitizedCommand)
 
-	apiErrorHandler := func(err error) bool {
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
 	return retryWithExponentialBackoff(func() (bool, error) {
 		return sendMessageToAI(session, aiPrompt)
-	}, apiErrorHandler)
+	}, standardAPIErrorHandler)
 }
 
 // sendMessageToAI sends a message to the AI and handles the response.
@@ -62,16 +58,10 @@ func sendShutdownMessage(session *Session) error {
 	// Send a shutdown message to the AI including the chat history with the context prompt
 	aiPrompt := fmt.Sprintf(ContextPromptShutdown, sanitizedMessage, ApplicationName)
 
-	// Retry logic for sending the shutdown message to the AI.
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
 	// Attempt to send the shutdown message to the AI with retry logic
 	_, err := retryWithExponentialBackoff(func() (bool, error) {
 		return sendMessageToAI(session, aiPrompt)
-	}, apiErrorHandler)
+	}, standardAPIErrorHandler)
 
 	return err
 }
@@ -135,4 +125,45 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 	}
 	logger.Any(InfoTokenCountFile, filePath, tokenCount)
 	return false, nil // Continue the session after displaying the token count.
+}
+
+// constructAITranslatePrompt constructs the AI translation prompt.
+func constructAITranslatePrompt(applicationName, command, text, targetLanguage string) string {
+	return fmt.Sprintf(AITranslateCommandPrompt,
+		applicationName,
+		command,
+		text,
+		targetLanguage)
+}
+
+// handleAIInteraction handles sending messages to the AI and processing responses.
+func handleAIInteraction(session *Session, aiPrompt string, postProcess func(session *Session, aiResponse string) error) error {
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+
+	success, err := retryWithExponentialBackoff(func() (bool, error) {
+		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+		if err != nil {
+			return false, err
+		}
+		return true, postProcess(session, aiResponse)
+	}, standardAPIErrorHandler)
+
+	if err != nil {
+		return err
+	}
+
+	if !success {
+		return fmt.Errorf(ErrorFailedToSendTranslationMessageAfterRetries)
+	}
+
+	return nil
+}
+
+// postProcessAITranslate handles the post-processing of AI's response for translation.
+func postProcessAITranslate(session *Session, aiResponse string) error {
+	// Sanitize AI's response to remove any separators
+	aiResponse = sanitizeAIResponse(aiResponse)
+	// Add the sanitized AI's response to the chat history
+	session.ChatHistory.AddMessage(AiNerd, aiResponse, session.ChatConfig)
+	return nil
 }

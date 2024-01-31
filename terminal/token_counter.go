@@ -7,7 +7,6 @@ package terminal
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/google/generative-ai-go/genai"
 	"google.golang.org/api/option"
@@ -92,12 +91,7 @@ func performTokenCount(ctx context.Context, apiKey, input string, tokenCount *in
 		return makeTokenCountRequest(ctx, apiKey, input, tokenCount)
 	}
 
-	apiErrorHandler := func(err error) bool {
-		// Retry on 500 status code
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
-	return retryWithExponentialBackoff(retryFunc, apiErrorHandler)
+	return retryWithExponentialBackoff(retryFunc, standardAPIErrorHandler)
 }
 
 // makeTokenCountRequest performs a single attempt to count tokens using the AI model.
