@@ -323,21 +323,17 @@ func (cmd *handleClearCommand) clearChatHistory(session *Session) (bool, error) 
 		clearMessage += "\n" + ResetTotalTokenUsage
 	}
 	// Print the message(s) with timestamp and typing effect
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-	PrintTypingChat(clearMessage, TypingDelay)
+	logger.Any(clearMessage) // simplify
 	// Added back the context prompt after clearing the chat history
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	fmt.Println()
 	return false, nil // Continue the session
 }
 
 // clearSummarizeHistory clears the summarized messages from the chat history.
 func (cmd *handleClearCommand) clearSummarizeHistory(session *Session) (bool, error) {
 	session.ChatHistory.ClearAllSystemMessages()
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-	PrintTypingChat(ChatSysSummaryMessages, TypingDelay)
+	logger.Any(ChatSysSummaryMessages) // simplify
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	fmt.Println()
 	return false, nil // Continue the session
 }
 
@@ -375,9 +371,7 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 	cmd.SafetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi))
 	// Pass ContextPrompt
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
-	PrintTypingChat(fmt.Sprintf(SystemSafety, parts[1]), TypingDelay)
-	fmt.Println() // this correct, fix front end issue
+	logger.Any(fmt.Sprintf(SystemSafety, parts[1])) // simplify
 	return false, nil
 }
 
