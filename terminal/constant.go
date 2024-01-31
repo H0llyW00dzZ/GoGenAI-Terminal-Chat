@@ -263,8 +263,9 @@ const (
 	High             = "high"
 	MonitoringSignal = "Received signal: %v.\n"
 	ShowChatHistory  = "Chat History:\n\n%s"
-	SummarizePrompt  = "Summarize the discussion briefly in 200 words or " +
-		"less to use as a prompt for future context:\n"
+	SummarizePrompt  = StripChars + "\nIn 200 words or less, provide a brief summary of the ongoing discussion.\n" +
+		"This summary will serve as a prompt for contextual reference in future interactions:\n\n"
+
 	ListChatStats = statsEmoji + " List of Chat Statistics for This Session:\n\n" +
 		youNerd + " User messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
 		aiNerd + " AI messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
