@@ -267,45 +267,18 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 	textToTranslate := strings.Join(parts[1:languageFlagIndex], " ")
 	targetLanguage := parts[languageFlagIndex+1]
 
-	// Define the translation prompt to be sent to the AI.
-	aiPrompt := fmt.Sprintf(AITranslateCommandPrompt,
-		ApplicationName,
-		AITranslateCommand,
-		textToTranslate,
-		targetLanguage)
+	aiPrompt := constructAITranslatePrompt(ApplicationName, AITranslateCommand, textToTranslate, targetLanguage)
 
-	// Sanitize the message before sending it to the AI
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
-
-	// Retry logic for sending the translation prompt to the AI.
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
-	// Wrap the SendMessage call within retryWithExponentialBackoff
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
-		if err != nil {
-			return false, err
-		}
-		// Sanitize AI's response to remove any separators
-		aiResponse = sanitizeAIResponse(aiResponse)
+	err := handleAIInteraction(session, aiPrompt, func(session *Session, aiResponse string) error {
 		// Add a message to the chat history indicating the translation command was invoked
 		translationCommandMessage := fmt.Sprintf(ContextUserInvokeTranslateCommands, targetLanguage, textToTranslate)
 		session.ChatHistory.AddMessage(StringNewLine+YouNerd, translationCommandMessage, session.ChatConfig)
-		// Add the sanitized AI's response to the chat history
-		session.ChatHistory.AddMessage(AiNerd, aiResponse, session.ChatConfig)
-		return true, nil
-	}, apiErrorHandler)
+		return postProcessAITranslate(session, aiResponse)
+	})
 
 	if err != nil {
 		logger.Error(ErrorFailedToSendTranslationMessage, err)
 		return false, err
-	}
-
-	if !success {
-		return false, fmt.Errorf(ErrorFailedToSendTranslationMessageAfterRetries)
 	}
 
 	// Indicate that the command was handled; return false to continue the session.
