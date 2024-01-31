@@ -167,28 +167,6 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	return false, nil
 }
 
-// checkVersionAndGetPrompt checks if the current version of the software is the latest and informs the user accordingly.
-func (c *handleCheckVersionCommand) checkVersionAndGetPrompt() (aiPrompt string, err error) {
-	// Check if the current version is the latest.
-	isLatest, latestVersion, err := checkLatestVersionWithBackoff()
-	if err != nil {
-		return "", err
-	}
-
-	if isLatest {
-		aiPrompt = fmt.Sprintf(YouAreusingLatest, VersionCommand, ApplicationName, CurrentVersion)
-	} else {
-		// Fetch and format the release information for the latest version.
-		aiPrompt, err = fetchAndFormatReleaseInfo(latestVersion)
-		if err != nil {
-			return "", err
-		}
-	}
-
-	// Return the prompt to the caller.
-	return aiPrompt, nil
-}
-
 // Execute performs the ping operation on the provided IP address.
 // It uses system utilities to send ICMP packets to the IP and returns the result.
 //
@@ -242,32 +220,6 @@ func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Sess
 		logger.Error(ErrorUnrecognizedSubcommandForClear, subcommand)
 		return false, nil
 	}
-}
-
-// clearChatHistory clears the chat history.
-func (cmd *handleClearCommand) clearChatHistory(session *Session) (bool, error) {
-	session.ChatHistory.Clear()
-	// Prepare the full message to be printed
-	clearMessage := ChatHistoryClear
-	showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
-	// Append token reset message if SHOW_TOKEN_COUNT is true
-	if showTokenCount {
-		totalTokenCount = 0 // Reset the total token count to zero
-		clearMessage += "\n" + ResetTotalTokenUsage
-	}
-	// Print the message(s) with timestamp and typing effect
-	logger.Any(clearMessage) // simplify
-	// Added back the context prompt after clearing the chat history
-	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	return false, nil // Continue the session
-}
-
-// clearSummarizeHistory clears the summarized messages from the chat history.
-func (cmd *handleClearCommand) clearSummarizeHistory(session *Session) (bool, error) {
-	session.ChatHistory.ClearAllSystemMessages()
-	logger.Any(ChatSysSummaryMessages) // simplify
-	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	return false, nil // Continue the session
 }
 
 // Execute processes the ":safety" command within a chat session.
@@ -428,43 +380,6 @@ func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool
 	return false, nil
 }
 
-// constructSummarizePrompt constructs the prompt to be sent to the AI for summarization.
-func (h *handleSummarizeCommand) constructSummarizePrompt() string {
-	return fmt.Sprintf(SummarizePrompt)
-}
-
-// sendSummarizePrompt sends the summarize prompt to the AI and handles the response.
-func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitizedMessage string) (bool, error) {
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-	// Retry logic for sending the summarize prompt to the AI.
-	return retryWithExponentialBackoff(func() (bool, error) {
-		// Note: This is subject to change, for example,
-		// to implement another functionality without displaying AI response in the terminal,
-		// but only adding it to the chat history.
-		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
-		if err != nil {
-			return false, err
-		}
-
-		h.handleAIResponse(session, sanitizedMessage, aiResponse)
-		return true, nil
-	}, apiErrorHandler)
-}
-
-// handleAIResponse processes the AI's response to the summarize command.
-func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMessage, aiResponse string) {
-	// Instead of directly adding, check if a system message already exists and replace it.
-	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
-	if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
-		// If it was not a system message or no existing system message was found to replace,
-		// add the new system message to the chat history.
-		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
-	}
-}
-
 // Execute processes the main command for handleStatsCommand. Since handleStatsCommand
 // is implemented with subcommands, this method does not perform any action and simply
 // returns false and nil to indicate that the session should continue without error.
@@ -491,23 +406,6 @@ func (cmd *handleStatsCommand) HandleSubcommand(subcommand string, session *Sess
 	}
 }
 
-// showChatStats displays the chat statistics in a session. It retrieves the statistics
-// from the session's ChatHistory and prints them to the console with a typing effect.
-// The typing delay is specified by the TypingDelay constant/variable.
-// The function prints a system message prefix with a timestamp before the stats.
-// After printing the stats, it continues the session without error.
-func (cmd *handleStatsCommand) showChatStats(session *Session) (bool, error) {
-	// Retrieve chat statistics from the session's ChatHistory.
-	stats := session.ChatHistory.GetMessageStats()
-
-	// Use the logger's Any method to print the statistics without colorization.
-	// The SYSTEMPREFIX is included directly in the formatted message.
-	logger.Any(ListChatStats,
-		stats.UserMessages, stats.AIMessages, stats.SystemMessages)
-
-	return false, nil // Continue the session without error.
-}
-
 func (cmd *handleTokeCountingCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Continue the session
 	return cmd.HandleSubcommand("", session, parts)
@@ -525,28 +423,4 @@ func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, sessio
 		return false, nil
 	}
 
-}
-
-func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, session *Session) (bool, error) {
-	// Verify the file extension before reading the file.
-	if err := verifyFileExtension(filePath); err != nil {
-		logger.Error(ErrorInvalidFileExtension, err)
-		return false, nil
-	}
-
-	fileContent, err := os.ReadFile(filePath)
-	if err != nil {
-		logger.Error(ErrorFailedToReadFile, err)
-		return false, nil
-	}
-
-	text := string(fileContent)
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(text)
-	tokenCount, err := CountTokens(apiKey, sanitizedMessage)
-	if err != nil {
-		logger.Error(ErrorFailedToCountTokens, err)
-		return false, nil
-	}
-	logger.Any(InfoTokenCountFile, filePath, tokenCount)
-	return false, nil // Continue the session after displaying the token count.
 }

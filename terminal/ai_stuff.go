@@ -8,6 +8,7 @@ package terminal
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -73,4 +74,65 @@ func sendShutdownMessage(session *Session) error {
 	}, apiErrorHandler)
 
 	return err
+}
+
+// constructSummarizePrompt constructs the prompt to be sent to the AI for summarization.
+func (h *handleSummarizeCommand) constructSummarizePrompt() string {
+	return fmt.Sprintf(SummarizePrompt)
+}
+
+// sendSummarizePrompt sends the summarize prompt to the AI and handles the response.
+func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitizedMessage string) (bool, error) {
+	apiErrorHandler := func(err error) bool {
+		// Error 500 Google Api
+		return strings.Contains(err.Error(), Error500GoogleApi)
+	}
+	// Retry logic for sending the summarize prompt to the AI.
+	return retryWithExponentialBackoff(func() (bool, error) {
+		// Note: This is subject to change, for example,
+		// to implement another functionality without displaying AI response in the terminal,
+		// but only adding it to the chat history.
+		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+		if err != nil {
+			return false, err
+		}
+
+		h.handleAIResponse(session, sanitizedMessage, aiResponse)
+		return true, nil
+	}, apiErrorHandler)
+}
+
+// handleAIResponse processes the AI's response to the summarize command.
+func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMessage, aiResponse string) {
+	// Instead of directly adding, check if a system message already exists and replace it.
+	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
+	if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
+		// If it was not a system message or no existing system message was found to replace,
+		// add the new system message to the chat history.
+		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+	}
+}
+
+func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, session *Session) (bool, error) {
+	// Verify the file extension before reading the file.
+	if err := verifyFileExtension(filePath); err != nil {
+		logger.Error(ErrorInvalidFileExtension, err)
+		return false, nil
+	}
+
+	fileContent, err := os.ReadFile(filePath)
+	if err != nil {
+		logger.Error(ErrorFailedToReadFile, err)
+		return false, nil
+	}
+
+	text := string(fileContent)
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(text)
+	tokenCount, err := CountTokens(apiKey, sanitizedMessage)
+	if err != nil {
+		logger.Error(ErrorFailedToCountTokens, err)
+		return false, nil
+	}
+	logger.Any(InfoTokenCountFile, filePath, tokenCount)
+	return false, nil // Continue the session after displaying the token count.
 }
