@@ -69,11 +69,6 @@ func PrintTypingChat(message string, delay time.Duration) {
 //	*genai.GenerativeModel: A pointer to a generative AI model that is configured and ready for
 //	                          initiating a chat session.
 //
-// Example:
-//
-//	model := ConfigureModelForSession(ctx, client, session)
-//	response, err := model.Generate(ctx, prompt)
-//
 // Note: The function assumes that the client has been properly initialized and that the session
 // contains valid safety settings. If no safety settings are present in the session, default
 // safety settings are applied.
