@@ -9,7 +9,6 @@ package terminal
 import (
 	"fmt"
 	"os"
-	"strings"
 )
 
 // addMessageWithContext adds a message to the chat history with context.
@@ -73,10 +72,6 @@ func (h *handleSummarizeCommand) constructSummarizePrompt() string {
 
 // sendSummarizePrompt sends the summarize prompt to the AI and handles the response.
 func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitizedMessage string) (bool, error) {
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
 	// Retry logic for sending the summarize prompt to the AI.
 	return retryWithExponentialBackoff(func() (bool, error) {
 		// Note: This is subject to change, for example,
@@ -89,7 +84,7 @@ func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitized
 
 		h.handleAIResponse(session, sanitizedMessage, aiResponse)
 		return true, nil
-	}, apiErrorHandler)
+	}, standardAPIErrorHandler)
 }
 
 // handleAIResponse processes the AI's response to the summarize command.
