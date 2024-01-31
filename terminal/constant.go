@@ -190,6 +190,7 @@ const (
 	ErrorUnrecognizedSubcommandForTokenCount        = "Unrecognized subcommand for token count: %s"
 	ErrorInvalidFileExtension                       = "Invalid file extension: %v"
 	ErrorFileTypeNotSupported                       = "file type not supported: only .md and .txt files are allowed." // Low level error
+	ErrorFailedToSendCommandToAI                    = "Failed to send command to AI: %v"
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal

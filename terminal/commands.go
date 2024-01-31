@@ -37,45 +37,11 @@ import (
 // any necessary cleanup. The method's return value of true indicates to the calling code that the session loop
 // should exit and the application should terminate.
 func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Context
-	// Clear the chat history now that the shutdown message has been sent
-	session.ChatHistory.Clear()
-	session.ChatHistory.AddMessage(AiNerd,
-		ContextPrompt,
-		session.ChatConfig)
-	session.ChatHistory.AddMessage(StringNewLine+YouNerd,
-		QuitCommand,
-		session.ChatConfig) // should be accurate now
-
-	// Sanitize the message before sending it to the AI
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(QuitCommand)
-
-	// Send a shutdown message to the AI including the chat history with the context prompt
-	aiPrompt := fmt.Sprintf(ContextPromptShutdown, sanitizedMessage, ApplicationName)
-
-	// Retry logic for sending the shutdown message to the AI.
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
-	// Attempt to send the shutdown message to the AI with retry logic
-	_, err := retryWithExponentialBackoff(func() (bool, error) {
-		_, err := SendMessage(session.Ctx, session.Client, aiPrompt, session)
-		return err == nil, err
-	}, apiErrorHandler)
-
-	if err != nil {
-		// If there's an error sending the message, log it
+	if err := sendShutdownMessage(session); err != nil {
 		logger.Error(ErrorFailedToSendShutdownMessage, err)
 	}
-
-	// Proceed with shutdown regardless of the error
-	fmt.Println(ShutdownMessage)
-	session.endSession() // End the session and perform cleanup
-
-	// Signal to the main loop that it's time to exit
-	return true, nil // Always return true to end the session, and nil for error since we handle it above.
+	session.endSession()
+	return true, nil
 }
 
 // Execute processes the ":help" command within a chat session. It constructs a help prompt
@@ -103,71 +69,35 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 //
 // Note: The method does not add the AI's response to the chat history to avoid potential
 // loops in the AI's behavior.
-func (h *handleHelpCommand) Execute(session *Session, parts []string) (bool, error) {
-	// Pass ContextPrompt 🤪
-	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	session.ChatHistory.AddMessage(StringNewLine+YouNerd, HelpCommand, session.ChatConfig)
-	// Define the help prompt to be sent to the AI, including the list of available commands.
-	aiPrompt := fmt.Sprintf(HelpCommandPrompt,
-		// Note: This doesn't look complex, as the complex one looks way better than the "hardcoded" one LOL
-		ApplicationName,
-		HelpCommand,
-		QuitCommand,
-		ShortQuitCommand,
-		HelpCommand,
-		ShortHelpCommand,
-		VersionCommand,
-		SafetyCommand,
-		Low,
-		Default,
-		High,
-		AITranslateCommand,
-		LangArgs,
-		CryptoRandCommand,
-		LengthArgs,
-		SummarizeCommands,
-		ChatCommands,
-		ShowCommands,
-		ChatHistoryArgs,
-		StatsCommand,
-		ChatCommands,
-		ClearCommand,
-		SummarizeCommands,
-		ClearCommand,
-		ChatCommands,
-		TokenCountCommands,
-		FileCommands,
-	)
-
-	// Sanitize the message before sending it to the AI
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
-
-	// Retry logic for sending the help prompt to the AI.
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
-		// Sanitize AI's response to remove any separators
-		aiResponse = sanitizeAIResponse(aiResponse)
-		// Add the sanitized AI's response to the chat history
-		session.ChatHistory.AddMessage(AiNerd, aiResponse, session.ChatConfig)
-		return err == nil, err
-	}, apiErrorHandler)
-
-	if err != nil {
-		logger.Error(ErrorFailedToSendHelpMessage, err)
-		return false, err
-	}
-
-	if !success {
-		return false, fmt.Errorf(ErrorFailedToSendHelpMessagesAfterRetries)
-	}
-
-	// Indicate that the command was handled successfully; return false to continue the session.
-	return false, nil
+func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, error) {
+	return executeCommand(session, HelpCommand, func(cmd string) string {
+		return fmt.Sprintf(HelpCommandPrompt,
+			ApplicationName,
+			cmd,
+			QuitCommand,
+			ShortQuitCommand,
+			HelpCommand,
+			ShortHelpCommand,
+			VersionCommand,
+			SafetyCommand,
+			Low, Default, High,
+			AITranslateCommand,
+			LangArgs,
+			CryptoRandCommand,
+			LengthArgs,
+			SummarizeCommands,
+			ChatCommands,
+			ShowCommands,
+			ChatHistoryArgs,
+			StatsCommand,
+			ChatCommands,
+			ClearCommand,
+			SummarizeCommands,
+			ClearCommand,
+			ChatCommands,
+			TokenCountCommands,
+			FileCommands)
+	})
 }
 
 // Execute checks if the current version of the software is the latest and informs the user accordingly.
