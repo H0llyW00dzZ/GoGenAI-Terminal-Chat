@@ -344,6 +344,10 @@ func (cmd *handleTokeCountingCommand) IsValid(parts []string) bool {
 
 // Note: this unimplemented
 // Now even it's unimplemented, it wont detected in deadcode indicate that "unreachable func"
+//
+// Additional Note: The reason 'unimplemented' is placed here is because it's relatively easy to implement, and I want to ensure I don't forget about it.
+// In contrast, implementing features like colorization or ASCII Art is more challenging.
+// For instance, colorization requires capturing patterns from AI responses and reformatting them, which can be complex.
 type handleK8sCommand struct{}
 type storageCommand struct{}
 type savehistorytostorageCommand struct{}
