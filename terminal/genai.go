@@ -79,8 +79,12 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 	// Note: This is a good balance between safety and readability.
 	// It allows for a wider range of content to be generated while still maintaining a reasonable level of safety.
 	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
-	safetySettings := DefaultSafetySettings()
-	safetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi))
+	// Apply the current session's safety settings to the model
+	// If no specific safety settings have been set, use the default settings.
+	if session.SafetySettings == nil {
+		session.SafetySettings = DefaultSafetySettings()
+	}
+	session.SafetySettings.ApplyToModel(model)
 	tempOption := WithTemperature(0.9) // Improved output, especially when using :summarize
 	ApplyOptions(model, tempOption)
 	// Retrieve the relevant chat history using ChatConfig
@@ -205,10 +209,12 @@ func sanitizeAIResponse(response string) string {
 func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string, session *Session) error {
 	model := client.GenerativeModel(ModelAi)
 
-	// Apply safety settings to the model
-	safetySettings := DefaultSafetySettings()
-	safetySettings.ApplyToModel(model)
-
+	// Apply the current session's safety settings to the model
+	// If no specific safety settings have been set, use the default settings.
+	if session.SafetySettings == nil {
+		session.SafetySettings = DefaultSafetySettings()
+	}
+	session.SafetySettings.ApplyToModel(model)
 	// Apply additional model configurations like TopP
 	tempOption := WithTemperature(0.9)
 	ApplyOptions(model, tempOption)
