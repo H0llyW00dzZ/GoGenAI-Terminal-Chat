@@ -589,7 +589,7 @@ func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, sessio
 	filePath := parts[2]
 	switch subcommand {
 	case FileCommands:
-		return cmd.handleTokenCount(apiKey, filePath)
+		return cmd.handleTokenCount(apiKey, filePath, session)
 	default:
 		// Log an error for unrecognized subcommands and continue the session.
 		logger.Error(ErrorUnrecognizedSubcommandForTokenCount, subcommand)
@@ -598,7 +598,7 @@ func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, sessio
 
 }
 
-func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string) (bool, error) {
+func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, session *Session) (bool, error) {
 	// Verify the file extension before reading the file.
 	if err := verifyFileExtension(filePath); err != nil {
 		logger.Error(ErrorInvalidFileExtension, err)
@@ -612,7 +612,8 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string) 
 	}
 
 	text := string(fileContent)
-	tokenCount, err := CountTokens(apiKey, text)
+	sanitizedMessage := session.ChatHistory.SanitizeMessage(text)
+	tokenCount, err := CountTokens(apiKey, sanitizedMessage)
 	if err != nil {
 		logger.Error(ErrorFailedToCountTokens, err)
 		return false, nil
