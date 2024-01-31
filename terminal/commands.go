@@ -40,7 +40,9 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 	if err := sendShutdownMessage(session); err != nil {
 		logger.Error(ErrorFailedToSendShutdownMessage, err)
 	}
-	session.endSession()
+	// Proceed with shutdown regardless of the error
+	fmt.Println(ShutdownMessage)
+	session.endSession() // End the session and perform cleanup
 	return true, nil
 }
 
