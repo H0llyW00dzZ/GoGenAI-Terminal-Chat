@@ -207,17 +207,8 @@ func sanitizeAIResponse(response string) string {
 //
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
 func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string, session *Session) error {
-	model := client.GenerativeModel(ModelAi)
+	model := configureModelForSession(ctx, client, session)
 
-	// Apply the current session's safety settings to the model
-	// If no specific safety settings have been set, use the default settings.
-	if session.SafetySettings == nil {
-		session.SafetySettings = DefaultSafetySettings()
-	}
-	session.SafetySettings.ApplyToModel(model)
-	// Apply additional model configurations like TopP
-	tempOption := WithTemperature(0.9)
-	ApplyOptions(model, tempOption)
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
 
@@ -227,6 +218,27 @@ func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatConte
 		fullContext = chatHistory + StringNewLine + chatContext
 	}
 
+	return sendMessageAndProcessResponse(ctx, model, fullContext, session)
+}
+
+func configureModelForSession(ctx context.Context, client *genai.Client, session *Session) *genai.GenerativeModel {
+	model := client.GenerativeModel(ModelAi)
+
+	// Apply the current session's safety settings to the model
+	// If no specific safety settings have been set, use the default settings.
+	if session.SafetySettings == nil {
+		session.SafetySettings = DefaultSafetySettings()
+	}
+	session.SafetySettings.ApplyToModel(model)
+
+	// Apply additional model configurations like TopP
+	tempOption := WithTemperature(0.9)
+	ApplyOptions(model, tempOption)
+
+	return model
+}
+
+func sendMessageAndProcessResponse(ctx context.Context, model *genai.GenerativeModel, fullContext string, session *Session) error {
 	// Send the message to the AI
 	resp, err := model.StartChat().SendMessage(ctx, genai.Text(fullContext))
 	if err != nil {
