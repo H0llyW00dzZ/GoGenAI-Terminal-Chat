@@ -74,33 +74,43 @@ func PrintTypingChat(message string, delay time.Duration) {
 // specified by the session's ChatConfig, to the generative AI model. It then calls `printResponse` to process
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func SendMessage(ctx context.Context, client *genai.Client, chatContext string, session *Session) (string, error) {
+	// Get the generative model from the client
 	model := client.GenerativeModel(ModelAi)
-	cs := model.StartChat()
-	// Note: This is a good balance between safety and readability.
-	// It allows for a wider range of content to be generated while still maintaining a reasonable level of safety.
-	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
+
 	// Apply the current session's safety settings to the model
 	// If no specific safety settings have been set, use the default settings.
 	if session.SafetySettings == nil {
 		session.SafetySettings = DefaultSafetySettings()
 	}
-	session.SafetySettings.ApplyToModel(model)
-	tempOption := WithTemperature(0.9) // Improved output, especially when using :summarize
-	ApplyOptions(model, tempOption)
+	// Apply the safety settings to the model
+	session.SafetySettings.ApplyToModel(client.GenerativeModel(ModelAi))
+
+	// Apply additional model configurations like temperature
+	ApplyOptions(model, WithTemperature(0.9))
+
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
 
+	// Form the full context by appending the new message to the chat history
 	fullContext := chatContext
 	if len(chatHistory) > 0 {
 		// Append the new message to the chat history to form the full context
 		fullContext = chatHistory + StringNewLine + chatContext
 	}
+	// Note: This is a good balance between safety and readability.
+	// It allows for a wider range of content to be generated while still maintaining a reasonable level of safety.
+	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
+	// Start a new chat session with the model
+	cs := model.StartChat()
 
+	// Send the full context to the AI and get the response
 	resp, err := cs.SendMessage(ctx, genai.Text(fullContext))
 	if err != nil {
+		logger.Error("Failed to send message: %v", err)
 		return "", err
 	}
 
+	// Process the AI's response
 	return printResponse(resp), nil
 }
 
