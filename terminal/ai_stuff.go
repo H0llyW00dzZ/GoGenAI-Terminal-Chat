@@ -18,8 +18,9 @@ func addMessageWithContext(session *Session, sender, message string) {
 
 // executeCommand is a generic function to execute a command.
 func executeCommand(session *Session, command string, constructPrompt func(string) string) (bool, error) {
-	// Assuming VersionCommand is the user input that triggered the ai.
-	addMessageWithContext(session, StringNewLine+YouNerd, VersionCommand)
+	// Assuming command is the user input that triggered the AI.
+	// Note: The command execution process is now more dynamic.
+	addMessageWithContext(session, StringNewLine+YouNerd, command)
 	success, err := sendCommandToAI(session, command, constructPrompt)
 	if err != nil {
 		logger.Error(ErrorFailedToSendCommandToAI, err)
@@ -30,8 +31,6 @@ func executeCommand(session *Session, command string, constructPrompt func(strin
 
 // sendCommandToAI sends a command to the AI after sanitizing and applying retry logic.
 func sendCommandToAI(session *Session, command string, constructPrompt func(string) string) (bool, error) {
-	// Assuming HelpCommands is the user input that triggered the ai.
-	addMessageWithContext(session, StringNewLine+YouNerd, HelpCommand)
 	sanitizedCommand := session.ChatHistory.SanitizeMessage(command)
 	aiPrompt := constructPrompt(sanitizedCommand)
 
