@@ -71,6 +71,7 @@ func (q *handleQuitCommand) Execute(session *Session, parts []string) (bool, err
 // loops in the AI's behavior.
 func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, error) {
 	return executeCommand(session, HelpCommand, func(cmd string) string {
+		// Note: This a better fmt formatting unlike 'C' or 'RUST' hahahaha
 		return fmt.Sprintf(HelpCommandPrompt,
 			ApplicationName,
 			cmd,
