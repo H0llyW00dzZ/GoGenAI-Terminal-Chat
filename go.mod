@@ -4,7 +4,7 @@ go 1.21.6
 
 require (
 	github.com/google/generative-ai-go v0.5.0 // direct
-	google.golang.org/api v0.160.0 // direct
+	google.golang.org/api v0.161.0 // direct
 )
 
 require (
