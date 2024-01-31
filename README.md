@@ -206,6 +206,12 @@ Environment variables are key-value pairs that can affect the behavior of your a
   <img src="https://i.imgur.com/zAu5ORl.png" alt="simple debug" />
 </p>
 
+### 🤖 📝 Better LLM's Summarization:
+
+<p align="center">
+  <img src="https://i.imgur.com/cAbmRqy.png" alt="summarization" />
+</p>
+
 > [!NOTE]
 > This `🔓 ⚙️ Simple Debugging` are simple unlike shitty a complex logic `go codes` that increase of `cyclomatic complexity`
 
