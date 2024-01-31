@@ -239,7 +239,7 @@ func configureModelForSession(ctx context.Context, client *genai.Client, session
 	if session.SafetySettings == nil {
 		session.SafetySettings = DefaultSafetySettings()
 	}
-	session.SafetySettings.ApplyToModel(model)
+	session.SafetySettings.ApplyToModel(client.GenerativeModel(ModelAi))
 
 	// Apply additional model configurations like TopP
 	tempOption := WithTemperature(0.9)
