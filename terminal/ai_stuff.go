@@ -54,11 +54,8 @@ func sendShutdownMessage(session *Session) error {
 	// Assuming QuitCommand is the user input that triggered the shutdown.
 	addMessageWithContext(session, StringNewLine+YouNerd, QuitCommand)
 
-	// Sanitize the message before sending it to the AI.
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(QuitCommand)
-
 	// Send a shutdown message to the AI including the chat history with the context prompt
-	aiPrompt := fmt.Sprintf(ContextPromptShutdown, sanitizedMessage, ApplicationName)
+	aiPrompt := fmt.Sprintf(ContextPromptShutdown, QuitCommand, ApplicationName)
 
 	// Attempt to send the shutdown message to the AI with retry logic
 	_, err := retryWithExponentialBackoff(func() (bool, error) {
