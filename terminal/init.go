@@ -5,7 +5,10 @@
 package terminal
 
 import (
+	"fmt"
+	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 // apiKey holds the API key used for authenticating requests to the generative
@@ -109,6 +112,24 @@ var slantStyle = NewASCIIArtStyle()
 var stripStyle = NewASCIIArtStyle()
 var newLine = NewASCIIArtStyle()
 
+// helper function
+//
+// verifyFileExtension checks if the file has an allowed extension.
+func verifyFileExtension(filePath string) error {
+	allowedExtensions := map[string]bool{
+		dotMD:  true,
+		dotTxt: true,
+	}
+
+	// Extract the file extension and check if it's allowed.
+	fileExt := strings.ToLower(filepath.Ext(filePath))
+	if _, allowed := allowedExtensions[fileExt]; !allowed {
+		return fmt.Errorf(ErrorFileTypeNotSupported)
+	}
+
+	return nil
+}
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
@@ -154,6 +175,10 @@ func init() {
 	showChatCommandHandler := &handleShowChatCommand{}
 	registry.Register(ChatCommands, &handleShowChatCommand{})
 	registry.RegisterSubcommand(ChatCommands, ShowCommands, showChatCommandHandler)
+	// Register the token count command and its handler.
+	tokenCountCommandHandler := &handleTokeCountingCommand{}
+	registry.Register(TokenCountCommands, tokenCountCommandHandler)
+	registry.RegisterSubcommand(TokenCountCommands, FileCommands, tokenCountCommandHandler)
 
 	//TODO: Will add more commands here, example: :help, :about, :credits, :k8s, syncing AI With Go Routines (Known as Gopher hahaha) etc.
 	// Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line

@@ -335,6 +335,13 @@ func (cmd *handleStatsCommand) IsValid(parts []string) bool {
 	return len(parts) == 1
 }
 
+type handleTokeCountingCommand struct{}
+
+func (cmd *handleTokeCountingCommand) IsValid(parts []string) bool {
+	// The token count command should have exactly three parts: the command, subcommand, and the file path.
+	return len(parts) == 3
+}
+
 // Note: this unimplemented
 // Now even it's unimplemented, it wont detected in deadcode indicate that "unreachable func"
 type handleK8sCommand struct{}
@@ -358,8 +365,6 @@ func (cmd *handlepingCommand) IsValid(parts []string) bool {
 type translateCommand struct{}
 
 type fixDocsFormattingCommand struct{}
-
-type handleTokecountingCommand struct{}
 
 type handlePromptfileCommand struct{}
 
