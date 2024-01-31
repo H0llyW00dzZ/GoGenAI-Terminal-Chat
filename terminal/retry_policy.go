@@ -57,3 +57,9 @@ func standardAPIErrorHandler(err error) bool {
 	// Error 500 Google Api
 	return strings.Contains(err.Error(), Error500GoogleApi)
 }
+
+// standardAPIErrorHandler is the standard error handling strategy for API errors.
+func standardOtherAPIErrorHandler(err error) bool {
+	// Error 500 Other Api
+	return strings.Contains(err.Error(), Code500)
+}
