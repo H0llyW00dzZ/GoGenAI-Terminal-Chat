@@ -50,6 +50,51 @@ func PrintTypingChat(message string, delay time.Duration) {
 	fmt.Println()
 }
 
+// ConfigureModelForSession prepares and configures a generative AI model for use in a chat session.
+// It applies safety settings from the session to the model and sets additional configuration options
+// such as temperature. This function is essential for ensuring that the AI model behaves according
+// to the desired safety guidelines and operational parameters before engaging in a chat session.
+//
+// Parameters:
+//
+//	ctx context.Context: A context.Context that carries deadlines, cancellation signals, and other request-scoped
+//	       values across API boundaries and between processes.
+//	client *genai.Client: A pointer to a genai.Client, which provides the functionality to interact with the
+//	          generative AI service.
+//	session *Session: A pointer to a Session struct that contains the current chat session's state,
+//	           including safety settings and chat history.
+//
+// Returns:
+//
+//	*genai.GenerativeModel: A pointer to a generative AI model that is configured and ready for
+//	                          initiating a chat session.
+//
+// Example:
+//
+//	model := ConfigureModelForSession(ctx, client, session)
+//	response, err := model.Generate(ctx, prompt)
+//
+// Note: The function assumes that the client has been properly initialized and that the session
+// contains valid safety settings. If no safety settings are present in the session, default
+// safety settings are applied.
+func ConfigureModelForSession(ctx context.Context, client *genai.Client, session *Session) *genai.GenerativeModel {
+	// Initialize the model with the specific AI model identifier.
+	model := client.GenerativeModel(ModelAi)
+
+	// Apply safety settings from the session or use default settings if none are provided.
+	if session.SafetySettings == nil {
+		session.SafetySettings = DefaultSafetySettings()
+	}
+	session.SafetySettings.ApplyToModel(model)
+
+	// Set additional configuration options, such as the temperature, to control the creativity
+	// and randomness of the AI's responses.
+	tempOption := WithTemperature(0.9)
+	ApplyOptions(model, tempOption)
+
+	return model
+}
+
 // SendMessage sends a chat message to the generative AI model and retrieves the response.
 // It constructs a chat session using the provided `genai.Client`, which is used to communicate
 // with the AI service. The function simulates a chat interaction by sending the chat context,
@@ -75,7 +120,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func SendMessage(ctx context.Context, client *genai.Client, chatContext string, session *Session) (string, error) {
 	// Get the generative model from the client
-	model := configureModelForSession(ctx, client, session) // Simplify 🤪
+	model := ConfigureModelForSession(ctx, client, session) // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
@@ -204,7 +249,7 @@ func sanitizeAIResponse(response string) string {
 //
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
 func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string, session *Session) error {
-	model := configureModelForSession(ctx, client, session)
+	model := ConfigureModelForSession(ctx, client, session)
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
@@ -216,23 +261,6 @@ func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatConte
 	}
 
 	return sendMessageAndProcessResponse(ctx, model, fullContext, session)
-}
-
-func configureModelForSession(ctx context.Context, client *genai.Client, session *Session) *genai.GenerativeModel {
-	model := client.GenerativeModel(ModelAi)
-
-	// Apply the current session's safety settings to the model
-	// If no specific safety settings have been set, use the default settings.
-	if session.SafetySettings == nil {
-		session.SafetySettings = DefaultSafetySettings()
-	}
-	session.SafetySettings.ApplyToModel(client.GenerativeModel(ModelAi))
-
-	// Apply additional model configurations like TopP
-	tempOption := WithTemperature(0.9)
-	ApplyOptions(model, tempOption)
-
-	return model
 }
 
 func sendMessageAndProcessResponse(ctx context.Context, model *genai.GenerativeModel, fullContext string, session *Session) error {
