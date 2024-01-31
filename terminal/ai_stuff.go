@@ -31,8 +31,7 @@ func executeCommand(session *Session, command string, constructPrompt func(strin
 
 // sendCommandToAI sends a command to the AI after sanitizing and applying retry logic.
 func sendCommandToAI(session *Session, command string, constructPrompt func(string) string) (bool, error) {
-	sanitizedCommand := session.ChatHistory.SanitizeMessage(command)
-	aiPrompt := constructPrompt(sanitizedCommand)
+	aiPrompt := constructPrompt(command)
 
 	return retryWithExponentialBackoff(func() (bool, error) {
 		return sendMessageToAI(session, aiPrompt)
