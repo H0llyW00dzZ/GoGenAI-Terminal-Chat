@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -101,16 +100,12 @@ func GetFullReleaseInfo(tagName string) (release *GitHubRelease, err error) {
 
 // checkLatestVersionWithBackoff wraps the CheckLatestVersion call with retry logic.
 func checkLatestVersionWithBackoff() (isLatest bool, latestVersion string, err error) {
-	// Define an error handler for non-specific API errors
-	apiErrorHandler := func(err error) bool {
-		// Retry on 500 status code
-		return strings.Contains(err.Error(), Code500)
-	}
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		isLatest, latestVersion, err = CheckLatestVersion(CurrentVersion)
 		return err == nil, err
-	}, apiErrorHandler)
+		// Define an error handler for non-specific API errors
+	}, standardOtherAPIErrorHandler)
 
 	if err != nil || !success {
 		return false, "", err
@@ -141,14 +136,11 @@ func fetchReleaseWithBackoff(latestVersion string) (*GitHubRelease, error) {
 	var releaseInfo *GitHubRelease
 	var err error // Declare err variable to use it in the function scope
 
-	apiErrorHandler := func(e error) bool {
-		return strings.Contains(e.Error(), Code500)
-	}
-
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		releaseInfo, err = GetFullReleaseInfo(latestVersion)
 		return err == nil, err
-	}, apiErrorHandler)
+		// Define an error handler for non-specific API errors
+	}, standardOtherAPIErrorHandler)
 
 	if err != nil || !success {
 		return nil, err
