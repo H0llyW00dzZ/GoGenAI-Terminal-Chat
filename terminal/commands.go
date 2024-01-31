@@ -578,3 +578,39 @@ func (cmd *handleStatsCommand) showChatStats(session *Session) (bool, error) {
 
 	return false, nil // Continue the session without error.
 }
+
+func (cmd *handleTokeCountingCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Continue the session
+	return cmd.HandleSubcommand("", session, parts)
+}
+
+func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	apiKey := os.Getenv(API_KEY) // Retrieve the API_KEY from the environment
+	filePath := parts[2]
+	switch subcommand {
+	case FileCommands:
+		return cmd.handleTokenCount(apiKey, filePath)
+	default:
+		// Log an error for unrecognized subcommands and continue the session.
+		logger.Error(ErrorUnrecognizedSubcommandForTokenCount, subcommand)
+		return false, nil
+	}
+
+}
+
+func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string) (bool, error) {
+	fileContent, err := os.ReadFile(filePath)
+	if err != nil {
+		logger.Error(ErrorFailedToReadFile, err)
+		return false, nil
+	}
+
+	text := string(fileContent)
+	tokenCount, err := CountTokens(apiKey, text)
+	if err != nil {
+		logger.Error(ErrorFailedToCountTokens, err)
+		return false, nil
+	}
+	logger.Any(InfoTokenCountFile, filePath, tokenCount)
+	return false, nil // Continue the session after displaying the token count.
+}
