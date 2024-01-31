@@ -79,6 +79,9 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 
 	// Apply the current session's safety settings to the model
 	// If no specific safety settings have been set, use the default settings.
+	// Note: This is a good balance between safety and readability.
+	// It allows for a wider range of content to be generated while still maintaining a reasonable level of safety.
+	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
 	if session.SafetySettings == nil {
 		session.SafetySettings = DefaultSafetySettings()
 	}
@@ -97,9 +100,7 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 		// Append the new message to the chat history to form the full context
 		fullContext = chatHistory + StringNewLine + chatContext
 	}
-	// Note: This is a good balance between safety and readability.
-	// It allows for a wider range of content to be generated while still maintaining a reasonable level of safety.
-	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
+
 	// Start a new chat session with the model
 	cs := model.StartChat()
 
