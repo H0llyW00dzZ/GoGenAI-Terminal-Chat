@@ -18,8 +18,9 @@ func addMessageWithContext(session *Session, sender, message string) {
 
 // executeCommand is a generic function to execute a command.
 func executeCommand(session *Session, command string, constructPrompt func(string) string) (bool, error) {
-	// Assuming VersionCommand is the user input that triggered the ai.
-	addMessageWithContext(session, StringNewLine+YouNerd, VersionCommand)
+	// Assuming command is the user input that triggered the AI.
+	// Note: The command execution process is now more dynamic.
+	addMessageWithContext(session, StringNewLine+YouNerd, command)
 	success, err := sendCommandToAI(session, command, constructPrompt)
 	if err != nil {
 		logger.Error(ErrorFailedToSendCommandToAI, err)
@@ -30,10 +31,7 @@ func executeCommand(session *Session, command string, constructPrompt func(strin
 
 // sendCommandToAI sends a command to the AI after sanitizing and applying retry logic.
 func sendCommandToAI(session *Session, command string, constructPrompt func(string) string) (bool, error) {
-	// Assuming HelpCommands is the user input that triggered the ai.
-	addMessageWithContext(session, StringNewLine+YouNerd, HelpCommand)
-	sanitizedCommand := session.ChatHistory.SanitizeMessage(command)
-	aiPrompt := constructPrompt(sanitizedCommand)
+	aiPrompt := constructPrompt(command)
 
 	return retryWithExponentialBackoff(func() (bool, error) {
 		return sendMessageToAI(session, aiPrompt)
@@ -42,7 +40,8 @@ func sendCommandToAI(session *Session, command string, constructPrompt func(stri
 
 // sendMessageToAI sends a message to the AI and handles the response.
 func sendMessageToAI(session *Session, message string) (bool, error) {
-	_, err := SendMessage(session.Ctx, session.Client, message, session)
+	aiResponse, err := SendMessage(session.Ctx, session.Client, message, session)
+	addMessageWithContext(session, AiNerd, aiResponse)
 	return err == nil, err
 }
 
@@ -54,11 +53,8 @@ func sendShutdownMessage(session *Session) error {
 	// Assuming QuitCommand is the user input that triggered the shutdown.
 	addMessageWithContext(session, StringNewLine+YouNerd, QuitCommand)
 
-	// Sanitize the message before sending it to the AI.
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(QuitCommand)
-
 	// Send a shutdown message to the AI including the chat history with the context prompt
-	aiPrompt := fmt.Sprintf(ContextPromptShutdown, sanitizedMessage, ApplicationName)
+	aiPrompt := fmt.Sprintf(ContextPromptShutdown, QuitCommand, ApplicationName)
 
 	// Attempt to send the shutdown message to the AI with retry logic
 	_, err := retryWithExponentialBackoff(func() (bool, error) {
@@ -126,6 +122,8 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 }
 
 // constructAITranslatePrompt constructs the AI translation prompt.
+//
+// Note: This currently unstable will fix it later
 func constructAITranslatePrompt(applicationName, command, text, targetLanguage string) string {
 	return fmt.Sprintf(AITranslateCommandPrompt,
 		applicationName,
