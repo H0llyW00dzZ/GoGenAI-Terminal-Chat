@@ -21,12 +21,13 @@ import (
 // Session encapsulates the state and functionality for a chat session with a generative AI model.
 // It holds the AI client, chat history, and context for managing the session lifecycle.
 type Session struct {
-	Client      *genai.Client      // Client is the generative AI client used to communicate with the AI model.
-	ChatHistory *ChatHistory       // ChatHistory stores the history of the chat session.
-	ChatConfig  *ChatConfig        // ChatConfig contains the settings for managing the chat history size.
-	Ctx         context.Context    // Ctx is the context governing the session, used for cancellation.
-	Cancel      context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
-	Ended       bool               // Ended indicates whether the session has ended.
+	Client         *genai.Client      // Client is the generative AI client used to communicate with the AI model.
+	ChatHistory    *ChatHistory       // ChatHistory stores the history of the chat session.
+	ChatConfig     *ChatConfig        // ChatConfig contains the settings for managing the chat history size.
+	Ctx            context.Context    // Ctx is the context governing the session, used for cancellation.
+	Cancel         context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
+	Ended          bool               // Ended indicates whether the session has ended.
+	SafetySettings *SafetySettings    // Holds the current safety settings for the session.
 	// mu protects the concurrent access to session's state, ensuring thread safety.
 	// It should be locked when accessing or modifying the session's state.
 	mu sync.Mutex
