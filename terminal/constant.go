@@ -126,6 +126,8 @@ const (
 	SummarizeCommands  = ":summarize"
 	ClearCommand       = ":clear"
 	StatsCommand       = ":stats"
+	TokenCountCommands = ":tokencount"
+	FileCommands       = ":file"
 	PingCommand        = ":ping" // Currently marked as TODO
 	PrefixChar         = ":"
 	// List args
@@ -181,6 +183,10 @@ const (
 	ErrorFailedToSendSummarizeMessage               = "Failed To Send Summarize Message: %v"
 	ErrorFailedToSendSummarizeMessageAfterRetries   = "failed to send summarize message after retries" // low level
 	ErrorUnrecognizedSubcommandForClear             = "Unrecognized subcommand for clear: %s"
+	ErrorFailedToReadFile                           = "Failed to read file: %v"
+	ErrorFailedToCountTokens                        = "Failed to count tokens: %v"
+	ErrorUnrecognizedSubcommandForTokenCount        = "Unrecognized subcommand for token count: %s"
+
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
 	Error500GoogleApi    = "googleapi: Error 500:"
@@ -258,6 +264,8 @@ const (
 		youNerd + " User messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
 		aiNerd + " AI messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
 		sysEmoji + " System messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
+	InfoTokenCountFile = "The file " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset +
+		" contains " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + " tokens."
 )
 
 // Defined Tools
