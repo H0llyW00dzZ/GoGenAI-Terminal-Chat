@@ -75,21 +75,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func SendMessage(ctx context.Context, client *genai.Client, chatContext string, session *Session) (string, error) {
 	// Get the generative model from the client
-	model := client.GenerativeModel(ModelAi)
-
-	// Apply the current session's safety settings to the model
-	// If no specific safety settings have been set, use the default settings.
-	// Note: This is a good balance between safety and readability.
-	// It allows for a wider range of content to be generated while still maintaining a reasonable level of safety.
-	// Additional Note: This method unlike static "model.SafetySettings = []*genai.SafetySetting" in official genai docs lmao.
-	if session.SafetySettings == nil {
-		session.SafetySettings = DefaultSafetySettings()
-	}
-	// Apply the safety settings to the model
-	session.SafetySettings.ApplyToModel(client.GenerativeModel(ModelAi))
-
-	// Apply additional model configurations like temperature
-	ApplyOptions(model, WithTemperature(0.9))
+	model := configureModelForSession(ctx, client, session) // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
