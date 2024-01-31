@@ -122,6 +122,8 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 }
 
 // constructAITranslatePrompt constructs the AI translation prompt.
+//
+// Note: This currently unstable will fix it later
 func constructAITranslatePrompt(applicationName, command, text, targetLanguage string) string {
 	return fmt.Sprintf(AITranslateCommandPrompt,
 		applicationName,
