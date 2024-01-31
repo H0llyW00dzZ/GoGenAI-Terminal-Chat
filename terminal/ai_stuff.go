@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+// addMessageWithContext adds a message to the chat history with context.
+func addMessageWithContext(session *Session, sender, message string) {
+	session.ChatHistory.AddMessage(sender, message, session.ChatConfig)
+}
+
 // executeCommand is a generic function to execute a command.
 func executeCommand(session *Session, command string, constructPrompt func(string) string) (bool, error) {
 	success, err := sendCommandToAI(session, command, constructPrompt)
@@ -66,9 +71,4 @@ func sendShutdownMessage(session *Session) error {
 	}, apiErrorHandler)
 
 	return err
-}
-
-// addMessageWithContext adds a message to the chat history with context.
-func addMessageWithContext(session *Session, sender, message string) {
-	session.ChatHistory.AddMessage(sender, message, session.ChatConfig)
 }
