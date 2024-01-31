@@ -18,6 +18,8 @@ func addMessageWithContext(session *Session, sender, message string) {
 
 // executeCommand is a generic function to execute a command.
 func executeCommand(session *Session, command string, constructPrompt func(string) string) (bool, error) {
+	// Assuming VersionCommand is the user input that triggered the ai.
+	addMessageWithContext(session, StringNewLine+YouNerd, VersionCommand)
 	success, err := sendCommandToAI(session, command, constructPrompt)
 	if err != nil {
 		logger.Error(ErrorFailedToSendCommandToAI, err)
@@ -28,6 +30,8 @@ func executeCommand(session *Session, command string, constructPrompt func(strin
 
 // sendCommandToAI sends a command to the AI after sanitizing and applying retry logic.
 func sendCommandToAI(session *Session, command string, constructPrompt func(string) string) (bool, error) {
+	// Assuming HelpCommands is the user input that triggered the ai.
+	addMessageWithContext(session, StringNewLine+YouNerd, HelpCommand)
 	sanitizedCommand := session.ChatHistory.SanitizeMessage(command)
 	aiPrompt := constructPrompt(sanitizedCommand)
 
@@ -45,9 +49,8 @@ func sendMessageToAI(session *Session, message string) (bool, error) {
 // sendShutdownMessage sends a formatted shutdown message to the AI and logs it to the chat history.
 func sendShutdownMessage(session *Session) error {
 	session.ChatHistory.Clear()
-	session.ChatHistory.AddMessage(AiNerd,
-		ContextPrompt,
-		session.ChatConfig)
+	// Context
+	addMessageWithContext(session, AiNerd, ContextPrompt)
 	// Assuming QuitCommand is the user input that triggered the shutdown.
 	addMessageWithContext(session, StringNewLine+YouNerd, QuitCommand)
 
