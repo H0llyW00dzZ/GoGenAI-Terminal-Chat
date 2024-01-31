@@ -117,6 +117,7 @@ var newLine = NewASCIIArtStyle()
 // verifyFileExtension checks if the file has an allowed extension.
 func verifyFileExtension(filePath string) error {
 	allowedExtensions := map[string]bool{
+		// Note: Feel free to submit a pull request or issues if you want to add support for other file types
 		dotMD:  true,
 		dotTxt: true,
 	}
