@@ -96,6 +96,8 @@ const (
 		"**%s** **%s**: Show the chat statistic.\n\n" +
 		"**%s** **%s**: Clear all system summary messages from the chat history.\n\n" +
 		"**%s** **%s**: Clear all chat history and reset the total token usage count if enabled.\n\n" +
+		"**%s** **%s** <**path/file/data.txt**> or <**data.txt**>: Counts a token from the specified file.\n\n" +
+		"**Note**: The token count file feature only supports files with the extensions .md and .txt.\n\n" +
 		"**Additional Note**: There are no additional commands or HTML Markdown available " +
 		"because this is a terminal application and is limited.\n"
 	// TranslateCommandPrompt commands
