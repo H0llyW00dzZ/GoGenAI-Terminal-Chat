@@ -258,6 +258,8 @@ func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatConte
 	return sendMessageAndProcessResponse(ctx, model, fullContext, session)
 }
 
+// sendMessageAndProcessResponse handles the full communication cycle with the generative AI model.
+// It sends the provided context to the model, processes the response, and updates the chat history.
 func sendMessageAndProcessResponse(ctx context.Context, model *genai.GenerativeModel, fullContext string, session *Session) error {
 	// Send the message to the AI
 	resp, err := model.StartChat().SendMessage(ctx, genai.Text(fullContext))
