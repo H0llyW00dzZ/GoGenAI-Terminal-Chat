@@ -214,7 +214,7 @@ func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatConte
 	if session.SafetySettings == nil {
 		session.SafetySettings = DefaultSafetySettings()
 	}
-
+	session.SafetySettings.ApplyToModel(model)
 	// Apply additional model configurations like TopP
 	tempOption := WithTemperature(0.9)
 	ApplyOptions(model, tempOption)
