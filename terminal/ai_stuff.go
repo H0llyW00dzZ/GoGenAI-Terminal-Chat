@@ -1,6 +1,8 @@
 // Copyright (c) 2024 H0llyW00dzZ
 //
 // License: MIT License
+//
+// Note: By simplify like this, list function here can be reusable
 
 package terminal
 
