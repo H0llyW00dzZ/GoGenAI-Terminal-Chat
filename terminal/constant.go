@@ -187,7 +187,7 @@ const (
 	ErrorFailedToCountTokens                        = "Failed to count tokens: %v"
 	ErrorUnrecognizedSubcommandForTokenCount        = "Unrecognized subcommand for token count: %s"
 	ErrorInvalidFileExtension                       = "Invalid file extension: %v"
-	ErrorFileTypeNotSupported                       = "file type not supported: only .md, .mdx, and .txt files are allowed" // low level
+	ErrorFileTypeNotSupported                       = "file type not supported: only .md and .txt files are allowed." // Low level error
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
