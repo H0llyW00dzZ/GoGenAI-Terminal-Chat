@@ -7,6 +7,7 @@ package terminal
 import (
 	"fmt"
 	"math"
+	"strings"
 	"time"
 )
 
@@ -49,4 +50,10 @@ func retryWithExponentialBackoff(retryFunc RetryableFunc, handleError ErrorHandl
 	err := fmt.Errorf(ErrorLowLevelMaximumRetries)
 	logger.Error(err.Error())
 	return false, err
+}
+
+// standardAPIErrorHandler is the standard error handling strategy for API errors.
+func standardAPIErrorHandler(err error) bool {
+	// Error 500 Google Api
+	return strings.Contains(err.Error(), Error500GoogleApi)
 }
