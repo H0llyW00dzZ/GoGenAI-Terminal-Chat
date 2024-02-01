@@ -80,7 +80,7 @@ func ConfigureModelForSession(ctx context.Context, client *genai.Client, session
 	if session.SafetySettings == nil {
 		session.SafetySettings = DefaultSafetySettings()
 	}
-	session.SafetySettings.ApplyToModel(client.GenerativeModel(ModelAi))
+	session.SafetySettings.ApplyToModel(model)
 
 	// Set additional configuration options, such as the temperature, to control the creativity
 	// and randomness of the AI's responses.
