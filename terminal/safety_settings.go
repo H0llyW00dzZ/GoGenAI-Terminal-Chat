@@ -95,6 +95,7 @@ func (s *SafetySettings) SetHighSafety() {
 // This method updates the model's safety settings to match the thresholds specified
 // in the SafetySettings instance, affecting how the model filters generated content.
 func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel) {
+	// fix 400 error lmao, should be work now
 	model.SafetySettings = []*genai.SafetySetting{
 		{
 			Category:  genai.HarmCategoryDangerousContent,
@@ -109,24 +110,8 @@ func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel) {
 			Threshold: s.SexuallyExplicitContentThreshold,
 		},
 		{
-			Category:  genai.HarmCategoryMedical,
-			Threshold: s.MedicalThreshold,
-		},
-		{
-			Category:  genai.HarmCategoryViolence,
-			Threshold: s.ViolenceThreshold,
-		},
-		{
 			Category:  genai.HarmCategoryHateSpeech,
 			Threshold: s.HateSpeechThreshold,
-		},
-		{
-			Category:  genai.HarmCategoryToxicity,
-			Threshold: s.ToxicityThreshold,
-		},
-		{
-			Category:  genai.HarmCategoryDerogatory,
-			Threshold: s.DerogatoryThershold,
 		},
 	}
 }
