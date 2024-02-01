@@ -116,6 +116,25 @@ func WithMaxOutputTokens(maxOutputTokens int32) (ModelConfig, error) {
 	}, nil
 }
 
+// WithSafetyOptions creates a ModelConfig function to set the safety options
+// for a GenerativeModel.
+//
+// Parameters:
+//
+//	safety *SafetySettings: The safety settings to apply.
+//
+// Returns:
+//
+//	ModelConfig: A function that, when applied to a model, sets the safety options.
+//
+// Note: This is currently marked as TODO, as it's not used anywhere in the code. However, it would be advantageous to implement this feature in the future.
+// For instance, it could be used with Vertex AI.
+func WithSafetyOptions(safety *SafetySettings) ModelConfig {
+	return func(m *genai.GenerativeModel) {
+		safety.ApplyToModel(m)
+	}
+}
+
 // ApplyOptions is a convenience function that applies a series of configuration
 // options to a GenerativeModel. This allows for flexible and dynamic model
 // configuration at runtime.
