@@ -312,7 +312,7 @@ const (
 // Context RAM's labyrinth
 const (
 	ContextUserInvokeTranslateCommands = "Translating to %s: %s"
-	SummaryPrefix                      = aiNerd + " 📝 📌 Summary of this discussion:\n"
+	SummaryPrefix                      = aiNerd + " 📝 📌 Summary of this discussion:\n\n"
 )
 
 // List RestfulAPI Error
