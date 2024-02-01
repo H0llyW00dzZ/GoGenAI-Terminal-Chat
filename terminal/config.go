@@ -117,18 +117,24 @@ func WithMaxOutputTokens(maxOutputTokens int32) (ModelConfig, error) {
 }
 
 // WithSafetyOptions creates a ModelConfig function to set the safety options
-// for a GenerativeModel.
+// for a GenerativeModel. It allows the application of model-specific safety
+// settings based on the provided modelName, enabling fine-grained control over
+// content safety for different AI models.
 //
 // Parameters:
 //
-//	safety *SafetySettings: The safety settings to apply.
+//	safety *SafetySettings: The safety settings to apply to the model.
+//	modelName string: The identifier for the generative AI model to which the safety settings
+//	                   will be applied. This allows for different safety configurations for
+//	                   different models.
 //
 // Returns:
 //
-//	ModelConfig: A function that, when applied to a model, sets the safety options.
+//	ModelConfig: A function that, when applied to a model, sets the safety options based on
+//	             the provided safety settings and model name.
 //
 // Note: This is currently marked as TODO, as it's not used anywhere in the code. However, it would be advantageous to implement this feature in the future.
-// For instance, it could be used with Vertex AI.
+// For instance, it could be used with Vertex AI that require model-specific safety configurations.
 func WithSafetyOptions(safety *SafetySettings, modelName string) ModelConfig {
 	// Note: This advanced idiomatic Go makes use of pointers hahaha.
 	return func(m *genai.GenerativeModel) {
