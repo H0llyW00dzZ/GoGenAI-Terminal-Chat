@@ -357,6 +357,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [X] **Improve CommandRegistry to avoid bugs (`e.g., issues with executing a scalable command handler`)**
 - [X] **Improve Conditional Debug Logging for commands**
 - [X] **Improve Chat Statistic**
+- [ ] **Improve `:aitranslate` commands**
 
 ### Other:
 - [ ] **Plan for Google Cloud Deployment**
