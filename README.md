@@ -367,6 +367,9 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > The `Plan for Google Cloud Deployment` feature is intended to support cloud compatibility with Vertex AI capabilities once version v1.0.0 (this repository) is reached and considered stable [read here](https://pkg.go.dev/about#best-practices).
 
+### Command Tools:
+- [ ] **Calculate the Size of the Code Base Volume**
+
 **Why?** This project is developed in compliance with the `Terms of Service` and `Privacy Policy` for `personal use`. It's important to note that this project is developed on a personal basis during my free time and is not associated with any company or enterprise endeavors. This contrasts with many companies that primarily cater to enterprise needs. For instance, `Vertex AI` capabilities can be utilized on a personal basis for tasks such as fine-tuning and using your own data, without the complexity and overhead typically associated with enterprise-level requirements.
 
 ## 🕵️‍♂️ HACKING
