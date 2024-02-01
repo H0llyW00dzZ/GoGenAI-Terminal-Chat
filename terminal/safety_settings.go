@@ -63,7 +63,9 @@ func (s *SafetySettings) SetHighSafety() {
 // in the SafetySettings instance, affecting how the model filters generated content.
 func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel, modelName string) {
 	// fix 400 error lmao, should be work now
-	// Note: This is subject to change to avoid stupid complexity if there are many models.
+	// Note: This is subject to change to avoid stupid unnecessary complexity, especially when dealing with numerous models.
+	// For instance, simplify the process by breaking down the logic into smaller components.
+	// Keeping cyclomatic complexity under 5 is a secret key hahaha in Go programming. It leads to reusable, easy-to-maintain code that boosts performance and minimizes bugs.
 	switch modelName {
 	case ModelAi:
 		// Apply a specific set of safety settings for the "gemini-pro" model
