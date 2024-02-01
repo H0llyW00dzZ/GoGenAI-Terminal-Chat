@@ -360,6 +360,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 - [ ] **Improve `:aitranslate` commands**
 > [!NOTE]
 > The `Improve :aitranslate commands` aims to enhance translation capabilities, including translating from files, markdown, documents, CSVs, and potentially more. As it's written in Go, which has a powerful standard library 🤪, you can, for instance, use the command `:aitranslate :file data.csv`.
+- [ ] **Fix `:safety` commands**
 
 
 ### Other:
