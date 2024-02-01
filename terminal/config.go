@@ -129,10 +129,10 @@ func WithMaxOutputTokens(maxOutputTokens int32) (ModelConfig, error) {
 //
 // Note: This is currently marked as TODO, as it's not used anywhere in the code. However, it would be advantageous to implement this feature in the future.
 // For instance, it could be used with Vertex AI.
-func WithSafetyOptions(safety *SafetySettings) ModelConfig {
+func WithSafetyOptions(safety *SafetySettings, modelName string) ModelConfig {
 	// Note: This advanced idiomatic Go makes use of pointers hahaha.
 	return func(m *genai.GenerativeModel) {
-		safety.ApplyToModel(m)
+		safety.ApplyToModel(m, modelName)
 	}
 }
 

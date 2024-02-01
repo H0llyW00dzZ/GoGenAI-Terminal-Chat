@@ -59,7 +59,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 // Note: The function assumes that the client has been properly initialized and that the session
 // contains valid safety settings. If no safety settings are present in the session, default
 // safety settings are applied.
-func ConfigureModelForSession(ctx context.Context, client *genai.Client, session *Session) *genai.GenerativeModel {
+func ConfigureModelForSession(ctx context.Context, client *genai.Client, session *Session, modelName string) *genai.GenerativeModel {
 	// Initialize the model with the specific AI model identifier.
 	model := client.GenerativeModel(ModelAi)
 
@@ -67,7 +67,7 @@ func ConfigureModelForSession(ctx context.Context, client *genai.Client, session
 	if session.SafetySettings == nil {
 		session.SafetySettings = DefaultSafetySettings()
 	}
-	session.SafetySettings.ApplyToModel(model)
+	session.SafetySettings.ApplyToModel(model, modelName)
 
 	// Set additional configuration options, such as the temperature, to control the creativity
 	// and randomness of the AI's responses.
@@ -102,7 +102,7 @@ func ConfigureModelForSession(ctx context.Context, client *genai.Client, session
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func SendMessage(ctx context.Context, client *genai.Client, chatContext string, session *Session) (string, error) {
 	// Get the generative model from the client
-	model := ConfigureModelForSession(ctx, client, session) // Simplify 🤪
+	model := ConfigureModelForSession(ctx, client, session, ModelAi) // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
@@ -231,7 +231,7 @@ func sanitizeAIResponse(response string) string {
 //
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
 func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string, session *Session) error {
-	model := ConfigureModelForSession(ctx, client, session)
+	model := ConfigureModelForSession(ctx, client, session, ModelAi)
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)

@@ -61,24 +61,67 @@ func (s *SafetySettings) SetHighSafety() {
 // ApplyToModel applies the configured safety settings to a given generative AI model.
 // This method updates the model's safety settings to match the thresholds specified
 // in the SafetySettings instance, affecting how the model filters generated content.
-func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel) {
+func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel, modelName string) {
 	// fix 400 error lmao, should be work now
-	model.SafetySettings = []*genai.SafetySetting{
-		{
-			Category:  genai.HarmCategoryDangerousContent,
-			Threshold: s.DangerousContentThreshold,
-		},
-		{
-			Category:  genai.HarmCategoryHarassment,
-			Threshold: s.HarassmentContentThreshold,
-		},
-		{
-			Category:  genai.HarmCategorySexuallyExplicit,
-			Threshold: s.SexuallyExplicitContentThreshold,
-		},
-		{
-			Category:  genai.HarmCategoryHateSpeech,
-			Threshold: s.HateSpeechThreshold,
-		},
+	// Note: This is subject to change to avoid stupid complexity if there are many models.
+	switch modelName {
+	case ModelAi:
+		// Apply a specific set of safety settings for the "gemini-pro" model
+		model.SafetySettings = []*genai.SafetySetting{
+			{
+				Category:  genai.HarmCategoryDangerousContent,
+				Threshold: s.DangerousContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHarassment,
+				Threshold: s.HarassmentContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategorySexuallyExplicit,
+				Threshold: s.SexuallyExplicitContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHateSpeech,
+				Threshold: s.HateSpeechThreshold,
+			},
+		}
+		// TODO: This for other model
+		// would be implemented in next years maybe lmao
+	default:
+		// Apply a different set of safety settings for other models
+		model.SafetySettings = []*genai.SafetySetting{
+			{
+				Category:  genai.HarmCategoryDangerousContent,
+				Threshold: s.DangerousContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHarassment,
+				Threshold: s.HarassmentContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategorySexuallyExplicit,
+				Threshold: s.SexuallyExplicitContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryMedical,
+				Threshold: s.MedicalThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryViolence,
+				Threshold: s.ViolenceThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHateSpeech,
+				Threshold: s.HateSpeechThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryToxicity,
+				Threshold: s.ToxicityThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryDerogatory,
+				Threshold: s.DerogatoryThershold,
+			},
+		}
 	}
 }

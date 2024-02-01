@@ -247,7 +247,7 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 	cmd.setSafetyLevel(parts[1])
 
 	// Apply the updated safety settings and notify the user.
-	cmd.SafetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi))
+	cmd.SafetySettings.ApplyToModel(session.Client.GenerativeModel(ModelAi), ModelAi)
 	// Pass ContextPrompt
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
 	logger.Any(fmt.Sprintf(SystemSafety, parts[1])) // simplify
