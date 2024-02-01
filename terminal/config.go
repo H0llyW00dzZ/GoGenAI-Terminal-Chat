@@ -44,11 +44,6 @@ func ConfigureModel(model *genai.GenerativeModel, opts ...ModelConfig) {
 	}
 }
 
-// ModelConfig defines a function type for configuring a GenerativeModel.
-// Functions of this type take a pointer to a GenerativeModel and apply
-// specific settings to it.
-type ModelConfig func(m *genai.GenerativeModel)
-
 // WithTemperature creates a ModelConfig function to set the temperature
 // of a GenerativeModel. Temperature controls the randomness of the AI's
 // responses, with higher values leading to more varied output.
