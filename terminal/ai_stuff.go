@@ -81,19 +81,22 @@ func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitized
 			return false, err
 		}
 
-		h.handleAIResponse(session, sanitizedMessage, aiResponse)
+		h.handleAIResponse(session, sanitizedMessage, aiResponse, SummaryPrefix)
 		return true, nil
 	}, standardAPIErrorHandler)
 }
 
 // handleAIResponse processes the AI's response to the summarize command.
-func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMessage, aiResponse string) {
+func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMessage, aiResponse, customText string) {
+	// Concatenate custom text with the AI response.
+	fullResponse := SummaryPrefix + aiResponse
+
 	// Instead of directly adding, check if a system message already exists and replace it.
-	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
-	if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
+	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, fullResponse)
+	if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(fullResponse)) {
 		// If it was not a system message or no existing system message was found to replace,
 		// add the new system message to the chat history.
-		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+		session.ChatHistory.AddMessage(SYSTEMPREFIX, fullResponse, session.ChatConfig)
 	}
 }
 
