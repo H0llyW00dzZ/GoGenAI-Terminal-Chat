@@ -151,7 +151,7 @@ func (h *ChatHistory) updateMessageCounts(user string) {
 		h.updateSystemMessageCount()
 	} else if user == AiNerd {
 		h.AIMessageCount++
-	} else if user == StringNewLine+YouNerd {
+	} else if user == YouNerd {
 		h.UserMessageCount++
 	}
 }
@@ -303,6 +303,7 @@ func (h *ChatHistory) appendChatMessages(builder *strings.Builder, chatMsgs []st
 		// After printing an AI message and if it's not the last message, add a separator
 		// Note: This a better way instead of structuring it then stored in RAM's labyrinth.
 		// For example how it work it's like this
+		//
 		// ⚙️  SYSTEM: Discussion Summary:
 		//
 		// ---
@@ -312,10 +313,12 @@ func (h *ChatHistory) appendChatMessages(builder *strings.Builder, chatMsgs []st
 		// 🤖 AI: You are using the latest version, v0.5.0 of GoGenAI Terminal Chat. There is no need to update at the moment. Is there anything else I can help you with today?
 		//
 		// ---
-		// Add a separator after each AI message, except for the last message
-		if isAIMessage(sanitizedMsg) && i < len(chatMsgs)-1 {
+		//
+		// Add a separator after an AI message if the next message is a user message
+		if isAIMessage(sanitizedMsg) && i < len(chatMsgs)-1 && isUserMessage(chatMsgs[i+1]) {
 			builder.WriteString(StripChars)    // Append the separator
 			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
+			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator for the user
 		}
 	}
 }
@@ -330,6 +333,12 @@ func (h *ChatHistory) separateSystemMessages(messages []string) (sysMsgs, chatMs
 		}
 	}
 	return sysMsgs, chatMsgs
+}
+
+// isUserMessage checks if the message is from the user
+func isUserMessage(message string) bool {
+	// Assuming YouNerd is the prefix for user messages
+	return strings.HasPrefix(message, YouNerd)
 }
 
 // isAIMessage checks if the message is from the AI

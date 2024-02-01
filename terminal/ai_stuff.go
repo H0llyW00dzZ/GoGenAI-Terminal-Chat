@@ -20,7 +20,7 @@ func addMessageWithContext(session *Session, sender, message string) {
 func executeCommand(session *Session, command string, constructPrompt func(string) string) (bool, error) {
 	// Assuming command is the user input that triggered the AI.
 	// Note: The command execution process is now more dynamic.
-	addMessageWithContext(session, StringNewLine+YouNerd, command)
+	addMessageWithContext(session, YouNerd, command)
 	success, err := sendCommandToAI(session, command, constructPrompt)
 	if err != nil {
 		logger.Error(ErrorFailedToSendCommandToAI, err)
@@ -51,7 +51,7 @@ func sendShutdownMessage(session *Session) error {
 	// Context
 	addMessageWithContext(session, AiNerd, ContextPrompt)
 	// Assuming QuitCommand is the user input that triggered the shutdown.
-	addMessageWithContext(session, StringNewLine+YouNerd, QuitCommand)
+	addMessageWithContext(session, YouNerd, QuitCommand)
 
 	// Send a shutdown message to the AI including the chat history with the context prompt
 	aiPrompt := fmt.Sprintf(ContextPromptShutdown, QuitCommand, ApplicationName)
