@@ -11,31 +11,11 @@ import (
 	"os"
 	"os/signal"
 	"strings"
-	"sync"
 	"syscall"
 
 	"github.com/google/generative-ai-go/genai"
 	"google.golang.org/api/option"
 )
-
-// Session encapsulates the state and functionality for a chat session with a generative AI model.
-// It holds the AI client, chat history, and context for managing the session lifecycle.
-type Session struct {
-	Client         *genai.Client      // Client is the generative AI client used to communicate with the AI model.
-	ChatHistory    *ChatHistory       // ChatHistory stores the history of the chat session.
-	ChatConfig     *ChatConfig        // ChatConfig contains the settings for managing the chat history size.
-	Ctx            context.Context    // Ctx is the context governing the session, used for cancellation.
-	Cancel         context.CancelFunc // Cancel is a function to cancel the context, used for cleanup.
-	Ended          bool               // Ended indicates whether the session has ended.
-	SafetySettings *SafetySettings    // Holds the current safety settings for the session.
-	// mu protects the concurrent access to session's state, ensuring thread safety.
-	// It should be locked when accessing or modifying the session's state.
-	mu sync.Mutex
-	// this reference pretty useful, which can handle runtime 24/7, unlike original ai chat session systems.
-	// for example, if session is ended not cause of client, then it will be renew with previous chat history.
-	lastInput string // Stores the last user input for reference
-
-}
 
 // NewSession creates a new chat session with the provided API key for authentication.
 // It initializes the generative AI client and sets up a context for managing the session.

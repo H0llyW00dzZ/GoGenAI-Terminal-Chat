@@ -15,13 +15,6 @@ type Worker interface {
 	Stop() error
 }
 
-// ChatWorker is responsible for handling background tasks related to chat sessions.
-type ChatWorker struct {
-	session *Session
-	ticker  *time.Ticker
-	done    chan bool
-}
-
 // NewChatWorker creates a new ChatWorker for a given chat session.
 func NewChatWorker(session *Session) *ChatWorker {
 	return &ChatWorker{

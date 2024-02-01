@@ -13,19 +13,6 @@ import (
 	genai "github.com/google/generative-ai-go/genai"
 )
 
-// BinaryAnsiChars is a struct that contains the ANSI characters used to print the typing effect.
-type BinaryAnsiChars struct {
-	BinaryAnsiChar          rune
-	BinaryAnsiSquenseChar   rune
-	BinaryAnsiSquenseString string
-	BinaryLeftSquareBracket rune
-}
-
-// TypingChars is a struct that contains the Animated Chars used to print the typing effect.
-type TypingChars struct {
-	AnimatedChars string
-}
-
 // PrintTypingChat simulates the visual effect of typing out a message character by character.
 // It prints each character of a message to the standard output with a delay between each character
 // to give the appearance of real-time typing.

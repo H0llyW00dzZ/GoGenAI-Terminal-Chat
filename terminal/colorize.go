@@ -8,20 +8,6 @@ import (
 	"strings"
 )
 
-// ANSIColorCodes defines a struct for holding ANSI color escape sequences.
-type ANSIColorCodes struct {
-	ColorRed         string
-	ColorGreen       string
-	ColorYellow      string
-	ColorBlue        string
-	ColorPurple      string
-	ColorCyan        string
-	ColorHex95b806   string // 24-bit color
-	ColorCyan24Bit   string // 24-bit color
-	ColorPurple24Bit string // 24-bit color
-	ColorReset       string
-}
-
 // ANSI color codes
 const (
 	// Note: By replacing the ANSI escape sequence from "\033" to "\x1b", might can avoid a rare bug that sometimes occurs on different machines,

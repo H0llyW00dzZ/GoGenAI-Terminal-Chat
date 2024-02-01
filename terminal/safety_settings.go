@@ -11,39 +11,6 @@ import (
 	genai "github.com/google/generative-ai-go/genai"
 )
 
-// SafetyOption is a function type that takes a pointer to a SafetySettings
-// instance and applies a specific safety configuration to it. It is used
-// to abstract the different safety level settings (e.g., low, high, default)
-// and allows for a flexible and scalable way to manage safety configurations
-// through function mapping.
-type SafetyOption struct {
-	Setter func(s *SafetySettings)
-	Valid  bool
-}
-
-// SafetySettings encapsulates the content safety configuration for the AI model.
-// It defines thresholds for various categories of potentially harmful content,
-// allowing users to set the desired level of content filtering based on the
-// application's requirements and user preferences.
-type SafetySettings struct {
-	// DangerousContentThreshold defines the threshold for filtering dangerous content.
-	DangerousContentThreshold genai.HarmBlockThreshold
-	// HarassmentContentThreshold defines the threshold for filtering harassment-related content.
-	HarassmentContentThreshold genai.HarmBlockThreshold
-	// SexuallyExplicitContentThreshold defines the threshold for filtering sexually explicit content.
-	SexuallyExplicitContentThreshold genai.HarmBlockThreshold
-	// MedicalThreshold defines the threshold for filtering medical-related content.
-	MedicalThreshold genai.HarmBlockThreshold
-	// ViolenceThreshold defines the threshold for filtering violent content.
-	ViolenceThreshold genai.HarmBlockThreshold
-	// HateSpeechThreshold defines the threshold for filtering hate speech.
-	HateSpeechThreshold genai.HarmBlockThreshold
-	// ToxicityThreshold defines the threshold for filtering toxic content.
-	ToxicityThreshold genai.HarmBlockThreshold
-	// DerogatoryThershold defines the threshold for filtering derogatory content.
-	DerogatoryThershold genai.HarmBlockThreshold
-}
-
 // DefaultSafetySettings returns a SafetySettings instance with a default
 // configuration where all categories are set to block medium and above levels
 // of harmful content. This default setting provides a balanced approach to
