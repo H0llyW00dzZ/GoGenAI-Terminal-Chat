@@ -125,7 +125,7 @@ func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, e
 func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Pass ContextPrompt 🤪
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	session.ChatHistory.AddMessage(StringNewLine+YouNerd, VersionCommand, session.ChatConfig)
+	session.ChatHistory.AddMessage(YouNerd, VersionCommand, session.ChatConfig)
 	// Get the entire chat history as a string
 
 	// Check if the current version is the latest.
@@ -266,7 +266,7 @@ func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (
 	err := handleAIInteraction(session, aiPrompt, func(session *Session, aiResponse string) error {
 		// Add a message to the chat history indicating the translation command was invoked
 		translationCommandMessage := fmt.Sprintf(ContextUserInvokeTranslateCommands, targetLanguage, textToTranslate)
-		session.ChatHistory.AddMessage(StringNewLine+YouNerd, translationCommandMessage, session.ChatConfig)
+		session.ChatHistory.AddMessage(YouNerd, translationCommandMessage, session.ChatConfig)
 		return postProcessAITranslate(session, aiResponse)
 	})
 
