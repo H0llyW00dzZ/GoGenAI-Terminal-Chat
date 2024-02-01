@@ -296,6 +296,7 @@ func (h *ChatHistory) appendSystemMessages(builder *strings.Builder, sysMsgs []s
 
 // appendChatMessages appends chat messages to the StringBuilder, adding separators as needed.
 func (h *ChatHistory) appendChatMessages(builder *strings.Builder, chatMsgs []string) {
+	totalMessages := len(chatMsgs)
 	for i, msg := range chatMsgs {
 		sanitizedMsg := h.SanitizeMessage(msg) // Sanitize each message
 		builder.WriteString(sanitizedMsg)      // Append the sanitized message to the builder
@@ -315,12 +316,19 @@ func (h *ChatHistory) appendChatMessages(builder *strings.Builder, chatMsgs []st
 		// ---
 		//
 		// Add a separator after an AI message if the next message is a user message
-		if isAIMessage(sanitizedMsg) && i < len(chatMsgs)-1 && isUserMessage(chatMsgs[i+1]) {
+		// Determine if a separator should be appended after the current message.
+		if i < totalMessages-1 && h.shouldAppendSeparator(sanitizedMsg, chatMsgs[i+1], i, totalMessages) {
 			builder.WriteString(StripChars)    // Append the separator
 			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator
 			builder.WriteRune(nl.NewLineChars) // Append a newline character after the separator for the user
 		}
 	}
+}
+
+// shouldAppendSeparator determines if a separator should be added between messages.
+func (h *ChatHistory) shouldAppendSeparator(currentMessage, nextMessage string, currentIndex, totalMessages int) bool {
+	// Check if the current message is from the AI and the next message is from the user.
+	return isAIMessage(currentMessage) && currentIndex < totalMessages-1 && isUserMessage(nextMessage)
 }
 
 // separateSystemMessages separates system messages from chat messages.
