@@ -50,6 +50,9 @@ func PrintTypingChat(message string, delay time.Duration) {
 //	          generative AI service.
 //	session *Session: A pointer to a Session struct that contains the current chat session's state,
 //	           including safety settings and chat history.
+//	modelName string: The identifier for the generative AI model to be used in the session. This name
+//	                   is used to apply specific configurations and safety settings tailored to the
+//	                   particular AI model.
 //
 // Returns:
 //
@@ -58,10 +61,11 @@ func PrintTypingChat(message string, delay time.Duration) {
 //
 // Note: The function assumes that the client has been properly initialized and that the session
 // contains valid safety settings. If no safety settings are present in the session, default
-// safety settings are applied.
+// safety settings are applied. The modelName parameter allows for model-specific configuration,
+// enabling more granular control over the behavior and safety of different AI models.
 func ConfigureModelForSession(ctx context.Context, client *genai.Client, session *Session, modelName string) *genai.GenerativeModel {
 	// Initialize the model with the specific AI model identifier.
-	model := client.GenerativeModel(ModelAi)
+	model := client.GenerativeModel(modelName)
 
 	// Apply safety settings from the session or use default settings if none are provided.
 	if session.SafetySettings == nil {
