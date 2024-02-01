@@ -139,12 +139,6 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	// Sanitize the message before sending it to the AI
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
-	// Retry logic for sending the version check prompt to the AI.
-	apiErrorHandler := func(err error) bool {
-		// Error 500 Google Api
-		return strings.Contains(err.Error(), Error500GoogleApi)
-	}
-
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
 		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
 		// Sanitize AI's response to remove any separators
@@ -152,7 +146,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 		// Add the sanitized AI's response to the chat history
 		session.ChatHistory.AddMessage(AiNerd, aiResponse, session.ChatConfig)
 		return err == nil, err
-	}, apiErrorHandler)
+	}, standardAPIErrorHandler)
 
 	if err != nil {
 		logger.Error(ErrorFailedToSendVersionCheckMessage, err)
