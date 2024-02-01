@@ -325,3 +325,33 @@ const (
 	dotMD  = ".md"
 	dotTxt = ".txt"
 )
+
+// ANSI color codes
+const (
+	// Note: By replacing the ANSI escape sequence from "\033" to "\x1b", might can avoid a rare bug that sometimes occurs on different machines,
+	// although the original code works fine on mine (Author: @H0llyW00dzZ).
+	ColorRed    = "\x1b[31m"
+	ColorGreen  = "\x1b[32m"
+	ColorYellow = "\x1b[33m"
+	ColorBlue   = "\x1b[34m"
+	ColorPurple = "\x1b[35m"
+	ColorCyan   = "\x1b[36m"
+	// ColorHex95b806 represents the color #95b806 using an ANSI escape sequence for 24-bit color.
+	ColorHex95b806 = "\x1b[38;2;149;184;6m"
+	// ColorCyan24Bit represents the color #11F0F7 using an ANSI escape sequence for 24-bit color.
+	ColorCyan24Bit   = "\x1b[38;2;17;240;247m"
+	ColorPurple24Bit = "\x1b[38;2;255;0;255m"
+	ColorReset       = "\x1b[0m"
+)
+
+// ANSI Text Formatting.
+const (
+	// bold text.
+	BoldText = "\x1b[1m"
+	// reset bold text formatting.
+	ResetBoldText = "\x1b[22m"
+	// italic text
+	ItalicText = "\x1B[3m"
+	// reset italic text formatting.
+	ResetItalicText = "\x1B[23m"
+)
