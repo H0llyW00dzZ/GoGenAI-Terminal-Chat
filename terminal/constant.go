@@ -355,3 +355,12 @@ const (
 	// reset italic text formatting.
 	ResetItalicText = "\x1B[23m"
 )
+
+const (
+	// UserMessage indicates a message that originates from a human user.
+	UserMessage MessageType = iota // magic
+	// AIMessage indicates a message that originates from an AI or bot.
+	AIMessage
+	// SystemMessage indicates a message that provides system-level information.
+	SystemMessage
+)

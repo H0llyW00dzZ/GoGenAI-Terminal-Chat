@@ -11,18 +11,6 @@ import (
 	"strings"
 )
 
-// MessageType categorizes the source of a chat message.
-type MessageType int
-
-const (
-	// UserMessage indicates a message that originates from a human user.
-	UserMessage MessageType = iota // magic
-	// AIMessage indicates a message that originates from an AI or bot.
-	AIMessage
-	// SystemMessage indicates a message that provides system-level information.
-	SystemMessage
-)
-
 // DetermineMessageType analyzes the content of a message to classify its type.
 // It returns the MessageType based on predefined criteria for identifying user, AI, and system messages.
 func DetermineMessageType(message string) MessageType {
