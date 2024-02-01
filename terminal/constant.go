@@ -58,18 +58,18 @@ const (
 	ContextPrompt          = "Hello! How can I assist you today?"
 	ShutdownMessage        = "Shutting down gracefully..."
 	ContextCancel          = "Context canceled, shutting down..." // sending a messages to gopher officer
-	ANewVersionIsAvailable = "A newer version is available: %s\n\n"
+	ANewVersionIsAvailable = StripChars + "\nA newer version is available: %s\n\n"
 	ReleaseName            = "- %s\n\n"
 	FullChangeLog          = "**%s**\n"
 	DummyMessages          = "Hello, AI! from @H0llyW00dzZ"
 	// Better prompt instead of typing manually hahaha
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
-	YouAreusingLatest = "The user invoked the command: **%s**\n" +
+	YouAreusingLatest = StripChars + "\nThe user invoked the command: **%s**\n" +
 		"The current version of **%s** is: **%s**.\n" +
 		"This is the latest version available.\n" +
 		"Please inform the user that no update is necessary at this time." // Better Response for AI
-	ReleaseNotesPrompt = "The user invoked the command: **%s**\n" +
+	ReleaseNotesPrompt = StripChars + "\nThe user invoked the command: **%s**\n" +
 		"The current version of the application **%s** is: **%s**.\n" +
 		"There is a newer version available: **%s**.\n\n" +
 		"Details of the latest release:\n" +
@@ -77,10 +77,10 @@ const (
 		"- Published Date: **%s**\n\n" +
 		"Release Notes:\n%s\n" // Better Response for AI
 	// Quit Prompt commands
-	ContextPromptShutdown = "The user has attempted the command: **%s** in **%s**.\n" +
+	ContextPromptShutdown = StripChars + "\nThe user has attempted the command: **%s** in **%s**.\n" +
 		"AI, please provide an appropriate shutdown message."
 	// Help Prompt commands
-	HelpCommandPrompt = "**This a System messages**:**%s**\n\n" +
+	HelpCommandPrompt = StripChars + "\n**This a System messages**:**%s**\n\n" +
 		"The user attempted an command: **%s**\n" +
 		"Can you provide help information for the available commands?\n\n" +
 		"List of Available Commands:\n" +
