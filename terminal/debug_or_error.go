@@ -11,17 +11,7 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
 )
-
-// DebugOrErrorLogger provides a simple logger with support for debug and error logging.
-// It encapsulates a standard log.Logger and adds functionality for conditional debug
-// logging and colorized error output.
-type DebugOrErrorLogger struct {
-	logger          *log.Logger
-	debugMode       bool
-	PrintTypingChat func(string, time.Duration)
-}
 
 // NewDebugOrErrorLogger initializes a new DebugOrErrorLogger with a logger that writes
 // to os.Stderr with the standard log flags.

@@ -11,16 +11,6 @@ import (
 	"time"
 )
 
-// GitHubRelease represents the metadata of a software release from GitHub.
-// It includes information such as the tag name, release name, and a description body,
-// typically containing the changelog or release notes.
-type GitHubRelease struct {
-	TagName string `json:"tag_name"`     // The tag associated with the release, e.g., "v1.2.3"
-	Name    string `json:"name"`         // The official name of the release
-	Body    string `json:"body"`         // Detailed description or changelog for the release
-	Date    string `json:"published_at"` // Published Date
-}
-
 // CheckLatestVersion compares the current application version against the latest
 // version available on GitHub. It fetches the latest release information from the
 // repository specified by GitHubAPIURL and determines if an update is available.

@@ -9,19 +9,6 @@ import (
 	"strings"
 )
 
-// ASCIIArtChar represents a styled ASCII character with its pattern and color.
-// The Pattern field is a slice of strings, with each string representing a line
-// of the character's ASCII representation. The Color field specifies the color
-// to be used when displaying the character.
-type ASCIIArtChar struct {
-	Pattern []string // Lines of the ASCII representation of the character.
-	Color   string   // Color code or label for the character's color.
-}
-
-// ASCIIArtStyle maps runes to their corresponding ASCIIArtChar representations.
-// It defines the styling for each character that can be rendered in ASCII art.
-type ASCIIArtStyle map[rune]ASCIIArtChar
-
 // NewASCIIArtStyle creates and returns a new ASCIIArtStyle map. It initializes
 // an empty map that can be populated with ASCII art characters using the AddChar
 // method or by direct assignment.

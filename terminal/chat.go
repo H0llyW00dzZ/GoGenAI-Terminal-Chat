@@ -9,31 +9,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"strings"
-	"sync"
-)
-
-// ChatHistory manages the state of chat messages exchanged during a session.
-// It tracks the messages, their unique hashes, and counts of different types of messages (user, AI, system).
-// This struct also ensures concurrent access safety using a read-write mutex.
-type ChatHistory struct {
-	Messages           []string       // Messages contains all the chat messages in chronological order.
-	Hashes             map[string]int // Hashes maps the SHA-256 hash of each message to its index in Messages.
-	UserMessageCount   int            // UserMessageCount holds the total number of user messages.
-	AIMessageCount     int            // AIMessageCount holds the total number of AI messages.
-	SystemMessageCount int            // SystemMessageCount holds the total number of system messages.
-	mu                 sync.RWMutex   // Explicit 🤪
-}
-
-// MessageType categorizes the source of a chat message.
-type MessageType int
-
-const (
-	// UserMessage indicates a message that originates from a human user.
-	UserMessage MessageType = iota // magic
-	// AIMessage indicates a message that originates from an AI or bot.
-	AIMessage
-	// SystemMessage indicates a message that provides system-level information.
-	SystemMessage
 )
 
 // DetermineMessageType analyzes the content of a message to classify its type.
@@ -60,11 +35,6 @@ func NewChatHistory() *ChatHistory {
 		Messages: make([]string, 0),
 		Hashes:   make(map[string]int),
 	}
-}
-
-// NewLineChar is a struct that containt Rune for New Line Character
-type NewLineChar struct {
-	NewLineChars rune
 }
 
 // AddMessage appends a new message to the chat history.
@@ -490,14 +460,6 @@ func (h *ChatHistory) ClearAllSystemMessages() {
 	// Replace the old Messages and Hashes with the new ones that exclude system messages.
 	h.Messages = newMessages
 	h.Hashes = newHashes
-}
-
-// MessageStats encapsulates the counts of different types of messages in the chat history.
-// It holds separate counts for user messages, AI messages, and system messages.
-type MessageStats struct {
-	UserMessages   int // UserMessages is the count of messages sent by users.
-	AIMessages     int // AIMessages is the count of messages sent by the AI.
-	SystemMessages int // SystemMessages is the count of system-generated messages.
 }
 
 // GetMessageStats safely retrieves the message counts from the ChatHistory instance.

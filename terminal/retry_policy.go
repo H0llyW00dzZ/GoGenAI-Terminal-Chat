@@ -11,13 +11,6 @@ import (
 	"time"
 )
 
-// RetryableFunc is a type that represents a function that can be retried.
-type RetryableFunc func() (bool, error)
-
-// ErrorHandlerFunc is a type that represents a function that handles an error and
-// decides whether the operation should be retried.
-type ErrorHandlerFunc func(error) bool
-
 // retryWithExponentialBackoff attempts to execute a RetryableFunc with a retry policy.
 // It applies exponential backoff between retries and logs an error if the maximum number of retries is reached.
 //

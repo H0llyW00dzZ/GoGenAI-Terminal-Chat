@@ -9,19 +9,6 @@ import (
 	"time"
 )
 
-// Worker defines the interface for a background worker in the terminal application.
-type Worker interface {
-	Start(ctx context.Context) error
-	Stop() error
-}
-
-// ChatWorker is responsible for handling background tasks related to chat sessions.
-type ChatWorker struct {
-	session *Session
-	ticker  *time.Ticker
-	done    chan bool
-}
-
 // NewChatWorker creates a new ChatWorker for a given chat session.
 func NewChatWorker(session *Session) *ChatWorker {
 	return &ChatWorker{
