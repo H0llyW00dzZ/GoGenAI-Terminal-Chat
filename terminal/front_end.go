@@ -100,8 +100,14 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	// Concatenate chat history and AI response for token counting
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
-
-	tokenCount, err := CountTokens(apiKey, ModelAi, fullText, "", nil)
+	params := TokenCountParams{
+		APIKey:      apiKey,
+		ModelName:   ModelAi,
+		Input:       fullText,
+		ImageFormat: "", // Assuming there is no image data in this case
+		ImageData:   nil,
+	}
+	tokenCount, err := CountTokens(params)
 	printnewlineAscii() // a better one, instead of "\n"
 	if err != nil {
 		handleTokenCountError(err)

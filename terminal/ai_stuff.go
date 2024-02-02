@@ -115,7 +115,14 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 
 	text := string(fileContent)
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(text)
-	tokenCount, err := CountTokens(apiKey, ModelAi, sanitizedMessage, "", nil)
+	params := TokenCountParams{
+		APIKey:      apiKey,
+		ModelName:   ModelAi,
+		Input:       sanitizedMessage,
+		ImageFormat: "", // Assuming there is no image data in this case
+		ImageData:   nil,
+	}
+	tokenCount, err := CountTokens(params)
 	if err != nil {
 		logger.Error(ErrorFailedToCountTokens, err)
 		return false, nil
