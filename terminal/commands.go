@@ -173,7 +173,7 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, e
 	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
-		fmt.Println()
+		printnewlineAscii()
 		return true, nil
 	}
 
@@ -181,7 +181,7 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string) (bool, e
 	_, err := fun_stuff.PingIP(ip)
 	if err != nil {
 		logger.Error(ErrorPingFailed, err)
-		fmt.Println()
+		printnewlineAscii()
 	}
 
 	return false, nil
@@ -232,7 +232,7 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
-		fmt.Println()
+		printnewlineAscii()
 		return false, nil
 	}
 
@@ -317,7 +317,7 @@ func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (boo
 func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	if !cmd.IsValid(parts) {
 		logger.Error(HumanErrorWhileTypingCommandArgs, parts)
-		fmt.Println()
+		printnewlineAscii()
 		return false, nil
 	}
 
