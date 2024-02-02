@@ -52,7 +52,7 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 		l.PrintTypingChat(builder.String(), TypingDelay)
 
 		// Print a newline after the message
-		fmt.Println()
+		printnewlineAscii()
 	}
 }
 
@@ -79,7 +79,7 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
-	fmt.Println()
+	printnewlineAscii()
 }
 
 // RecoverFromPanic should be deferred at the beginning of a function or goroutine
@@ -183,7 +183,7 @@ func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
-	fmt.Println()
+	printnewlineAscii()
 }
 
 // Any logs a general message without any colorization. It behaves like Println and allows for formatted messages.
