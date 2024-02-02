@@ -203,5 +203,5 @@ func (l *DebugOrErrorLogger) Any(format string, v ...interface{}) {
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
-	fmt.Println()
+	printnewlineAscii() // this a modern now instead of fmt hahaha
 }

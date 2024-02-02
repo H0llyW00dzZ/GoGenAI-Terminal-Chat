@@ -34,7 +34,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 		fmt.Printf(AnimatedChars, char)
 		time.Sleep(delay)
 	}
-	fmt.Println()
+	printnewlineAscii()
 }
 
 // ConfigureModelForSession prepares and configures a generative AI model for use in a chat session.
