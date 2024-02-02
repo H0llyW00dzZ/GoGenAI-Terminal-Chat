@@ -325,6 +325,8 @@ const (
 // dotFiles
 const (
 	// a better way instead of stupid hardcoding
+	// Reason: In compiled languages, "" denotes a string constant and '' denotes a rune, unlike in interpreted languages.
+	// Using constants improves readability and maintainability over stupid hardcoding values.
 	dotMD          = ".md"
 	dotTxt         = ".txt"
 	dotPng         = ".png"
