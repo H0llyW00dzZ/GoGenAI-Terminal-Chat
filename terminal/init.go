@@ -142,6 +142,9 @@ func verifyImageFileExtension(filePath string) error {
 		dotPng:  true,
 		dotJpg:  true,
 		dotJpeg: true,
+		dotHeic: true,
+		dotHeif: true,
+		dotWebp: true,
 	}
 
 	// Extract the file extension and check if it's allowed.
