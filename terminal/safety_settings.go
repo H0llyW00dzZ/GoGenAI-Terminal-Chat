@@ -87,6 +87,7 @@ func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel, modelName st
 				Threshold: s.HateSpeechThreshold,
 			},
 		}
+	// TODO: Implement Perfect System in Terminal For Gemini-Pro Vision Capabilities
 	case GeminiProVision:
 		// Apply a specific set of safety settings for the "gemini-pro-vision" model
 		model.SafetySettings = []*genai.SafetySetting{
