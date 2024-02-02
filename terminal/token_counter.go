@@ -13,51 +13,55 @@ import (
 )
 
 // CountTokens connects to a generative AI model using the provided API key
-// and counts the number of tokens in the given input string. This function
-// is useful for understanding the token usage of text inputs in the context
+// and counts the number of tokens in the given input string or image data.
+// This function is useful for understanding the token usage of inputs in the context
 // of generative AI, which can help manage API usage and costs.
 //
 // Parameters:
 //
-//	apiKey string: The API key used to authenticate with the generative AI service.
-//	input  string: The text input for which the number of tokens will be counted.
+//	apiKey     string         : The API key used to authenticate with the generative AI service.
+//	input      string         : The text input for which the number of tokens will be counted.
+//	imageFormat string  : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData  []byte   : The byte slice containing the image data.
 //
 // Returns:
 //
-//	int:   The number of tokens that the input string contains.
-//	error: An error that occurred while creating the client, connecting to the service,
-//	       or counting the tokens. If the operation is successful, the error is nil.
+//	int   : The number of tokens that the input contains.
+//	error : An error that occurred while creating the client, connecting to the service,
+//	        or counting the tokens. If the operation is successful, the error is nil.
 //
 // The function creates a new client for each call, which is then closed before
 // returning. It is designed to be a self-contained operation that does not require
 // the caller to manage the lifecycle of the generative AI client.
-func CountTokens(apiKey, input string) (int, error) {
+func CountTokens(apiKey, input, imageFormat string, imageData []byte) (int, error) {
 	ctx := context.Background()
-	return countTokensWithClient(ctx, apiKey, input)
+	return countTokensWithClient(ctx, apiKey, input, imageFormat, imageData)
 }
 
 // countTokensWithClient orchestrates the process of counting the number of tokens
-// in a given input string using a generative AI model. This function is designed to
-// handle the complexities of interacting with the AI service, including client
-// initialization, request execution, and error handling with retry logic.
+// in a given input string and/or image data using a generative AI model. This function
+// is designed to handle the complexities of interacting with the AI service, including
+// client initialization, request execution, and error handling with retry logic.
 //
 // Parameters:
 //
-//	ctx     : The context for controlling the lifetime of the request.
-//	apiKey  : The API key used to authenticate with the generative AI service.
-//	input   : The text input for which the number of tokens will be counted.
+//	ctx         : The context for controlling the lifetime of the request.
+//	apiKey      : The API key used to authenticate with the generative AI service.
+//	input       : The text input for which the number of tokens will be counted.
+//	imageFormat : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData   : The byte slice containing the image data.
 //
 // Returns:
 //
-//	tokenCount : The number of tokens in the input string.
+//	tokenCount : The number of tokens in the input string and/or image data.
 //	err        : An error encountered during the token counting process.
 //
 // Note: This function leverages performTokenCount to manage retries and error handling,
 // abstracting the retry logic away from the core token counting operation.
-func countTokensWithClient(ctx context.Context, apiKey, input string) (int, error) {
+func countTokensWithClient(ctx context.Context, apiKey, input, imageFormat string, imageData []byte) (int, error) {
 	var tokenCount int
 
-	success, err := performTokenCount(ctx, apiKey, input, &tokenCount)
+	success, err := performTokenCount(ctx, apiKey, input, imageFormat, imageData, &tokenCount)
 	if err != nil {
 		return 0, err
 	}
@@ -77,6 +81,8 @@ func countTokensWithClient(ctx context.Context, apiKey, input string) (int, erro
 //	ctx         : The context for controlling the lifetime of the request.
 //	apiKey      : The API key used to authenticate with the generative AI service.
 //	input       : The text input for which the number of tokens will be counted.
+//	imageFormat : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData   : The byte slice containing the image data.
 //	tokenCount  : A pointer to an integer that will hold the token count result.
 //
 // Returns:
@@ -86,23 +92,25 @@ func countTokensWithClient(ctx context.Context, apiKey, input string) (int, erro
 //
 // Note: This function delegates the actual token counting to makeTokenCountRequest
 // and is responsible for invoking the retry logic.
-func performTokenCount(ctx context.Context, apiKey, input string, tokenCount *int) (bool, error) {
+func performTokenCount(ctx context.Context, apiKey, input, imageFormat string, imageData []byte, tokenCount *int) (bool, error) {
 	retryFunc := func() (bool, error) {
-		return makeTokenCountRequest(ctx, apiKey, input, tokenCount)
+		return makeTokenCountRequest(ctx, apiKey, input, imageFormat, imageData, tokenCount)
 	}
 
 	return retryWithExponentialBackoff(retryFunc, standardAPIErrorHandler)
 }
 
 // makeTokenCountRequest performs a single attempt to count tokens using the AI model.
-// It initializes a new AI client, sends the token counting request, and updates the
-// token count based on the response.
+// It initializes a new AI client, sends the token counting request with either text,
+// image data, or both, and updates the token count based on the response.
 //
 // Parameters:
 //
 //	ctx         : The context for controlling the lifetime of the request.
 //	apiKey      : The API key used to authenticate with the generative AI service.
 //	input       : The text input for which the number of tokens will be counted.
+//	imageFormat : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData   : The byte slice containing the image data.
 //	tokenCount  : A pointer to an integer that will hold the token count result.
 //
 // Returns:
@@ -112,7 +120,7 @@ func performTokenCount(ctx context.Context, apiKey, input string, tokenCount *in
 //
 // Note: This function is called within the retry logic of performTokenCount and
 // handles the direct interaction with the AI service for counting tokens.
-func makeTokenCountRequest(ctx context.Context, apiKey, input string, tokenCount *int) (bool, error) {
+func makeTokenCountRequest(ctx context.Context, apiKey, input, imageFormat string, imageData []byte, tokenCount *int) (bool, error) {
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
 	if err != nil {
 		return false, err
@@ -120,11 +128,24 @@ func makeTokenCountRequest(ctx context.Context, apiKey, input string, tokenCount
 	defer client.Close()
 
 	model := client.GenerativeModel(ModelAi)
-	resp, err := model.CountTokens(ctx, genai.Text(input))
+
+	resp, err := prepareAndCountTokens(ctx, model, input, imageFormat, imageData)
 	if err != nil {
 		return false, err
 	}
 
 	*tokenCount = int(resp.TotalTokens)
 	return true, nil
+}
+
+// prepareAndCountTokens prepares the token counting request based on the input and image data
+// and executes the request using the provided model.
+func prepareAndCountTokens(ctx context.Context, model *genai.GenerativeModel, input, imageFormat string, imageData []byte) (*genai.CountTokensResponse, error) {
+	if len(imageData) > 0 && len(input) > 0 {
+		return model.CountTokens(ctx, genai.Text(input), genai.ImageData(imageFormat, imageData))
+	} else if len(imageData) > 0 {
+		return model.CountTokens(ctx, genai.ImageData(imageFormat, imageData))
+	} else {
+		return model.CountTokens(ctx, genai.Text(input))
+	}
 }
