@@ -29,6 +29,10 @@ import (
 //	int   : The number of tokens that the input contains.
 //	error : An error that occurred while creating the client, connecting to the service,
 //	        or counting the tokens. If the operation is successful, the error is nil.
+//
+// The function creates a new client for each call, which is then closed before
+// returning. It is designed to be a self-contained operation that does not require
+// the caller to manage the lifecycle of the generative AI client.
 func CountTokens(apiKey, input, imageFormat string, imageData []byte) (int, error) {
 	ctx := context.Background()
 	return countTokensWithClient(ctx, apiKey, input, imageFormat, imageData)
