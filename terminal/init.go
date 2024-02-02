@@ -152,11 +152,11 @@ func verifyImageFileExtension(filePath string) error {
 		for ext, isAllowed := range allowedExtensions {
 			if isAllowed {
 				// Add the extension without the dot for a cleaner error message.
-				allowedExts = append(allowedExts, strings.TrimPrefix(ext, "."))
+				allowedExts = append(allowedExts, strings.TrimPrefix(ext, dotString))
 			}
 		}
 		// Join the allowed extensions with commas and an "or" before the last one.
-		allowedExtsStr := strings.Join(allowedExts[:len(allowedExts)-1], ", ") + " or " + allowedExts[len(allowedExts)-1]
+		allowedExtsStr := strings.Join(allowedExts[:len(allowedExts)-1], dotStringComma) + oRString + allowedExts[len(allowedExts)-1]
 		return fmt.Errorf(dynamicErrorImageFileTypeNotSupported, allowedExtsStr)
 	}
 

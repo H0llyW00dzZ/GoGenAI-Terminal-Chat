@@ -325,11 +325,14 @@ const (
 // dotFiles
 const (
 	// a better way instead of stupid hardcoding
-	dotMD   = ".md"
-	dotTxt  = ".txt"
-	dotPng  = ".png"
-	dotJpg  = ".jpg"
-	dotJpeg = ".jpeg"
+	dotMD          = ".md"
+	dotTxt         = ".txt"
+	dotPng         = ".png"
+	dotJpg         = ".jpg"
+	dotJpeg        = ".jpeg"
+	dotString      = "."
+	dotStringComma = ","
+	oRString       = "or"
 )
 
 // ANSI color codes
