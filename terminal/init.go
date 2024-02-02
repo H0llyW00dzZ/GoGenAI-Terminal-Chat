@@ -147,7 +147,17 @@ func verifyImageFileExtension(filePath string) error {
 	// Extract the file extension and check if it's allowed.
 	fileExt := strings.ToLower(filepath.Ext(filePath))
 	if _, allowed := allowedExtensions[fileExt]; !allowed {
-		return fmt.Errorf(DynamicErrorImageFileTypeNotSupported, dotPng, dotJpg, dotJpeg)
+		// Create a slice to hold the allowed extensions for the error message.
+		allowedExts := []string{}
+		for ext, isAllowed := range allowedExtensions {
+			if isAllowed {
+				// Add the extension without the dot for a cleaner error message.
+				allowedExts = append(allowedExts, strings.TrimPrefix(ext, "."))
+			}
+		}
+		// Join the allowed extensions with commas and an "or" before the last one.
+		allowedExtsStr := strings.Join(allowedExts[:len(allowedExts)-1], ", ") + " or " + allowedExts[len(allowedExts)-1]
+		return fmt.Errorf(DynamicErrorImageFileTypeNotSupported, allowedExtsStr)
 	}
 
 	return nil
