@@ -162,6 +162,20 @@ type SafetySettings struct {
 	DerogatoryThershold genai.HarmBlockThreshold
 }
 
+// TokenCountParams encapsulates the parameters needed for counting tokens using a generative AI model.
+type TokenCountParams struct {
+	// Authentication key for the AI service.
+	APIKey string
+	// Name of the AI model to use.
+	ModelName string
+	// Text input for token counting.
+	Input string
+	// Format of the image if provided (e.g., "png", "jpeg").
+	ImageFormat string
+	// Image data as a byte slice.
+	ImageData []byte
+}
+
 // NewLineChar is a struct that containt Rune for New Line Character
 type NewLineChar struct {
 	NewLineChars rune
