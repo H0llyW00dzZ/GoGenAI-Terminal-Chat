@@ -87,6 +87,26 @@ func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel, modelName st
 				Threshold: s.HateSpeechThreshold,
 			},
 		}
+	case GeminiProVision:
+		// Apply a specific set of safety settings for the "gemini-pro-vision" model
+		model.SafetySettings = []*genai.SafetySetting{
+			{
+				Category:  genai.HarmCategoryDangerousContent,
+				Threshold: s.DangerousContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHarassment,
+				Threshold: s.HarassmentContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategorySexuallyExplicit,
+				Threshold: s.SexuallyExplicitContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHateSpeech,
+				Threshold: s.HateSpeechThreshold,
+			},
+		}
 		// TODO: This for other model
 		// would be implemented in next years maybe lmao
 	default:
