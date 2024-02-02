@@ -69,10 +69,17 @@ func makeTokenCountRequest(ctx context.Context, params TokenCountParams, tokenCo
 // based on the input text or image data.
 func prepareAndCountTokens(ctx context.Context, model *genai.GenerativeModel, params TokenCountParams) (*genai.CountTokensResponse, error) {
 	if len(params.ImageData) > 0 && len(params.Input) > 0 {
-		return model.CountTokens(ctx, genai.Text(params.Input), genai.ImageData(params.ImageFormat, params.ImageData))
+		return model.CountTokens(ctx,
+			genai.Text(params.Input),
+			genai.ImageData(
+				params.ImageFormat,
+				params.ImageData))
 	} else if len(params.ImageData) > 0 {
-		return model.CountTokens(ctx, genai.ImageData(params.ImageFormat, params.ImageData))
+		return model.CountTokens(ctx,
+			genai.ImageData(params.ImageFormat,
+				params.ImageData))
 	} else {
-		return model.CountTokens(ctx, genai.Text(params.Input))
+		return model.CountTokens(ctx,
+			genai.Text(params.Input))
 	}
 }
