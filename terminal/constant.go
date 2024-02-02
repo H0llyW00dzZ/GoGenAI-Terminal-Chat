@@ -192,6 +192,7 @@ const (
 	ErrorInvalidFileExtension                       = "Invalid file extension: %v"
 	ErrorFileTypeNotSupported                       = "file type not supported: only .md and .txt files are allowed." // Low level error
 	ErrorFailedToSendCommandToAI                    = "Failed to send command to AI: %v"
+	ErrorVariableImageFileTypeNotSupported          = "image file type not supported: only %s files are allowed." // Low level error
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
@@ -324,8 +325,14 @@ const (
 // dotFiles
 const (
 	// a better way instead of stupid hardcoding
-	dotMD  = ".md"
-	dotTxt = ".txt"
+	dotMD          = ".md"
+	dotTxt         = ".txt"
+	dotPng         = ".png"
+	dotJpg         = ".jpg"
+	dotJpeg        = ".jpeg"
+	dotString      = "."
+	dotStringComma = ","
+	oRString       = "or"
 )
 
 // ANSI color codes
