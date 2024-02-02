@@ -76,7 +76,8 @@ func prepareAndCountTokens(ctx context.Context, model *genai.GenerativeModel, pa
 				params.ImageData))
 	} else if len(params.ImageData) > 0 {
 		return model.CountTokens(ctx,
-			genai.ImageData(params.ImageFormat,
+			genai.ImageData(
+				params.ImageFormat,
 				params.ImageData))
 	} else {
 		return model.CountTokens(ctx,
