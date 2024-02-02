@@ -117,7 +117,7 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(text)
 	params := TokenCountParams{
 		APIKey:      apiKey,
-		ModelName:   ModelAi,
+		ModelName:   GeminiPro,
 		Input:       sanitizedMessage,
 		ImageFormat: "", // Assuming there is no image data in this case
 		ImageData:   nil,

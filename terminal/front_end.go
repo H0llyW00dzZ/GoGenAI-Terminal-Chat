@@ -102,7 +102,7 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
 	params := TokenCountParams{
 		APIKey:      apiKey,
-		ModelName:   ModelAi,
+		ModelName:   GeminiPro,
 		Input:       fullText,
 		ImageFormat: "", // Assuming there is no image data in this case
 		ImageData:   nil,
