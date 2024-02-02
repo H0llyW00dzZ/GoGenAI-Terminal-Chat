@@ -106,7 +106,7 @@ func ConfigureModelForSession(ctx context.Context, client *genai.Client, session
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func SendMessage(ctx context.Context, client *genai.Client, chatContext string, session *Session) (string, error) {
 	// Get the generative model from the client
-	model := ConfigureModelForSession(ctx, client, session, ModelAi) // Simplify 🤪
+	model := ConfigureModelForSession(ctx, client, session, GeminiPro) // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
@@ -144,7 +144,7 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 //	An error if sending the dummy message fails.
 func SendDummyMessage(client *genai.Client) (bool, error) {
 	// Initialize a dummy chat session or use an appropriate lightweight method.
-	model := client.GenerativeModel(ModelAi)
+	model := client.GenerativeModel(GeminiPro)
 	// Configure the model with options.
 	// Apply the configurations to the model.
 	// Note: This a testing in live production by sending a Dummy messages lmao
@@ -235,7 +235,7 @@ func sanitizeAIResponse(response string) string {
 //
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
 func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string, session *Session) error {
-	model := ConfigureModelForSession(ctx, client, session, ModelAi)
+	model := ConfigureModelForSession(ctx, client, session, GeminiPro)
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
