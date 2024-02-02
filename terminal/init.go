@@ -132,7 +132,7 @@ func verifyFileExtension(filePath string) error {
 }
 
 // Dynamic ErrorImageFileTypeNotSupported is a format string for the error message when an unsupported file type is encountered.
-var DynamicErrorImageFileTypeNotSupported = ErrorVariableImageFileTypeNotSupported
+var dynamicErrorImageFileTypeNotSupported = ErrorVariableImageFileTypeNotSupported
 
 // helper function
 //
@@ -157,7 +157,7 @@ func verifyImageFileExtension(filePath string) error {
 		}
 		// Join the allowed extensions with commas and an "or" before the last one.
 		allowedExtsStr := strings.Join(allowedExts[:len(allowedExts)-1], ", ") + " or " + allowedExts[len(allowedExts)-1]
-		return fmt.Errorf(DynamicErrorImageFileTypeNotSupported, allowedExtsStr)
+		return fmt.Errorf(dynamicErrorImageFileTypeNotSupported, allowedExtsStr)
 	}
 
 	return nil
