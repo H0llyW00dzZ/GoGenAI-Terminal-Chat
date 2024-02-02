@@ -20,9 +20,10 @@ import (
 // Parameters:
 //
 //	apiKey     string         : The API key used to authenticate with the generative AI service.
+//	modelName  string         : The name of the generative AI model to be used for counting tokens.
 //	input      string         : The text input for which the number of tokens will be counted.
-//	imageFormat string  : The format of the image (e.g., "png", "jpeg"), if image data is provided.
-//	imageData  []byte   : The byte slice containing the image data.
+//	imageFormat string        : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData  []byte         : The byte slice containing the image data.
 //
 // Returns:
 //
@@ -33,9 +34,9 @@ import (
 // The function creates a new client for each call, which is then closed before
 // returning. It is designed to be a self-contained operation that does not require
 // the caller to manage the lifecycle of the generative AI client.
-func CountTokens(apiKey, input, imageFormat string, imageData []byte) (int, error) {
+func CountTokens(apiKey, modelName, input, imageFormat string, imageData []byte) (int, error) {
 	ctx := context.Background()
-	return countTokensWithClient(ctx, apiKey, input, imageFormat, imageData)
+	return countTokensWithClient(ctx, apiKey, modelName, input, imageFormat, imageData)
 }
 
 // countTokensWithClient orchestrates the process of counting the number of tokens
@@ -45,23 +46,24 @@ func CountTokens(apiKey, input, imageFormat string, imageData []byte) (int, erro
 //
 // Parameters:
 //
-//	ctx         : The context for controlling the lifetime of the request.
-//	apiKey      : The API key used to authenticate with the generative AI service.
-//	input       : The text input for which the number of tokens will be counted.
-//	imageFormat : The format of the image (e.g., "png", "jpeg"), if image data is provided.
-//	imageData   : The byte slice containing the image data.
+//	ctx         context.Context : The context for controlling the lifetime of the request.
+//	apiKey      string          : The API key used to authenticate with the generative AI service.
+//	modelName   string          : The name of the generative AI model to be used for counting tokens.
+//	input       string          : The text input for which the number of tokens will be counted.
+//	imageFormat string          : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData   []byte          : The byte slice containing the image data.
 //
 // Returns:
 //
-//	tokenCount : The number of tokens in the input string and/or image data.
-//	err        : An error encountered during the token counting process.
+//	tokenCount int  : The number of tokens in the input string and/or image data.
+//	err        error: An error encountered during the token counting process.
 //
 // Note: This function leverages performTokenCount to manage retries and error handling,
 // abstracting the retry logic away from the core token counting operation.
-func countTokensWithClient(ctx context.Context, apiKey, input, imageFormat string, imageData []byte) (int, error) {
+func countTokensWithClient(ctx context.Context, apiKey, modelName, input, imageFormat string, imageData []byte) (int, error) {
 	var tokenCount int
 
-	success, err := performTokenCount(ctx, apiKey, input, imageFormat, imageData, &tokenCount)
+	success, err := performTokenCount(ctx, apiKey, modelName, input, imageFormat, imageData, &tokenCount)
 	if err != nil {
 		return 0, err
 	}
@@ -78,23 +80,24 @@ func countTokensWithClient(ctx context.Context, apiKey, input, imageFormat strin
 //
 // Parameters:
 //
-//	ctx         : The context for controlling the lifetime of the request.
-//	apiKey      : The API key used to authenticate with the generative AI service.
-//	input       : The text input for which the number of tokens will be counted.
-//	imageFormat : The format of the image (e.g., "png", "jpeg"), if image data is provided.
-//	imageData   : The byte slice containing the image data.
-//	tokenCount  : A pointer to an integer that will hold the token count result.
+//	ctx         context.Context : The context for controlling the lifetime of the request.
+//	apiKey      string          : The API key used to authenticate with the generative AI service.
+//	modelName   string          : The name of the generative AI model to be used for counting tokens.
+//	input       string          : The text input for which the number of tokens will be counted.
+//	imageFormat string          : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData   []byte          : The byte slice containing the image data.
+//	tokenCount  *int            : A pointer to an integer that will hold the token count result.
 //
 // Returns:
 //
-//	success : A boolean indicating whether the token counting operation succeeded.
-//	err     : An error encountered during the token counting process.
+//	success bool : A boolean indicating whether the token counting operation succeeded.
+//	err     error: An error encountered during the token counting process.
 //
 // Note: This function delegates the actual token counting to makeTokenCountRequest
 // and is responsible for invoking the retry logic.
-func performTokenCount(ctx context.Context, apiKey, input, imageFormat string, imageData []byte, tokenCount *int) (bool, error) {
+func performTokenCount(ctx context.Context, apiKey, modelName, input, imageFormat string, imageData []byte, tokenCount *int) (bool, error) {
 	retryFunc := func() (bool, error) {
-		return makeTokenCountRequest(ctx, apiKey, input, imageFormat, imageData, tokenCount)
+		return makeTokenCountRequest(ctx, apiKey, modelName, input, imageFormat, imageData, tokenCount)
 	}
 
 	return retryWithExponentialBackoff(retryFunc, standardAPIErrorHandler)
@@ -106,28 +109,29 @@ func performTokenCount(ctx context.Context, apiKey, input, imageFormat string, i
 //
 // Parameters:
 //
-//	ctx         : The context for controlling the lifetime of the request.
-//	apiKey      : The API key used to authenticate with the generative AI service.
-//	input       : The text input for which the number of tokens will be counted.
-//	imageFormat : The format of the image (e.g., "png", "jpeg"), if image data is provided.
-//	imageData   : The byte slice containing the image data.
-//	tokenCount  : A pointer to an integer that will hold the token count result.
+//	ctx         context.Context : The context for controlling the lifetime of the request.
+//	apiKey      string          : The API key used to authenticate with the generative AI service.
+//	modelName   string          : The name of the generative AI model to be used for counting tokens.
+//	input       string          : The text input for which the number of tokens will be counted.
+//	imageFormat string          : The format of the image (e.g., "png", "jpeg"), if image data is provided.
+//	imageData   []byte          : The byte slice containing the image data.
+//	tokenCount  *int            : A pointer to an integer that will hold the token count result.
 //
 // Returns:
 //
-//	success : A boolean indicating whether the token counting operation succeeded.
-//	err     : An error encountered during the token counting process.
+//	success bool : A boolean indicating whether the token counting operation succeeded.
+//	err     error: An error encountered during the token counting process.
 //
 // Note: This function is called within the retry logic of performTokenCount and
 // handles the direct interaction with the AI service for counting tokens.
-func makeTokenCountRequest(ctx context.Context, apiKey, input, imageFormat string, imageData []byte, tokenCount *int) (bool, error) {
+func makeTokenCountRequest(ctx context.Context, apiKey, modelName, input, imageFormat string, imageData []byte, tokenCount *int) (bool, error) {
 	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
 	if err != nil {
 		return false, err
 	}
 	defer client.Close()
 
-	model := client.GenerativeModel(ModelAi)
+	model := client.GenerativeModel(modelName)
 
 	resp, err := prepareAndCountTokens(ctx, model, input, imageFormat, imageData)
 	if err != nil {

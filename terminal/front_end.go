@@ -101,7 +101,7 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	// Concatenate chat history and AI response for token counting
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
 
-	tokenCount, err := CountTokens(apiKey, fullText, "", nil)
+	tokenCount, err := CountTokens(apiKey, ModelAi, fullText, "", nil)
 	printnewlineAscii() // a better one, instead of "\n"
 	if err != nil {
 		handleTokenCountError(err)
