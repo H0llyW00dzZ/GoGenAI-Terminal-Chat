@@ -5,8 +5,10 @@
 package terminal
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -28,13 +30,17 @@ import (
 // For instance, when a Gopher completes a task or job and transitions to a resting state,
 // this function can print a message with a typing effect to visually represent the Gopher's "sleeping" activities.
 func PrintTypingChat(message string, delay time.Duration) {
-	// Note: This now more like a human typing effect.
-	// It's safe now alongside with sanitizing message.
+	// Note: Improve a human typing effect.
+	writer := bufio.NewWriter(os.Stdout) // Create a buffered writer
+
 	for _, char := range message {
-		fmt.Printf(AnimatedChars, char)
-		time.Sleep(delay)
+		writer.WriteString(string(char)) // Write to the buffer
+		writer.Flush()                   // Flush the buffer to print the character group
+		time.Sleep(delay)                // Sleep for the desired delay
 	}
+
 	printnewlineAscii()
+	writer.Flush() // Make sure to flush any remaining output
 }
 
 // ConfigureModelForSession prepares and configures a generative AI model for use in a chat session.
