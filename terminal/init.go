@@ -131,6 +131,28 @@ func verifyFileExtension(filePath string) error {
 	return nil
 }
 
+// Dynamic ErrorImageFileTypeNotSupported is a format string for the error message when an unsupported file type is encountered.
+var DynamicErrorImageFileTypeNotSupported = ErrorVariableImageFileTypeNotSupported
+
+// helper function
+//
+// verifyImageFileExtension checks if the image file has an allowed extension.
+func verifyImageFileExtension(filePath string) error {
+	allowedExtensions := map[string]bool{
+		dotPng:  true,
+		dotJpg:  true,
+		dotJpeg: true,
+	}
+
+	// Extract the file extension and check if it's allowed.
+	fileExt := strings.ToLower(filepath.Ext(filePath))
+	if _, allowed := allowedExtensions[fileExt]; !allowed {
+		return fmt.Errorf(DynamicErrorImageFileTypeNotSupported, dotPng, dotJpg, dotJpeg)
+	}
+
+	return nil
+}
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
