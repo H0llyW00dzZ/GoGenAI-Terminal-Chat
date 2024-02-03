@@ -78,6 +78,27 @@ type ChatWorker struct {
 	done    chan bool
 }
 
+// ColorizationOptions encapsulates the settings necessary for the Colorize function to apply color to text.
+// It includes the text to be colorized, pairs of delimiters and their corresponding colors, a map to determine
+// if delimiters should be retained, and a map defining additional ANSI formatting codes.
+type ColorizationOptions struct {
+	Text           string            // Text is the original string that will be colorized.
+	ColorPairs     []string          // ColorPairs is a slice where each pair consists of a delimiter and its associated ANSI color code.
+	KeepDelimiters map[string]bool   // KeepDelimiters dictates whether each delimiter should be kept in the final output.
+	Formatting     map[string]string // Formatting is a map associating delimiters with their ANSI formatting codes for additional text styling.
+}
+
+// ColorizationPartOptions holds the options for colorizing parts of a text.
+// It contains the text to be colorized, the delimiter that marks the text to be colorized,
+// the color to apply, and maps that determine whether to keep delimiters and how to format the text.
+type ColorizationPartOptions struct {
+	Text           string            // Text is the string that will be processed for colorization.
+	Delimiter      string            // Delimiter is the string that marks the beginning and end of text to be colorized.
+	Color          string            // Color is the ANSI color code that will be applied to the text within delimiters.
+	KeepDelimiters map[string]bool   // KeepDelimiters is a map indicating whether to keep each delimiter in the output text.
+	Formatting     map[string]string // Formatting is a map of delimiters to their corresponding ANSI formatting codes.
+}
+
 // DebugOrErrorLogger provides a simple logger with support for debug and error logging.
 // It encapsulates a standard log.Logger and adds functionality for conditional debug
 // logging and colorized error output.
@@ -85,6 +106,16 @@ type DebugOrErrorLogger struct {
 	logger          *log.Logger
 	debugMode       bool
 	PrintTypingChat func(string, time.Duration)
+}
+
+// FormattingOptions encapsulates the settings required to apply formatting to a text segment.
+// It includes the text to be formatted, the delimiter used to identify the text segment,
+// the color to apply, and a map specifying the ANSI formatting codes associated with different delimiters.
+type FormattingOptions struct {
+	Text       string            // Text is the string to which formatting will be applied.
+	Delimiter  string            // Delimiter is the string used to identify segments of text for formatting.
+	Color      string            // Color is the ANSI color code that will be applied to the text within the delimiter.
+	Formatting map[string]string // Formatting is a map that associates delimiters with their respective ANSI formatting codes.
 }
 
 // TypingChars is a struct that contains the Animated Chars used to print the typing effect.
