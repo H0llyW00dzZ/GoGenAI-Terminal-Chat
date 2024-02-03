@@ -34,7 +34,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 	writer := bufio.NewWriter(os.Stdout) // Create a buffered writer
 
 	for _, char := range message {
-		// Additional Note: This improvement eliminates the use of animated characters, enhancing smoothness, especially with 100+ messages.
+		// Additional Note: This improvement eliminates the use of fmt + animated characters, enhancing smoothness, especially with 100+ messages.
 		// Also, ignore Go routines in pprof debugger that frequently switch (e.g., from 50 to 100 Go routines) and are waiting in "I/O Wait".
 		writer.WriteString(string(char)) // Write to the buffer
 		writer.Flush()                   // Flush the buffer to print the character group
