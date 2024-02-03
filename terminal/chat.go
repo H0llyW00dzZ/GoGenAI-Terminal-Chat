@@ -445,25 +445,21 @@ func (h *ChatHistory) ClearAllSystemMessages() {
 	defer h.mu.Unlock() // Ensure unlocking
 
 	var newMessages []string
+	var newHashes = make(map[string]int)
+	h.SystemMessageCount = 0 // Reset the system message count
+
 	for _, message := range h.Messages {
 		if !isSysMessage(message) {
 			// This is not a system message; keep it.
 			newMessages = append(newMessages, message)
+			hashValue := h.hashMessage(message)
+			newHashes[hashValue] = len(newMessages) - 1
 		}
-	}
-
-	// Rebuild the hash index for messages
-	newHashes := make(map[string]int)
-	for i, msg := range newMessages {
-		hashValue := h.hashMessage(msg)
-		newHashes[hashValue] = i
 	}
 
 	// Replace the old Messages and Hashes with the new ones that exclude system messages.
 	h.Messages = newMessages
 	h.Hashes = newHashes
-	// Since system messages are removed, reset the count
-	h.SystemMessageCount = 0
 }
 
 // GetMessageStats safely retrieves the message counts from the ChatHistory instance.
