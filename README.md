@@ -107,6 +107,10 @@ By adopting this scalable command handling system, the chat application is well-
 
 - **Efficient Concurrency Management**: Thanks to Go's lightweight goroutines and effective synchronization primitives, GoGenAI Terminal Chat handles concurrent operations with ease. The application can serve multiple users simultaneously without significant increases in latency or memory usage, ensuring consistent performance even under load.
 
+### 📌 High Quality Go Codes
+
+This repository contains high-quality Go code focusing on functionality, with each function designed for simplicity and avoiding unnecessary `stupid complexity`, even in scenarios that could easily exceed a `stupid complexity` score of `10+`.
+
 ## ⚙️ Installation
 
 To use GoGenAI Terminal Chat, you need to have Docker installed on your machine. If you don't have Docker installed, please follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
