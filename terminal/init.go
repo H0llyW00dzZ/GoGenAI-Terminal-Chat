@@ -89,8 +89,6 @@ var ansiRegex *regexp.Regexp
 // recompiling it with each use.
 var filterCodeBlock *regexp.Regexp
 
-var tripleBacktickColor string
-
 // scalable safetyOptions maps safety level strings to their corresponding setter functions and validity.
 var safetyOptions = map[string]SafetyOption{
 	Low: {

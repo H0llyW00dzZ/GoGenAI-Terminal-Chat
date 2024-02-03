@@ -40,6 +40,10 @@ func Colorize(options ColorizationOptions) string {
 	for i := 0; i < len(options.ColorPairs); i += 2 {
 		delimiter := options.ColorPairs[i]
 		color := options.ColorPairs[i+1]
+		if delimiter == TripleBacktick {
+			// Set the color for triple backticks
+			tripleBacktickColor = color
+		}
 		colorizationPartOptions := ColorizationPartOptions{
 			Text:           text,
 			Delimiter:      delimiter,
@@ -64,8 +68,10 @@ func Colorize(options ColorizationOptions) string {
 
 	// Replace the placeholder with the colorized triple backtick sequence
 	// Note: This can refactor easily, for example changing color inside a triple backtick
-	colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + ColorReset
-	processedText = strings.ReplaceAll(processedText, ObjectTripleHighLevelString, colorizedTripleBacktick)
+	if tripleBacktickColor != "" {
+		colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + ColorReset
+		processedText = strings.ReplaceAll(processedText, ObjectTripleHighLevelString, colorizedTripleBacktick)
+	}
 
 	return processedText
 }
