@@ -46,32 +46,34 @@ func GenerateRandomString(length int) (string, error) {
 		return "", errors.New(errorLengthMustbePositiveInteger)
 	}
 
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	const maxCharRepeat = 1 // no characters should repeat more than 1 times
-	// Note: by improving like this, it's difficult to guess/predictable especially for human.
-	for {
-		bytes := make([]byte, length)
-		if _, err := rand.Read(bytes); err != nil {
-			return "", err
-		}
-		for i, b := range bytes {
-			bytes[i] = charset[b%byte(len(charset))]
-		}
-		if isRandomEnough(bytes, maxCharRepeat) {
-			return string(bytes), nil
-		}
-		// If not random enough, the loop will continue and generate a new string
+	if length > len(charset) {
+		return "", errors.New(errorLengthSize)
 	}
+
+	// Convert the charset to a slice of runes to handle potential multi-byte characters.
+	// Note: by improving like this, it's difficult to guess/predictable especially for human.
+	charsetSlice := []rune(charset)
+	shuffledCharset := make([]rune, len(charsetSlice))
+	copy(shuffledCharset, charsetSlice)
+
+	// Shuffle the characters.
+	if err := shuffleSlice(shuffledCharset); err != nil {
+		return "", err
+	}
+
+	// Return the first 'length' characters of the shuffled charset.
+	return string(shuffledCharset[:length]), nil
 }
 
-// isRandomEnough checks if any character repeats more than the maxCharRepeat times.
-func isRandomEnough(bytes []byte, maxCharRepeat int) bool {
-	charCount := make(map[byte]int)
-	for _, b := range bytes {
-		charCount[b]++
-		if charCount[b] > maxCharRepeat {
-			return false
+// shuffleSlice shuffles a slice of runes using the Fisher-Yates algorithm.
+func shuffleSlice(slice []rune) error {
+	for i := len(slice) - 1; i > 0; i-- {
+		byteIndex := make([]byte, 1)
+		if _, err := rand.Read(byteIndex); err != nil {
+			return err
 		}
+		j := int(byteIndex[0]) % (i + 1)
+		slice[i], slice[j] = slice[j], slice[i]
 	}
-	return true
+	return nil
 }
