@@ -14,10 +14,11 @@ import (
 //
 // Parameters:
 //
-//	text          string: The text to be colorized.
-//	colorPairs    []string: A slice where each pair of elements represents a delimiter and its color.
-//	keepDelimiters map[string]bool: A map to indicate whether to keep the delimiter in the output.
-//	formatting     map[string]string: A map of delimiters to their corresponding ANSI formatting codes.
+//	options ColorizationOptions: A struct containing all the necessary options, including:
+//		- Text: The text to be colorized.
+//		- ColorPairs: A slice where each pair of elements represents a delimiter and its color.
+//		- KeepDelimiters: A map to indicate whether to keep the delimiter in the output.
+//		- Formatting: A map of delimiters to their corresponding ANSI formatting codes.
 //
 // Returns:
 //
@@ -26,23 +27,38 @@ import (
 // Note: This function may not work as expected in Windows Command Prompt due to its limited
 // support for ANSI color codes. It is designed for terminals that support ANSI, such as those
 // in Linux/Unix environments.
-func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool, formatting map[string]string) string {
-	// Replace actual triple backticks with the placeholder
-	text = strings.ReplaceAll(text, TripleBacktick, ObjectTripleHighLevelString)
+func Colorize(options ColorizationOptions) string {
+	text := strings.ReplaceAll(options.Text, TripleBacktick, ObjectTripleHighLevelString)
 
 	var result strings.Builder
 	result.Grow(len(text) * 2) // Preallocate with an estimated size
 
+	// Assume tripleBacktickColor is defined elsewhere or add it to ColorizationOptions if needed
+	var tripleBacktickColor string
+
 	// Process each color pair separately
-	for i := 0; i < len(colorPairs); i += 2 {
-		delimiter := colorPairs[i]
-		color := colorPairs[i+1]
-		text = applyColorToDelimitedText(text, delimiter, color, keepDelimiters, formatting)
-		if delimiter == TripleBacktick {
-			tripleBacktickColor = color
+	for i := 0; i < len(options.ColorPairs); i += 2 {
+		delimiter := options.ColorPairs[i]
+		color := options.ColorPairs[i+1]
+		colorizationPartOptions := ColorizationPartOptions{
+			Text:           text,
+			Delimiter:      delimiter,
+			Color:          color,
+			KeepDelimiters: options.KeepDelimiters,
+			Formatting:     options.Formatting,
 		}
-		text = processDelimiters(text, delimiter, color, keepDelimiters, formatting)
+		text = applyColorToDelimitedText(colorizationPartOptions)
+
+		// Create a FormattingOptions struct for the processDelimiters call
+		formattingOptions := FormattingOptions{
+			Text:       text,
+			Delimiter:  delimiter,
+			Color:      color,
+			Formatting: options.Formatting,
+		}
+		text = processDelimiters(formattingOptions, options.KeepDelimiters)
 	}
+
 	result.WriteString(text)
 	processedText := result.String()
 
@@ -55,51 +71,51 @@ func Colorize(text string, colorPairs []string, keepDelimiters map[string]bool, 
 }
 
 // applyColorToDelimitedText applies the specified color to delimited sections of the given text.
-func applyColorToDelimitedText(text, delimiter, color string, keepDelimiters map[string]bool, formatting map[string]string) string {
+func applyColorToDelimitedText(options ColorizationPartOptions) string {
 	var result strings.Builder
-	parts := strings.Split(text, delimiter)
+	parts := strings.Split(options.Text, options.Delimiter)
 	partsLen := len(parts) // Get the length of parts once and pass it to processPart
 
 	// Process parts with a consistent pattern to avoid complex conditionals
 	for i, part := range parts {
-		processPart(&result, i, partsLen, part, delimiter, color, keepDelimiters, formatting)
+		processPart(&result, i, partsLen, part, options)
 	}
 	return result.String()
 }
 
 // processPart processes an individual part of the text, applying color if necessary.
-func processPart(result *strings.Builder, index, partsLen int, part, delimiter, color string, keepDelimiters map[string]bool, formatting map[string]string) {
+func processPart(result *strings.Builder, index, partsLen int, part string, options ColorizationPartOptions) {
 	if index%2 == 0 { // Even index, regular text
 		result.WriteString(part)
 	} else { // Odd index, colorized text
-		colorizePart(result, part, delimiter, color, formatting)
+		colorizePart(result, part, options)
 	}
-	appendDelimiterIfNeeded(result, index, partsLen, delimiter, keepDelimiters)
+	appendDelimiterIfNeeded(result, index, partsLen, options)
 }
 
 // colorizePart applies color and formatting to a part of the text.
-func colorizePart(result *strings.Builder, part, delimiter, color string, formatting map[string]string) {
+func colorizePart(result *strings.Builder, part string, options ColorizationPartOptions) {
 	// Apply any formatting (bold, italic, etc.) before the color
-	if format, hasFormat := formatting[delimiter]; hasFormat {
+	if format, hasFormat := options.Formatting[options.Delimiter]; hasFormat {
 		result.WriteString(format)
 	}
 	// Apply the color
-	result.WriteString(color)
+	result.WriteString(options.Color)
 	// Append the actual text
 	result.WriteString(part)
 	// Reset the color first
 	result.WriteString(ColorReset)
 	// Reset any formatting (bold, italic, etc.) if it was applied
-	if _, hasFormat := formatting[delimiter]; hasFormat {
+	if _, hasFormat := options.Formatting[options.Delimiter]; hasFormat {
 		result.WriteString(ResetBoldText)
 		result.WriteString(ResetItalicText)
 	}
 }
 
 // appendDelimiterIfNeeded appends the delimiter to the result if the conditions are met.
-func appendDelimiterIfNeeded(result *strings.Builder, index, partsLen int, delimiter string, keepDelimiters map[string]bool) {
-	if shouldKeepDelimiter(delimiter, keepDelimiters) && index < partsLen-1 {
-		result.WriteString(delimiter)
+func appendDelimiterIfNeeded(result *strings.Builder, index, partsLen int, options ColorizationPartOptions) {
+	if shouldKeepDelimiter(options.Delimiter, options.KeepDelimiters) && index < partsLen-1 {
+		result.WriteString(options.Delimiter)
 	}
 }
 
@@ -109,34 +125,48 @@ func shouldKeepDelimiter(delimiter string, keepDelimiters map[string]bool) bool 
 	return exists && keep
 }
 
-// ApplyFormatting applies text formatting based on the provided delimiter.
+// ApplyFormatting applies text formatting based on the provided FormattingOptions.
 // If the delimiter is recognized, it applies the appropriate ANSI formatting codes.
 //
 // Parameters:
 //
-//	text string: The text to format.
-//	delimiter string: The delimiter that indicates what kind of formatting to apply.
-//	color string: The ANSI color code to apply to the text.
-//	formatting map[string]string: A map of delimiters to their corresponding ANSI formatting codes.
+//	options FormattingOptions: The struct that contains the formatting options.
 //
 // Returns:
 //
 //	string: The formatted text.
-func ApplyFormatting(text string, delimiter string, color string, formatting map[string]string) string {
-	if formatCode, ok := formatting[delimiter]; ok {
-		return color + formatCode + text + ResetBoldText + ResetItalicText + ColorReset
+func ApplyFormatting(options FormattingOptions) string {
+	if formatCode, ok := options.Formatting[options.Delimiter]; ok {
+		return options.Color + formatCode + options.Text + ResetBoldText + ResetItalicText + ColorReset
 	}
-	return color + text + ColorReset
+	return options.Color + options.Text + ColorReset
 }
 
 // processDelimiters processes the delimiters in the text and applies the corresponding color and formatting.
-func processDelimiters(text string, delimiter, color string, keepDelimiters map[string]bool, formatting map[string]string) string {
-	parts := strings.Split(text, delimiter)
+// It takes a FormattingOptions struct containing the text to process and formatting details,
+// and a map that dictates whether to keep or remove each delimiter after processing.
+//
+// Parameters:
+//
+//	options FormattingOptions: The struct that contains the text and formatting details.
+//	keepDelimiters map[string]bool: A map indicating whether to keep each delimiter in the output.
+//
+// Returns:
+//
+//	string: The text with delimiters processed and formatting applied.
+func processDelimiters(options FormattingOptions, keepDelimiters map[string]bool) string {
+	parts := strings.Split(options.Text, options.Delimiter)
 	for j := 1; j < len(parts); j += 2 {
-		if keep, exists := keepDelimiters[delimiter]; exists && keep {
-			parts[j] = color + delimiter + parts[j] + delimiter + ColorReset
+		if keep, exists := keepDelimiters[options.Delimiter]; exists && keep {
+			parts[j] = options.Color + options.Delimiter + parts[j] + options.Delimiter + ColorReset
 		} else {
-			parts[j] = ApplyFormatting(parts[j], delimiter, color, formatting)
+			formattingOptions := FormattingOptions{
+				Text:       parts[j],
+				Delimiter:  options.Delimiter,
+				Color:      options.Color,
+				Formatting: options.Formatting,
+			}
+			parts[j] = ApplyFormatting(formattingOptions)
 		}
 	}
 	return strings.Join(parts, "")
