@@ -70,7 +70,9 @@ func Colorize(options ColorizationOptions) string {
 	// Note: This can refactor easily, for example changing color inside a triple backtick
 	if tripleBacktickColor != "" {
 		colorizedTripleBacktick := tripleBacktickColor + TripleBacktick + ColorReset
-		processedText = strings.ReplaceAll(processedText, ObjectTripleHighLevelString, colorizedTripleBacktick)
+		processedText = strings.ReplaceAll(processedText,
+			ObjectTripleHighLevelString,
+			colorizedTripleBacktick)
 	}
 
 	return processedText
@@ -120,7 +122,9 @@ func colorizePart(result *strings.Builder, part string, options ColorizationPart
 
 // appendDelimiterIfNeeded appends the delimiter to the result if the conditions are met.
 func appendDelimiterIfNeeded(result *strings.Builder, index, partsLen int, options ColorizationPartOptions) {
-	if shouldKeepDelimiter(options.Delimiter, options.KeepDelimiters) && index < partsLen-1 {
+	if shouldKeepDelimiter(options.Delimiter,
+		options.KeepDelimiters) &&
+		index < partsLen-1 {
 		result.WriteString(options.Delimiter)
 	}
 }
@@ -143,7 +147,9 @@ func shouldKeepDelimiter(delimiter string, keepDelimiters map[string]bool) bool 
 //	string: The formatted text.
 func ApplyFormatting(options FormattingOptions) string {
 	if formatCode, ok := options.Formatting[options.Delimiter]; ok {
-		return options.Color + formatCode + options.Text + ResetBoldText + ResetItalicText + ColorReset
+		return options.Color + formatCode +
+			options.Text + ResetBoldText +
+			ResetItalicText + ColorReset
 	}
 	return options.Color + options.Text + ColorReset
 }
@@ -164,7 +170,8 @@ func processDelimiters(options FormattingOptions, keepDelimiters map[string]bool
 	parts := strings.Split(options.Text, options.Delimiter)
 	for j := 1; j < len(parts); j += 2 {
 		if keep, exists := keepDelimiters[options.Delimiter]; exists && keep {
-			parts[j] = options.Color + options.Delimiter + parts[j] + options.Delimiter + ColorReset
+			parts[j] = options.Color + options.Delimiter +
+				parts[j] + options.Delimiter + ColorReset
 		} else {
 			formattingOptions := FormattingOptions{
 				Text:       parts[j],
