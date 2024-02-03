@@ -298,7 +298,9 @@ func (h *ChatHistory) appendChatMessages(builder *strings.Builder, chatMsgs []st
 // shouldAppendSeparator determines if a separator should be added between messages.
 func (h *ChatHistory) shouldAppendSeparator(currentMessage, nextMessage string, currentIndex, totalMessages int) bool {
 	// Check if the current message is from the AI and the next message is from the user.
-	return isAIMessage(currentMessage) && currentIndex < totalMessages-1 && isUserMessage(nextMessage)
+	return isAIMessage(currentMessage) &&
+		currentIndex < totalMessages-1 &&
+		isUserMessage(nextMessage)
 }
 
 // separateSystemMessages separates system messages from chat messages.
