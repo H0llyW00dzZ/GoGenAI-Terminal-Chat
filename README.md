@@ -375,6 +375,10 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 
 **Why?** This project is developed in compliance with the `Terms of Service` and `Privacy Policy` for `personal use`. It's important to note that this project is developed on a personal basis during my free time and is not associated with any company or enterprise endeavors. This contrasts with many companies that primarily cater to enterprise needs. For instance, `Vertex AI` capabilities can be utilized on a personal basis for tasks such as fine-tuning and using your own data, without the complexity and overhead typically associated with enterprise-level requirements.
 
+- [ ] **Web Interface Support**
+> [!NOTE]
+> The `Web Interface Support` feature is designed to facilitate support for WebAssembly (WASM), leveraging its development in Go. This enables the management of chat and other functionalities locally, starting from version v1.0.0+ (probably v2) of this repository, once it is reached and deemed stable. For best practices, [read here](https://pkg.go.dev/about#best-practices).
+
 ### Command Tools:
 - [ ] **Calculate the Size of the Code Base Volume**
 > [!NOTE]
