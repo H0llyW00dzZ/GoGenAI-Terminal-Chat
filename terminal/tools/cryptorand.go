@@ -69,6 +69,8 @@ func GenerateRandomString(length int) (string, error) {
 
 // shuffleSlice shuffles a slice of runes using the Fisher-Yates algorithm.
 func shuffleSlice(slice []rune) error {
+	// Note: This looks like undreadable for human, but not for machine 🤪,
+	// unlike when a human writes a function in Go that makes the code complex (e.g, cyclomatic reached 10+ which is not recommended for go)
 	for i := len(slice) - 1; i > 0; i-- {
 		byteIndex := make([]byte, 1)
 		if _, err := rand.Read(byteIndex); err != nil {
