@@ -183,7 +183,16 @@ func colorizeResponse(content string) string {
 		DoubleAsterisk: BoldText, // Assuming DoubleAsterisk in the output
 	}
 
-	return Colorize(content, colorPairs, keepDelimiters, formatting)
+	// Create an instance of ColorizationOptions with the necessary information
+	options := ColorizationOptions{
+		Text:           content,
+		ColorPairs:     colorPairs,
+		KeepDelimiters: keepDelimiters,
+		Formatting:     formatting,
+	}
+
+	// Call the Colorize function with the options struct
+	return Colorize(options)
 }
 
 // handleSingleAsterisks applies color to text surrounded by single-character delimiters.
