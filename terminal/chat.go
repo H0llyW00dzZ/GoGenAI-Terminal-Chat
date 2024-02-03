@@ -476,3 +476,12 @@ func (h *ChatHistory) GetMessageStats() MessageStats {
 		SystemMessages: h.SystemMessageCount,
 	}
 }
+
+// HasSystemMessages checks if there are any system messages in the chat history.
+func (h *ChatHistory) HasSystemMessages() bool {
+	h.mu.RLock()         // Lock for reading
+	defer h.mu.RUnlock() // Ensure unlocking
+
+	// Check if the SystemMessageCount is greater than 0.
+	return h.SystemMessageCount > 0
+}
