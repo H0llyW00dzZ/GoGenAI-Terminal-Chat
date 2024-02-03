@@ -329,6 +329,9 @@ func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *S
 
 // Execute processes the ":summarize" command within a chat session.
 func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Remove system messages from the chat history before summarizing.
+	session.ChatHistory.ClearAllSystemMessages()
+
 	// Define the summarize prompt to be sent to the AI.
 	aiPrompt := h.constructSummarizePrompt()
 	// Sanitize the message before sending it to the AI
