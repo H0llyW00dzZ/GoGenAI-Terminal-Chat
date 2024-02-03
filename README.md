@@ -8,8 +8,6 @@
 Copyright (©️) 2024 @H0llyW00dzZ All rights reserved.
 </pre>
 
-# GoGenAI-Terminal-Chat
-
 [![Go Report Card](https://goreportcard.com/badge/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)](https://goreportcard.com/report/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)
 [![Go Reference](https://pkg.go.dev/badge/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat.svg)](https://pkg.go.dev/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)
 
