@@ -47,7 +47,7 @@ func GenerateRandomString(length int) (string, error) {
 	}
 
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	const maxCharRepeat = 1 // no characters should repeat more than 3 times
+	const maxCharRepeat = 1 // no characters should repeat more than 1 times
 	// Note: by improving like this, it's difficult to guess/predictable especially for human.
 	for {
 		bytes := make([]byte, length)
