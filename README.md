@@ -372,6 +372,8 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 
 ### Command Tools:
 - [ ] **Calculate the Size of the Code Base Volume**
+> [!NOTE]
+> The `Calculate the Size of the Code Base Volume` feature is designed to assess the size of a code base. For example, it can calculate the volume of Google's Open Source projects, or Other Open Source Projects, which contain billions of lines of code written in `Go`.
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](SECURITY.md)
