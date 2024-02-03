@@ -110,26 +110,6 @@ type MessageStats struct {
 	SystemMessages int // SystemMessages is the count of system-generated messages.
 }
 
-// MessageContext holds the context necessary for determining whether to append a
-// separator between chat messages. It encapsulates the current and next message
-// content, the index of the current message, and the total number of messages
-// in the chat history.
-type MessageContext struct {
-	// currentMessage contains the sanitized content of the current message in the chat history.
-	currentMessage string
-
-	// nextMessage contains the sanitized content of the message that follows the current
-	// message in the chat history, used for context in decisions about appending separators.
-	nextMessage string
-
-	// currentIndex is the zero-based index of the current message within the chat history.
-	currentIndex int
-
-	// totalMessages represents the total number of messages in the chat history,
-	// used to determine if the current message is the last one.
-	totalMessages int
-}
-
 // Session encapsulates the state and functionality for a chat session with a generative AI model.
 // It holds the AI client, chat history, and context for managing the session lifecycle.
 type Session struct {
