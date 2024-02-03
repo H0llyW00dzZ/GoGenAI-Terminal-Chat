@@ -47,12 +47,31 @@ func GenerateRandomString(length int) (string, error) {
 	}
 
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	bytes := make([]byte, length)
-	if _, err := rand.Read(bytes); err != nil {
-		return "", err
+	const maxCharRepeat = 1 // no characters should repeat more than 3 times
+	// Note: by improving like this, it's difficult to guess/predictable especially for human.
+	for {
+		bytes := make([]byte, length)
+		if _, err := rand.Read(bytes); err != nil {
+			return "", err
+		}
+		for i, b := range bytes {
+			bytes[i] = charset[b%byte(len(charset))]
+		}
+		if isRandomEnough(bytes, maxCharRepeat) {
+			return string(bytes), nil
+		}
+		// If not random enough, the loop will continue and generate a new string
 	}
-	for i, b := range bytes {
-		bytes[i] = charset[b%byte(len(charset))]
+}
+
+// isRandomEnough checks if any character repeats more than the maxCharRepeat times.
+func isRandomEnough(bytes []byte, maxCharRepeat int) bool {
+	charCount := make(map[byte]int)
+	for _, b := range bytes {
+		charCount[b]++
+		if charCount[b] > maxCharRepeat {
+			return false
+		}
 	}
-	return string(bytes), nil
+	return true
 }
