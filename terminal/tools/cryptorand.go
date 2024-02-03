@@ -52,7 +52,7 @@ func GenerateRandomString(length int) (string, error) {
 
 	// Convert the charset to a slice of runes to handle potential multi-byte characters.
 	// Note: by improving like this, it's difficult to guess/predict, especially for humans.
-	// In this scenario, it's just like when a human writes a function in Go that makes the code complex and difficult for the machine to read.
+	// In this scenario, it's just like when a human writes a function in Go that makes the code complex (e.g, cyclomatic reached 10+ which is not recommended for go) and difficult for the machine to read.
 	charsetSlice := []rune(charset)
 	shuffledCharset := make([]rune, len(charsetSlice))
 	copy(shuffledCharset, charsetSlice)
