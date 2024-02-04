@@ -96,16 +96,26 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 }
 
 // printTokenCount prints the number of tokens used in the AI's response, including the chat history.
-// It also updates and prints the total token count for the session.
+// It now supports image data for the GeminiProVision model.
 func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	// Concatenate chat history and AI response for token counting
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
+	modelName := GeminiPro // Default model name
+	var imageData []byte
+	var imageFormat string
+
+	// Check if the response contains image data for GeminiProVision
+	if err := verifyImageFileExtension(aiResponse); err == nil {
+		modelName = GeminiProVision
+		imageData, imageFormat = readImageFile(aiResponse)
+	}
+
 	params := TokenCountParams{
 		APIKey:      apiKey,
-		ModelName:   GeminiPro,
+		ModelName:   modelName,
 		Input:       fullText,
-		ImageFormat: "", // Assuming there is no image data in this case
-		ImageData:   nil,
+		ImageFormat: imageFormat,
+		ImageData:   imageData,
 	}
 	tokenCount, err := CountTokens(params)
 	printnewlineAscii() // a better one, instead of "\n"
@@ -113,9 +123,9 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 		handleTokenCountError(err)
 		return
 	}
-	// print the current token count
+	// Print the current token count
 	printCurrentTokenCount(tokenCount)
-	// update and print the total token count
+	// Update and print the total token count
 	updateAndPrintTotalTokenCount(tokenCount)
 
 	// Visual separator for clarity in the output
