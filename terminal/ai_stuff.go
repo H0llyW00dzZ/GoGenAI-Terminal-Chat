@@ -142,7 +142,7 @@ func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *Tok
 	imageData, err := os.ReadFile(filePath)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
+		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err) // low level in 2024
 	}
 	// Note: Avoid attempting to inspect "imageData" using fmt.Println(imageData) unless you are professional/master of go programming
 	// as it will literally print the binary data of the image.
