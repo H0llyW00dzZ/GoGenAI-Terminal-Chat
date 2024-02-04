@@ -144,6 +144,8 @@ func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *Tok
 		// Magic FMT, unlike stupid hard coding
 		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
 	}
+	// Note: Avoid attempting to inspect "imageData" using fmt.Println(imageData) unless you are professional/master of go programming
+	// as it will literally print the binary data of the image.
 	params.ImageData = imageData
 	params.ImageFormat = getImageFormat(filePath)
 	params.ModelName = GeminiProVision
