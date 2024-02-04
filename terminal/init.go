@@ -6,6 +6,7 @@ package terminal
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -153,8 +154,6 @@ var dynamicErrorImageFileTypeNotSupported = ErrorVariableImageFileTypeNotSupport
 // helper function
 //
 // verifyImageFileExtension checks if the image file has an allowed extension.
-//
-// Note: This is marked as a TODO since it is currently unused.
 func verifyImageFileExtension(filePath string) error {
 	allowedExtensions := map[string]bool{
 		dotPng:  true,
@@ -202,6 +201,20 @@ func getImageFormat(filePath string) string {
 		return format
 	}
 	return ""
+}
+
+// Helper Function
+//
+// readImageFile reads an image file and returns its data and format.
+// It assumes the aiResponse argument is a valid file path to an image.
+func readImageFile(filePath string) ([]byte, string) {
+	imageData, err := os.ReadFile(filePath)
+	if err != nil {
+		handleTokenCountError(err)
+		return nil, ""
+	}
+	imageFormat := getImageFormat(filePath)
+	return imageData, imageFormat
 }
 
 func init() {
