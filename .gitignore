@@ -25,7 +25,7 @@ pprof_debug.go
 
 # test test test are not important, since this repo mostly using standard library and simple function
 # Reason: I prefer not to spend excessive effort writing a test function when this repository already contains an abundance of well-developed features. 
-# Additionally, writing tests should be reserved for stupid complex Go code, which may be more prone to errors and thus require more rigorous validation.
+# Additionally, writing tests should be reserved for stupid complex Go code (e.g, complexity reached 10+), which may be more prone to errors and thus require more rigorous validation.
 *_test.go
 
 # Respect Privacy
