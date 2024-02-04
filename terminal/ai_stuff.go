@@ -102,33 +102,60 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 
 func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, session *Session) (bool, error) {
 	// Verify the file extension before reading the file.
-	if err := verifyFileExtension(filePath); err != nil {
-		logger.Error(ErrorInvalidFileExtension, err)
-		return false, nil
-	}
-
-	fileContent, err := os.ReadFile(filePath)
+	params, err := cmd.prepareTokenCountParams(apiKey, filePath)
 	if err != nil {
-		logger.Error(ErrorFailedToReadFile, err)
+		logger.Error("%v", err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
 
-	text := string(fileContent)
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(text)
-	params := TokenCountParams{
-		APIKey:      apiKey,
-		ModelName:   GeminiPro,
-		Input:       sanitizedMessage,
-		ImageFormat: "", // Assuming there is no image data in this case
-		ImageData:   nil,
-	}
 	tokenCount, err := CountTokens(params)
 	if err != nil {
-		logger.Error(ErrorFailedToCountTokens, err)
+		logger.Error("%v", err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
 	logger.Any(InfoTokenCountFile, filePath, tokenCount)
 	return false, nil // Continue the session after displaying the token count.
+}
+
+func (cmd *handleTokeCountingCommand) prepareTokenCountParams(apiKey, filePath string) (TokenCountParams, error) {
+	var params TokenCountParams
+	params.APIKey = apiKey
+
+	if isImage := verifyImageFileExtension(filePath) == nil; isImage {
+		if err := cmd.readImageFile(filePath, &params); err != nil {
+			return TokenCountParams{}, err
+		}
+	} else {
+		if err := cmd.readTextFile(filePath, &params); err != nil {
+			return TokenCountParams{}, err
+		}
+	}
+
+	return params, nil
+}
+
+func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *TokenCountParams) error {
+	imageData, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
+	}
+	params.ImageData = imageData
+	params.ImageFormat = getImageFormat(filePath)
+	params.ModelName = GeminiProVision
+	return nil
+}
+
+func (cmd *handleTokeCountingCommand) readTextFile(filePath string, params *TokenCountParams) error {
+	if err := verifyFileExtension(filePath); err != nil {
+		return err
+	}
+	fileContent, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
+	}
+	params.Input = string(fileContent)
+	params.ModelName = GeminiPro
+	return nil
 }
 
 // constructAITranslatePrompt constructs the AI translation prompt.

@@ -24,6 +24,7 @@ const (
 	ObjectHighLevelStringWithNewLine = "%s %s\n" // Catch High level string With NewLine
 	ObjectTripleHighLevelString      = "%%%s%%"  // Catch High level triple string
 	ObjectHighLevelContextString     = "%s\n%s"  // Catch High level context string
+	ObjectHighLevelFMT               = "%s: %s"
 	// TimeFormat is tailored for AI responses, providing a layout conducive to formatting chat transcripts.
 	TimeFormat      = "2006/01/02 15:04:05"
 	OtherTimeFormat = "January 2, 2006 at 15:04:05"
