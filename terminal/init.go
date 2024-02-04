@@ -110,20 +110,38 @@ var slantStyle = NewASCIIArtStyle()
 var stripStyle = NewASCIIArtStyle()
 var newLine = NewASCIIArtStyle()
 
+var dynamicErrorFileTypeNotSupported = ErrorFileTypeNotSupported
+
 // helper function
 //
 // verifyFileExtension checks if the file has an allowed extension.
 func verifyFileExtension(filePath string) error {
 	allowedExtensions := map[string]bool{
 		// Note: Feel free to submit a pull request or issues if you want to add support for other file types
-		dotMD:  true,
-		dotTxt: true,
+		dotMD:   true,
+		dotTxt:  true,
+		dotPng:  true,
+		dotJpg:  true,
+		dotJpeg: true,
+		dotHeic: true,
+		dotHeif: true,
+		dotWebp: true,
 	}
 
 	// Extract the file extension and check if it's allowed.
 	fileExt := strings.ToLower(filepath.Ext(filePath))
 	if _, allowed := allowedExtensions[fileExt]; !allowed {
-		return fmt.Errorf(ErrorFileTypeNotSupported)
+		// Create a slice to hold the allowed extensions for the error message.
+		allowedExts := []string{}
+		for ext, isAllowed := range allowedExtensions {
+			if isAllowed {
+				// Add the extension without the dot for a cleaner error message.
+				allowedExts = append(allowedExts, strings.TrimPrefix(ext, dotString))
+			}
+		}
+		// Join the allowed extensions with commas and an "or" before the last one.
+		allowedExtsStr := strings.Join(allowedExts[:len(allowedExts)-1], dotStringComma) + oRString + allowedExts[len(allowedExts)-1]
+		return fmt.Errorf(dynamicErrorFileTypeNotSupported, allowedExtsStr)
 	}
 
 	return nil
@@ -135,6 +153,8 @@ var dynamicErrorImageFileTypeNotSupported = ErrorVariableImageFileTypeNotSupport
 // helper function
 //
 // verifyImageFileExtension checks if the image file has an allowed extension.
+//
+// Note: This is marked as a TODO since it is currently unused.
 func verifyImageFileExtension(filePath string) error {
 	allowedExtensions := map[string]bool{
 		dotPng:  true,
