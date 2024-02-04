@@ -25,3 +25,5 @@ pprof_debug.go
 
 # test test test are not important, since this repo mostly using standard library and simple function
 *_test.go
+
+testPicture.jpg
