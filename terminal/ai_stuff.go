@@ -107,14 +107,14 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 	params, err := cmd.prepareTokenCountParams(apiKey, filePath)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		logger.Error(ErrorFailedToReadFile, err) // Using logger.Error with formatting directive.
+		logger.Error(ErrorFailedToReadFile, filePath, err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
 
 	tokenCount, err := CountTokens(params)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		logger.Error(ErrorFailedToCountTokens, err) // Using logger.Error with formatting directive.
+		logger.Error(ErrorFailedToCountTokens, filePath, err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
 	logger.Any(InfoTokenCountFile, filePath, tokenCount)

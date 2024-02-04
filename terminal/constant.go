@@ -190,8 +190,8 @@ const (
 	ErrorFailedToSendSummarizeMessage               = "Failed To Send Summarize Message: %v"
 	ErrorFailedToSendSummarizeMessageAfterRetries   = "failed to send summarize message after retries" // low level
 	ErrorUnrecognizedSubcommandForClear             = "Unrecognized subcommand for clear: %s"
-	ErrorFailedToReadFile                           = "Failed to read file: %v"
-	ErrorFailedToCountTokens                        = "Failed to count tokens: %v"
+	ErrorFailedToReadFile                           = "Failed to read the file at %s: %v"
+	ErrorFailedToCountTokens                        = "Failed to count tokens in the file at %s: %v"
 	ErrorUnrecognizedSubcommandForTokenCount        = "Unrecognized subcommand for token count: %s"
 	ErrorInvalidFileExtension                       = "Invalid file extension: %v"
 	ErrorFileTypeNotSupported                       = "file type not supported: only %s files are allowed." // Low level error
