@@ -187,12 +187,12 @@ func verifyImageFileExtension(filePath string) error {
 // getImageFormat returns the image format based on the file extension.
 func getImageFormat(filePath string) string {
 	extToFormat := map[string]string{
-		dotJpg:  "jpeg",
-		dotJpeg: "jpeg",
-		dotPng:  "png",
-		dotHeic: "heic",
-		dotHeif: "heif",
-		dotWebp: "webp",
+		dotJpg:  FormatJPEG,
+		dotJpeg: FormatJPEG,
+		dotPng:  FormatPNG,
+		dotHeic: FormatHEIC,
+		dotHeif: FormatHEIC,
+		dotWebp: FormatWEBP,
 	}
 
 	// Extract the file extension in lowercase.

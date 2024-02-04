@@ -379,3 +379,12 @@ const (
 	// SystemMessage indicates a message that provides system-level information.
 	SystemMessage
 )
+
+// mime formatting
+const (
+	FormatJPEG = "jpeg"
+	FormatPNG  = "png"
+	FormatHEIC = "heic"
+	FormatHEIF = "heif"
+	FormatWEBP = "webp"
+)
