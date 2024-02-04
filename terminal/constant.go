@@ -191,7 +191,7 @@ const (
 	ErrorFailedToCountTokens                        = "Failed to count tokens: %v"
 	ErrorUnrecognizedSubcommandForTokenCount        = "Unrecognized subcommand for token count: %s"
 	ErrorInvalidFileExtension                       = "Invalid file extension: %v"
-	ErrorFileTypeNotSupported                       = "file type not supported: only .md and .txt files are allowed." // Low level error
+	ErrorFileTypeNotSupported                       = "file type not supported: only %s files are allowed." // Low level error
 	ErrorFailedToSendCommandToAI                    = "Failed to send command to AI: %v"
 	ErrorVariableImageFileTypeNotSupported          = "image file type not supported: only %s files are allowed." // Low level error
 
@@ -337,8 +337,8 @@ const (
 	dotHeic        = ".heic"
 	dotHeif        = ".heif"
 	dotString      = "."
-	dotStringComma = ","
-	oRString       = "or"
+	dotStringComma = ", "
+	oRString       = " or "
 )
 
 // ANSI color codes
