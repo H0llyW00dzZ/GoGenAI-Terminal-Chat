@@ -154,8 +154,6 @@ var dynamicErrorImageFileTypeNotSupported = ErrorVariableImageFileTypeNotSupport
 // helper function
 //
 // verifyImageFileExtension checks if the image file has an allowed extension.
-//
-// Note: This is marked as a TODO since it is currently unused.
 func verifyImageFileExtension(filePath string) error {
 	allowedExtensions := map[string]bool{
 		dotPng:  true,
