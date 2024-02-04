@@ -164,6 +164,26 @@ func verifyImageFileExtension(filePath string) error {
 	return nil
 }
 
+// getImageFormat returns the image format based on the file extension.
+func getImageFormat(filePath string) string {
+	extToFormat := map[string]string{
+		dotJpg:  "jpeg",
+		dotJpeg: "jpeg",
+		dotPng:  "png",
+		dotHeic: "heic",
+		dotHeif: "heif",
+		dotWebp: "webp",
+	}
+
+	// Extract the file extension in lowercase.
+	ext := strings.ToLower(filepath.Ext(filePath))
+	// Lookup the image format based on file extension.
+	if format, ok := extToFormat[ext]; ok {
+		return format
+	}
+	return ""
+}
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
