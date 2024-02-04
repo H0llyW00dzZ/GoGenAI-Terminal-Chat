@@ -107,14 +107,14 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 	params, err := cmd.prepareTokenCountParams(apiKey, filePath)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		logger.Error("%v", err) // Using logger.Error with formatting directive.
+		logger.Error(ErrorFailedToReadFile, err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
 
 	tokenCount, err := CountTokens(params)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		logger.Error("%v", err) // Using logger.Error with formatting directive.
+		logger.Error(ErrorFailedToCountTokens, err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
 	logger.Any(InfoTokenCountFile, filePath, tokenCount)
@@ -142,7 +142,7 @@ func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *Tok
 	imageData, err := os.ReadFile(filePath)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
+		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err) // low level in 2024
 	}
 	// Note: Avoid attempting to inspect "imageData" using fmt.Println(imageData) unless you are professional/master of go programming
 	// as it will literally print the binary data of the image.
