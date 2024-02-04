@@ -100,6 +100,8 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 	}
 }
 
+// Note: This approach simplifies maintenance and improvements by abstracting logic in this manner,
+// in contrast to less optimal practices where functions are made overly complex (e.g, stupid human) with excessive conditional statements.
 func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, session *Session) (bool, error) {
 	// Verify the file extension before reading the file.
 	params, err := cmd.prepareTokenCountParams(apiKey, filePath)
