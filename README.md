@@ -369,7 +369,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > The enhancement, `Improve AIResponse by Storing the Original AI Response in ChatHistory`, involves saving the original response from the AI into `ChatHistory`. Additionally, this action automatically triggers improvements for the `Colorize` feature.
 - [ ] **Leverage `ChatHistory` by automatically syncing for multi-modal use (`gemini-pro-vision`)**
 > [!NOTE]
-> The enhancement, `Leverage ChatHistory by automatically syncing for multi-modal use (gemini-pro-vision)`, utilizes `ChatHistory` as a highly efficient, in-memory data storage solution. This ensures seamless synchronization and optimal performance across various modes.
+> The enhancement, `Leverage ChatHistory by automatically syncing for multi-modal use (gemini-pro-vision)`, utilizes `ChatHistory` as a highly efficient, in-memory data storage solution unlike written in `C` or other language that causing `memory leaks` . This ensures seamless synchronization and optimal performance across various modes.
 
 ### Other:
 - [ ] **Plan for Google Cloud Deployment**
