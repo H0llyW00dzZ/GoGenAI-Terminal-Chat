@@ -104,12 +104,14 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 	// Verify the file extension before reading the file.
 	params, err := cmd.prepareTokenCountParams(apiKey, filePath)
 	if err != nil {
+		// Magic FMT, unlike stupid hard coding
 		logger.Error("%v", err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
 
 	tokenCount, err := CountTokens(params)
 	if err != nil {
+		// Magic FMT, unlike stupid hard coding
 		logger.Error("%v", err) // Using logger.Error with formatting directive.
 		return false, nil
 	}
@@ -137,6 +139,7 @@ func (cmd *handleTokeCountingCommand) prepareTokenCountParams(apiKey, filePath s
 func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *TokenCountParams) error {
 	imageData, err := os.ReadFile(filePath)
 	if err != nil {
+		// Magic FMT, unlike stupid hard coding
 		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
 	}
 	params.ImageData = imageData
@@ -151,6 +154,7 @@ func (cmd *handleTokeCountingCommand) readTextFile(filePath string, params *Toke
 	}
 	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
+		// Magic FMT, unlike stupid hard coding
 		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
 	}
 	params.Input = string(fileContent)
