@@ -6,6 +6,7 @@ package terminal
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -202,6 +203,20 @@ func getImageFormat(filePath string) string {
 		return format
 	}
 	return ""
+}
+
+// Helper Function
+//
+// readImageFile reads an image file and returns its data and format.
+// It assumes the aiResponse argument is a valid file path to an image.
+func readImageFile(filePath string) ([]byte, string) {
+	imageData, err := os.ReadFile(filePath)
+	if err != nil {
+		handleTokenCountError(err)
+		return nil, ""
+	}
+	imageFormat := getImageFormat(filePath)
+	return imageData, imageFormat
 }
 
 func init() {
