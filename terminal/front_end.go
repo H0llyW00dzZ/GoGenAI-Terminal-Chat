@@ -105,6 +105,8 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	var imageFormat string
 
 	// Check if the response contains image data for GeminiProVision
+	//
+	// Note: Not Ready Yet, it won't work hahaha
 	if err := verifyImageFileExtension(aiResponse); err == nil {
 		modelName = GeminiProVision
 		imageData, imageFormat = readImageFile(aiResponse)
