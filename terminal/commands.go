@@ -140,7 +140,7 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+		aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
 		// Sanitize AI's response to remove any separators
 		aiResponse = sanitizeAIResponse(aiResponse)
 		// Add the sanitized AI's response to the chat history
