@@ -84,15 +84,15 @@ jobs:
       run: |
         curl \
           -X POST \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Authorization: token ${{ secrets.STUPID_GITHUB_CI_CONFUSING_TOKEN }}" \
           -H "Content-Type: application/octet-stream" \
           --data-binary @checksum.txt \
           $(curl -s \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.STUPID_GITHUB_CI_CONFUSING_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.result }}" \
             | jq -r .upload_url | sed "s/{?name,label}//")?name=checksum.txt
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.STUPID_GITHUB_CI_CONFUSING_TOKEN }}
 
     - name: Clean up Buildx builder
       if: always()
