@@ -114,7 +114,7 @@ func HandleUnrecognizedCommand(command string, session *Session, parts []string)
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
 	// Send the constructed message to the AI and get the response.
-	_, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+	_, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
 	if err != nil {
 		errMsg := fmt.Sprintf(ErrorFailedtoSendUnrecognizedCommandToAI, err)
 		logger.Error(errMsg)

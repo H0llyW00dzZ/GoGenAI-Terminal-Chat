@@ -112,12 +112,12 @@ func ConfigureModelForSession(ctx context.Context, client *genai.Client, session
 // The function initializes a new chat session and sends the chat context, along with the portion of chat history
 // specified by the session's ChatConfig, to the generative AI model. It then calls `printResponse` to process
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
-func SendMessage(ctx context.Context, client *genai.Client, chatContext string, session *Session) (string, error) {
+func (s *Session) SendMessage(ctx context.Context, client *genai.Client, chatContext string) (string, error) {
 	// Get the generative model from the client
-	model := ConfigureModelForSession(ctx, client, session, GeminiPro) // Simplify 🤪
+	model := ConfigureModelForSession(ctx, client, s, GeminiPro) // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
-	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
+	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
 
 	// Form the full context by appending the new message to the chat history
 	fullContext := chatContext
@@ -136,8 +136,8 @@ func SendMessage(ctx context.Context, client *genai.Client, chatContext string, 
 		return "", err
 	}
 
-	// Process the AI's response
-	return printResponse(resp), nil
+	// Process the AI's response using the Session's method
+	return s.printResponse(resp), nil
 }
 
 // SendDummyMessage verifies the validity of the API key by sending a dummy message.
@@ -196,18 +196,25 @@ func SendDummyMessage(client *genai.Client) (bool, error) {
 //	string: A concatenated string of all parts from the AI response.
 //
 // This function is unexported and is intended for internal use within the package.
-func printResponse(resp *genai.GenerateContentResponse) string {
+func (s *Session) printResponse(resp *genai.GenerateContentResponse) string {
 	aiResponse := ""
 	// Note: this method are better instead of resp.Candidates[0] because it's more efficient and faster.
 	for _, cand := range resp.Candidates {
 		if cand.Content != nil {
 			for _, part := range cand.Content.Parts {
 				content := fmt.Sprint(part)
+
+				// Store the original AI response in the chat history
+				s.ChatHistory.AddMessage(AiNerd, content, s.ChatConfig)
+
+				// Process the AI response for display
 				content = removeAIPrefix(content)
 				// Filter out the language identifier from code blocks before any other processing
 				filteredContent := FilterLanguageFromCodeBlock(content)
 				colorized := colorizeResponse(filteredContent)
 				colorized = handleSingleAsterisks(colorized)
+
+				// Display the processed AI response
 				printAIResponse(colorized)
 				aiResponse += colorized
 			}

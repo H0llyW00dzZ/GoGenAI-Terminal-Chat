@@ -40,7 +40,7 @@ func sendCommandToAI(session *Session, command string, constructPrompt func(stri
 
 // sendMessageToAI sends a message to the AI and handles the response.
 func sendMessageToAI(session *Session, message string) (bool, error) {
-	aiResponse, err := SendMessage(session.Ctx, session.Client, message, session)
+	aiResponse, err := session.SendMessage(session.Ctx, session.Client, message)
 	addMessageWithContext(session, AiNerd, aiResponse)
 	return err == nil, err
 }
@@ -76,7 +76,7 @@ func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitized
 		// Note: This is subject to change, for example,
 		// to implement another functionality without displaying AI response in the terminal,
 		// but only adding it to the chat history.
-		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+		aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
 		if err != nil {
 			return false, err
 		}
@@ -182,7 +182,7 @@ func handleAIInteraction(session *Session, aiPrompt string, postProcess func(ses
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := SendMessage(session.Ctx, session.Client, sanitizedMessage, session)
+		aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
 		if err != nil {
 			return false, err
 		}

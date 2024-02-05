@@ -186,12 +186,10 @@ func (s *Session) ensureClientIsValid() bool {
 func (s *Session) sendInputToAI(input string) bool {
 	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := SendMessage(s.Ctx, s.Client, input, s)
+		_, err := s.SendMessage(s.Ctx, s.Client, input)
 		if err != nil {
 			return false, err
 		}
-		aiResponse = sanitizeAIResponse(aiResponse)                // Sanitize AI's response to remove any separators
-		s.ChatHistory.AddMessage(AiNerd, aiResponse, s.ChatConfig) // Add the sanitized AI's response to the chat history
 		return true, nil
 	}, standardAPIErrorHandler)
 
