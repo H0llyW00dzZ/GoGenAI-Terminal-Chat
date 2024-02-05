@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag Name (Optional for manual trigger)'
+        required: false
+        default: ''
 
 jobs:
   build-and-push:
@@ -28,9 +33,17 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Extract tag name
+    - name: Determine Tag Name
       id: tag_name
-      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ github.event.inputs.tag_name }}" != "" ]; then
+          echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+        elif [ "${GITHUB_REF#refs/tags/}" != "" ]; then
+          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        else
+          echo "Error: Tag name not provided."
+          exit 1
+        fi
 
     - name: Build and Push Docker image
       uses: docker/build-push-action@v3
