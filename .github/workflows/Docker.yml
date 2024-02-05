@@ -79,7 +79,7 @@ jobs:
           return release.data.id;
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      # stupid github ci issue, how the fuck got response "Resource not accessible by integration", while it fully authorize
     - name: Upload checksum.txt as release asset
       run: |
         curl \
