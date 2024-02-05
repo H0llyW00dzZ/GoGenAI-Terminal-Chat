@@ -57,9 +57,10 @@ jobs:
 
     - name: Create checksum.txt file
       run: |
-        IMAGE_NAME=ghcr.io/h0llyw00dzz/gogenai-terminal-chat:${{ env.TAG_NAME }}
-        CHECKSUM=$(docker inspect --format='{{.Id}}' "$IMAGE_NAME")
-        echo "$CHECKSUM" > checksum.txt
+          docker pull ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
+          IMAGE_NAME=ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
+          CHECKSUM=$(docker inspect --format='{{.Id}}' "$IMAGE_NAME")
+          echo "$CHECKSUM" > checksum.txt
 
     - name: Get the release ID (Assuming the release exists)
       id: get_release
