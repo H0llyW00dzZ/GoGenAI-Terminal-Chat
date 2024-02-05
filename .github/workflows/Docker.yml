@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -40,6 +41,44 @@ jobs:
         tags: |
           ghcr.io/h0llyw00dzz/gogenai-terminal-chat:${{ env.TAG_NAME }}
           ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
+
+    - name: Create checksum.txt file
+      run: |
+        IMAGE_NAME=ghcr.io/h0llyw00dzz/gogenai-terminal-chat:${{ env.TAG_NAME }}
+        CHECKSUM=$(docker inspect --format='{{.Id}}' "$IMAGE_NAME")
+        echo "$CHECKSUM" > checksum.txt
+
+    - name: Get the release ID (Assuming the release exists)
+      id: get_release
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const release = await github.rest.repos.getReleaseByTag({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag: '${{ env.TAG_NAME }}'
+          });
+          if (!release.data.id) {
+            throw new Error('Release not found');
+          }
+          console.log(`Found release ID: ${release.data.id}`);
+          return release.data.id;
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload checksum.txt as release asset
+      run: |
+        curl \
+          -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/octet-stream" \
+          --data-binary @checksum.txt \
+          $(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.result }}" \
+            | jq -r .upload_url | sed "s/{?name,label}//")?name=checksum.txt
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Clean up Buildx builder
       if: always()
