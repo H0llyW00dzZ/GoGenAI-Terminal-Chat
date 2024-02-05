@@ -342,12 +342,12 @@ func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool
 
 	success, err := h.sendSummarizePrompt(session, sanitizedMessage)
 	if err != nil {
-		logger.Error(ErrorFailedToSendHelpMessage, err)
+		logger.Error(ErrorFailedToSendSummarizeMessage, err)
 		return false, err
 	}
 
 	if !success {
-		return false, fmt.Errorf(ErrorFailedToSendHelpMessagesAfterRetries)
+		return false, fmt.Errorf(ErrorFailedToSendSummarizeMessageAfterRetries)
 	}
 
 	// Indicate that the command was handled successfully; return false to continue the session.
