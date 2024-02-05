@@ -95,9 +95,7 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 
 // handleAIMessage processes an AI message.
 func (h *ChatHistory) handleAIMessage(message, hashValue string) {
-	// Warning!!! Explicit 🤪
-	h.mu.Lock()         // Lock for writing
-	defer h.mu.Unlock() // Ensure unlocking
+
 	if _, exists := h.Hashes[hashValue]; !exists {
 		h.addMessageToHistory(message, hashValue)
 		h.AIMessageCount++
