@@ -93,9 +93,11 @@ func (h *ChatHistory) handleSystemMessage(sanitizedText, message, hashValue stri
 	return true // Indicate a system message was handled.
 }
 
-// handleAIMessage processes an AI message.
+// handleAIMessage is responsible for processing an AI message.
 func (h *ChatHistory) handleAIMessage(message, hashValue string) {
-
+	// Note: The mu (explicit) was removed from this function as it is already
+	// connected to the "AddMessage" function. Do not attempt to reintroduce the mutex here
+	// as it will lead to deadlocks.
 	if _, exists := h.Hashes[hashValue]; !exists {
 		h.addMessageToHistory(message, hashValue)
 		h.AIMessageCount++
