@@ -157,6 +157,9 @@ Environment variables are key-value pairs that can affect the behavior of your a
   <img src="https://i.imgur.com/3haszmI.png" alt="docker" />
 </p>
 
+> [!NOTE]
+> The `Average Consumption` metrics are calculated without including the use of a storage system like a database and are based on the assumption that each function is relatively simple, with an average cyclomatic complexity of 5 as the maximum. However, consumption may increase with more complex functions (e.g., those with a cyclomatic complexity of 10 or more, which are not recommended).
+
 #### Idle
 
 <p align="center">
@@ -169,8 +172,15 @@ Environment variables are key-value pairs that can affect the behavior of your a
   <img src="https://i.imgur.com/BGtQar4.png" alt="docker" />
 </p>
 
+#### Average Maximum Consumption
+
+<p align="center">
+  <img src="https://i.imgur.com/D8yA9XF.png" alt="docker" />
+</p>
+
 > [!NOTE]
-> The `Average Consumption` metrics are calculated without including the use of a storage system like a database and are based on the assumption that each function is relatively simple, with an average cyclomatic complexity of 5 as the maximum. However, consumption may increase with more complex functions (e.g., those with a cyclomatic complexity of 10 or more, which are not recommended).
+> The `Average Maximum Consumption` metrics are based on the simulation of `human` typing behavior. This involves rendering the chat responses character by character to mimic the rhythm and pace of human typing.
+
 
 ### 🤖 Better LLM's:
 <p align="center">
