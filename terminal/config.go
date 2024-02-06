@@ -38,6 +38,9 @@ func DefaultChatConfig() *ChatConfig {
 //
 //	model *genai.GenerativeModel: The generative AI model to configure.
 //	opts ...ModelConfig: A variadic number of configuration options.
+//
+// Note: While currently unused, this function is marked as TODO.
+// It will be utilized in the future to enhance scalability.
 func ConfigureModel(model *genai.GenerativeModel, opts ...ModelConfig) {
 	for _, opt := range opts {
 		opt(model)
