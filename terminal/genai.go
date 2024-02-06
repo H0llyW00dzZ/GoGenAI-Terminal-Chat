@@ -204,11 +204,15 @@ func (s *Session) printResponse(resp *genai.GenerateContentResponse) string {
 			for _, part := range cand.Content.Parts {
 				content := fmt.Sprint(part)
 
-				// Store the original AI response in the chat history
+				// Note: The function removeAIPrefix is invoked here to prevent the occurrence of duplicate AIPrefix entries in ChatHistory (known as RAM's labyrinth),
+				// which could lead to confusion.
+				// Remove the AI prefix from the content.
+				content = removeAIPrefix(content)
+
+				// Store the original AI response in the chat history (known as RAM's labyrinth)
 				s.ChatHistory.AddMessage(AiNerd, content, s.ChatConfig)
 
 				// Process the AI response for display
-				content = removeAIPrefix(content)
 				// Filter out the language identifier from code blocks before any other processing
 				filteredContent := FilterLanguageFromCodeBlock(content)
 				colorized := colorizeResponse(filteredContent)
