@@ -186,6 +186,7 @@ func (s *Session) ensureClientIsValid() bool {
 func (s *Session) sendInputToAI(input string) bool {
 	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
+		// Fix Duplicated by using Magic "_" Identifier
 		_, err := s.SendMessage(s.Ctx, s.Client, input)
 		if err != nil {
 			return false, err
