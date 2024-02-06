@@ -179,7 +179,7 @@ Environment variables are key-value pairs that can affect the behavior of your a
 </p>
 
 > [!NOTE]
-> The `Average Maximum Consumption` metrics are based on the simulation of `human` typing behavior. This involves rendering the chat responses character by character to mimic the rhythm and pace of human typing.
+> The `Average Maximum Consumption` metrics are based on the simulation of `human` typing behavior. This involves rendering the chat responses character by character to mimic the rhythm and pace of `human` typing.
 
 
 ### 🤖 Better LLM's:
