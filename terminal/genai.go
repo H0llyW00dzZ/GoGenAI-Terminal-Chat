@@ -100,8 +100,6 @@ func ConfigureModelForSession(ctx context.Context, client *genai.Client, session
 //	ctx context.Context: The context for controlling the cancellation of the request.
 //	client *genai.Client: The client instance used to create a generative model session and send messages to the AI model.
 //	chatContext string: The chat context or message to be sent to the AI model.
-//	session *Session: The current chat session containing the ChatHistory and ChatConfig. The ChatConfig determines
-//	                  how much of the chat history is sent to the AI for context.
 //
 // Returns:
 //
