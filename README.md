@@ -8,7 +8,7 @@
 Copyright (©️) 2024 @H0llyW00dzZ All rights reserved.
 </pre>
 
-[![Go Version](https://img.shields.io/badge/1.21.6-gray?style=flat&logo=go&logoWidth=15)](https://github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/blob/master/go.mod#L3)
+[![Go Version](https://img.shields.io/badge/1.22.0-gray?style=flat&logo=go&logoWidth=15)](https://github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/blob/master/go.mod#L3)
 [![Go Reference](https://pkg.go.dev/badge/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat.svg)](https://pkg.go.dev/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)
 [![Go Report Card](https://goreportcard.com/badge/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)](https://goreportcard.com/report/github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat)
 
@@ -392,7 +392,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > The `Web Interface Support` feature is designed to facilitate support for WebAssembly (WASM), leveraging its development in Go. This enables the management of chat and other functionalities locally, starting from version v1.0.0+ (probably v2) of this repository, once it is reached and deemed stable. For best practices, [read here](https://pkg.go.dev/about#best-practices).
 
-- [ ] **Go Upgrade to 1.22**
+- [X] **Go Upgrade to 1.22**
 
 ### Command Tools:
 - [ ] **Calculate the Size of the Code Base Volume**
