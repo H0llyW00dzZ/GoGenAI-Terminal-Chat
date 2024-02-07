@@ -1,6 +1,6 @@
 module github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat
 
-go 1.21.6
+go 1.22.0
 
 require (
 	github.com/google/generative-ai-go v0.6.0 // direct
