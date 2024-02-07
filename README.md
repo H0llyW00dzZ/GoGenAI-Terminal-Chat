@@ -112,13 +112,16 @@ This repository contains high-quality Go code focusing on functionality, with ea
 
 ## ⚙️ Installation
 
-To use GoGenAI Terminal Chat, you need to have Docker installed on your machine. If you don't have Docker installed, please follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
+To use GoGenAI Terminal Interface Chat, you need to have Docker installed on your machine. If you don't have Docker installed, please follow the [official Docker installation guide](https://docs.docker.com/get-docker/).
 
 Once Docker is set up, you can pull the image from GitHub Packages by running:
 
 ```sh
 docker pull ghcr.io/h0llyw00dzz/gogenai-terminal-chat:latest
 ```
+
+> [!TIP]
+> For `Master` or `Advanced` of `Go Programming`, especially those in `cloud engineering`, this `GoGenAI Terminal Interface Chat` can be run in a `Cloud Shell` (`for example, Google Cloud Shell`) without using Docker.
 
 ## Usage
 
