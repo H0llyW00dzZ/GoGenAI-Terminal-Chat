@@ -215,6 +215,8 @@ func handleSingleAsterisks(content string) string {
 // printAIResponse prints the AI's response with a typing effect.
 //
 // Added a new parameter `isSystemMessage` to distinguish between AI and system messages.
+//
+// Note: By implementing it this way, the function becomes easier to maintain and more reusable.
 func printAIResponse(response string, isSystemMessage bool) {
 	var prefix string
 	if isSystemMessage {
