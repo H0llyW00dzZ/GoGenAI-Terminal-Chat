@@ -213,9 +213,16 @@ func handleSingleAsterisks(content string) string {
 }
 
 // printAIResponse prints the AI's response with a typing effect.
-func printAIResponse(colorized string) {
-	PrintPrefixWithTimeStamp(AiNerd)
-	PrintTypingChat(colorized, TypingDelay)
+// Added a new parameter `isSystemMessage` to distinguish between AI and system messages.
+func printAIResponse(response string, isSystemMessage bool) {
+	var prefix string
+	if isSystemMessage {
+		prefix = SYSTEMPREFIX // Use system prefix for system messages
+	} else {
+		prefix = AiNerd // Use AI prefix for AI messages
+	}
+	PrintPrefixWithTimeStamp(prefix)
+	PrintTypingChat(response, TypingDelay)
 }
 
 // printResponseFooter prints the footer after the AI response and includes prompt feedback and token count if enabled.
