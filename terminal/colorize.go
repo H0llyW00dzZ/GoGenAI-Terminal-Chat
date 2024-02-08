@@ -38,8 +38,8 @@ func Colorize(options ColorizationOptions) string {
 
 	// Process each color pair separately
 	for i := 0; i < len(options.ColorPairs); i += 2 {
-		delimiter := options.ColorPairs[i]
-		color := options.ColorPairs[i+1]
+		// Note: This only work in go 1.22 🤪
+		delimiter, color := options.ColorPairs[i], options.ColorPairs[i+1]
 		if delimiter == TripleBacktick {
 			// Set the color for triple backticks
 			tripleBacktickColor = color
