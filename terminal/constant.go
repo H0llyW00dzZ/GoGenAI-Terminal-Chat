@@ -62,55 +62,57 @@ const (
 	ContextCancel          = "Context canceled, shutting down..." // sending a messages to gopher officer
 	ANewVersionIsAvailable = StripChars + "\nA newer version is available: %s\n\n"
 	ReleaseName            = "- %s\n\n"
-	FullChangeLog          = "**%s**\n"
+	FullChangeLog          = DoubleAsterisk + "%s" + DoubleAsterisk + "\n"
 	DummyMessages          = "Hello, AI! from @H0llyW00dzZ"
 	// Better prompt instead of typing manually hahaha
 	ApplicationName = "GoGenAI Terminal Chat"
 	// Check Version Prompt commands
-	YouAreusingLatest = StripChars + "\nThe user invoked the command: **%s**\n" +
-		"The current version of **%s** is: **%s**.\n" +
+	YouAreusingLatest = StripChars + "\nThe user invoked the command: " + DoubleAsterisk + "%s" + DoubleAsterisk + "\n" +
+		"The current version of " + DoubleAsterisk + "%s" + DoubleAsterisk + " is: " + DoubleAsterisk + "%s" + DoubleAsterisk + ".\n" +
 		"This is the latest version available.\n" +
 		"Please inform the user that no update is necessary at this time." // Better Response for AI
-	ReleaseNotesPrompt = StripChars + "\nThe user invoked the command: **%s**\n" +
-		"The current version of the application **%s** is: **%s**.\n" +
-		"There is a newer version available: **%s**.\n\n" +
+	ReleaseNotesPrompt = StripChars + "\nThe user invoked the command: " + DoubleAsterisk + "%s" + DoubleAsterisk + "\n" +
+		"The current version of the application " + DoubleAsterisk + "%s" + DoubleAsterisk + " is: " + DoubleAsterisk + "%s" + DoubleAsterisk + ".\n" +
+		"There is a newer version available: " + DoubleAsterisk + "%s" + DoubleAsterisk + ".\n\n" +
 		"Details of the latest release:\n" +
-		"- Release Name: **%s**\n" +
-		"- Published Date: **%s**\n\n" +
+		"- Release Name: " + DoubleAsterisk + "%s" + DoubleAsterisk + "\n" +
+		"- Published Date: " + DoubleAsterisk + "%s" + DoubleAsterisk + "\n\n" +
 		"Release Notes:\n%s\n" // Better Response for AI
 	// Quit Prompt commands
-	ContextPromptShutdown = StripChars + "\nThe user has attempted the command: **%s** in **%s**.\n" +
+	ContextPromptShutdown = StripChars + "\nThe user has attempted the command: " + DoubleAsterisk + "%s" + DoubleAsterisk + " in " + DoubleAsterisk + "%s" + DoubleAsterisk + ".\n" +
 		"AI, please provide an appropriate shutdown message."
 	// Help Prompt commands
-	HelpCommandPrompt = StripChars + "\n**This a System messages**:**%s**\n\n" +
-		"The user attempted an command: **%s**\n" +
+	HelpCommandPrompt = StripChars + "\n" + DoubleAsterisk + "This a System messages" + DoubleAsterisk + ":" + DoubleAsterisk + "%s" + DoubleAsterisk + "\n\n" +
+		"The user attempted an command: " + DoubleAsterisk + "%s" + DoubleAsterisk + "\n" +
 		"Can you provide help information for the available commands?\n\n" +
 		"List of Available Commands:\n" +
-		"**%s** or **%s**: Quit the application.\n" +
-		"**%s** or **%s**: Show this help information.\n" +
-		"**%s**: Check the application version.\n" +
-		"**%s**: Set the safety level - **%s** (low), **%s** (default), **%s** (high).\n" +
-		"**%s** <text> **%s** <target language>: Translate text to the specified language.\n" +
-		"**%s** **%s** <number>: Generate a random string of the specified length.\n" +
-		"**%s**: Summarize a current conversation\n\n" +
-		"**Note**: When you summarize a current conversation, it will be displayed at the top of the chat history.\n\n" +
-		"**%s %s** **%s**: Show the chat history.\n\n" +
-		"**%s** **%s**: Show the chat statistic.\n\n" +
-		"**%s** **%s**: Clear all system summary messages from the chat history.\n\n" +
-		"**%s** **%s**: Clear all chat history and reset the total token usage count if enabled.\n\n" +
-		"**%s** **%s** <**path/file/data.txt**> or <**data.txt**>: Counts a token from the specified file.\n\n" +
-		"**Note**: The token count file feature only supports files with the following extensions: " +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " or " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Quit the application.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " or " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show this help information.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + ": Check the application version.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + ": Set the safety level - " + DoubleAsterisk + "%s" + DoubleAsterisk + " (low), " + DoubleAsterisk + "%s" + DoubleAsterisk + " (default), " +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " (high).\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " <text> " + DoubleAsterisk + "%s" + DoubleAsterisk + " <target language>: Translate text to the specified language.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <number>: Generate a random string of the specified length.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + ": Summarize a current conversation\n\n" +
+		DoubleAsterisk + "Note" + DoubleAsterisk + ": When you summarize a current conversation, it will be displayed at the top of the chat history.\n\n" +
+		DoubleAsterisk + "%s %s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat history.\n\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat statistic.\n\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all system summary messages from the chat history.\n\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all chat history and reset the total token usage count if enabled.\n\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <" + DoubleAsterisk + "path/file/data.txt" + DoubleAsterisk + "> or <" +
+		DoubleAsterisk + "data.txt" + DoubleAsterisk + ">: Counts a token from the specified file.\n\n" +
+		DoubleAsterisk + "Note" + DoubleAsterisk + ": The token count file feature only supports files with the following extensions: " +
 		dotMD + dotStringComma + dotTxt + dotStringComma + dotPng + dotStringComma +
 		dotJpg + dotStringComma + dotJpeg + dotStringComma + dotWebp + dotStringComma +
 		dotHeic + dotStringComma + dotHeif + ".\n\n" +
-		"**Additional Note**: There are no additional commands or HTML Markdown available " +
+		DoubleAsterisk + "Additional Note" + DoubleAsterisk + ": There are no additional commands or HTML Markdown available " +
 		"because this is a terminal application and is limited.\n"
 	// TranslateCommandPrompt commands
-	AITranslateCommandPrompt = "**This a System messages**:**%s**\n\n" +
-		"The user attempted an command: **%s**\n" +
+	AITranslateCommandPrompt = DoubleAsterisk + "This a System messages" + DoubleAsterisk + ":" + DoubleAsterisk + "%s" + DoubleAsterisk + "\n\n" +
+		"The user attempted an command: " + DoubleAsterisk + "%s" + DoubleAsterisk + "\n" +
 		"Can you translate requested by user?\n" +
-		"Text:\n**%s**\n" +
-		"Translate To:\n **%s**"
+		"Text:\n" + DoubleAsterisk + "%s" + DoubleAsterisk + "\n" +
+		"Translate To:\n " + DoubleAsterisk + "%s" + DoubleAsterisk
 )
 
 // Defined constants for commands
@@ -309,7 +311,7 @@ const (
 	Current_Version = "Current Version: " + ColorHex95b806 + CurrentVersion + ColorReset
 	// Acknowledgment of the original author is appreciated as this project is developed in an open-source environment.
 	Copyright = "Copyright (©️) 2024 @H0llyW00dzZ All rights reserved."
-	TIP       = "* " + ColorHex95b806 + "Use the commands " + ColorReset +
+	TIP       = SingleAsterisk + ColorHex95b806 + " Use the commands " + ColorReset +
 		BoldText + ColorYellow + ShortHelpCommand + ColorYellow +
 		BoldText + ColorHex95b806 + " or " + ColorReset + BoldText + ColorYellow + HelpCommand + ColorReset +
 		BoldText + ColorHex95b806 + " to display a list of available commands." + ColorReset
