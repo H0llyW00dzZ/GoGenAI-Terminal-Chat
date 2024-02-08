@@ -167,7 +167,7 @@ const (
 	ErrorLowLevelFailedtoStartAiChatSession         = "failed to start a new AI chat session: %w"
 	ErrorUserAttemptUnrecognizedCommandPrompt       = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
 	ErrorFailedtoSendUnrecognizedCommandToAI        = "Failed to send unrecognized command to AI: %v"
-	HumanErrorWhileTypingCommandArgs                = "Invalid Command Arguments: %v"
+	HumanErrorWhileTypingCommandArgs                = "Invalid %s Command Arguments: %v"
 	ErrorPingFailed                                 = "Ping failed: %v"
 	ErrorUnrecognizedCommand                        = "Unrecognized command: %s"
 	ErrorUnrecognizedSubCommand                     = "Unrecognized %s command sub commands/args : %s"
@@ -191,7 +191,6 @@ const (
 	ErrorMaxOutputTokenMustbe                       = "maxOutputTokens must be 50 or higher, got %d"     // low level
 	ErrorFailedToSendSummarizeMessage               = "Failed To Send Summarize Message: %v"
 	ErrorFailedToSendSummarizeMessageAfterRetries   = "failed to send summarize message after retries" // low level
-	ErrorUnrecognizedSubcommandForClear             = "Unrecognized subcommand for clear: %s"
 	ErrorFailedToReadFile                           = "Failed to read the file at %s: %v"
 	ErrorFailedToCountTokens                        = "Failed to count tokens in the file at %s: %v"
 	ErrorUnrecognizedSubcommandForTokenCount        = "Unrecognized subcommand for token count: %s"
