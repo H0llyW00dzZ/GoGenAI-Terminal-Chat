@@ -217,7 +217,9 @@ func (s *Session) printResponse(resp *genai.GenerateContentResponse) string {
 				colorized = handleSingleAsterisks(colorized)
 
 				// Display the processed AI response
-				printAIResponse(colorized)
+				// Note: "false" indicate that AI Prefix not System Prefix
+				// This how I like Go, unlike other language that sometimes not accurate about boolean lmao
+				printAIResponse(colorized, false)
 				aiResponse += colorized
 			}
 		}
