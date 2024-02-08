@@ -161,9 +161,13 @@ func (h *ChatHistory) addNewSysMessage(message, hashValue string) {
 
 // cleanupOldSysMessages removes older system messages from the history.
 func (h *ChatHistory) cleanupOldSysMessages() {
-	for i := len(h.Messages) - 2; i >= 0; i-- {
-		if isSysMessage(h.Messages[i]) {
-			h.Messages = append(h.Messages[:i], h.Messages[i+1:]...)
+	// Search for the last system message from the end of the slice.
+	// Note: This only work in go 1.22
+	for i := range h.Messages {
+		idx := len(h.Messages) - 1 - i // Calculate the index from the end.
+		if isSysMessage(h.Messages[idx]) {
+			// Remove the system message.
+			h.Messages = append(h.Messages[:idx], h.Messages[idx+1:]...)
 			break // Assuming only one system message exists at a time.
 		}
 	}

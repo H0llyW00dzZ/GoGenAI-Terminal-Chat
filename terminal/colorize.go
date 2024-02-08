@@ -168,7 +168,9 @@ func ApplyFormatting(options FormattingOptions) string {
 //	string: The text with delimiters processed and formatting applied.
 func processDelimiters(options FormattingOptions, keepDelimiters map[string]bool) string {
 	parts := strings.Split(options.Text, options.Delimiter)
-	for j := 1; j < len(parts); j += 2 {
+	// Note: This only work in go 1.22 🤪
+	for j := range parts[1:] { // Start from the second element
+		j = 2*j + 1 // Adjust index because we're ranging over every other element
 		if keep, exists := keepDelimiters[options.Delimiter]; exists && keep {
 			parts[j] = options.Color + options.Delimiter +
 				parts[j] + options.Delimiter + ColorReset
