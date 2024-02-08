@@ -140,11 +140,8 @@ func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (b
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
 	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
-		// Sanitize AI's response to remove any separators
-		aiResponse = sanitizeAIResponse(aiResponse)
-		// Add the sanitized AI's response to the chat history
-		session.ChatHistory.AddMessage(AiNerd, aiResponse, session.ChatConfig)
+		// Fix Duplicated by using Magic "_" Identifier
+		_, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
 		return err == nil, err
 	}, standardAPIErrorHandler)
 
