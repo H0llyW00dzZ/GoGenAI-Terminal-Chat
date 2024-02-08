@@ -217,7 +217,7 @@ func (s *Session) printResponse(resp *genai.GenerateContentResponse) string {
 				colorized = handleSingleAsterisks(colorized)
 
 				// Display the processed AI response
-				printAIResponse(colorized)
+				printAIResponse(colorized, false)
 				aiResponse += colorized
 			}
 		}
