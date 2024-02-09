@@ -111,8 +111,9 @@ func WithTopK(topK int32) ModelConfig {
 //	ModelConfig: A function that sets the maximum number of output tokens when applied to a model.
 //	error: An error if maxOutputTokens is below 20.
 func WithMaxOutputTokens(maxOutputTokens int32) (ModelConfig, error) {
-	if maxOutputTokens < 20 {
-		return nil, fmt.Errorf(ErrorMaxOutputTokenMustbe, maxOutputTokens)
+	if maxOutputTokens < MinOutputTokens {
+		// Use the constant in the error message
+		return nil, fmt.Errorf(ErrorMaxOutputTokenMustbe, MinOutputTokens, maxOutputTokens)
 	}
 	return func(m *genai.GenerativeModel) {
 		m.SetMaxOutputTokens(maxOutputTokens)
