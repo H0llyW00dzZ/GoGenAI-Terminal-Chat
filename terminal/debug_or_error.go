@@ -117,8 +117,14 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 			colors.ColorReset))
 
 		// Retrieve the stack trace
-		stack := make([]byte, 4096)
-		length := runtime.Stack(stack, true)
+		stack := make([]byte, 4096)           // Start with a 4KB buffer
+		length := runtime.Stack(stack, false) // Pass 'false' to get only the current goroutine's stack trace
+
+		// Check if the stack trace might be truncated
+		if length == len(stack) {
+			builder.WriteString(fmt.Sprintf(StackPossiblyTruncated))
+		}
+
 		builder.WriteString(fmt.Sprintf(StackTracePanic,
 			colors.ColorHex95b806,
 			colors.ColorReset,
