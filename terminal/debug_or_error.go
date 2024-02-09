@@ -108,8 +108,11 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 	if r := recover(); r != nil {
 		var builder strings.Builder
 		// Format the message for panic
+		// Include the application name and version in the panic log
 		builder.WriteString(fmt.Sprintf(
 			RecoverGopher,
+			ApplicationName,
+			CurrentVersion,
 			colors.ColorHex95b806,
 			colors.ColorReset,
 			colors.ColorRed,
