@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 )
 
@@ -87,8 +88,9 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 // colorized output to distinguish the log message clearly in the terminal.
 //
 // The message "Recovered from panic:" is displayed in green, followed by the panic
-// value in red. This method ensures that the panic does not cause the program to crash
-// and provides a clear indication in the logs that a panic was caught and handled.
+// value in red and the stack trace. This method ensures that the panic does not cause
+// the program to crash and provides a clear indication in the logs that a panic was
+// caught and handled.
 //
 // Usage:
 //
@@ -113,6 +115,14 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 			colors.ColorRed,
 			r,
 			colors.ColorReset))
+
+		// Retrieve the stack trace
+		stack := make([]byte, 4096)
+		length := runtime.Stack(stack, true)
+		builder.WriteString(fmt.Sprintf(StackTracePanic,
+			colors.ColorHex95b806,
+			colors.ColorReset,
+			stack[:length]))
 
 		// Output the message to the logger
 		l.PrintTypingChat(builder.String(), TypingDelay)
