@@ -190,7 +190,7 @@ const (
 	ErrorFailedToSendTranslationMessage             = "Failed to send translation message: %v"
 	ErrorFailedToSendTranslationMessageAfterRetries = "Failed to send translation message after retries" // low level
 	ErrorFailedToApplyModelConfiguration            = "failed to apply model configuration"              // low level
-	ErrorMaxOutputTokenMustbe                       = "maxOutputTokens must be 50 or higher, got %d"     // low level
+	ErrorMaxOutputTokenMustbe                       = "maxOutputTokens must be %d or higher, got %d"     // low level
 	ErrorFailedToSendSummarizeMessage               = "Failed To Send Summarize Message: %v"
 	ErrorFailedToSendSummarizeMessageAfterRetries   = "failed to send summarize message after retries" // low level
 	ErrorFailedToReadFile                           = "Failed to read the file at %s: %v"
@@ -393,4 +393,9 @@ const (
 	FormatHEIC = "heic"
 	FormatHEIF = "heif"
 	FormatWEBP = "webp"
+)
+
+// model configuration
+const (
+	MinOutputTokens int32 = 20 // Define the minimum number of tokens as a constant
 )
