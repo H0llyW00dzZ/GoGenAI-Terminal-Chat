@@ -169,7 +169,7 @@ const (
 	ErrorLowLevelFailedtoStartAiChatSession         = "failed to start a new AI chat session: %w"
 	ErrorUserAttemptUnrecognizedCommandPrompt       = "**From System**:**%s**\n\nThe user attempted an unrecognized command: **%s**" // Better Response for AI
 	ErrorFailedtoSendUnrecognizedCommandToAI        = "Failed to send unrecognized command to AI: %v"
-	HumanErrorWhileTypingCommandArgs                = "Invalid %s Command Arguments: %v"
+	ErrorWhileTypingCommandArgs                     = "Invalid %s Command Arguments: %v"
 	ErrorPingFailed                                 = "Ping failed: %v"
 	ErrorUnrecognizedCommand                        = "Unrecognized command: %s"
 	ErrorUnrecognizedSubCommand                     = "Unrecognized %s command sub commands/args : %s"

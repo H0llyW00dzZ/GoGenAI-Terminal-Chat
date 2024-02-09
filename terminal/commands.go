@@ -169,7 +169,7 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string, subcomma
 	// Note: WIP
 	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
-		logger.Error(HumanErrorWhileTypingCommandArgs, subcommand, parts)
+		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
 		printnewlineAscii()
 		return true, nil
 	}
@@ -208,7 +208,7 @@ func (cmd *handleClearCommand) HandleSubcommand(subcommand string, session *Sess
 		return cmd.clearSummarizeHistory(session)
 	default:
 		// Handle unrecognized subcommand
-		logger.Error(HumanErrorWhileTypingCommandArgs, subcommand, parts)
+		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
 		return false, nil
 	}
 }
@@ -228,7 +228,7 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 	// Note: The code in "safety_settings.go" employs advanced idiomatic Go practices. 🤪
 	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
 	if !cmd.IsValid(parts) {
-		logger.Error(HumanErrorWhileTypingCommandArgs, subcommand, parts)
+		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
 		printnewlineAscii()
 		return false, nil
 	}
@@ -313,7 +313,7 @@ func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (boo
 
 func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	if !cmd.IsValid(parts) {
-		logger.Error(HumanErrorWhileTypingCommandArgs, subcommand, parts)
+		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
 		printnewlineAscii()
 		return false, nil
 	}
@@ -372,7 +372,7 @@ func (cmd *handleStatsCommand) HandleSubcommand(subcommand string, session *Sess
 		return cmd.showChatStats(session)
 	default:
 		// Log an error for unrecognized subcommands and continue the session.
-		logger.Error(HumanErrorWhileTypingCommandArgs, subcommand, parts)
+		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
 		return false, nil
 	}
 }
