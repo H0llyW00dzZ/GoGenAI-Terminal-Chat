@@ -19,6 +19,8 @@ const (
 const (
 	SignalMessage                    = " Received an interrupt, shutting down gracefully..." // fix formatting ^C in linux/unix
 	RecoverGopher                    = "%sRecovered from panic:%s %s%v%s"
+	StackTracePanic                  = "\n%sStack Trace:\n%s%s"
+	StackPossiblyTruncated           = "...stack trace possibly truncated...\n"
 	ObjectHighLevelString            = "%s %s"   // Catch High level string
 	ObjectHighLevelStringWithSpace   = "%s %s "  // Catch High level string with space
 	ObjectHighLevelStringWithNewLine = "%s %s\n" // Catch High level string With NewLine
