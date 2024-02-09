@@ -110,6 +110,7 @@ var safetyOptions = map[string]SafetyOption{
 var slantStyle = NewASCIIArtStyle()
 var stripStyle = NewASCIIArtStyle()
 var newLine = NewASCIIArtStyle()
+var panicDetected = NewASCIIArtStyle()
 
 var dynamicErrorFileTypeNotSupported = ErrorFileTypeNotSupported
 
@@ -300,4 +301,18 @@ func init() {
 	newLine.AddChar(N, []string{
 		eMpty, // this better unlike hardcoded "\n" lmao.
 	}, colors.ColorReset)
+	panicDetected.AddChar(P, []string{
+		slantp1,
+		slanta2,
+		slantn3,
+		slanti4,
+		slantc5,
+	}, BoldText+colors.ColorHex95b806)
+	panicDetected.AddChar(D, []string{
+		slantA1,
+		slantA2,
+		slantA3,
+		slantA4,
+		slantA5,
+	}, BoldText+colors.ColorHex95b806)
 }

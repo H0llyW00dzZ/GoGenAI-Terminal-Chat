@@ -107,6 +107,11 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 func (l *DebugOrErrorLogger) RecoverFromPanic() {
 	if r := recover(); r != nil {
 		var builder strings.Builder
+		combinedStyle := MergeStyles(panicDetected)
+		text := "PD"
+		asciiArt, _ := ToASCIIArt(text, combinedStyle)
+		fmt.Println(asciiArt)
+		printnewlineAscii()
 		// Format the message for panic
 		// Include the application name and version in the panic log
 		builder.WriteString(fmt.Sprintf(
