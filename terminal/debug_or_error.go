@@ -121,6 +121,7 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 		length := runtime.Stack(stack, false) // Pass 'false' to get only the current goroutine's stack trace
 
 		// Check if the stack trace might be truncated
+		// Note: This should not happen for lower complexity. If the complexity is very high, this may occur.
 		if length == len(stack) {
 			builder.WriteString(fmt.Sprintf(StackPossiblyTruncated))
 		}
