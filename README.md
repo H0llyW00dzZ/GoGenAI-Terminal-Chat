@@ -384,6 +384,7 @@ Contributions is always welcome! If you're able to write code that adheres to a 
 > [!NOTE]
 > The enhancement, `Leverage ChatHistory by automatically syncing for multi-modal use (gemini-pro-vision)`, utilizes `ChatHistory` as a highly efficient, in-memory data storage solution unlike written in `C` or other language that causing `memory leaks` . This ensures seamless synchronization and optimal performance across various modes.
 - [ ] **[Explicit] Improve `Error` message handling to make it more dynamic.**
+- [ ] **Improve `Colorize` to enhance scalability and integrate it with Standard Library Regex for better performance.**
 
 ### Other:
 - [ ] **Plan for Google Cloud Deployment**
