@@ -238,6 +238,7 @@ const (
 	BinaryRegexAnsi         = `\x1b\[[0-9;]*m`
 	CodeBlockRegex          = "```\\w+"
 	SanitizeTextAIResponse  = "\n---\n"
+	ItalicTextRegex         = `\*([^\s][^\*]*?[^\s])\*`
 )
 
 // Defined List of Environment variables
