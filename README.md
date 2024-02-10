@@ -331,9 +331,6 @@ By following these tips, you can write simple, easy-to-understand functions that
 ## 🙌 Contributing
 Available [`here`](CONTRIBUTING.md)
 
-> [!TIP]
-> If you're unable to write code that adheres to a cyclomatic complexity of 5 or less per function, you can refer to the Go tour [here](https://go.dev/tour/). 
-
 ## 📝 TODO
 
 > [!NOTE]
