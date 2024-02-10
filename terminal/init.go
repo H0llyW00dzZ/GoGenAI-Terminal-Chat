@@ -76,6 +76,8 @@ var totalTokenCount int = 0
 // Note: Removing Struct now, this a `Go` not a `Rust`
 var ansiRegex *regexp.Regexp
 
+var italicAnsiRegex *regexp.Regexp
+
 // filterCodeBlock is a compiled regular expression that is used to identify and
 // remove language identifiers from Markdown code blocks. A Markdown code block is
 // typically indicated by triple backticks (```) followed by an optional language
@@ -224,6 +226,7 @@ func init() {
 	// Compile the ANSI color code regular expression pattern.
 	ansiRegex = regexp.MustCompile(BinaryRegexAnsi)
 	filterCodeBlock = regexp.MustCompile(CodeBlockRegex)
+	italicAnsiRegex = regexp.MustCompile(ItalicTextRegex)
 
 	// Initialize the command registry.
 	// Note: This NewCommandRegistry offers excellent scalability. For Example: You can easily add numerous commands without impacting
