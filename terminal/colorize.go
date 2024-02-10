@@ -217,17 +217,29 @@ func SingleCharColorize(text string, delimiter string, color string) string {
 	lines := strings.Split(text, StringNewLine)
 	for _, line := range lines {
 		trimmedLine := strings.TrimSpace(line)
-		if strings.HasPrefix(trimmedLine, delimiter) {
+		// Check for list items, which start with the delimiter followed by a space.
+		if strings.HasPrefix(trimmedLine, delimiter+" ") {
 			// Colorize the delimiter and the following space if it's a list item
 			result.WriteString(color)
 			result.WriteString(trimmedLine[:1])
 			result.WriteString(colors.ColorReset)
 			result.WriteString(trimmedLine[1:])
 		} else {
-			// No coloring needed
-			result.WriteString(trimmedLine)
+			// Apply italic formatting to the line.
+			processedLine := ApplyItalic(trimmedLine)
+			result.WriteString(processedLine)
 		}
 		result.WriteRune(nl.NewLineChars)
 	}
 	return strings.TrimRight(result.String(), StringNewLine)
+}
+
+// ApplyItalic applies italic formatting to text surrounded by single asterisks.
+// It uses the global italicPattern variable to identify and format italic text.
+func ApplyItalic(text string) string {
+	return italicAnsiRegex.ReplaceAllStringFunc(text, func(match string) string {
+		// Remove the asterisks and apply italic formatting to the inner text.
+		innerContent := match[1 : len(match)-1] // Strip the asterisks
+		return colors.ColorHex95b806 + ItalicText + innerContent + ResetItalicText + colors.ColorReset
+	})
 }
