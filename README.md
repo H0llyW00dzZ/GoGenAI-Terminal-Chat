@@ -329,7 +329,7 @@ By following these tips, you can write simple, easy-to-understand functions that
 ---
 
 ## 🙌 Contributing
-Available [`here`](CONTRIBUTING.md)
+Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed information on how you can contribute to this project.
 
 ## 📝 TODO
 
