@@ -28,12 +28,6 @@ var logger *DebugOrErrorLogger
 // Caution is advised: if you're not familiar with these practices, improper handling in this "CommandRegistry" could lead to frequent panics 24/7 🤪.
 var registry *CommandRegistry
 
-// checkVersion is a package-level variable that holds the latest release information
-// fetched from the GitHub API. It is used to cache the details of the latest release
-// to avoid multiple API calls when checking for updates within the application's
-// lifecycle. This variable should be updated only through the CheckLatestVersion function.
-var checkVersion GitHubRelease
-
 var aiPrompt string
 
 // colors holds the ANSI color codes and is accessible throughout the package.
