@@ -42,8 +42,13 @@ func (p *TokenCountParams) performTokenCount(ctx context.Context, tokenCount *in
 		return p.makeTokenCountRequest(ctx, tokenCount)
 	}
 
-	// Assuming retryWithExponentialBackoff and standardAPIErrorHandler are defined elsewhere
-	return retryWithExponentialBackoff(retryFunc, standardAPIErrorHandler)
+	// Create an instance of RetryableOperation with the defined retryFunc.
+	operation := RetryableOperation{
+		retryFunc: retryFunc,
+	}
+
+	// Call the retryWithExponentialBackoff method on the RetryableOperation instance.
+	return operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 }
 
 // makeTokenCountRequest attempts to count tokens by initializing a new AI client and sending the token counting request.
