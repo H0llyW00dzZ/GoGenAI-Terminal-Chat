@@ -111,7 +111,7 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, 
 		return false, nil
 	}
 
-	tokenCount, err := CountTokens(params)
+	tokenCount, err := params.CountTokens()
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
 		logger.Error(ErrorFailedToCountTokens, filePath, err) // Using logger.Error with formatting directive.
