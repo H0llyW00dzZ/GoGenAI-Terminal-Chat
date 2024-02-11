@@ -124,33 +124,44 @@ func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, e
 // functions (CheckLatestVersion and GetFullReleaseInfo) to determine version information and fetch release details.
 func (c *handleCheckVersionCommand) Execute(session *Session, parts []string) (bool, error) {
 	// Pass ContextPrompt 🤪
+	// Add messages to the chat history to provide context for the version check.
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
 	session.ChatHistory.AddMessage(YouNerd, VersionCommand, session.ChatConfig)
-	// Get the entire chat history as a string
 
-	// Check if the current version is the latest.
+	// Check if the current version is the latest and get the prompt for the AI.
 	aiPrompt, err := c.checkVersionAndGetPrompt()
 	if err != nil {
+		// Log errors related to version checking and Google API issues.
 		logger.Error(ErrorFailedTosendmessagesToAI, err)
 		logger.HandleGoogleAPIError(err)
 		return false, err
 	}
 
-	// Sanitize the message before sending it to the AI
+	// Sanitize the AI prompt to ensure it is safe to send.
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		// Fix Duplicated by using Magic "_" Identifier
-		_, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
-		return err == nil, err
-	}, standardAPIErrorHandler)
+	// Define a retryable operation with a function that sends the version check message to the AI.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			// Fix Duplicated by using Magic "_" Identifier
+			// Send the message to the AI, discarding the response since it's not needed here.
+			_, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
+			// If there's no error, the operation is successful.
+			return err == nil, err
+		},
+	}
+
+	// Execute the retryable operation with an exponential backoff strategy.
+	success, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 
 	if err != nil {
+		// If an error occurs that is not recoverable by retries, log it and return the error.
 		logger.Error(ErrorFailedToSendVersionCheckMessage, err)
 		return false, err
 	}
 
 	if !success {
+		// If the operation was not successful after retries, return an error.
 		return false, fmt.Errorf(ErrorFailedToSendVersionCheckMessageAfterReties)
 	}
 

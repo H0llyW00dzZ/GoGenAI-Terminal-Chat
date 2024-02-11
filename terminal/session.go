@@ -28,7 +28,7 @@ import (
 //
 //	*Session: A pointer to the newly created Session object.
 func NewSession(apiKey string) *Session {
-	// Initialize ChatConfig with default values
+	// Initialize ChatConfig with default values.
 	chatConfig := DefaultChatConfig()
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -39,12 +39,17 @@ func NewSession(apiKey string) *Session {
 		return nil
 	}
 
-	// Perform a simple request to validate the API key.
-	valid, err := retryWithExponentialBackoff(func() (bool, error) {
-		return SendDummyMessage(client)
-	}, standardAPIErrorHandler)
+	// Define a retryable operation for validating the API key.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			return SendDummyMessage(client)
+		},
+	}
 
-	// Handle the result of retryWithExponentialBackoff
+	// Execute the retryable operation with an exponential backoff strategy.
+	valid, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
+
+	// Handle the result of the retry operation.
 	if err != nil || !valid {
 		cancel()
 		logger.Error(ErrorFailedToStartSession, err)
@@ -184,22 +189,26 @@ func (s *Session) ensureClientIsValid() bool {
 // sendInputToAI sends the user input to the AI and updates the chat history with the AI's response.
 // It returns true if the input was successfully sent and the response was received, otherwise false.
 func (s *Session) sendInputToAI(input string) bool {
-	// Use retryWithExponentialBackoff to handle potential transient errors with sending the message.
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		// Fix Duplicated by using Magic "_" Identifier
-		_, err := s.SendMessage(s.Ctx, s.Client, input)
-		if err != nil {
-			return false, err
-		}
-		return true, nil
-	}, standardAPIErrorHandler)
+	// Define a retryable operation for sending input to the AI.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			// Fix Duplicated by using Magic "_" Identifier
+			// Send the input message to the AI, discarding the response.
+			_, err := s.SendMessage(s.Ctx, s.Client, input)
+			// If there's an error, the operation is not successful.
+			return err == nil, err
+		},
+	}
+
+	// Execute the retryable operation with an exponential backoff strategy.
+	success, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 
 	if err != nil || !success {
 		logger.Error(ErrorSendingMessage, err)
-		return false // Sending input to AI failed
+		return false // Sending input to AI failed.
 	}
 
-	return true // Input was successfully sent to AI
+	return true // Input was successfully sent to AI.
 }
 
 // cleanup releases resources used by the session. It cancels the context and closes

@@ -31,11 +31,19 @@ func executeCommand(session *Session, command string, constructPrompt func(strin
 
 // sendCommandToAI sends a command to the AI after sanitizing and applying retry logic.
 func sendCommandToAI(session *Session, command string, constructPrompt func(string) string) (bool, error) {
+	// Construct the AI prompt using the provided function.
 	aiPrompt := constructPrompt(command)
 
-	return retryWithExponentialBackoff(func() (bool, error) {
-		return sendMessageToAI(session, aiPrompt)
-	}, standardAPIErrorHandler)
+	// Define a retryable operation with a function that sends a message to the AI.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			// This function is called repeatedly by retryWithExponentialBackoff if it fails.
+			return sendMessageToAI(session, aiPrompt)
+		},
+	}
+
+	// Execute the retryable operation with an exponential backoff strategy.
+	return operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 }
 
 // sendMessageToAI sends a message to the AI and handles the response.
@@ -47,20 +55,25 @@ func sendMessageToAI(session *Session, message string) (bool, error) {
 
 // sendShutdownMessage sends a formatted shutdown message to the AI and logs it to the chat history.
 func sendShutdownMessage(session *Session) error {
+	// Clear the chat history in preparation for shutdown.
 	session.ChatHistory.Clear()
-	// Context
+	// Add context and quit command messages to the chat history.
 	addMessageWithContext(session, AiNerd, ContextPrompt)
-	// Assuming QuitCommand is the user input that triggered the shutdown.
 	addMessageWithContext(session, YouNerd, QuitCommand)
 
-	// Send a shutdown message to the AI including the chat history with the context prompt
+	// Construct the AI prompt for shutdown.
 	aiPrompt := fmt.Sprintf(ContextPromptShutdown, QuitCommand, ApplicationName)
 
-	// Attempt to send the shutdown message to the AI with retry logic
-	_, err := retryWithExponentialBackoff(func() (bool, error) {
-		return sendMessageToAI(session, aiPrompt)
-	}, standardAPIErrorHandler)
+	// Define a retryable operation with a function that sends the shutdown message to the AI.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			// This function is called repeatedly by retryWithExponentialBackoff if it fails.
+			return sendMessageToAI(session, aiPrompt)
+		},
+	}
 
+	// Execute the retryable operation with an exponential backoff strategy.
+	_, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 	return err
 }
 
@@ -71,19 +84,25 @@ func (h *handleSummarizeCommand) constructSummarizePrompt() string {
 
 // sendSummarizePrompt sends the summarize prompt to the AI and handles the response.
 func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitizedMessage string) (bool, error) {
-	// Retry logic for sending the summarize prompt to the AI.
-	return retryWithExponentialBackoff(func() (bool, error) {
-		// Note: This is subject to change, for example,
-		// to implement another functionality without displaying AI response in the terminal,
-		// but only adding it to the chat history.
-		aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
-		if err != nil {
-			return false, err
-		}
+	// Define a retryable operation with a function that sends the summarize prompt to the AI.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			// Note: This is subject to change, for example,
+			// to implement another functionality without displaying AI response in the terminal,
+			// but only adding it to the chat history.
+			// This function is called repeatedly by retryWithExponentialBackoff if it fails.
+			aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
+			if err != nil {
+				return false, err
+			}
+			// Handle the AI's response after a successful send.
+			h.handleAIResponse(session, sanitizedMessage, aiResponse, SummaryPrefix)
+			return true, nil
+		},
+	}
 
-		h.handleAIResponse(session, sanitizedMessage, aiResponse, SummaryPrefix)
-		return true, nil
-	}, standardAPIErrorHandler)
+	// Execute the retryable operation with an exponential backoff strategy.
+	return operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 }
 
 // handleAIResponse processes the AI's response to the summarize command.
@@ -179,21 +198,32 @@ func constructAITranslatePrompt(applicationName, command, text, targetLanguage s
 
 // handleAIInteraction handles sending messages to the AI and processing responses.
 func handleAIInteraction(session *Session, aiPrompt string, postProcess func(session *Session, aiResponse string) error) error {
+	// Sanitize the AI prompt to ensure it is safe to send.
 	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
 
-	success, err := retryWithExponentialBackoff(func() (bool, error) {
-		aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
-		if err != nil {
-			return false, err
-		}
-		return true, postProcess(session, aiResponse)
-	}, standardAPIErrorHandler)
+	// Define a retryable operation with a function that sends messages to the AI.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			// This function is called repeatedly by retryWithExponentialBackoff if it fails.
+			aiResponse, err := session.SendMessage(session.Ctx, session.Client, sanitizedMessage)
+			if err != nil {
+				return false, err
+			}
+			// Call the provided post-processing function on the AI's response.
+			return true, postProcess(session, aiResponse)
+		},
+	}
+
+	// Execute the retryable operation with an exponential backoff strategy.
+	success, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 
 	if err != nil {
+		// If an error occurs that is not recoverable by retries, return the error.
 		return err
 	}
 
 	if !success {
+		// If the operation was not successful after retries, return an error.
 		return fmt.Errorf(ErrorFailedToSendTranslationMessageAfterRetries)
 	}
 
