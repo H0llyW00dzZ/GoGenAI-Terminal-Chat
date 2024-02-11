@@ -212,6 +212,11 @@ func handleSingleAsterisks(content string) string {
 	return SingleCharColorize(content, SingleAsterisk, colors.ColorCyan24Bit)
 }
 
+// handleSingleMinusSign applies color to text surrounded by single-character delimiters.
+func handleSingleMinusSign(content string) string {
+	return SingleCharColorize(content, SingleMinusSign, colors.ColorCyan24Bit)
+}
+
 // printAIResponse prints the AI's response with a typing effect.
 //
 // Added a new parameter `isSystemMessage` to distinguish between AI and system messages.
