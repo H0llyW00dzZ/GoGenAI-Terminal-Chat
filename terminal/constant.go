@@ -225,21 +225,33 @@ const (
 
 // Defined List of characters
 const (
-	SingleAsterisk                     = "*"
-	DoubleAsterisk                     = "**"
-	SingleBacktick                     = "`"
-	TripleBacktick                     = "```"
-	SingleUnderscore                   = "_"
-	StringNewLine                      = "\n"
-	BinaryAnsiChar                     = '\x1b'
-	BinaryLeftSquareBracket            = '['
-	BinaryAnsiSquenseChar              = 'm'
-	BinaryAnsiSquenseString            = "m"
-	BinaryRegexAnsi                    = `\x1b\[[0-9;]*m`
-	CodeBlockRegex                     = "```\\w+"
-	SanitizeTextAIResponse             = "\n---\n"
-	ItalicTextRegex                    = `\*(\S(.*?\S)?)\*`   // Updated regex to match text surrounded by single asterisks
-	StandaloneAsteriskAnsiRegexPattern = `(?m)(^|\s)\*(\s|$)` // TODO
+	SingleAsterisk          = "*"
+	DoubleAsterisk          = "**"
+	SingleBacktick          = "`"
+	TripleBacktick          = "```"
+	SingleUnderscore        = "_"
+	StringNewLine           = "\n"
+	BinaryAnsiChar          = '\x1b'
+	BinaryLeftSquareBracket = '['
+	BinaryAnsiSquenseChar   = 'm'
+	BinaryAnsiSquenseString = "m"
+	BinaryRegexAnsi         = `\x1b\[[0-9;]*m`
+	CodeBlockRegex          = "```\\w+"
+	SanitizeTextAIResponse  = "\n---\n"
+	// This regex pattern will match:
+	//
+	// 1. An asterisk followed by a space (e.g., "* ")
+	//
+	// 2. Italic text surrounded by single asterisks (e.g., "*italic*")
+	//
+	// 3. A leading asterisk followed by space and italic text (e.g., "* *italic*")
+	//
+	// Ref: https://go.dev/play/p/3APEsqfgUV-
+	//
+	// It uses a non-greedy match for the italic text and optional groups.
+	ItalicTextRegex = `\*(\s\*\S.*?\S\*|\s|\S.*?\S\*)`
+	// TODO
+	StandaloneAsteriskAnsiRegexPattern = `(?m)(^|\s)\*(\s|$)`
 )
 
 // Defined List of Environment variables
