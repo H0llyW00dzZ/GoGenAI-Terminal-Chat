@@ -1,4 +1,12 @@
-# Security Policy
+<pre>
+   ______      ______           ___    ____
+  / ____/___  / ____/__  ____  /   |  /  _/
+ / / __/ __ \/ / __/ _ \/ __ \/ /| |  / /  
+/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     Security Policy
+\____/\____/\____/\___/_/ /_/_/  |_/___/  
+
+Copyright (©️) 2024 @H0llyW00dzZ All rights reserved.
+</pre>
 
 ## Supported Versions
 
