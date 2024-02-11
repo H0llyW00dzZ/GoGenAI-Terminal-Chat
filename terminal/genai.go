@@ -254,11 +254,11 @@ func sanitizeAIResponse(response string) string {
 // sendToAIWithoutDisplay sends a message to the AI, processes the response, and updates the chat history without displaying the response.
 //
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
-func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string, session *Session) error {
-	model := ConfigureModelForSession(ctx, client, session, GeminiPro)
+func (s *Session) sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string) error {
+	model := ConfigureModelForSession(ctx, client, s, GeminiPro)
 
 	// Retrieve the relevant chat history using ChatConfig
-	chatHistory := session.ChatHistory.GetHistory(session.ChatConfig)
+	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
 
 	fullContext := chatContext
 	if len(chatHistory) > 0 {
@@ -266,12 +266,12 @@ func sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatConte
 		fullContext = chatHistory + StringNewLine + chatContext
 	}
 
-	return sendMessageAndProcessResponse(ctx, model, fullContext, session)
+	return s.sendMessageAndProcessResponse(ctx, model, fullContext)
 }
 
 // sendMessageAndProcessResponse handles the full communication cycle with the generative AI model.
 // It sends the provided context to the model, processes the response, and updates the chat history.
-func sendMessageAndProcessResponse(ctx context.Context, model *genai.GenerativeModel, fullContext string, session *Session) error {
+func (s *Session) sendMessageAndProcessResponse(ctx context.Context, model *genai.GenerativeModel, fullContext string) error {
 	// Send the message to the AI
 	resp, err := model.StartChat().SendMessage(ctx, genai.Text(fullContext))
 	if err != nil {
@@ -280,12 +280,12 @@ func sendMessageAndProcessResponse(ctx context.Context, model *genai.GenerativeM
 
 	// Process the AI's response and add it to the chat history
 	aiResponse := processAIResponse(resp)
-	sanitizedMessage := session.ChatHistory.SanitizeMessage(aiPrompt)
+	sanitizedMessage := s.ChatHistory.SanitizeMessage(aiPrompt)
 	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
-	if !session.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, session.ChatHistory.hashMessage(aiResponse)) {
+	if !s.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, s.ChatHistory.hashMessage(aiResponse)) {
 		// If it was not a system message or no existing system message was found to replace,
 		// add the new system message to the chat history.
-		session.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, session.ChatConfig)
+		s.ChatHistory.AddMessage(SYSTEMPREFIX, aiResponse, s.ChatConfig)
 	}
 
 	return nil
