@@ -119,7 +119,7 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 		ImageFormat: imageFormat,
 		ImageData:   imageData,
 	}
-	tokenCount, err := CountTokens(params)
+	tokenCount, err := params.CountTokens()
 	printnewlineAscii() // a better one, instead of "\n"
 	if err != nil {
 		handleTokenCountError(err)
