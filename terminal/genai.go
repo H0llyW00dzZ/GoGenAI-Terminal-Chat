@@ -277,7 +277,7 @@ func (s *Session) sendMessageAndProcessResponse(ctx context.Context, model *gena
 	}
 
 	// Process the AI's response and add it to the chat history
-	aiResponse := processAIResponse(resp)
+	aiResponse := s.processAIResponse(resp)
 	sanitizedMessage := s.ChatHistory.SanitizeMessage(aiPrompt)
 	formattedResponse := fmt.Sprintf(ObjectHighLevelString, SYSTEMPREFIX, aiResponse)
 	if !s.ChatHistory.handleSystemMessage(sanitizedMessage, formattedResponse, s.ChatHistory.hashMessage(aiResponse)) {
@@ -290,7 +290,7 @@ func (s *Session) sendMessageAndProcessResponse(ctx context.Context, model *gena
 }
 
 // processAIResponse processes the AI's response and returns it as a string.
-func processAIResponse(resp *genai.GenerateContentResponse) string {
+func (s *Session) processAIResponse(resp *genai.GenerateContentResponse) string {
 	var aiResponse strings.Builder
 	for _, cand := range resp.Candidates {
 		if cand.Content != nil {
