@@ -215,6 +215,7 @@ func (s *Session) printResponse(resp *genai.GenerateContentResponse) string {
 				filteredContent := FilterLanguageFromCodeBlock(content)
 				colorized := colorizeResponse(filteredContent)
 				colorized = handleSingleAsterisks(colorized)
+				colorized = handleSingleMinusSign(colorized)
 
 				// Display the processed AI response
 				// Note: "false" indicate that AI Prefix not System Prefix

@@ -230,6 +230,7 @@ const (
 	SingleBacktick          = "`"
 	TripleBacktick          = "```"
 	SingleUnderscore        = "_"
+	SingleMinusSign         = "-"
 	StringNewLine           = "\n"
 	BinaryAnsiChar          = '\x1b'
 	BinaryLeftSquareBracket = '['
