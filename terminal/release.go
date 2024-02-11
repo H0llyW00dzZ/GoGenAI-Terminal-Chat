@@ -72,8 +72,7 @@ func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion str
 //
 // Returns:
 //
-//	release *GitHubRelease: A pointer to the GitHubRelease struct containing the release information.
-//	err error: An error if the request fails or if there is an issue parsing the response.
+//	error: An error if the request fails or if there is an issue parsing the response.
 func (r *GitHubRelease) GetFullReleaseInfo(tagName string) error {
 	// Construct the full URL to the GitHub API for the given tag name.
 	releaseURL := fmt.Sprintf(GitHubReleaseFUll, tagName)
