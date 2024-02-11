@@ -56,8 +56,6 @@ func PrintTypingChat(message string, delay time.Duration) {
 //	       values across API boundaries and between processes.
 //	client *genai.Client: A pointer to a genai.Client, which provides the functionality to interact with the
 //	          generative AI service.
-//	session *Session: A pointer to a Session struct that contains the current chat session's state,
-//	           including safety settings and chat history.
 //	modelName string: The identifier for the generative AI model to be used in the session. This name
 //	                   is used to apply specific configurations and safety settings tailored to the
 //	                   particular AI model.
@@ -71,15 +69,15 @@ func PrintTypingChat(message string, delay time.Duration) {
 // contains valid safety settings. If no safety settings are present in the session, default
 // safety settings are applied. The modelName parameter allows for model-specific configuration,
 // enabling more granular control over the behavior and safety of different AI models.
-func ConfigureModelForSession(ctx context.Context, client *genai.Client, session *Session, modelName string) *genai.GenerativeModel {
+func (s *Session) ConfigureModelForSession(ctx context.Context, client *genai.Client, modelName string) *genai.GenerativeModel {
 	// Initialize the model with the specific AI model identifier.
 	model := client.GenerativeModel(modelName)
 
 	// Apply safety settings from the session or use default settings if none are provided.
-	if session.SafetySettings == nil {
-		session.SafetySettings = DefaultSafetySettings()
+	if s.SafetySettings == nil {
+		s.SafetySettings = DefaultSafetySettings()
 	}
-	session.SafetySettings.ApplyToModel(model, modelName)
+	s.SafetySettings.ApplyToModel(model, modelName)
 
 	// Set additional configuration options, such as the temperature, to control the creativity
 	// and randomness of the AI's responses.
@@ -112,7 +110,7 @@ func ConfigureModelForSession(ctx context.Context, client *genai.Client, session
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func (s *Session) SendMessage(ctx context.Context, client *genai.Client, chatContext string) (string, error) {
 	// Get the generative model from the client
-	model := ConfigureModelForSession(ctx, client, s, GeminiPro) // Simplify 🤪
+	model := s.ConfigureModelForSession(ctx, client, GeminiPro) // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
@@ -255,7 +253,7 @@ func sanitizeAIResponse(response string) string {
 //
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
 func (s *Session) sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string) error {
-	model := ConfigureModelForSession(ctx, client, s, GeminiPro)
+	model := s.ConfigureModelForSession(ctx, client, GeminiPro)
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
