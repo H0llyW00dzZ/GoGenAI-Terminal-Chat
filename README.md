@@ -402,4 +402,4 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
 > The `Calculate the Size of the Code Base Volume` feature is designed to assess the size of a code base. For example, it can calculate the volume of Google's Open Source projects, or Other Open Source Projects, which contain billions of lines of code written in `Go`.
 
 ## 🕵️‍♂️ HACKING
-Available [`here`](SECURITY.md)
+Available [`here`](https://github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/security/policy)
