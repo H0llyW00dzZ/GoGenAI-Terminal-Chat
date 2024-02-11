@@ -11,16 +11,16 @@ import (
 	"time"
 )
 
-// retryWithExponentialBackoff attempts to execute a RetryableFunc with a retry policy.
+// retryWithExponentialBackoff attempts to execute the RetryableFunc with a retry policy.
 // It applies exponential backoff between retries and logs an error if the maximum number of retries is reached.
 //
 // Note: this a powerful retry policy, unlike that shitty complex go codes
-func retryWithExponentialBackoff(retryFunc RetryableFunc, handleError ErrorHandlerFunc) (bool, error) {
+func (op *RetryableOperation) retryWithExponentialBackoff(handleError ErrorHandlerFunc) (bool, error) {
 	const maxRetries = 3
 	baseDelay := time.Second
 
 	for attempt := 0; attempt < maxRetries; attempt++ {
-		success, err := retryFunc()
+		success, err := op.retryFunc()
 		if err == nil {
 			return success, nil
 		}
@@ -51,7 +51,7 @@ func standardAPIErrorHandler(err error) bool {
 	return strings.Contains(err.Error(), Error500GoogleApi)
 }
 
-// standardAPIErrorHandler is the standard error handling strategy for API errors.
+// standardOtherAPIErrorHandler is the standard error handling strategy for API errors.
 func standardOtherAPIErrorHandler(err error) bool {
 	// Error 500 Other Api
 	return strings.Contains(err.Error(), Code500)
