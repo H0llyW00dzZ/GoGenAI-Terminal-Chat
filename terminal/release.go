@@ -34,7 +34,7 @@ func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion str
 	resp, err := client.Get(GitHubAPIURL)
 	if err != nil {
 		// Log and return the error if the HTTP request fails.
-		logger.Error(ErrorFailedToFetchReleaseInfo, err)
+		logger.Error(ErrorFailedToFetchReleaseInfo, GitHubAPIURL, err)
 		return false, "", err
 	}
 	// Ensure the body of the response is closed when the function returns.
@@ -74,7 +74,7 @@ func CheckLatestVersion(currentVersion string) (isLatest bool, latestVersion str
 //
 //	release *GitHubRelease: A pointer to the GitHubRelease struct containing the release information.
 //	err error: An error if the request fails or if there is an issue parsing the response.
-func GetFullReleaseInfo(tagName string) (release *GitHubRelease, err error) {
+func (r *GitHubRelease) GetFullReleaseInfo(tagName string) error {
 	// Construct the full URL to the GitHub API for the given tag name.
 	releaseURL := fmt.Sprintf(GitHubReleaseFUll, tagName)
 
@@ -82,8 +82,8 @@ func GetFullReleaseInfo(tagName string) (release *GitHubRelease, err error) {
 	resp, err := http.Get(releaseURL)
 	if err != nil {
 		// Log and return the error if the HTTP request fails.
-		logger.Error(ErrorFailedTagToFetchReleaseInfo, tagName, err)
-		return nil, err // Return the original error without additional formatting
+		logger.Error(ErrorFailedToFetchReleaseInfo, tagName, err)
+		return err // Return the original error without additional formatting
 	}
 	// Ensure the body of the response is closed when the function returns.
 	defer resp.Body.Close()
@@ -93,19 +93,18 @@ func GetFullReleaseInfo(tagName string) (release *GitHubRelease, err error) {
 		// Log and return an error if the status code is not 200 OK.
 		errMsg := fmt.Sprintf(ErrorReceivedNon200StatusCode, resp.StatusCode)
 		logger.Error(errMsg)
-		return nil, fmt.Errorf(errMsg)
+		return fmt.Errorf(errMsg)
 	}
 
-	// Decode the JSON response into a GitHubRelease struct.
-	var checkVersion GitHubRelease // This should be a local variable, not a global one.
-	if err := json.NewDecoder(resp.Body).Decode(&checkVersion); err != nil {
+	// Decode the JSON response into this GitHubRelease struct (r).
+	if err := json.NewDecoder(resp.Body).Decode(r); err != nil {
 		// Log and return the error if JSON unmarshaling fails.
 		logger.Error(ErrorFailedTagUnmarshalTheReleaseData, tagName, err)
-		return nil, err // Return the original error without additional formatting
+		return err
 	}
 
-	// Return a pointer to the filled GitHubRelease struct and no error.
-	return &checkVersion, nil
+	// No need to return the struct as it's updated in place.
+	return nil
 }
 
 // checkLatestVersionWithBackoff wraps the CheckLatestVersion call with retry logic.
@@ -182,15 +181,14 @@ func fetchAndFormatReleaseInfo(latestVersion string) (aiPrompt string, err error
 //
 //	releaseInfo *GitHubRelease: A pointer to the GitHubRelease struct containing the release information.
 //	err error: An error if the request fails after retries or if there is an issue parsing the response.
-func fetchReleaseWithBackoff(latestVersion string) (*GitHubRelease, error) {
-	var releaseInfo *GitHubRelease
+func fetchReleaseWithBackoff(tagName string) (*GitHubRelease, error) {
+	releaseInfo := &GitHubRelease{}
 
 	// Define a retryable operation with a function that fetches the release information.
 	operation := RetryableOperation{
-		retryFunc: func() (bool, error) {
+		retryFunc: func() (retry bool, err error) {
 			// Call GetFullReleaseInfo to fetch detailed release information for the given tag name.
-			var err error
-			releaseInfo, err = GetFullReleaseInfo(latestVersion)
+			err = releaseInfo.GetFullReleaseInfo(tagName)
 			// The operation is successful if there is no error.
 			return err == nil, err
 		},
