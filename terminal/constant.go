@@ -225,20 +225,21 @@ const (
 
 // Defined List of characters
 const (
-	SingleAsterisk          = "*"
-	DoubleAsterisk          = "**"
-	SingleBacktick          = "`"
-	TripleBacktick          = "```"
-	SingleUnderscore        = "_"
-	StringNewLine           = "\n"
-	BinaryAnsiChar          = '\x1b'
-	BinaryLeftSquareBracket = '['
-	BinaryAnsiSquenseChar   = 'm'
-	BinaryAnsiSquenseString = "m"
-	BinaryRegexAnsi         = `\x1b\[[0-9;]*m`
-	CodeBlockRegex          = "```\\w+"
-	SanitizeTextAIResponse  = "\n---\n"
-	ItalicTextRegex         = `\*([^\s][^\*]*?[^\s])\*`
+	SingleAsterisk                     = "*"
+	DoubleAsterisk                     = "**"
+	SingleBacktick                     = "`"
+	TripleBacktick                     = "```"
+	SingleUnderscore                   = "_"
+	StringNewLine                      = "\n"
+	BinaryAnsiChar                     = '\x1b'
+	BinaryLeftSquareBracket            = '['
+	BinaryAnsiSquenseChar              = 'm'
+	BinaryAnsiSquenseString            = "m"
+	BinaryRegexAnsi                    = `\x1b\[[0-9;]*m`
+	CodeBlockRegex                     = "```\\w+"
+	SanitizeTextAIResponse             = "\n---\n"
+	ItalicTextRegex                    = `\*(\S(.*?\S)?)\*`   // Updated regex to match text surrounded by single asterisks
+	StandaloneAsteriskAnsiRegexPattern = `(?m)(^|\s)\*(\s|$)` // TODO
 )
 
 // Defined List of Environment variables
