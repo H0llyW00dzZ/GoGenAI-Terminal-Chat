@@ -326,6 +326,8 @@ func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *S
 
 // Execute processes the ":summarize" command within a chat session.
 func (h *handleSummarizeCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Add a message to the chat history indicating the summarize command was invoked
+	session.ChatHistory.AddMessage(YouNerd, SummarizeCommands, session.ChatConfig)
 	// Check if there are system messages in the chat history before summarizing.
 	if session.ChatHistory.HasSystemMessages() {
 		// Remove system messages from the chat history.
