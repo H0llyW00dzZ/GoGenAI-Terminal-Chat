@@ -141,6 +141,40 @@ type MessageStats struct {
 	SystemMessages int // SystemMessages is the count of system-generated messages.
 }
 
+// RetryableOperation encapsulates an operation that may need to be retried upon failure.
+// It contains a retryFunc of type RetryableFunc, which is a function that performs
+// the actual operation and returns a success flag along with an error if one occurred.
+//
+// The retryFunc is designed to be idempotent, meaning that it can be called multiple times
+// without causing unintended side effects, which is essential for a function that may be retried.
+//
+// The RetryableOperation struct is typically used with a retry strategy function such as
+// retryWithExponentialBackoff, which takes the operation and applies a backoff algorithm
+// to perform retries with increasing delays, reducing the load on the system and increasing
+// the chance of recovery from transient errors.
+//
+// Example:
+//
+//	operation := RetryableOperation{
+//	    retryFunc: func() (bool, error) {
+//	        // Perform some operation that can fail transiently.
+//	        result, err := SomeOperationThatMightFail()
+//	        return result != nil, err
+//	    },
+//	}
+//
+// success, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
+//
+//	if err != nil {
+//	    // Handle error after final retry attempt.
+//	}
+//
+// Use cases for RetryableOperation include network requests, database transactions,
+// or any other operations that might fail temporarily due to external factors.
+type RetryableOperation struct {
+	retryFunc RetryableFunc
+}
+
 // Session encapsulates the state and functionality for a chat session with a generative AI model.
 // It holds the AI client, chat history, and context for managing the session lifecycle.
 type Session struct {
