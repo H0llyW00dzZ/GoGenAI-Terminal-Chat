@@ -1,6 +1,9 @@
 // Copyright (c) 2024 H0llyW00dzZ
 //
 // License: MIT License
+//
+// Note: This file contains various struct types. If a struct is not linked to or passed to other functions,
+// it indicates that the struct may need further improvement or integration.
 
 package terminal
 
