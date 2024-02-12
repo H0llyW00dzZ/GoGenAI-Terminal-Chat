@@ -1,0 +1,117 @@
+name: Laporan Bug (Indonesia)
+description: Buat laporan untuk membantu kami melakukan perbaikan
+title: "[Bug]: "
+labels: ["bug"]
+assignees: ["H0llyW00dzZ"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Deskripsi Bug**
+        Deskripsi yang jelas dan singkat tentang bug yang terjadi.
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Deskripsikan Bug
+      description: Deskripsi yang jelas dan singkat tentang bug yang terjadi.
+      placeholder: 'Sebuah bug...'
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Cara Reproduksi**
+        Langkah-langkah untuk mereproduksi perilaku:
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Cara Reproduksi
+      description: Langkah-langkah untuk mereproduksi perilaku.
+      placeholder: |
+        1. Pergi ke '...'
+        2. Klik pada '....'
+        3. Gulir ke bawah hingga '....'
+        4. Lihat kesalahan
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Perilaku yang Diharapkan**
+        Deskripsi yang jelas dan singkat tentang apa yang Anda harapkan terjadi.
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Perilaku yang Diharapkan
+      description: Apa yang Anda harapkan terjadi.
+      placeholder: 'Saya mengharapkan...'
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Tangkapan Layar**
+        Jika berlaku, tambahkan tangkapan layar untuk membantu menjelaskan masalah Anda.
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Tangkapan Layar
+      description: Jika berlaku, tambahkan tangkapan layar untuk membantu menjelaskan masalah Anda.
+      placeholder: 'Unggah gambar atau seret dan lepas.'
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        **Desktop (lengkapi informasi berikut):**
+         - OS: [mis. Linux]
+         - Versi [mis. sembarang]
+  - type: input
+    id: desktop-os
+    attributes:
+      label: Sistem Operasi Desktop
+      description: Sistem operasi yang Anda gunakan.
+      placeholder: mis. Linux
+    validations:
+      required: true
+
+  - type: input
+    id: desktop-version
+    attributes:
+      label: Versi Desktop
+      description: Versi dari sistem operasi.
+      placeholder: mis. sembarang
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Versi Aplikasi**
+        Versi aplikasi apa yang Anda gunakan?
+  - type: input
+    id: application-version
+    attributes:
+      label: Versi Aplikasi
+      description: Versi aplikasi tempat bug terjadi.
+      placeholder: mis. 1.2.3
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Konteks Tambahan**
+        Tambahkan konteks lain tentang masalah di sini.
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Konteks Tambahan
+      description: Konteks lain tentang masalah.
+      placeholder: 'Detail lebih lanjut...'
+    validations:
+      required: false

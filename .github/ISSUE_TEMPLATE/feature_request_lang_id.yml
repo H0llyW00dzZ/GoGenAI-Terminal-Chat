@@ -1,0 +1,80 @@
+name: Permintaan Fitur (Indonesia)
+description: Sarankan ide untuk proyek ini
+title: "[Permintaan Fitur]: "
+labels: ["peningkatan", "TODO"]
+assignees: ["H0llyW00dzZ"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Deskripsi Fitur
+        Silakan deskripsikan fitur yang ingin Anda lihat secara detail.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Deskripsi Fitur
+      description: Deskripsi detail dari fitur yang Anda usulkan.
+      placeholder: "Deskripsikan fitur yang Anda inginkan..."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Motivasi
+        Mengapa fitur ini diperlukan? Masalah apa yang dipecahkannya?
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivasi
+      description: Jelaskan mengapa fitur ini penting.
+      placeholder: "Fitur ini penting karena..."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Implementasi yang Mungkin
+        Jika Anda memiliki ide tentang bagaimana mengimplementasikan fitur ini, silakan bagikan di sini.
+
+  - type: textarea
+    id: possible-implementation
+    attributes:
+      label: Implementasi yang Mungkin
+      description: Saran tentang bagaimana fitur ini dapat diimplementasikan.
+      placeholder: "Saya percaya fitur ini dapat diimplementasikan dengan..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Alternatif yang Dipertimbangkan
+        Apakah ada solusi alternatif atau fitur yang telah Anda pertimbangkan?
+
+  - type: textarea
+    id: alternatives-considered
+    attributes:
+      label: Alternatif yang Dipertimbangkan
+      description: Deskripsikan solusi alternatif atau fitur yang telah Anda pertimbangkan.
+      placeholder: "Saya juga telah mempertimbangkan alternatif berikut..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Konteks Tambahan
+        Tambahkan konteks lain atau tangkapan layar tentang permintaan fitur di sini.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Konteks Tambahan
+      description: Informasi lain atau tangkapan layar yang mungkin membantu.
+      placeholder: "Informasi tambahan..."
+    validations:
+      required: false
