@@ -2,7 +2,6 @@ name: Laporan Bug (Indonesia)
 description: Buat laporan untuk membantu kami melakukan perbaikan
 title: "[Bug]: "
 labels: ["bug", "Language: ID"]
-assignees: ["H0llyW00dzZ"]
 body:
   - type: markdown
     attributes:
