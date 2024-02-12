@@ -101,6 +101,14 @@ body:
     validations:
       required: true
 
+  - type: checkboxes
+    id: using-docker
+    attributes:
+      label: Apakah Anda Menggunakan Docker?
+      description: Centang kotak ini jika Anda menggunakan Docker.
+      options:
+      - label: Ya
+
   - type: markdown
     attributes:
       value: |
