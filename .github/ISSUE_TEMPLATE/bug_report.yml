@@ -17,6 +17,7 @@ body:
       placeholder: 'A bug...'
     validations:
       required: true
+
   - type: markdown
     attributes:
       value: |
@@ -34,6 +35,7 @@ body:
         4. See error
     validations:
       required: true
+
   - type: markdown
     attributes:
       value: |
@@ -47,6 +49,7 @@ body:
       placeholder: 'I expected...'
     validations:
       required: true
+
   - type: markdown
     attributes:
       value: |
@@ -60,6 +63,7 @@ body:
       placeholder: 'Upload images or drag & drop.'
     validations:
       required: false
+
   - type: markdown
     attributes:
       value: |
@@ -74,6 +78,7 @@ body:
       placeholder: e.g. Linux
     validations:
       required: true
+
   - type: input
     id: desktop-version
     attributes:
@@ -82,6 +87,21 @@ body:
       placeholder: e.g. any
     validations:
       required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Application Version**
+        What version of the application are you using?
+  - type: input
+    id: application-version
+    attributes:
+      label: Application Version
+      description: The version of the application where the bug occurred.
+      placeholder: e.g. 1.2.3
+    validations:
+      required: true
+
   - type: markdown
     attributes:
       value: |
