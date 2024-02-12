@@ -104,19 +104,6 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Are you Using Docker?**
-        Check the box if you are using Docker.
-  - type: checkboxes
-    id: using-docker
-    attributes:
-      label: Are you Using Docker?
-      description: Check the box if you are using Docker.
-      options:
-        - label: Yes
-
-  - type: markdown
-    attributes:
-      value: |
         **Konteks Tambahan**
         Tambahkan konteks lain tentang masalah di sini.
   - type: textarea
