@@ -471,12 +471,12 @@ func (h *ChatHistory) ClearAllSystemMessages() {
 // GetMessageStats safely retrieves the message counts from the ChatHistory instance.
 // It returns a MessageStats struct containing the counts of user, AI, and system messages.
 // Access to the ChatHistory's message counts is read-locked to ensure thread safety.
-func (h *ChatHistory) GetMessageStats() MessageStats {
+func (h *ChatHistory) GetMessageStats() *MessageStats {
 	h.mu.RLock()         // Lock for reading
 	defer h.mu.RUnlock() // Unlock when the function exits
 
-	// Return a new instance of MessageStats with the current counts.
-	return MessageStats{
+	// Return a pointer to a new instance of MessageStats with the current counts.
+	return &MessageStats{
 		UserMessages:   h.UserMessageCount,
 		AIMessages:     h.AIMessageCount,
 		SystemMessages: h.SystemMessageCount,
