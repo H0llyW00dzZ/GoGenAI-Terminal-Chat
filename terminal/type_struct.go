@@ -2,8 +2,8 @@
 //
 // License: MIT License
 //
-// Note: This file contains various struct types. If a struct is not linked to or passed to other functions,
-// it indicates that the struct may need further improvement or integration.
+// Note: This file contains various struct types. If a struct is neither linked to nor passed to other functions,
+// it suggests that both the struct and the associated functions may require further improvement or integration.
 
 package terminal
 
