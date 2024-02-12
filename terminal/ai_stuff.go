@@ -165,7 +165,7 @@ func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *Tok
 	}
 	// Note: Avoid attempting to inspect "imageData" using fmt.Println(imageData) unless you are professional/master of go programming
 	// as it will literally print the binary data of the image.
-	params.ImageData = imageData
+	params.ImageData = [][]byte{imageData} // Wrap imageData in a slice of byte slices
 	params.ImageFormat = getImageFormat(filePath)
 	params.ModelName = GeminiProVision
 	return nil
