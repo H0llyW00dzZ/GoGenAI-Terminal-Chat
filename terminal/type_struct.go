@@ -241,7 +241,7 @@ type TokenCountParams struct {
 	// Format of the image if provided (e.g., "png", "jpeg").
 	ImageFormat string
 	// Image data as a byte slice.
-	ImageData []byte
+	ImageData [][]byte // Image data as a slice of byte slices, each representing an image.
 }
 
 // NewLineChar is a struct that containt Rune for New Line Character

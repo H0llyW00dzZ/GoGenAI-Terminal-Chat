@@ -101,26 +101,31 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	// Concatenate chat history and AI response for token counting
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
 	modelName := GeminiPro // Default model name
-	var imageData []byte
+	var imageData [][]byte
 	var imageFormat string
+
+	// Initialize TokenCountParams with the text input
+	params := TokenCountParams{
+		APIKey:    apiKey,
+		ModelName: modelName,
+		Input:     fullText,
+	}
 
 	// Check if the response contains image data for GeminiProVision
 	//
 	// Note: Not Ready Yet, it won't work hahaha
 	if err := verifyImageFileExtension(aiResponse); err == nil {
 		modelName = GeminiProVision
-		imageData, imageFormat = readImageFile(aiResponse)
+		var singleImageData []byte
+		singleImageData, imageFormat = readImageFile(aiResponse) // Adjusted to match the returned values
+		imageData = append(imageData, singleImageData)           // Append the single image data to the slice
+		params.ImageData = imageData                             // Set the ImageData field
+		params.ImageFormat = imageFormat                         // Set the ImageFormat field
+		params.ModelName = modelName                             // Set the ModelName field
 	}
 
-	params := TokenCountParams{
-		APIKey:      apiKey,
-		ModelName:   modelName,
-		Input:       fullText,
-		ImageFormat: imageFormat,
-		ImageData:   imageData,
-	}
-	tokenCount, err := params.CountTokens()
-	printnewlineAscii() // a better one, instead of "\n"
+	tokenCount, err := params.CountTokens() // Adjusted to use the CountTokens function directly
+	printnewlineAscii()                     // a better one, instead of "\n"
 	if err != nil {
 		handleTokenCountError(err)
 		return
