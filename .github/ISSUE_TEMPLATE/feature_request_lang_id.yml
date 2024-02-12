@@ -1,7 +1,7 @@
 name: Permintaan Fitur (Indonesia)
 description: Sarankan ide untuk proyek ini
 title: "[Permintaan Fitur]: "
-labels: ["peningkatan", "TODO"]
+labels: ["enhancement", "TODO", "Language: ID"]
 assignees: ["H0llyW00dzZ"]
 body:
   - type: markdown
