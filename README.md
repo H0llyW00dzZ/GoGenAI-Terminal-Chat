@@ -108,7 +108,7 @@ By adopting this scalable command handling system, the chat application is well-
 
 ### 📌 High Quality Go Codes
 
-This repository contains high-quality Go code that focuses particularly on `Retry Policy Logic` and `Chat System Logic`. Each function is designed for `simplicity`, deliberately avoiding unnecessary `stupid complexity`, even in scenarios that could potentially exceed a `stupid complexity` score of `10+`.
+This repository contains high-quality Go code that focuses particularly on `Retry Policy Logic`, `Chat System Logic` and `Other`. Each function is designed for `simplicity`, deliberately avoiding unnecessary `stupid complexity`, even in scenarios that could potentially exceed a `stupid complexity` score of `10+`.
 
 ## ⚙️ Installation
 
