@@ -1,6 +1,9 @@
 // Copyright (c) 2024 H0llyW00dzZ
 //
 // License: MIT License
+//
+// Note: This CountTokens function supports multi-modal inputs and is designed for stability. It can utilize any model available in Google's AI offerings to count tokens.
+// It also supports processing multiple images (e.g., 999999+ images hahaha) simultaneously.
 
 package terminal
 
