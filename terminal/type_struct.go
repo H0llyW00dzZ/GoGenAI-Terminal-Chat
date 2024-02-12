@@ -166,7 +166,7 @@ type MessageStats struct {
 //	    },
 //	}
 //
-// success, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
+//	success, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
 //
 //	if err != nil {
 //	    // Handle error after final retry attempt.
