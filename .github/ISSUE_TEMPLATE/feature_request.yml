@@ -1,0 +1,80 @@
+name: Feature Request
+description: Suggest an idea for this project
+title: "[Feature Request]: "
+labels: ["enhancement", "TODO"]
+assignees: ["H0llyW00dzZ"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Description
+        Please describe the feature you would like to see in detail.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: A detailed description of the feature you're proposing.
+      placeholder: "Describe the feature you'd like..."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Motivation
+        Why is this feature necessary? What problem does it solve?
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Explain why this feature is important.
+      placeholder: "This feature is important because..."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Possible Implementation
+        If you have ideas about how to implement this feature, please share them here.
+
+  - type: textarea
+    id: possible-implementation
+    attributes:
+      label: Possible Implementation
+      description: Suggestions for how this feature could be implemented.
+      placeholder: "I believe this feature could be implemented by..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Alternatives Considered
+        Are there any alternative solutions or features you've considered?
+
+  - type: textarea
+    id: alternatives-considered
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or features you've considered.
+      placeholder: "I've also considered the following alternatives..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Additional Context
+        Add any other context or screenshots about the feature request here.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information or screenshots that would be helpful.
+      placeholder: "Additional information..."
+    validations:
+      required: false
