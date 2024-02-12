@@ -74,19 +74,21 @@ func (p *TokenCountParams) makeTokenCountRequest(ctx context.Context, tokenCount
 // prepareAndCountTokens creates and executes a token counting request using the provided model,
 // based on the input text or image data.
 func (p *TokenCountParams) prepareAndCountTokens(ctx context.Context, model *genai.GenerativeModel) (*genai.CountTokensResponse, error) {
-	if len(p.ImageData) > 0 && len(p.Input) > 0 {
-		return model.CountTokens(ctx,
-			genai.Text(p.Input),
-			genai.ImageData(
-				p.ImageFormat,
-				p.ImageData))
-	} else if len(p.ImageData) <= 0 {
-		return model.CountTokens(ctx,
-			genai.Text(p.Input))
+	// If there is text input, count tokens for text.
+	if len(p.Input) > 0 {
+		return model.CountTokens(ctx, genai.Text(p.Input))
 	}
 
-	return model.CountTokens(ctx,
-		genai.ImageData(
-			p.ImageFormat,
-			p.ImageData))
+	// If there are images, count tokens for each image and sum the counts.
+	var totalTokens int
+	for _, imageData := range p.ImageData {
+		resp, err := model.CountTokens(ctx, genai.ImageData(p.ImageFormat, imageData))
+		if err != nil {
+			return nil, err
+		}
+		totalTokens += int(resp.TotalTokens)
+	}
+
+	// Return the total token count for all images.
+	return &genai.CountTokensResponse{TotalTokens: int32(totalTokens)}, nil
 }
