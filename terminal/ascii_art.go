@@ -30,11 +30,11 @@ func (style ASCIIArtStyle) AddChar(char rune, pattern []string, color string) {
 }
 
 // applyColor applies a color to a given line if the color exists.
-func applyColor(artChar ASCIIArtChar, line string) string {
-	if artChar.Color == "" {
+func (art *ASCIIArtChar) applyColor(line string) string {
+	if art.Color == "" {
 		return line // No color to apply
 	}
-	return artChar.Color + line + ColorReset
+	return art.Color + line + ColorReset
 }
 
 // ToASCIIArt converts a string to its ASCII art representation using a given style.
@@ -142,7 +142,7 @@ func buildOutput(output *[]string, char rune, style ASCIIArtStyle) error {
 	}
 	for i := range *output {
 		if i < len(art.Pattern) {
-			(*output)[i] += applyColor(art, art.Pattern[i])
+			(*output)[i] += art.applyColor(art.Pattern[i])
 		} else {
 			(*output)[i] += " " // Add spaces if the pattern is shorter than the max height
 		}
