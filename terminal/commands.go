@@ -389,11 +389,19 @@ func (cmd *handleTokeCountingCommand) Execute(session *Session, parts []string) 
 }
 
 func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	if !cmd.IsValid(parts) {
+		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
+		printnewlineASCII()
+		return false, nil
+	}
+
+	// The file paths start from index 2
+	filePaths := parts[2:]
+
 	apiKey := os.Getenv(APIKey) // Retrieve the API_KEY from the environment
-	filePath := parts[2]
 	switch subcommand {
 	case FileCommands:
-		return cmd.handleTokenCount(apiKey, filePath, session)
+		return cmd.handleTokenCount(apiKey, filePaths, session)
 	default:
 		// Log an error for unrecognized subcommands and continue the session.
 		logger.Error(ErrorUnrecognizedSubcommandForTokenCount, subcommand)
