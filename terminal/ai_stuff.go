@@ -168,7 +168,7 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths 
 
 	if len(validFilePaths) > 0 {
 		// Log the total token count for all valid files if any valid files were processed.
-		logger.Any(InfoTokenCountFile, strings.Join(validFilePaths, ", "), totalTokenCount)
+		logger.Any(InfoTokenCountFile, strings.Join(validFilePaths, dotStringComma), totalTokenCount)
 	}
 
 	return false, nil // The session continues regardless of token counting results.
