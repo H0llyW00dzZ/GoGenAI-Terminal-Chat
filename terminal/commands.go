@@ -244,19 +244,12 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 		return false, nil
 	}
 
-	// Ensure SafetySettings is initialized.
-	if cmd.SafetySettings == nil {
-		cmd.SafetySettings = DefaultSafetySettings()
-		// Pass ContextPrompt just incase
-		session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
-	}
-
 	// Set the safety level based on the command argument.
-	cmd.setSafetyLevel(parts[1])
+	cmd.setSafetyLevel(session, parts[1])
 
 	// Apply the updated safety settings and notify the user.
-	// Note: This is currently doesn't work and will be fixed later.
-	cmd.SafetySettings.ApplyToModel(session.Client.GenerativeModel(GeminiPro), GeminiPro)
+	// Note: It should be working now. If it still doesn't work, this may indicate a problem with your machine hahaha.
+	session.SafetySettings.ApplyToModel(session.Client.GenerativeModel(GeminiPro), GeminiPro)
 	// Pass ContextPrompt
 	session.ChatHistory.AddMessage(AiNerd, ContextPrompt, session.ChatConfig)
 	logger.Any(fmt.Sprintf(SystemSafety, parts[1])) // simplify
