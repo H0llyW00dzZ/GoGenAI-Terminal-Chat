@@ -84,6 +84,7 @@ func (p *TokenCountParams) prepareAndCountTokens(ctx context.Context, model *gen
 
 	// If there are images, count tokens for each image and sum the counts.
 	var totalTokens int
+	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
 	for _, imageData := range p.ImageData {
 		resp, err := model.CountTokens(ctx, genai.ImageData(p.ImageFormat, imageData))
 		if err != nil {
