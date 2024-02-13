@@ -83,7 +83,7 @@ func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, e
 			ShortHelpCommand,
 			VersionCommand,
 			SafetyCommand,
-			Low, Default, High,
+			Low, Default, High, Unspecified, None,
 			AITranslateCommand,
 			LangArgs,
 			CryptoRandCommand,

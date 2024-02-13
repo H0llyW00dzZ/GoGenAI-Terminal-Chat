@@ -92,7 +92,7 @@ const (
 		DoubleAsterisk + "%s" + DoubleAsterisk + " or " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show this help information.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + ": Check the application version.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + ": Set the safety level - " + DoubleAsterisk + "%s" + DoubleAsterisk + " (low), " + DoubleAsterisk + "%s" + DoubleAsterisk + " (default), " +
-		DoubleAsterisk + "%s" + DoubleAsterisk + " (high).\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " (high), " + DoubleAsterisk + "%s" + DoubleAsterisk + " (unspecified), " + DoubleAsterisk + "%s" + DoubleAsterisk + " (none).\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " <text> " + DoubleAsterisk + "%s" + DoubleAsterisk + " <target language>: Translate text to the specified language.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <number>: Generate a random string of the specified length.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + ": Summarize a current conversation\n\n" +
@@ -285,6 +285,8 @@ const (
 	Low              = "low"
 	Default          = "default"
 	High             = "high"
+	Unspecified      = "unspecified"
+	None             = "none"
 	MonitoringSignal = "Received signal: %v.\n"
 	ShowChatHistory  = "Chat History:\n\n%s"
 	SummarizePrompt  = StripChars + "\nIn 200 words or less, provide a brief summary of the ongoing discussion.\n" +
