@@ -257,7 +257,7 @@ func (cmd *handleSafetyCommand) IsValid(parts []string) bool {
 }
 
 // setSafetyLevel updates the safety settings based on the command argument.
-func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
+func (cmd *handleSafetyCommand) setSafetyLevel(session *Session, level string) {
 	option, exists := safetyOptions[level]
 	if !exists || !option.Valid {
 		// Handle unknown or invalid level, possibly log it or return an error
@@ -266,7 +266,7 @@ func (cmd *handleSafetyCommand) setSafetyLevel(level string) {
 	}
 
 	// Call the setter function associated with the safety level
-	option.Setter(cmd.SafetySettings)
+	option.Setter(session.SafetySettings)
 }
 
 // handleAITranslateCommand is the command to translate text using the AI model.
