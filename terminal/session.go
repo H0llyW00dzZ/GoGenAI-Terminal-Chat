@@ -82,7 +82,7 @@ func (s *Session) Start() {
 	text := "GV"
 	asciiArt, _ := ToASCIIArt(text, combinedStyle)
 	fmt.Println(asciiArt)
-	printnewlineAscii()
+	printnewlineASCII()
 	// Note: This is securely managed by the Gopher Officer, which handles the session and is linked to the `processInput` function.
 	// Additionally, the Gopher Officer may occasionally sleep during the session's lifecycle and will wake up when needed.
 	defer s.cleanup()
@@ -93,7 +93,7 @@ func (s *Session) Start() {
 	// This is a prompt context as the starting point for AI to start the conversation
 	PrintPrefixWithTimeStamp(AiNerd)
 	PrintTypingChat(ContextPrompt, TypingDelay)
-	printnewlineAscii() // Ensure there's a newline after the AI's initial message
+	printnewlineASCII() // Ensure there's a newline after the AI's initial message
 
 	// Add AI's initial message to chat history
 	s.ChatHistory.AddMessage(AiNerd, ContextPrompt, s.ChatConfig)

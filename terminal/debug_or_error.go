@@ -21,7 +21,7 @@ import (
 //
 //	*DebugOrErrorLogger: A pointer to a newly created DebugOrErrorLogger.
 func NewDebugOrErrorLogger() *DebugOrErrorLogger {
-	debugMode := os.Getenv(DEBUG_MODE) == "true" // Read the environment variable once
+	debugMode := os.Getenv(DebugMode) == "true" // Read the environment variable once
 	return &DebugOrErrorLogger{
 		logger:          log.New(os.Stderr, "", log.LstdFlags),
 		debugMode:       debugMode,
@@ -53,7 +53,7 @@ func (l *DebugOrErrorLogger) Debug(format string, v ...interface{}) {
 		l.PrintTypingChat(builder.String(), TypingDelay)
 
 		// Print a newline after the message
-		printnewlineAscii()
+		printnewlineASCII()
 	}
 }
 
@@ -80,7 +80,7 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
-	printnewlineAscii()
+	printnewlineASCII()
 }
 
 // RecoverFromPanic should be deferred at the beginning of a function or goroutine
@@ -111,7 +111,7 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 		text := "PD"
 		asciiArt, _ := ToASCIIArt(text, combinedStyle)
 		fmt.Println(asciiArt)
-		printnewlineAscii()
+		printnewlineASCII()
 		// Format the message for panic
 		// Include the application name and version in the panic log
 		builder.WriteString(fmt.Sprintf(
@@ -157,7 +157,7 @@ func (l *DebugOrErrorLogger) RecoverFromPanic() {
 func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) bool {
 	if err != nil {
 		// Check if the error message contains a 500 status code.
-		if strings.Contains(err.Error(), Error500GoogleApi) {
+		if strings.Contains(err.Error(), Error500GoogleAPI) {
 			// Log the Google Internal Error with the error message
 			l.Error(ErrorGoogleInternal, err)
 			return true // Indicate that this is a server error so bad hahaha
@@ -180,7 +180,7 @@ func (l *DebugOrErrorLogger) HandleGoogleAPIError(err error) bool {
 func (l *DebugOrErrorLogger) HandleOtherStupidAPIError(err error, apiName string) bool {
 	if err != nil {
 		// Check if the error message contains a 500 status code, but is not from Google API.
-		if strings.Contains(err.Error(), Code500) && !strings.Contains(err.Error(), Error500GoogleApi) {
+		if strings.Contains(err.Error(), Code500) && !strings.Contains(err.Error(), Error500GoogleAPI) {
 			// Log the Internal Error with the error message
 			l.Error(ErrorOtherAPI, apiName, err)
 			return true // Indicate that this is a bad server error
@@ -208,7 +208,7 @@ func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
-	printnewlineAscii()
+	printnewlineASCII()
 }
 
 // Any logs a general message without any colorization. It behaves like Println and allows for formatted messages.
@@ -228,5 +228,5 @@ func (l *DebugOrErrorLogger) Any(format string, v ...interface{}) {
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
-	printnewlineAscii() // this a modern now instead of fmt hahaha
+	printnewlineASCII() // this a modern now instead of fmt hahaha
 }

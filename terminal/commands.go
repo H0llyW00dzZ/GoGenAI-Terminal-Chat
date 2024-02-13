@@ -181,7 +181,7 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string, subcomma
 	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
 		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
-		printnewlineAscii()
+		printnewlineASCII()
 		return true, nil
 	}
 
@@ -189,7 +189,7 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string, subcomma
 	_, err := fun_stuff.PingIP(ip)
 	if err != nil {
 		logger.Error(ErrorPingFailed, err)
-		printnewlineAscii()
+		printnewlineASCII()
 	}
 
 	return false, nil
@@ -240,7 +240,7 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
 	if !cmd.IsValid(parts) {
 		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
-		printnewlineAscii()
+		printnewlineASCII()
 		return false, nil
 	}
 
@@ -287,7 +287,7 @@ func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (b
 	return cmd.HandleSubcommand("", session, parts) // Continue the session
 }
 
-func (h *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+func (cmd *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	lengthStr := parts[2] // The length argument is now the second part of the command
 	length, err := strconv.Atoi(lengthStr)
 	if err != nil {
@@ -318,7 +318,7 @@ func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (boo
 func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	if !cmd.IsValid(parts) {
 		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
-		printnewlineAscii()
+		printnewlineASCII()
 		return false, nil
 	}
 
@@ -389,7 +389,7 @@ func (cmd *handleTokeCountingCommand) Execute(session *Session, parts []string) 
 }
 
 func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	apiKey := os.Getenv(API_KEY) // Retrieve the API_KEY from the environment
+	apiKey := os.Getenv(APIKey) // Retrieve the API_KEY from the environment
 	filePath := parts[2]
 	switch subcommand {
 	case FileCommands:

@@ -284,17 +284,17 @@ func init() {
 		_G,
 		_O,
 		_GEN,
-		A_,
-		I_,
+		A,
+		I,
 	}, BoldText+colors.ColorHex95b806)
 	// Initialize the text style patterns for 'V'.
 	slantStyle.AddChar(V, []string{
-		BLANK_,
-		BLANK_,
-		BLANK_, // TODO: Implement a notification to be displayed here when a new version is available.
-		Current_Version,
+		Blank,
+		Blank,
+		Blank, // TODO: Implement a notification to be displayed here when a new version is available.
+		CurrentVersioN,
 		TIP,
-		BLANK_,
+		Blank,
 		Copyright,
 		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
 	}, BoldText+colors.ColorCyan24Bit)

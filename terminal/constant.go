@@ -12,7 +12,7 @@ const (
 	GitHubAPIURL      = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
 	GitHubReleaseFUll = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/tags/%s"
 	// CurrentVersion represents the current version of the application.
-	CurrentVersion = "v0.8.3"
+	CurrentVersion = "v0.8.4"
 )
 
 // Defined constants for the terminal package
@@ -176,7 +176,7 @@ const (
 	ErrorLowLevelCommand                            = "command cannot be empty"
 	ErrorUnknown                                    = "An error occurred: %v"
 	ErrorUnknownSafetyLevel                         = "Unknown safety level: %s"
-	ErrorInvalidApiKey                              = "Invalid API key: %v"
+	ErrorInvalidAPIKey                              = "Invalid API key: %v"
 	ErrorFailedToStartSession                       = "Failed To Start Session: %v"
 	ErrorLowLevelNoResponse                         = "no response from AI service"
 	ErrorLowLevelMaximumRetries                     = "maximum retries reached without success" // low level
@@ -203,7 +203,7 @@ const (
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
-	Error500GoogleApi    = "googleapi: Error 500:"
+	Error500GoogleAPI    = "googleapi: Error 500:"
 	ErrorGoogleInternal  = "Google Internal Error: %s"
 	ErrorGenAiReceiveNil = "received a nil option function" // low level
 	ErrorGenAI           = "GenAI Error: %v"
@@ -257,7 +257,7 @@ const (
 
 // Defined List of Environment variables
 const (
-	DEBUG_MODE  = "DEBUG_MODE"
+	DebugMode   = "DEBUG_MODE"
 	DEBUGPREFIX = "🔎 DEBUG:"
 	// Note: Currently only executing CMD,RetryPolicy, will add more later
 	DEBUGEXECUTINGCMD = "Executing " +
@@ -266,15 +266,15 @@ const (
 		" command with parts: " +
 		// Better Readability use Custom HEX color
 		ColorHex95b806 + "%#v" + ColorReset
-	DEBUGRETRYPOLICY     = "Retry Policy Attempt %d: error occurred - %v"
-	SHOW_PROMPT_FEEDBACK = "SHOW_PROMPT_FEEDBACK"
-	PROMPTFEEDBACK       = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
+	DEBUGRETRYPOLICY   = "Retry Policy Attempt %d: error occurred - %v"
+	ShowPromptFeedBack = "SHOW_PROMPT_FEEDBACK"
+	PROMPTFEEDBACK     = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
 		ColorHex95b806 + "%s" + ColorReset
-	SHOW_TOKEN_COUNT = "SHOW_TOKEN_COUNT"
-	TokenCount       = ColorHex95b806 + "%d" + ColorReset + " tokens\n"
-	TotalTokenCount  = "usage of this Session " + ColorHex95b806 + "%d" + ColorReset + " tokens"
+	ShowTokenCount  = "SHOW_TOKEN_COUNT"
+	TokenCount      = ColorHex95b806 + "%d" + ColorReset + " tokens\n"
+	TotalTokenCount = "usage of this Session " + ColorHex95b806 + "%d" + ColorReset + " tokens"
 	// Note: This is separate from the main package and is used for the token counter. The token counter is external and not a part of the Gemini session.
-	API_KEY = "API_KEY"
+	APIKey = "API_KEY"
 )
 
 // Defined Prefix System
@@ -319,10 +319,10 @@ const (
 	_G   = "   ______      ______           ___    ____  "
 	_O   = "  / ____/___  / ____/__  ____  /   |  /  _/  "
 	_GEN = " / / __/ __ \\/ / __/ _ \\/ __ \\/ /| |  / /    "
-	A_   = "/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     "
-	I_   = "\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     "
+	A    = "/ /_/ / /_/ / /_/ /  __/ / / / ___ |_/ /     "
+	I    = "\\____/\\____/\\____/\\___/_/ /_/_/  |_/___/     "
 	// Blank Art
-	BLANK_  = "                                      "
+	Blank   = "                                      "
 	eMpty   = ""
 	slantp1 = "    ____              _     "
 	slanta2 = "   / __ \\____ _____  (_)____"
@@ -338,7 +338,7 @@ const (
 
 // Text
 const (
-	Current_Version = "Current Version: " + ColorHex95b806 + CurrentVersion + ColorReset
+	CurrentVersioN = "Current Version: " + ColorHex95b806 + CurrentVersion + ColorReset
 	// Acknowledgment of the original author is appreciated as this project is developed in an open-source environment.
 	Copyright = "Copyright (©️) 2024 @H0llyW00dzZ All rights reserved."
 	TIP       = SingleAsterisk + ColorHex95b806 + " Use the commands " + ColorReset +

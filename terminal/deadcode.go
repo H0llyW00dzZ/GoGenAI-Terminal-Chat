@@ -123,13 +123,22 @@ func HandleUnrecognizedCommand(command string, session *Session, parts []string)
 	return false, nil
 }
 
-// Deprecated: This method is no longer used, and was replaced by SafetyOption.
+// SafetySetter defines a function signature for functions that modify the safety settings
+// of a generative AI model. It takes a pointer to a SafetySettings struct and applies
+// specific safety configurations to it. This type is used to abstract the modification
+// of safety settings so that different configurations can be applied without changing
+// the struct directly.
+//
+// Deprecated: This type is deprecated and has been replaced by the SafetyOption struct,
+// which provides a more structured way to represent safety settings along with their
+// validity state. The SafetyOption struct includes a Setter function of this type and
+// a Valid flag indicating whether the safety setting is applicable.
 type SafetySetter func(*SafetySettings)
 
-// Define the ASCII patterns for the 'slant' font for the characters
+// ASCIIPatterns Define the ASCII patterns for the 'slant' font for the characters
 //
 // Deprecated: This variable is no longer used, and was replaced by NewASCIIArtStyle().
-var AsciiPatterns = map[rune][]string{
+var ASCIIPatterns = map[rune][]string{
 	// Figlet in a compiled language, not an interpreted language.
 	// This literally header in your machine lmao.
 	// It so easy implement Header like this in go, also it possible to made it animated drawing/human typing this ascii art
@@ -138,23 +147,23 @@ var AsciiPatterns = map[rune][]string{
 		_G,
 		_O,
 		_GEN,
-		A_,
-		I_,
+		A,
+		I,
 	},
 	V: {
-		BLANK_,
-		BLANK_,
-		BLANK_, // TODO: Implement a notification to display here when a new version is available.
+		Blank,
+		Blank,
+		Blank, // TODO: Implement a notification to display here when a new version is available.
 		//			 For checking the version and viewing the change log, implement the command ":checkversion".
-		Current_Version,
+		CurrentVersioN,
 		Copyright,
 	},
 }
 
-// Define a map for character Ascii colors
+// ASCIIColors Define a map for character Ascii colors
 //
 // Deprecated: This variable is no longer used, and was replaced by NewASCIIArtStyle().
-var AsciiColors = map[rune]string{
+var ASCIIColors = map[rune]string{
 	G: BoldText + colors.ColorHex95b806,
 	V: BoldText + colors.ColorCyan24Bit,
 }
