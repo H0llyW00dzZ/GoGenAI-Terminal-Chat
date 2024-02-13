@@ -327,7 +327,10 @@ By following these tips, you can write simple, easy-to-understand functions that
 
 ---
 
-### ⚙️ High-Level Operation of the system:
+### ⚙️ System's Architecture:
+
+#### Simple
+
 ```mermaid
 flowchart LR
     Start([Start]) -->|User runs application| Init[Initialize Session]
@@ -347,6 +350,37 @@ flowchart LR
     DisplayResponse --> MainLoop
     SignalHandler -->|SIGINT/SIGTERM| Cleanup[Cleanup Resources]
     Cleanup --> End
+```
+
+#### Scalable
+
+```mermaid
+flowchart LR
+    Start([Start]) -->|User runs application| Init[Initialize Session]
+    Init -->|Set up signal handling| SignalHandler[Handle OS Signals]
+    Init -->|Load API Key| APIKeyValidation{API Key Validation}
+    APIKeyValidation -->|Valid| SetupClient[Setup AI Client]
+    APIKeyValidation -->|Invalid| End([End])
+    SetupClient -->|Client ready| MainLoop[Enter Main Loop]
+    MainLoop --> UserInput[/User Input/]
+    UserInput -->|Command| CommandRegistry[Command Registry]
+    UserInput -->|Chat Message| SendMessage[Send Message to AI]
+    CommandRegistry -->|Quit| End
+    CommandRegistry -->|Other Commands| ProcessCommand[Process Command]
+    SendMessage -->|Receive AI Response| UpdateHistory[Update Chat History]
+    UpdateHistory --> DisplayResponse[Display AI Response]
+    ProcessCommand --> MainLoop
+    DisplayResponse --> MainLoop
+    SignalHandler -->|SIGINT/SIGTERM| Cleanup[Cleanup Resources]
+    Cleanup --> End
+    ProcessCommand -->|API Interaction| APIClient[API Client]
+    APIClient -->|API Response| ProcessCommand
+    APIClient -->|API Error| ErrorHandler[Error Handler]
+    ErrorHandler -->|Handle Error| ProcessCommand
+    ErrorHandler -->|Fatal Error| End
+
+    classDef scalable fill:#f96,stroke:#333,stroke-width:2px;
+    class CommandRegistry,APIClient scalable;
 ```
 
 ## 🙌 Contributing
