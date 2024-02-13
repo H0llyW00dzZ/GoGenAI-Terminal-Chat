@@ -9,6 +9,7 @@ package terminal
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 // addMessageWithContext adds a message to the chat history with context.
@@ -119,25 +120,57 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 	}
 }
 
+// handleTokenCount processes multiple file paths to count the number of tokens for each file.
+// It uses the generative AI model to calculate token counts for text and image files.
+// Only files with supported extensions are processed. Unsupported files are logged and skipped.
+// After processing, it aggregates the token counts from all valid files and logs the total.
+// If errors occur during file processing, they are logged, and the file is excluded from the total count.
+//
+// Parameters:
+//
+//	apiKey string: The API key used for authenticating requests to the AI service.
+//	filePaths []string: A slice of file paths to be processed for token counting.
+//	session *Session: The current chat session containing state and context.
+//
+// Returns:
+//
+//	bool: Always returns false to indicate the session should continue.
+//	error: Returns nil as errors are handled internally and do not require external handling.
+//
 // Note: This approach simplifies maintenance and improvements by abstracting logic in this manner,
 // in contrast to less optimal practices where functions are made overly complex (e.g, stupid human) with excessive conditional statements.
-func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey, filePath string, session *Session) (bool, error) {
-	// Verify the file extension before reading the file.
-	params, err := cmd.prepareTokenCountParams(apiKey, filePath)
-	if err != nil {
-		// Magic FMT, unlike stupid hard coding
-		logger.Error(ErrorFailedToReadFile, filePath, err) // Using logger.Error with formatting directive.
-		return false, nil
+func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths []string, session *Session) (bool, error) {
+	var validFilePaths []string
+	totalTokenCount := 0
+
+	for _, filePath := range filePaths {
+		// Prepare the parameters for token counting based on the file type.
+		params, err := cmd.prepareTokenCountParams(apiKey, filePath)
+		if err != nil {
+			// Log the error and skip the file if it's not supported or another error occurred.
+			logger.Error(ErrorFailedToReadFile, filePath, err)
+			continue
+		}
+
+		// Count the tokens using the prepared parameters.
+		tokenCount, err := params.CountTokens()
+		if err != nil {
+			// Log the error and skip the file if token counting failed.
+			logger.Error(ErrorFailedToCountTokens, filePath, err)
+			continue
+		}
+
+		// Add the valid file path to the list and accumulate the token count.
+		validFilePaths = append(validFilePaths, filePath)
+		totalTokenCount += tokenCount
 	}
 
-	tokenCount, err := params.CountTokens()
-	if err != nil {
-		// Magic FMT, unlike stupid hard coding
-		logger.Error(ErrorFailedToCountTokens, filePath, err) // Using logger.Error with formatting directive.
-		return false, nil
+	if len(validFilePaths) > 0 {
+		// Log the total token count for all valid files if any valid files were processed.
+		logger.Any(InfoTokenCountFile, strings.Join(validFilePaths, ", "), totalTokenCount)
 	}
-	logger.Any(InfoTokenCountFile, filePath, tokenCount)
-	return false, nil // Continue the session after displaying the token count.
+
+	return false, nil // The session continues regardless of token counting results.
 }
 
 func (cmd *handleTokeCountingCommand) prepareTokenCountParams(apiKey, filePath string) (TokenCountParams, error) {
