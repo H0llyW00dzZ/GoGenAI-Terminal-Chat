@@ -100,6 +100,14 @@ var safetyOptions = map[string]SafetyOption{
 		Setter: func(s *SafetySettings) { *s = *DefaultSafetySettings() },
 		Valid:  true,
 	},
+	Unspecified: {
+		Setter: func(s *SafetySettings) { s.SetUnspecifiedSafety() },
+		Valid:  true,
+	},
+	None: {
+		Setter: func(s *SafetySettings) { s.SetNoneSafety() },
+		Valid:  true,
+	},
 }
 
 // scalable a global variable for the ASCII style.
@@ -256,6 +264,8 @@ func init() {
 	registry.RegisterSubcommand(SafetyCommand, Low, safetySettingsCommandHandler)
 	registry.RegisterSubcommand(SafetyCommand, Default, safetySettingsCommandHandler)
 	registry.RegisterSubcommand(SafetyCommand, High, safetySettingsCommandHandler)
+	registry.RegisterSubcommand(SafetyCommand, Unspecified, safetySettingsCommandHandler)
+	registry.RegisterSubcommand(SafetyCommand, None, safetySettingsCommandHandler)
 	// Assume showChatCommandHandler is capable of handling subcommands for ":chat"
 	showChatCommandHandler := &handleShowChatCommand{}
 	registry.Register(ChatCommands, &handleShowChatCommand{})

@@ -285,6 +285,8 @@ const (
 	Low              = "low"
 	Default          = "default"
 	High             = "high"
+	Unspecified      = "unspecified"
+	None             = "none"
 	MonitoringSignal = "Received signal: %v.\n"
 	ShowChatHistory  = "Chat History:\n\n%s"
 	SummarizePrompt  = StripChars + "\nIn 200 words or less, provide a brief summary of the ongoing discussion.\n" +
