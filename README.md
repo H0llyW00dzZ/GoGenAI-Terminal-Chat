@@ -183,10 +183,6 @@ Environment variables are key-value pairs that can affect the behavior of your a
 > [!WARNING]  
 > These `screenshots` may be outdated due to version changes.
 
-<p align="center">
-  <img src="https://i.imgur.com/H9vDYjZ.png" alt="kubectl terminal" />
-</p>
-
 ### 🤖 Better LLM's:
 <p align="center">
   <img src="https://i.imgur.com/2URKO1K.png" alt="terminal" />
@@ -213,6 +209,7 @@ Environment variables are key-value pairs that can affect the behavior of your a
 
 ### Kubernetes in the wild's:
 <p align="center">
+  <img src="https://i.imgur.com/H9vDYjZ.png" alt="k8s" />
   <img src="https://i.imgur.com/4iFId5w.png" alt="k8s" />
   <img src="https://i.imgur.com/qVEpOZy.png" alt="k8s" />
   <img src="https://i.imgur.com/Ox7CqMV.png" alt="k8s" />
