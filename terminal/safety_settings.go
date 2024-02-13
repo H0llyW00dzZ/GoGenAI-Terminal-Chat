@@ -58,6 +58,33 @@ func (s *SafetySettings) SetHighSafety() {
 	s.DerogatoryThershold = genai.HarmBlockOnlyHigh
 }
 
+// SetUnspecifiedSafety sets the safety settings to an unspecified threshold, which means no specific blocking level is set.
+// This setting may be appropriate for environments where the default AI model behavior is desired without additional filters.
+func (s *SafetySettings) SetUnspecifiedSafety() {
+	s.DangerousContentThreshold = genai.HarmBlockUnspecified
+	s.HarassmentContentThreshold = genai.HarmBlockUnspecified
+	s.SexuallyExplicitContentThreshold = genai.HarmBlockUnspecified
+	s.MedicalThreshold = genai.HarmBlockUnspecified
+	s.ViolenceThreshold = genai.HarmBlockUnspecified
+	s.HateSpeechThreshold = genai.HarmBlockUnspecified
+	s.ToxicityThreshold = genai.HarmBlockUnspecified
+	s.DerogatoryThershold = genai.HarmBlockUnspecified
+}
+
+// SetNoneSafety sets the safety settings to no threshold, which means no content is blocked.
+// This setting may be appropriate for environments where content moderation is not required or where users are expected
+// to handle all types of content without any filtering.
+func (s *SafetySettings) SetNoneSafety() {
+	s.DangerousContentThreshold = genai.HarmBlockNone
+	s.HarassmentContentThreshold = genai.HarmBlockNone
+	s.SexuallyExplicitContentThreshold = genai.HarmBlockNone
+	s.MedicalThreshold = genai.HarmBlockNone
+	s.ViolenceThreshold = genai.HarmBlockNone
+	s.HateSpeechThreshold = genai.HarmBlockNone
+	s.ToxicityThreshold = genai.HarmBlockNone
+	s.DerogatoryThershold = genai.HarmBlockNone
+}
+
 // ApplyToModel applies the configured safety settings to a given generative AI model.
 // This method updates the model's safety settings to match the thresholds specified
 // in the SafetySettings instance, affecting how the model filters generated content.
