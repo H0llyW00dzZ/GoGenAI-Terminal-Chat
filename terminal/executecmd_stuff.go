@@ -36,7 +36,7 @@ func (cmd *handleClearCommand) clearChatHistory(session *Session) (bool, error) 
 	session.ChatHistory.Clear()
 	// Prepare the full message to be printed
 	clearMessage := ChatHistoryClear
-	showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
+	showTokenCount := os.Getenv(ShowTokenCount) == "true"
 	// Append token reset message if SHOW_TOKEN_COUNT is true
 	if showTokenCount {
 		totalTokenCount = 0 // Reset the total token count to zero

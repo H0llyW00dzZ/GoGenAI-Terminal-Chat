@@ -27,7 +27,7 @@ type CommandRegistry struct {
 	subcommands map[string]map[string]CommandHandler // New field for subcommands
 }
 
-// Register a subcommand for a base command.
+// RegisterSubcommand for a base command.
 func (r *CommandRegistry) RegisterSubcommand(baseCommand, subcommand string, handler CommandHandler) {
 	if _, exists := r.subcommands[baseCommand]; !exists {
 		r.subcommands[baseCommand] = make(map[string]CommandHandler)
@@ -186,7 +186,7 @@ func (cmd *handleQuitCommand) IsValid(parts []string) bool {
 	return len(parts) == 1
 }
 
-func (h *handleQuitCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+func (cmd *handleQuitCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	// The quit command should not have any subcommand.
 	return true, nil
 }
@@ -205,7 +205,7 @@ func (cmd *handleHelpCommand) IsValid(parts []string) bool {
 	return len(parts) == 1
 }
 
-func (h *handleHelpCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+func (cmd *handleHelpCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	// The help command should not have any subcommand.
 	return true, nil
 }
@@ -224,7 +224,7 @@ func (h *handleCheckVersionCommand) HandleSubcommand(subcommand string, session 
 // parts []string: The slice containing the command and its arguments.
 //
 // Returns true if the command is valid, otherwise false.
-func (cmd *handleCheckVersionCommand) IsValid(parts []string) bool {
+func (h *handleCheckVersionCommand) IsValid(parts []string) bool {
 	// The checkversion command should not have any arguments.
 	return len(parts) == 1
 }
@@ -279,7 +279,7 @@ func (h *handleAITranslateCommand) HandleSubcommand(subcommand string, session *
 
 // IsValid checks if the translate command is valid based on the input parts.
 // The translate command is expected to follow the pattern: :aitranslate <text> :lang <targetlanguage>
-func (cmd *handleAITranslateCommand) IsValid(parts []string) bool {
+func (h *handleAITranslateCommand) IsValid(parts []string) bool {
 	// There should be at least 4 parts: the command itself, the text to translate, the language flag, and the target language.
 	// Additionally, check for the presence of the language flag ":lang".
 	if len(parts) < 4 {
@@ -324,7 +324,7 @@ func (h *handleSummarizeCommand) HandleSubcommand(subcommand string, session *Se
 }
 
 // IsValid checks if the summarize command is valid.
-func (cmd *handleSummarizeCommand) IsValid(parts []string) bool {
+func (h *handleSummarizeCommand) IsValid(parts []string) bool {
 	// The summarize command should not have any arguments.
 	return len(parts) == 1
 }

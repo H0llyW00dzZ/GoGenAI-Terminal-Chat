@@ -41,7 +41,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 		time.Sleep(delay)                // Sleep for the desired delay
 	}
 
-	printnewlineAscii()
+	printnewlineASCII()
 	writer.Flush() // Make sure to flush any remaining output
 }
 

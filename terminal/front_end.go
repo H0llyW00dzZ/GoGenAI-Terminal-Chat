@@ -77,7 +77,7 @@ func isFirstCharacterWide(s string) bool {
 
 // printPromptFeedback formats and prints the prompt feedback received from the AI.
 func printPromptFeedback(feedback *genai.PromptFeedback) {
-	printnewlineAscii() // this better new line instead of "\n" for front end hahaha
+	printnewlineASCII() // this better new line instead of "\n" for front end hahaha
 	if feedback == nil {
 		return
 	}
@@ -125,7 +125,7 @@ func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	}
 
 	tokenCount, err := params.CountTokens() // Adjusted to use the CountTokens function directly
-	printnewlineAscii()                     // a better one, instead of "\n"
+	printnewlineASCII()                     // a better one, instead of "\n"
 	if err != nil {
 		handleTokenCountError(err)
 		return
@@ -167,8 +167,8 @@ func printVisualSeparator() {
 	fmt.Println(asciiArt)
 }
 
-// printNewlineAscii prints a newline character as an ASCII art visual separator to the standard output.
-func printnewlineAscii() {
+// printnewlineASCII prints a newline character as an ASCII art visual separator to the standard output.
+func printnewlineASCII() {
 	text := "N"
 	asciiArt, _ := ToASCIIArt(text, newLine)
 	fmt.Println(asciiArt)
@@ -242,8 +242,8 @@ func printAIResponse(response string, isSystemMessage bool) {
 //
 // Note: this functionality are powerful, it won't break a current session of conversation hahaha.
 func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string) {
-	showPromptFeedback := os.Getenv(SHOW_PROMPT_FEEDBACK) == "true"
-	showTokenCount := os.Getenv(SHOW_TOKEN_COUNT) == "true"
+	showPromptFeedback := os.Getenv(ShowPromptFeedBack) == "true"
+	showTokenCount := os.Getenv(ShowTokenCount) == "true"
 
 	// Print the footer separator
 	printVisualSeparator()
@@ -255,10 +255,10 @@ func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string)
 
 	// Print token count if enabled
 	if showTokenCount {
-		apiKey := os.Getenv(API_KEY) // Retrieve the API_KEY from the environment
+		apiKey := os.Getenv(APIKey) // Retrieve the API_KEY from the environment
 		printTokenCount(apiKey, aiResponse)
 	}
 
 	// Print the closing footer separator
-	printnewlineAscii() // fix front end issue lmao
+	printnewlineASCII() // fix front end issue lmao
 }
