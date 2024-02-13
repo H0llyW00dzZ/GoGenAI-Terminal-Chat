@@ -150,10 +150,6 @@ Environment variables are key-value pairs that can affect the behavior of your a
 
 ## 📸 Screenshot
 
-<p align="center">
-  <img src="https://i.imgur.com/H9vDYjZ.png" alt="kubectl terminal" />
-</p>
-
 ### 📊 Average Consumption (Tested on Production Docker):
 
 <p align="center">
@@ -184,6 +180,12 @@ Environment variables are key-value pairs that can affect the behavior of your a
 > [!NOTE]
 > The `Average Maximum Consumption` metrics are based on the simulation of `human` typing behavior. This involves rendering the chat responses character by character to mimic the rhythm and pace of `human` typing.
 
+> [!WARNING]  
+> These `screenshots` may be outdated due to version changes.
+
+<p align="center">
+  <img src="https://i.imgur.com/H9vDYjZ.png" alt="kubectl terminal" />
+</p>
 
 ### 🤖 Better LLM's:
 <p align="center">
