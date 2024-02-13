@@ -108,7 +108,7 @@ func (p *TokenCountParams) launchTokenCountGoroutines(ctx context.Context, model
 	var wg sync.WaitGroup
 	var countTokensErr error
 	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
-
+	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
 	for _, imageData := range p.ImageData {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
 		go func(data []byte) {
