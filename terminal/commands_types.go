@@ -338,8 +338,9 @@ func (cmd *handleStatsCommand) IsValid(parts []string) bool {
 type handleTokeCountingCommand struct{}
 
 func (cmd *handleTokeCountingCommand) IsValid(parts []string) bool {
-	// The token count command should have exactly three parts: the command, subcommand, and the file path.
-	return len(parts) == 3
+	// The token count command should have at least three parts: the command, subcommand, and at least one file path.
+	// Additionally, the second part should be the FileCommands subcommand.
+	return len(parts) >= 3 && parts[1] == FileCommands
 }
 
 // Note: this unimplemented
