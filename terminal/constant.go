@@ -103,7 +103,7 @@ const (
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all chat history and reset the total token usage count if enabled.\n\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <" + DoubleAsterisk + "path/file/data.txt" + DoubleAsterisk + "> or <" +
 		DoubleAsterisk + "data.txt" + DoubleAsterisk + ">: Counts a token from the specified file.\n\n" +
-		DoubleAsterisk + "Note" + DoubleAsterisk + ": The token count file feature only supports files with the following extensions: " +
+		DoubleAsterisk + "Note" + DoubleAsterisk + ": The token count file feature supports multiple files simultaneously with the following extensions: " +
 		dotMD + dotStringComma + dotTxt + dotStringComma + dotPng + dotStringComma +
 		dotJpg + dotStringComma + dotJpeg + dotStringComma + dotWebp + dotStringComma +
 		dotHeic + dotStringComma + dotHeif + ".\n\n" +
