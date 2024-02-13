@@ -142,7 +142,8 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths []string, session *Session) (bool, error) {
 	var validFilePaths []string
 	totalTokenCount := 0
-
+	// Note: This functionality may only be compatible with Go version 1.22 and onwards hahahaha.
+	// Additionally, while it may seem complex due to the 'if statement' error handling, it's not actually that complex.
 	for _, filePath := range filePaths {
 		// Prepare the parameters for token counting based on the file type.
 		params, err := cmd.prepareTokenCountParams(apiKey, filePath)
