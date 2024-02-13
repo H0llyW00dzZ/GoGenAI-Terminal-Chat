@@ -351,7 +351,8 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
 
 ### Back-End:
 - [ ] **Implement any unimplemented features**
-- [ ] **Spawn Additional Go Routines**
+- [ ] **Spawning Additional Goroutines**
+  - [X] **Processing Multiple Image Datasets for Token Counting**
 - [ ] **Pin Each Message for a Simpler Context Prompt**
 > [!NOTE]
 > The `Pin Each Message for a Simpler Context Prompt` feature is designed to pin messages loaded from files such as `json/txt/md`. This feature works exceptionally well with automated or manual summarization, as opposed to when written in an `interpreted language` hahaha.
