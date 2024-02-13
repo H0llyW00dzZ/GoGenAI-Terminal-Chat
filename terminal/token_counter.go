@@ -92,6 +92,7 @@ func (p *TokenCountParams) prepareAndCountTokens(ctx context.Context, model *gen
 // countTokensConcurrently orchestrates concurrent token counting for multiple images
 // and aggregates the results into a single response.
 func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *genai.GenerativeModel) (*genai.CountTokensResponse, error) {
+	// Note: This a cheap in terms of efficiency, especially if the task is I/O-bound.
 	totalTokens, err := p.launchTokenCountGoroutines(ctx, model)
 	if err != nil {
 		// An error occurred during concurrent token counting; return the error.
