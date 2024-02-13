@@ -60,11 +60,12 @@ func NewSession(apiKey string) *Session {
 	// Initialize the ChatHistory here instead of using an empty struct
 	chatHistory := NewChatHistory() // Hash RAM's labyrinth, hahaha!
 	return &Session{
-		Client:      client,
-		ChatHistory: chatHistory, // Store the pointer to ChatHistory in RAM's labyrinth
-		ChatConfig:  chatConfig,  // Initialize ChatConfig
-		Ctx:         ctx,
-		Cancel:      cancel,
+		Client:         client,
+		ChatHistory:    chatHistory, // Store the pointer to ChatHistory in RAM's labyrinth
+		ChatConfig:     chatConfig,  // Initialize ChatConfig
+		SafetySettings: DefaultSafetySettings(),
+		Ctx:            ctx,
+		Cancel:         cancel,
 	}
 }
 
