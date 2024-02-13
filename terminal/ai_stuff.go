@@ -173,6 +173,21 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths 
 	return false, nil // The session continues regardless of token counting results.
 }
 
+// prepareTokenCountParams prepares the necessary parameters for counting tokens based on file type.
+// It differentiates between text and image files and sets up the parameters accordingly.
+//
+// Parameters:
+//
+//	apiKey string: The API key used for authenticating requests to the AI service.
+//	filePath string: The path to the file for which tokens should be counted.
+//
+// Returns:
+//
+//	TokenCountParams: The prepared parameters for token counting.
+//	error: An error if the file cannot be read or if the file extension is not supported.
+//
+// This method is responsible for determining the file type and reading the file's content.
+// For image files, it also determines the image format, which is necessary for the token counting operation.
 func (cmd *handleTokeCountingCommand) prepareTokenCountParams(apiKey, filePath string) (TokenCountParams, error) {
 	var params TokenCountParams
 	params.APIKey = apiKey
@@ -190,6 +205,21 @@ func (cmd *handleTokeCountingCommand) prepareTokenCountParams(apiKey, filePath s
 	return params, nil
 }
 
+// readImageFile reads the content of an image file and updates the provided TokenCountParams
+// with the image data and format.
+//
+// Parameters:
+//
+//	filePath string: The path to the image file.
+//	params *TokenCountParams: A pointer to the TokenCountParams struct to be updated with the image data.
+//
+// Returns:
+//
+//	error: An error if the file cannot be read.
+//
+// This method reads the specified image file and sets the ImageData and ImageFormat fields
+// in the TokenCountParams struct. It is used in conjunction with prepareTokenCountParams to
+// handle image files for token counting.
 func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *TokenCountParams) error {
 	imageData, err := os.ReadFile(filePath)
 	if err != nil {
@@ -204,6 +234,20 @@ func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *Tok
 	return nil
 }
 
+// readTextFile reads the content of a text file and updates the provided TokenCountParams
+// with the text content.
+//
+// Parameters:
+//
+//	filePath string: The path to the text file.
+//	params *TokenCountParams: A pointer to the TokenCountParams struct to be updated with the text content.
+//
+// Returns:
+//
+//	error: An error if the file cannot be read or if the file extension is not supported.
+//
+// This method reads the specified text file and sets the Input field in the TokenCountParams struct.
+// It is used in conjunction with prepareTokenCountParams to handle text files for token counting.
 func (cmd *handleTokeCountingCommand) readTextFile(filePath string, params *TokenCountParams) error {
 	if err := verifyFileExtension(filePath); err != nil {
 		return err
