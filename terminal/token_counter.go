@@ -10,6 +10,8 @@ package terminal
 import (
 	"context"
 	"fmt"
+	"sync"
+	"sync/atomic"
 
 	"github.com/google/generative-ai-go/genai"
 	"google.golang.org/api/option"
@@ -74,25 +76,70 @@ func (p *TokenCountParams) makeTokenCountRequest(ctx context.Context, tokenCount
 	return true, nil
 }
 
-// prepareAndCountTokens creates and executes a token counting request using the provided model,
-// based on the input text or image data.
+// prepareAndCountTokens determines the method for token counting based on the provided input.
+// If text input is provided, it directly counts tokens for the text. If image data is provided,
+// it delegates to countTokensConcurrently for concurrent token counting on image data.
 func (p *TokenCountParams) prepareAndCountTokens(ctx context.Context, model *genai.GenerativeModel) (*genai.CountTokensResponse, error) {
 	// If there is text input, count tokens for text.
 	if len(p.Input) > 0 {
+		// Text input is present; count tokens for text.
 		return model.CountTokens(ctx, genai.Text(p.Input))
 	}
+	// No text input; proceed to count tokens for image data concurrently.
+	return p.countTokensConcurrently(ctx, model)
+}
 
-	// If there are images, count tokens for each image and sum the counts.
-	var totalTokens int
-	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
+// countTokensConcurrently orchestrates concurrent token counting for multiple images
+// and aggregates the results into a single response.
+func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *genai.GenerativeModel) (*genai.CountTokensResponse, error) {
+	totalTokens, err := p.launchTokenCountGoroutines(ctx, model)
+	if err != nil {
+		// An error occurred during concurrent token counting; return the error.
+		return nil, err
+	}
+	// All token counting completed successfully; return the total token count.
+	return &genai.CountTokensResponse{TotalTokens: int32(totalTokens)}, nil
+}
+
+// launchTokenCountGoroutines starts a goroutine for each image to count tokens in parallel.
+// It waits for all goroutines to complete and returns the accumulated token count.
+func (p *TokenCountParams) launchTokenCountGoroutines(ctx context.Context, model *genai.GenerativeModel) (int64, error) {
+	var totalTokens int64
+	var wg sync.WaitGroup
+	var countTokensErr error
+	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
+
 	for _, imageData := range p.ImageData {
-		resp, err := model.CountTokens(ctx, genai.ImageData(p.ImageFormat, imageData))
-		if err != nil {
-			return nil, err
-		}
-		totalTokens += int(resp.TotalTokens)
+		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
+		go func(data []byte) {
+			defer wg.Done() // Decrement the counter when the goroutine completes.
+			tokens, err := p.countTokensForImage(ctx, model, data)
+			if err != nil {
+				mu.Lock()
+				if countTokensErr == nil {
+					// Record the first error encountered.
+					countTokensErr = err
+				}
+				mu.Unlock()
+				return
+			}
+			// Safely add the tokens from this image to the total count.
+			atomic.AddInt64(&totalTokens, tokens)
+		}(imageData)
 	}
 
-	// Return the total token count for all images.
-	return &genai.CountTokensResponse{TotalTokens: int32(totalTokens)}, nil
+	wg.Wait()                          // Wait for all goroutines to finish.
+	return totalTokens, countTokensErr // Return the total tokens and any error that occurred.
+}
+
+// countTokensForImage counts the tokens for a single image using the provided generative AI model.
+// It returns the token count for the image and any error encountered during the process.
+func (p *TokenCountParams) countTokensForImage(ctx context.Context, model *genai.GenerativeModel, imageData []byte) (int64, error) {
+	resp, err := model.CountTokens(ctx, genai.ImageData(p.ImageFormat, imageData))
+	if err != nil {
+		// An error occurred while counting tokens for this image; return the error.
+		return 0, err
+	}
+	// Token counting for this image was successful; return the count.
+	return int64(resp.TotalTokens), nil
 }
