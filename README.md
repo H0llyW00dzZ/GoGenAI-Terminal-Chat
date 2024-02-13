@@ -327,6 +327,28 @@ By following these tips, you can write simple, easy-to-understand functions that
 
 ---
 
+### ⚙️ High-Level Operation of the system:
+```mermaid
+flowchart LR
+    Start([Start]) -->|User runs application| Init[Initialize Session]
+    Init -->|Set up signal handling| SignalHandler[Handle OS Signals]
+    Init -->|Load API Key| APIKeyValidation{API Key Validation}
+    APIKeyValidation -->|Valid| SetupClient[Setup AI Client]
+    APIKeyValidation -->|Invalid| End([End])
+    SetupClient -->|Client ready| MainLoop[Enter Main Loop]
+    MainLoop --> UserInput[/User Input/]
+    UserInput -->|Command| CommandHandler[Handle Command]
+    UserInput -->|Chat Message| SendMessage[Send Message to AI]
+    CommandHandler -->|Quit| End
+    CommandHandler -->|Other Commands| ProcessCommand[Process Command]
+    SendMessage -->|Receive AI Response| UpdateHistory[Update Chat History]
+    UpdateHistory --> DisplayResponse[Display AI Response]
+    ProcessCommand --> MainLoop
+    DisplayResponse --> MainLoop
+    SignalHandler -->|SIGINT/SIGTERM| Cleanup[Cleanup Resources]
+    Cleanup --> End
+```
+
 ## 🙌 Contributing
 Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed information on how you can contribute to this project.
 
