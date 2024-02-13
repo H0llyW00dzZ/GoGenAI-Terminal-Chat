@@ -327,9 +327,13 @@ By following these tips, you can write simple, easy-to-understand functions that
 
 ---
 
-### ⚙️ System's Architecture:
+### GoGenAI Terminal Chat Application Overview:
 
-#### Simple
+The GoGenAI Terminal Chat application provides a command-line interface for users to interact with a generative AI model. The application handles user inputs, processes commands, communicates with the AI, and maintains a chat history. It is designed to be extensible and scalable to accommodate future growth and additional features.
+
+#### ⚙️ Simple System's Architecture:
+
+The simple architecture is designed for straightforward use cases and provides the basic functionality required for a terminal-based chat application.
 
 ```mermaid
 flowchart LR
@@ -352,7 +356,9 @@ flowchart LR
     Cleanup --> End
 ```
 
-#### Scalable
+#### ⚙️ Scalable System's Architecture:
+
+The scalable architecture is designed to handle growth, allowing for the addition of new commands, improved error handling, and more complex interactions with external APIs.
 
 ```mermaid
 flowchart LR
