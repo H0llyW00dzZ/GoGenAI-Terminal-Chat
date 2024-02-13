@@ -389,6 +389,9 @@ flowchart LR
     class CommandRegistry,APIClient scalable;
 ```
 
+> [!NOTE]
+> The `Scalable System's Architecture` approach demonstrates how a system can efficiently handle complexity through simplicity, with each function of the Go application maintaining a `cyclomatic complexity of under 5`.
+
 ## 🙌 Contributing
 Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed information on how you can contribute to this project.
 
