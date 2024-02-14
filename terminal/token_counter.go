@@ -83,6 +83,8 @@ func (p *TokenCountParams) prepareAndCountTokens(ctx context.Context, model *gen
 	// If there is text input, count tokens for text.
 	if len(p.Input) > 0 {
 		// Text input is present; count tokens for text.
+		// Note: This may be subject to change, especially when dealing with large data in each file txt or markdown, such as images.
+		// Go routines may be used in the future for this purpose.
 		return model.CountTokens(ctx, genai.Text(p.Input))
 	}
 	// No text input; proceed to count tokens for image data concurrently.
