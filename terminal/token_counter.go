@@ -121,12 +121,11 @@ func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *g
 }
 
 // launchTokenCountGoroutinesForImage starts a goroutine for each image to count tokens in parallel.
-// It waits for all goroutines to complete and returns the accumulated token count.
+// It waits for all goroutines to complete and returns the accumulated token count and the first error encountered, if any.
 func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Context, model *genai.GenerativeModel) (int64, error) {
 	var totalTokens int64
 	var wg sync.WaitGroup
-	var countTokensErr error
-	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
+	errChan := make(chan error, len(p.ImageData))
 	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
 	// Ref: Range over integers (https://go.dev/doc/go1.22)
 	for i, imageData := range p.ImageData {
@@ -135,13 +134,7 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Contex
 			defer wg.Done() // Decrement the counter when the goroutine completes.
 			tokens, err := p.countTokensForImage(ctx, model, data)
 			if err != nil {
-				logger.Error(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
-				mu.Lock()
-				if countTokensErr == nil {
-					// Record the first error encountered.
-					countTokensErr = err
-				}
-				mu.Unlock()
+				errChan <- fmt.Errorf(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
 				return
 			}
 			// Safely add the tokens from this image to the total count.
@@ -149,8 +142,12 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Contex
 		}(imageData, i)
 	}
 
-	wg.Wait()                          // Wait for all goroutines to finish.
-	return totalTokens, countTokensErr // Return the total tokens and any error that occurred.
+	go func() {
+		wg.Wait()      // Wait for all goroutines to finish.
+		close(errChan) // Close the error channel after all goroutines have finished.
+	}()
+
+	return totalTokens, collectErrors(errChan) // Return the total tokens and any error that occurred.
 }
 
 // countTokensForImage counts the tokens for a single image using the provided generative AI model.
@@ -166,12 +163,11 @@ func (p *TokenCountParams) countTokensForImage(ctx context.Context, model *genai
 }
 
 // launchTokenCountGoroutinesForText starts a goroutine for each text input to count tokens in parallel.
-// It waits for all goroutines to complete and returns the accumulated token count.
+// It waits for all goroutines to complete and returns the accumulated token count and the first error encountered, if any.
 func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context, model *genai.GenerativeModel, texts []string) (int64, error) {
 	var totalTokens int64
 	var wg sync.WaitGroup
-	var countTokensErr error
-	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
+	errChan := make(chan error, len(texts))
 	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
 	// Ref: Range over integers (https://go.dev/doc/go1.22)
 	for i, text := range texts {
@@ -181,13 +177,7 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context
 			defer wg.Done() // Decrement the counter when the goroutine completes.
 			tokens, err := p.countTokensForText(ctx, model, t)
 			if err != nil {
-				logger.Error(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
-				mu.Lock()
-				if countTokensErr == nil {
-					// Record the first error encountered.
-					countTokensErr = err
-				}
-				mu.Unlock()
+				errChan <- fmt.Errorf(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
 				return
 			}
 			// Safely add the tokens from this text to the total count.
@@ -195,8 +185,12 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context
 		}(text, i)
 	}
 
-	wg.Wait()                          // Wait for all goroutines to finish.
-	return totalTokens, countTokensErr // Return the total tokens and any error that occurred.
+	go func() {
+		wg.Wait()      // Wait for all goroutines to finish.
+		close(errChan) // Close the error channel after all goroutines have finished.
+	}()
+
+	return totalTokens, collectErrors(errChan) // Return the total tokens and any error that occurred.
 }
 
 // countTokensForText counts the tokens for a single text input using the provided generative AI model.
@@ -209,4 +203,15 @@ func (p *TokenCountParams) countTokensForText(ctx context.Context, model *genai.
 	}
 	// Token counting for this text was successful; return the count.
 	return int64(resp.TotalTokens), nil
+}
+
+// collectErrors waits for all errors to be sent on the given channel and returns the first non-nil error.
+func collectErrors(errChan <-chan error) error {
+	var collectedError error
+	for err := range errChan {
+		if collectedError == nil && err != nil {
+			collectedError = err // Record the first non-nil error encountered.
+		}
+	}
+	return collectedError
 }
