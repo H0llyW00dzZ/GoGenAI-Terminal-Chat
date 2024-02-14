@@ -128,12 +128,13 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Contex
 	var countTokensErr error
 	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
 	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
-	for _, imageData := range p.ImageData {
+	for i, imageData := range p.ImageData {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
-		go func(data []byte) {
+		go func(data []byte, index int) {
 			defer wg.Done() // Decrement the counter when the goroutine completes.
 			tokens, err := p.countTokensForImage(ctx, model, data)
 			if err != nil {
+				logger.Error(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
 				mu.Lock()
 				if countTokensErr == nil {
 					// Record the first error encountered.
@@ -144,7 +145,7 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Contex
 			}
 			// Safely add the tokens from this image to the total count.
 			atomic.AddInt64(&totalTokens, tokens)
-		}(imageData)
+		}(imageData, i)
 	}
 
 	wg.Wait()                          // Wait for all goroutines to finish.
@@ -171,13 +172,14 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context
 	var countTokensErr error
 	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
 
-	for _, text := range texts {
+	for i, text := range texts {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
 		// Note: This a better way, for example how it work it's inputValueString1 handle by goroutine 1, inputValueString2 handle by goroutine 2
-		go func(t string) {
+		go func(t string, index int) {
 			defer wg.Done() // Decrement the counter when the goroutine completes.
 			tokens, err := p.countTokensForText(ctx, model, t)
 			if err != nil {
+				logger.Error(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
 				mu.Lock()
 				if countTokensErr == nil {
 					// Record the first error encountered.
@@ -188,7 +190,7 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context
 			}
 			// Safely add the tokens from this text to the total count.
 			atomic.AddInt64(&totalTokens, tokens)
-		}(text)
+		}(text, i)
 	}
 
 	wg.Wait()                          // Wait for all goroutines to finish.
