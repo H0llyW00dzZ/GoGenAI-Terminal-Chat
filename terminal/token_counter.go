@@ -173,6 +173,7 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context
 
 	for _, text := range texts {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
+		// Note: This a better way, for example how it work it's inputValueString1 handle by goroutine 1, inputValueString2 handle by goroutine 2
 		go func(t string) {
 			defer wg.Done() // Decrement the counter when the goroutine completes.
 			tokens, err := p.countTokensForText(ctx, model, t)
