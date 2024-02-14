@@ -82,31 +82,47 @@ func (p *TokenCountParams) makeTokenCountRequest(ctx context.Context, tokenCount
 func (p *TokenCountParams) prepareAndCountTokens(ctx context.Context, model *genai.GenerativeModel) (*genai.CountTokensResponse, error) {
 	// If there is text input, count tokens for text.
 	if len(p.Input) > 0 {
-		// Text input is present; count tokens for text.
-		// Note: This may be subject to change, especially when dealing with large data in each file txt or markdown, such as images.
-		// Go routines may be used in the future for this purpose.
-		return model.CountTokens(ctx, genai.Text(p.Input))
+		// Text input is present; handle concurrent token counting for text.
+		texts := []string{p.Input}
+		return p.countTokensConcurrently(ctx, model, texts, nil)
+	} else if len(p.ImageData) > 0 {
+		// Image data is present; handle concurrent token counting for images.
+		return p.countTokensConcurrently(ctx, model, nil, p.ImageData)
 	}
-	// No text input; proceed to count tokens for image data concurrently.
-	return p.countTokensConcurrently(ctx, model)
+	return nil, fmt.Errorf(ErrorNoInputProvideForTokenCounting)
 }
 
 // countTokensConcurrently orchestrates concurrent token counting for multiple images
 // and aggregates the results into a single response.
-func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *genai.GenerativeModel) (*genai.CountTokensResponse, error) {
+func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *genai.GenerativeModel, texts []string, images [][]byte) (*genai.CountTokensResponse, error) {
 	// Note: This a cheap in terms of efficiency, especially if the task is I/O-bound.
-	totalTokens, err := p.launchTokenCountGoroutines(ctx, model)
-	if err != nil {
-		// An error occurred during concurrent token counting; return the error.
-		return nil, err
+	var totalTokens int64
+	var err error
+
+	if len(texts) > 0 {
+		totalTokens, err = p.launchTokenCountGoroutinesForText(ctx, model, texts)
+		if err != nil {
+			// An error occurred during concurrent token counting; return the error.
+			return nil, err
+		}
 	}
+
+	if len(images) > 0 {
+		imageTokens, err := p.launchTokenCountGoroutinesForImage(ctx, model)
+		if err != nil {
+			// An error occurred during concurrent token counting; return the error.
+			return nil, err
+		}
+		totalTokens += imageTokens
+	}
+
 	// All token counting completed successfully; return the total token count.
 	return &genai.CountTokensResponse{TotalTokens: int32(totalTokens)}, nil
 }
 
-// launchTokenCountGoroutines starts a goroutine for each image to count tokens in parallel.
+// launchTokenCountGoroutinesForImage starts a goroutine for each image to count tokens in parallel.
 // It waits for all goroutines to complete and returns the accumulated token count.
-func (p *TokenCountParams) launchTokenCountGoroutines(ctx context.Context, model *genai.GenerativeModel) (int64, error) {
+func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Context, model *genai.GenerativeModel) (int64, error) {
 	var totalTokens int64
 	var wg sync.WaitGroup
 	var countTokensErr error
@@ -144,5 +160,48 @@ func (p *TokenCountParams) countTokensForImage(ctx context.Context, model *genai
 		return 0, err
 	}
 	// Token counting for this image was successful; return the count.
+	return int64(resp.TotalTokens), nil
+}
+
+// launchTokenCountGoroutinesForText starts a goroutine for each text input to count tokens in parallel.
+// It waits for all goroutines to complete and returns the accumulated token count.
+func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context, model *genai.GenerativeModel, texts []string) (int64, error) {
+	var totalTokens int64
+	var wg sync.WaitGroup
+	var countTokensErr error
+	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
+
+	for _, text := range texts {
+		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
+		go func(t string) {
+			defer wg.Done() // Decrement the counter when the goroutine completes.
+			tokens, err := p.countTokensForText(ctx, model, t)
+			if err != nil {
+				mu.Lock()
+				if countTokensErr == nil {
+					// Record the first error encountered.
+					countTokensErr = err
+				}
+				mu.Unlock()
+				return
+			}
+			// Safely add the tokens from this text to the total count.
+			atomic.AddInt64(&totalTokens, tokens)
+		}(text)
+	}
+
+	wg.Wait()                          // Wait for all goroutines to finish.
+	return totalTokens, countTokensErr // Return the total tokens and any error that occurred.
+}
+
+// countTokensForText counts the tokens for a single text input using the provided generative AI model.
+// It returns the token count for the text and any error encountered during the process.
+func (p *TokenCountParams) countTokensForText(ctx context.Context, model *genai.GenerativeModel, text string) (int64, error) {
+	resp, err := model.CountTokens(ctx, genai.Text(text))
+	if err != nil {
+		// An error occurred while counting tokens for this text; return the error.
+		return 0, err
+	}
+	// Token counting for this text was successful; return the count.
 	return int64(resp.TotalTokens), nil
 }

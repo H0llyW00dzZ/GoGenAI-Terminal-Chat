@@ -200,6 +200,7 @@ const (
 	ErrorFileTypeNotSupported                       = "file type not supported: only %s files are allowed." // Low level error
 	ErrorFailedToSendCommandToAI                    = "Failed to send command to AI: %v"
 	ErrorVariableImageFileTypeNotSupported          = "image file type not supported: only %s files are allowed." // Low level error
+	ErrorNoInputProvideForTokenCounting             = "no input provided for token counting"                      // low level error
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
