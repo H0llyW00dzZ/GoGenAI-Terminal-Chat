@@ -244,6 +244,53 @@ type TokenCountParams struct {
 	ImageData [][]byte // Image data as a slice of byte slices, each representing an image.
 }
 
+// TokenCountRequest encapsulates the parameters required for concurrent token counting
+// in text and images using a generative AI model. It is designed to be passed to
+// functions that initiate multiple goroutines for processing text and image data in parallel.
+//
+// Fields:
+//
+//	Ctx:    A context.Context that carries deadlines, cancellation signals, and other
+//	        request-scoped values across API boundaries and between processes.
+//	        It is used to control the cancellation of the token counting process.
+//
+//	Model:  A pointer to an instance of genai.GenerativeModel, which provides methods
+//	        for counting tokens in text and image data. The model is expected to be
+//	        pre-initialized and ready for use.
+//
+//	Texts:  A slice of strings, where each string represents a piece of text for which
+//	        the token count is to be determined. Each element in the slice will be
+//	        processed concurrently by a separate goroutine.
+//
+//	Images: A slice of byte slices, where each byte slice represents image data for which
+//	        the token count is to be determined. The image data format should be compatible
+//	        with the generative AI model's expectations. Similar to 'Texts', each image
+//	        will be processed concurrently by its own goroutine.
+//
+// Example Usage:
+//
+//	req := TokenCountRequest{
+//	    Ctx:    ctx,
+//	    Model:  model,
+//	    Texts:  []string{"Hello, world!", "Go is awesome."},
+//	    Images: [][]byte{imageData1, imageData2},
+//	}
+//	// Pass 'req' to functions that process the request.
+//
+// Note:
+//
+//	The caller is responsible for ensuring that the context and the model provided are
+//	valid and that the context has not been canceled before initiating the token counting
+//	process. The 'Images' field should contain properly formatted image data that the
+//	model can process. If either 'Texts' or 'Images' is nil or empty, the corresponding
+//	token counting operations for that data type will not be performed.
+type TokenCountRequest struct {
+	Ctx    context.Context
+	Model  *genai.GenerativeModel
+	Texts  []string
+	Images [][]byte
+}
+
 // NewLineChar is a struct that containt Rune for New Line Character
 type NewLineChar struct {
 	NewLineChars rune
