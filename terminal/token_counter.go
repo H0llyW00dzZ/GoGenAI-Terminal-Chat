@@ -82,33 +82,44 @@ func (p *TokenCountParams) makeTokenCountRequest(ctx context.Context, tokenCount
 func (p *TokenCountParams) prepareAndCountTokens(ctx context.Context, model *genai.GenerativeModel) (*genai.CountTokensResponse, error) {
 	// If there is text input, count tokens for text.
 	if len(p.Input) > 0 {
-		// Text input is present; handle concurrent token counting for text.
-		texts := []string{p.Input}
-		return p.countTokensConcurrently(ctx, model, texts, nil)
+		// Text input is present; prepare a request for concurrent token counting for text.
+		request := TokenCountRequest{
+			Ctx:   ctx,
+			Model: model,
+			Texts: []string{p.Input},
+		}
+		return p.countTokensConcurrently(request)
 	} else if len(p.ImageData) > 0 {
-		// Image data is present; handle concurrent token counting for images.
-		return p.countTokensConcurrently(ctx, model, nil, p.ImageData)
+		// Image data is present; prepare a request for concurrent token counting for images.
+		request := TokenCountRequest{
+			Ctx:    ctx,
+			Model:  model,
+			Images: p.ImageData,
+		}
+		return p.countTokensConcurrently(request)
 	}
 	return nil, fmt.Errorf(ErrorNoInputProvideForTokenCounting)
 }
 
-// countTokensConcurrently orchestrates concurrent token counting for multiple images
+// countTokensConcurrently orchestrates concurrent token counting for multiple texts or images
 // and aggregates the results into a single response.
-func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *genai.GenerativeModel, texts []string, images [][]byte) (*genai.CountTokensResponse, error) {
+func (p *TokenCountParams) countTokensConcurrently(req TokenCountRequest) (*genai.CountTokensResponse, error) {
 	// Note: This a cheap in terms of efficiency, especially if the task is I/O-bound.
 	var totalTokens int64
 	var err error
 
-	if len(texts) > 0 {
-		totalTokens, err = p.launchTokenCountGoroutinesForText(ctx, model, texts)
+	// Handle concurrent token counting for text inputs if any.
+	if len(req.Texts) > 0 {
+		totalTokens, err = p.launchTokenCountGoroutinesForText(req)
 		if err != nil {
 			// An error occurred during concurrent token counting; return the error.
 			return nil, err
 		}
 	}
 
-	if len(images) > 0 {
-		imageTokens, err := p.launchTokenCountGoroutinesForImage(ctx, model)
+	// Handle concurrent token counting for image data if any.
+	if len(req.Images) > 0 {
+		imageTokens, err := p.launchTokenCountGoroutinesForImage(req)
 		if err != nil {
 			// An error occurred during concurrent token counting; return the error.
 			return nil, err
@@ -116,23 +127,23 @@ func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *g
 		totalTokens += imageTokens
 	}
 
-	// All token counting completed successfully; return the total token count.
+	// Return the total token count after successfully counting tokens for all inputs.
 	return &genai.CountTokensResponse{TotalTokens: int32(totalTokens)}, nil
 }
 
-// launchTokenCountGoroutinesForImage starts a goroutine for each image to count tokens in parallel.
+// launchTokenCountGoroutinesForImage starts a goroutine for each image in the request to count tokens in parallel.
 // It waits for all goroutines to complete and returns the accumulated token count and the first error encountered, if any.
-func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Context, model *genai.GenerativeModel) (int64, error) {
+func (p *TokenCountParams) launchTokenCountGoroutinesForImage(req TokenCountRequest) (int64, error) {
 	var totalTokens int64
 	var wg sync.WaitGroup
-	errChan := make(chan error, len(p.ImageData))
+	errChan := make(chan error, len(req.Images))
 	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
 	// Ref: Range over integers (https://go.dev/doc/go1.22)
-	for i, imageData := range p.ImageData {
+	for i, imageData := range req.Images {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
 		go func(data []byte, index int) {
 			defer wg.Done() // Decrement the counter when the goroutine completes.
-			tokens, err := p.countTokensForImage(ctx, model, data)
+			tokens, err := p.countTokensForImage(req.Ctx, req.Model, data)
 			if err != nil {
 				errChan <- fmt.Errorf(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
 				return
@@ -162,20 +173,20 @@ func (p *TokenCountParams) countTokensForImage(ctx context.Context, model *genai
 	return int64(resp.TotalTokens), nil
 }
 
-// launchTokenCountGoroutinesForText starts a goroutine for each text input to count tokens in parallel.
+// launchTokenCountGoroutinesForText starts a goroutine for each text input in the request to count tokens in parallel.
 // It waits for all goroutines to complete and returns the accumulated token count and the first error encountered, if any.
-func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context, model *genai.GenerativeModel, texts []string) (int64, error) {
+func (p *TokenCountParams) launchTokenCountGoroutinesForText(req TokenCountRequest) (int64, error) {
 	var totalTokens int64
 	var wg sync.WaitGroup
-	errChan := make(chan error, len(texts))
+	errChan := make(chan error, len(req.Texts))
 	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
 	// Ref: Range over integers (https://go.dev/doc/go1.22)
-	for i, text := range texts {
+	for i, text := range req.Texts {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
 		// Note: This a better way, for example how it work it's inputValueString1 handle by goroutine 1, inputValueString2 handle by goroutine 2
 		go func(t string, index int) {
 			defer wg.Done() // Decrement the counter when the goroutine completes.
-			tokens, err := p.countTokensForText(ctx, model, t)
+			tokens, err := p.countTokensForText(req.Ctx, req.Model, t)
 			if err != nil {
 				errChan <- fmt.Errorf(ErrorGopherEncounteredAnError, index, err) // Just incase adding this logger
 				return
