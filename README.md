@@ -390,12 +390,15 @@ flowchart LR
     ConcurrentProcessor -->|Aggregate Results| TokenCountingProcess
     ConcurrentProcessor -->|Error| ErrorHandler[Error Handler]
 
-    classDef scalable fill:#f96,stroke:#333,stroke-width:2px;
+    classDef scalable fill:#4c9f70,stroke:#333,stroke-width:2px;
     class CommandRegistry,APIClient,ConcurrentProcessor scalable;
 ```
 
 > [!NOTE]
-> The `Scalable System's Architecture` approach demonstrates how a system can efficiently handle complexity through simplicity, with each function of the Go application maintaining a `cyclomatic complexity of under 5`.
+> In the diagram above, components with a `green` fill color (`#4c9f70`) are designed to be scalable, indicating that they can handle growth and increased load effectively. These components include the `Command Registry`, `API Client`, and `Concurrent Processor`.
+
+> [!NOTE]
+> The `Scalable System's Architecture` showcases an efficient handling of complexity through simplicity. In this Go application, each function is designed to maintain an average cyclomatic complexity of 5 or less.
 
 ## 🙌 Contributing
 Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed information on how you can contribute to this project.
