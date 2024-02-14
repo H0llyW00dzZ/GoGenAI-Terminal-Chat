@@ -298,6 +298,8 @@ const (
 		sysEmoji + " System messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 	InfoTokenCountFile = "The file " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset +
 		" contains " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + " tokens."
+	RetryingStupid500Error = "Retrying (" + ColorRed + "last error: %v" + ColorReset + ")" +
+		" attempt number " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 )
 
 // Defined Tools

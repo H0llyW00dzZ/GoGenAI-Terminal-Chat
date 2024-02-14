@@ -34,6 +34,8 @@ func (op *RetryableOperation) retryWithExponentialBackoff(handleError ErrorHandl
 		if handleError(err) {
 			delay := baseDelay * time.Duration(math.Pow(2, float64(attempt)))
 			time.Sleep(delay)
+			// Log the retry attempt number and the last error message
+			logger.Any(RetryingStupid500Error, lastErr, attempt+1)
 			continue // Retry the request
 		} else {
 			// Non-retryable error or max retries exceeded
