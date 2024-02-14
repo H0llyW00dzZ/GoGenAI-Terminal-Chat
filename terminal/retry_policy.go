@@ -18,12 +18,15 @@ import (
 func (op *RetryableOperation) retryWithExponentialBackoff(handleError ErrorHandlerFunc) (bool, error) {
 	const maxRetries = 3
 	baseDelay := time.Second
+	var lastErr error // Variable to store the last error encountered
 
 	for attempt := 0; attempt < maxRetries; attempt++ {
 		success, err := op.retryFunc()
 		if err == nil {
 			return success, nil
 		}
+		lastErr = err // Store the last error encountered
+
 		// Log debug information
 		logger.Debug(DEBUGRETRYPOLICY, attempt+1, err)
 
@@ -40,7 +43,8 @@ func (op *RetryableOperation) retryWithExponentialBackoff(handleError ErrorHandl
 	}
 
 	// If this point is reached, retries have been exhausted without success.
-	err := fmt.Errorf(ErrorLowLevelMaximumRetries)
+	// Use the last error encountered in the final error message.
+	err := fmt.Errorf(ErrorLowLevelMaximumRetries, lastErr)
 	logger.Error(err.Error())
 	return false, err
 }
