@@ -373,7 +373,9 @@ flowchart LR
     UserInput -->|Chat Message| SendMessage[Send Message to AI]
     CommandRegistry -->|Quit| End
     CommandRegistry -->|Other Commands| ProcessCommand[Process Command]
+    CommandRegistry -->|Token Count| TokenCountingProcess[Token Counting Process]
     SendMessage -->|Receive AI Response| UpdateHistory[Update Chat History]
+    TokenCountingProcess -->|Receive AI Response| DisplayResponse[Display AI Response]
     UpdateHistory --> DisplayResponse[Display AI Response]
     ProcessCommand --> MainLoop
     DisplayResponse --> MainLoop
@@ -384,9 +386,12 @@ flowchart LR
     APIClient -->|API Error| ErrorHandler[Error Handler]
     ErrorHandler -->|Handle Error| ProcessCommand
     ErrorHandler -->|Fatal Error| End
+    TokenCountingProcess -->|Concurrent Processing| ConcurrentProcessor[Concurrent Processor]
+    ConcurrentProcessor -->|Aggregate Results| TokenCountingProcess
+    ConcurrentProcessor -->|Error| ErrorHandler[Error Handler]
 
     classDef scalable fill:#f96,stroke:#333,stroke-width:2px;
-    class CommandRegistry,APIClient scalable;
+    class CommandRegistry,APIClient,ConcurrentProcessor scalable;
 ```
 
 > [!NOTE]
