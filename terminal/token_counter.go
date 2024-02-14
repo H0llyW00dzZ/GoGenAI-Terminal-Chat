@@ -128,6 +128,7 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForImage(ctx context.Contex
 	var countTokensErr error
 	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
 	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
+	// Ref: Range over integers (https://go.dev/doc/go1.22)
 	for i, imageData := range p.ImageData {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
 		go func(data []byte, index int) {
@@ -171,7 +172,8 @@ func (p *TokenCountParams) launchTokenCountGoroutinesForText(ctx context.Context
 	var wg sync.WaitGroup
 	var countTokensErr error
 	mu := &sync.Mutex{} // Mutex to protect error assignment across goroutines.
-
+	// Note: This functionality may only be compatible with Go version 1.22 and onwards.
+	// Ref: Range over integers (https://go.dev/doc/go1.22)
 	for i, text := range texts {
 		wg.Add(1) // Increment the WaitGroup counter for each goroutine.
 		// Note: This a better way, for example how it work it's inputValueString1 handle by goroutine 1, inputValueString2 handle by goroutine 2
