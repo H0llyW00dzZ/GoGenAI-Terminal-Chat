@@ -116,6 +116,7 @@ func (p *TokenCountParams) countTokensConcurrently(ctx context.Context, model *g
 		totalTokens += imageTokens
 	}
 
+	// All token counting completed successfully; return the total token count.
 	return &genai.CountTokensResponse{TotalTokens: int32(totalTokens)}, nil
 }
 
