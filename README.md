@@ -424,8 +424,10 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
 ### Back-End:
 - [ ] **Implement any unimplemented features**
 - [ ] **Spawning Additional Goroutines**
+
   - [X] **Processing Multiple Image Datasets for Token Counting**
   - [X] **Processing Multiple Text Datasets for Token Counting**
+
 - [ ] **Pin Each Message for a Simpler Context Prompt**
 > [!NOTE]
 > The `Pin Each Message for a Simpler Context Prompt` feature is designed to pin messages loaded from files such as `json/txt/md`. This feature works exceptionally well with automated or manual summarization, as opposed to when written in an `interpreted language` hahaha.
@@ -455,7 +457,9 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
 > [!NOTE]
 > The enhancement, `Leverage ChatHistory by automatically syncing for multi-modal use (gemini-pro-vision)`, utilizes `ChatHistory` as a highly efficient, in-memory data storage solution unlike written in `C` or other language that causing `memory leaks` . This ensures seamless synchronization and optimal performance across various modes.
 - [ ] **[Explicit] Improve `Error` message handling to make it more dynamic.**
+
   - [X] **[Explicit] Each goroutine dynamically handles `Error` messages during `Count Tokens` operations, communicating through a channel.**
+
 - [ ] **Improve `Colorize` to enhance scalability and integrate it with Standard Library Regex for better performance.**
 
 ### Other:
