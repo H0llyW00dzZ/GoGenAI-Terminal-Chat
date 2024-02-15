@@ -35,7 +35,7 @@ const (
 	// this animated chars is magic, it used to show the user that the AI is typing just like human would type
 	AnimatedChars = "%c"
 	// this model is subject to changed in future
-	GeminiPro       = "gemini-pro"
+	GeminiPro       = "gemini-1.0-pro"
 	GeminiProVision = "gemini-pro-vision"
 	// this may subject to changed in future for example can customize the delay
 	TypingDelay = 60 * time.Millisecond
