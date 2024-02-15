@@ -326,6 +326,8 @@ func postProcessAITranslate(session *Session, aiResponse string) error {
 // Parameters:
 //
 //	info *genai.ModelInfo: A pointer to the ModelInfo struct containing the model's metadata.
+//
+// Note: This is currently marked as TODO since the command and subcommand logic needs to be refactored. Originally, this was designed for commands.
 func displayModelInfo(info *genai.ModelInfo) {
 	// Compile the model information into a single formatted string.
 	modelInfo := fmt.Sprintf(
