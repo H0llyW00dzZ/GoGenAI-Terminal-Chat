@@ -98,6 +98,7 @@ func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, e
 			SummarizeCommands,
 			ClearCommand,
 			ChatCommands,
+			CheckModelCommands,
 			TokenCountCommands,
 			FileCommands)
 	})
@@ -415,4 +416,23 @@ func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, sessio
 		return false, nil
 	}
 
+}
+
+func (cmd *handleCheckModelCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Validate the command arguments.
+	if !cmd.IsValid(parts) {
+		logger.Error(ErrorWhileTypingCommandArgs, CheckModelCommands, parts)
+		return false, nil
+	}
+
+	modelName := parts[1] // The model name is the second part.
+	modelInfo, err := session.Client.EmbeddingModel(modelName).Info(session.Ctx)
+	if err != nil {
+		logger.Error(ErrorFailedToRetriveModelInfo, err)
+		return false, err
+	}
+
+	// Process and display the model information.
+	DisplayModelInfo(modelInfo)
+	return false, nil // Return false to indicate the session should continue.
 }

@@ -101,6 +101,7 @@ const (
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat statistic.\n\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all system summary messages from the chat history.\n\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all chat history and reset the total token usage count if enabled.\n\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " <" + DoubleAsterisk + "model-name" + DoubleAsterisk + ">: Check the details of a specific AI model.\n\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <" + DoubleAsterisk + "path/file/data.txt" + DoubleAsterisk + "> or <" +
 		DoubleAsterisk + "data.txt" + DoubleAsterisk + ">: Counts a token from the specified file.\n\n" +
 		DoubleAsterisk + "Note" + DoubleAsterisk + ": The token count file feature supports multiple files simultaneously with the following extensions: " +
@@ -139,6 +140,7 @@ const (
 	StatsCommand       = ":stats"
 	TokenCountCommands = ":tokencount"
 	FileCommands       = ":file"
+	CheckModelCommands = ":checkmodel"
 	PingCommand        = ":ping" // Currently marked as TODO
 	PrefixChar         = ":"
 	// List args
@@ -202,6 +204,7 @@ const (
 	ErrorVariableImageFileTypeNotSupported          = "image file type not supported: only %s files are allowed." // Low level error
 	ErrorNoInputProvideForTokenCounting             = "no input provided for token counting"                      // low level error
 	ErrorGopherEncounteredAnError                   = "Goroutine %d encountered an error: %w"
+	ErrorFailedToRetriveModelInfo                   = "Failed to retrieve model info: %v"
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
