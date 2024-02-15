@@ -319,7 +319,7 @@ func postProcessAITranslate(session *Session, aiResponse string) error {
 	return nil
 }
 
-// displayModelInfo formats and logs the information about a generative AI model.
+// DisplayModelInfo formats and logs the information about a generative AI model.
 // It compiles the model's details into a single string and logs it using the
 // logger.Any method for a consistent logging experience.
 //
@@ -328,7 +328,7 @@ func postProcessAITranslate(session *Session, aiResponse string) error {
 //	info *genai.ModelInfo: A pointer to the ModelInfo struct containing the model's metadata.
 //
 // Note: This is currently marked as TODO since the command and subcommand logic needs to be refactored. Originally, this was designed for commands.
-func displayModelInfo(info *genai.ModelInfo) {
+func DisplayModelInfo(info *genai.ModelInfo) {
 	// Compile the model information into a single formatted string.
 	modelInfo := fmt.Sprintf(
 		ModelFormat,
