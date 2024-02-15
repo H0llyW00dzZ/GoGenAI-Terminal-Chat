@@ -331,7 +331,7 @@ func DisplayModelInfo(info *genai.ModelInfo) {
 	modelInfo := fmt.Sprintf(
 		ModelFormat,
 		info.DisplayName,
-		info.BaseModelID,
+		info.BaseModelID, // Note: this not showing could be a bug, in google sdk side
 		info.Version,
 		info.Description,
 		info.SupportedGenerationMethods,
