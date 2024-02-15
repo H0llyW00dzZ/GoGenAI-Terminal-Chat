@@ -153,7 +153,7 @@ const (
 	ErrorSendingMessage                             = "Error sending message to AI: %v"
 	ErrorReadingUserInput                           = "Error reading user input: %v"
 	ErrorFailedToFetchReleaseInfo                   = "Failed to fetch the latest release %s info: %v"
-	ErrorReceivedNon200StatusCode                   = "[Github] [Check Version] Received non-200 status code: %v Skip Retrying" // Github non 500 lmao
+	ErrorReceivedNon200StatusCode                   = "[Retry Policy] [Github] [Check Version] Received non-200 status code: %v Skip Retrying" // Github non 500 lmao
 	ErrorFailedToReadTheResponseBody                = "Failed to read the response body: %v"
 	ErrorFaileduUnmarshalTheReleaseData             = "Failed to unmarshal the release data: %v"
 	ErrorFailedTagToFetchReleaseInfo                = "Failed to fetch release info for tag '%s': %v"
@@ -179,9 +179,9 @@ const (
 	ErrorInvalidAPIKey                              = "Invalid API key: %v"
 	ErrorFailedToStartSession                       = "Failed To Start Session: %v"
 	ErrorLowLevelNoResponse                         = "no response from AI service"
-	ErrorLowLevelMaximumRetries                     = "maximum retries reached without success - %v" // low level
-	ErrorLowLevelFailedToCountTokensAfterRetries    = "failed to count tokens after retries"         // low level
-	ErrorNonretryableerror                          = "Failed to Retrying after %d (SKIPPED) retries due to a non-retryable error: %v"
+	ErrorLowLevelMaximumRetries                     = "[Retry Policy] maximum retries reached without success - %v" // low level
+	ErrorLowLevelFailedToCountTokensAfterRetries    = "failed to count tokens after retries"                        // low level
+	ErrorNonretryableerror                          = "[Retry Policy] Failed to Retrying after %d (SKIPPED) retries due to a non-retryable error: %v"
 	ErrorFailedToSendHelpMessage                    = "Failed to send help message: %v"
 	ErrorFailedToSendHelpMessagesAfterRetries       = "Failed to send help message after retries" // low level
 	ErrorFailedToSendShutdownMessage                = "Failed to send shutdown message: %v"
@@ -300,7 +300,7 @@ const (
 		sysEmoji + " System messages: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 	InfoTokenCountFile = "The file " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset +
 		" contains " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + " tokens."
-	RetryingStupid500Error = "Retrying (" + ColorRed + "last error: %v" + ColorReset + ")" +
+	RetryingStupid500Error = "[Retry Policy] Retrying (" + ColorRed + "last error: %v" + ColorReset + ")" +
 		" attempt number " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 )
 
