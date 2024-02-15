@@ -322,9 +322,10 @@ func (cmd *handleShowChatCommand) Execute(session *Session, parts []string) (boo
 }
 
 func (cmd *handleShowChatCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
-	if !cmd.IsValid(parts) {
+
+	// Check if there are enough parts to contain the length argument.
+	if len(parts) < 3 {
 		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
-		printnewlineASCII()
 		return false, nil
 	}
 
