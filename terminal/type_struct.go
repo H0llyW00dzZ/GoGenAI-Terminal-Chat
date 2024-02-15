@@ -111,6 +111,11 @@ type DebugOrErrorLogger struct {
 	PrintTypingChat func(string, time.Duration)
 }
 
+// ErrorASCIIArt is a custom error type for errors related to ASCII art conversion.
+type ErrorASCIIArt struct {
+	Message string
+}
+
 // FormattingOptions encapsulates the settings required to apply formatting to a text segment.
 // It includes the text to be formatted, the delimiter used to identify the text segment,
 // the color to apply, and a map specifying the ANSI formatting codes associated with different delimiters.
