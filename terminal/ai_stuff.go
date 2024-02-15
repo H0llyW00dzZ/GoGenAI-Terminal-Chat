@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	genai "github.com/google/generative-ai-go/genai"
 )
 
 // addMessageWithContext adds a message to the chat history with context.
@@ -315,4 +317,27 @@ func postProcessAITranslate(session *Session, aiResponse string) error {
 	// Add the sanitized AI's response to the chat history
 	session.ChatHistory.AddMessage(AiNerd, aiResponse, session.ChatConfig)
 	return nil
+}
+
+// displayModelInfo formats and logs the information about a generative AI model.
+// It compiles the model's details into a single string and logs it using the
+// logger.Any method for a consistent logging experience.
+//
+// Parameters:
+//
+//	info *genai.ModelInfo: A pointer to the ModelInfo struct containing the model's metadata.
+func displayModelInfo(info *genai.ModelInfo) {
+	// Compile the model information into a single formatted string.
+	modelInfo := fmt.Sprintf(
+		ModelFormat,
+		info.DisplayName,
+		info.BaseModelID,
+		info.Version,
+		info.Description,
+		info.InputTokenLimit,
+		info.OutputTokenLimit,
+	)
+
+	// Log the compiled model information.
+	logger.Any(modelInfo)
 }

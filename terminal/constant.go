@@ -302,6 +302,12 @@ const (
 		" contains " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + " tokens."
 	RetryingStupid500Error = "[Retry Policy] Retrying (" + ColorRed + "last error: %v" + ColorReset + ")" +
 		" attempt number " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
+	ModelFormat = "Model Name: %s\n" +
+		"Model ID: %s\n" +
+		"Version: %s\n" +
+		"Description: %s\n" +
+		"Input Token Limit: %d\n" +
+		"Output Token Limit: %d\n"
 )
 
 // Defined Tools
