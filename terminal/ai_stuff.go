@@ -156,8 +156,8 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths 
 		// Count the tokens using the prepared parameters.
 		tokenCount, err := params.CountTokens()
 		if err != nil {
-			// Log the error directly without formatting.
-			logger.Error("%s", err)
+			// Log the error with the file path and error details.
+			logger.Error(ErrorFailedToCountTokens, filePath, err)
 			continue
 		}
 
