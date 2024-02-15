@@ -302,12 +302,13 @@ const (
 		" contains " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + " tokens."
 	RetryingStupid500Error = "[Retry Policy] Retrying (" + ColorRed + "last error: %v" + ColorReset + ")" +
 		" attempt number " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
-	ModelFormat = "Model Name: %s\n" +
-		"Model ID: %s\n" +
-		"Version: %s\n" +
-		"Description: %s\n" +
-		"Input Token Limit: %d\n" +
-		"Output Token Limit: %d\n"
+	// ModelFormat defines a template for displaying model information with color and bold formatting for placeholders.
+	ModelFormat = "Model Name: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
+		"Model ID: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
+		"Version: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
+		"Description: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
+		"Input Token Limit: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
+		"Output Token Limit: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 )
 
 // Defined Tools
