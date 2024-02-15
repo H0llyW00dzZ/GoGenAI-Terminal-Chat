@@ -428,6 +428,9 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
   - [X] **Processing Multiple Image Datasets for Token Counting**
   - [X] **Processing Multiple Text Datasets for Token Counting**
 
+  > [!NOTE]
+  > The features for `Processing Multiple Image & Text Datasets for Token Counting` are protected against `race conditions` and `deadlocks`. Moreover, they can `efficiently` handle `multiple text data` or `multiple image data`.
+
 - [ ] **Pin Each Message for a Simpler Context Prompt**
 > [!NOTE]
 > The `Pin Each Message for a Simpler Context Prompt` feature is designed to pin messages loaded from files such as `json/txt/md`. This feature works exceptionally well with automated or manual summarization, as opposed to when written in an `interpreted language` hahaha.
