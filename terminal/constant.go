@@ -12,7 +12,7 @@ const (
 	GitHubAPIURL      = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/latest"
 	GitHubReleaseFUll = "https://api.github.com/repos/H0llyW00dzZ/GoGenAI-Terminal-Chat/releases/tags/%s"
 	// CurrentVersion represents the current version of the application.
-	CurrentVersion = "v0.8.8"
+	CurrentVersion = "v0.8.9"
 )
 
 // Defined constants for the terminal package
