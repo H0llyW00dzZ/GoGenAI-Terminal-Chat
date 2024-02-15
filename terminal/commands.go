@@ -433,14 +433,31 @@ func (cmd *handleCheckModelCommand) Execute(session *Session, parts []string) (b
 	}
 
 	modelName := parts[1] // The model name is the second part.
-	// Note: this a magic method
-	modelInfo, err := session.Client.EmbeddingModel(modelName).Info(session.Ctx)
-	if err != nil {
-		logger.Error(ErrorFailedToRetriveModelInfo, err)
-		return false, err
+
+	// Define a retryable operation for retrieving model info.
+	operation := RetryableOperation{
+		retryFunc: func() (bool, error) {
+			// Note: this a magic method
+			modelInfo, err := session.Client.EmbeddingModel(modelName).Info(session.Ctx)
+			if err != nil {
+				// Log the error and decide if it's worth retrying based on the error type.
+				logger.Error(ErrorFailedToRetriveModelInfo, err)
+				return false, err
+			}
+
+			// Process and display the model information if retrieval was successful.
+			DisplayModelInfo(modelInfo)
+			return true, nil
+		},
 	}
 
-	// Process and display the model information.
-	DisplayModelInfo(modelInfo)
-	return false, nil // Return false to indicate the session should continue.
+	// Execute the retryable operation with an exponential backoff strategy.
+	success, err := operation.retryWithExponentialBackoff(standardAPIErrorHandler)
+
+	if err != nil || !success {
+		logger.Error("%s", err)
+	}
+
+	// Return false to indicate the session should continue.
+	return false, nil
 }
