@@ -148,16 +148,16 @@ func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths 
 		// Prepare the parameters for token counting based on the file type.
 		params, err := cmd.prepareTokenCountParams(apiKey, filePath)
 		if err != nil {
-			// Log the error and skip the file if it's not supported or another error occurred.
-			logger.Error(ErrorFailedToReadFile, filePath, err)
+			// Log the error directly without formatting.
+			logger.Error("%s", err)
 			continue
 		}
 
 		// Count the tokens using the prepared parameters.
 		tokenCount, err := params.CountTokens()
 		if err != nil {
-			// Log the error and skip the file if token counting failed.
-			logger.Error(ErrorFailedToCountTokens, filePath, err)
+			// Log the error directly without formatting.
+			logger.Error("%s", err)
 			continue
 		}
 
@@ -225,7 +225,7 @@ func (cmd *handleTokeCountingCommand) readImageFile(filePath string, params *Tok
 	imageData, err := os.ReadFile(filePath)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err) // low level in 2024
+		return fmt.Errorf(ErrorFailedToReadFile, filePath, err) // low level in 2024
 	}
 	// Note: Avoid attempting to inspect "imageData" using fmt.Println(imageData) unless you are professional/master of go programming
 	// as it will literally print the binary data of the image.
@@ -256,7 +256,7 @@ func (cmd *handleTokeCountingCommand) readTextFile(filePath string, params *Toke
 	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
 		// Magic FMT, unlike stupid hard coding
-		return fmt.Errorf(ObjectHighLevelFMT, ErrorFailedToReadFile, err)
+		return fmt.Errorf(ErrorFailedToReadFile, filePath, err) // low level in 2024
 	}
 	params.Input = string(fileContent)
 	params.ModelName = GeminiPro
