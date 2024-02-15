@@ -47,7 +47,6 @@ func (op *RetryableOperation) retryWithExponentialBackoff(handleError ErrorHandl
 	// If this point is reached, retries have been exhausted without success.
 	// Use the last error encountered in the final error message.
 	err := fmt.Errorf(ErrorLowLevelMaximumRetries, lastErr)
-	logger.Error(err.Error())
 	return false, err
 }
 
