@@ -288,6 +288,12 @@ func (cmd *handleCryptoRandCommand) Execute(session *Session, parts []string) (b
 }
 
 func (cmd *handleCryptoRandCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// Check if there are enough parts to contain the length argument.
+	if len(parts) < 3 {
+		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
+		return false, nil
+	}
+
 	lengthStr := parts[2] // The length argument is now the second part of the command
 	length, err := strconv.Atoi(lengthStr)
 	if err != nil {
