@@ -460,6 +460,31 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
 
   - [X] **[Explicit] Each goroutine dynamically handles `Error` messages during `Count Tokens` operations, communicating through a channel.**
 
+  ***Illustration of how it works:***
+  ```mermaid
+  sequenceDiagram
+      participant Main as Main Goroutine
+      participant G1 as Goroutine 1
+      participant G2 as Goroutine 2
+      participant G3 as Goroutine 3
+      participant Ch as Error Channel
+      participant Collector as Error Collector
+
+      Main->>Ch: Create channel with capacity
+      Main->>G1: Start Goroutine 1
+      Main->>G2: Start Goroutine 2
+      Main->>G3: Start Goroutine 3
+      G1->>Ch: Send error (if any)
+      G2->>Ch: Send error (if any)
+      G3->>Ch: Send error (if any)
+      Main->>Collector: Start collecting errors
+      loop Collect errors
+          Ch->>Collector: Send errors to collector
+      end
+      Main->>Main: Close channel after all goroutines complete
+      Collector->>Main: Return first non-nil error
+  ```
+
 - [ ] **Improve `Colorize` to enhance scalability and integrate it with Standard Library Regex for better performance.**
 
 ### Other:
