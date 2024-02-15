@@ -98,6 +98,7 @@ func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, e
 			SummarizeCommands,
 			ClearCommand,
 			ChatCommands,
+			CheckModelCommands,
 			TokenCountCommands,
 			FileCommands)
 	})
