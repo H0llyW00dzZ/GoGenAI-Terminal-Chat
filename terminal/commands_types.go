@@ -83,35 +83,38 @@ func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []
 	// Note: For better dynamic logging, further debugging is needed here.
 	logger.Debug(DEBUGEXECUTINGCMD, name, parts)
 
+	// Look up the command handler in the registry.
 	cmd, exists := r.commands[name]
 	if !exists {
 		logger.Error(ErrorUnrecognizedCommand, name)
 		return false, nil
 	}
 
-	// If the command is :aitranslate, execute it directly without looking for subcommands.
-	if name == AITranslateCommand {
+	// Use a switch to handle special commands or default to subcommand execution.
+	// Note: By refactoring with a switch statement like this, the complexity of multiple if statements is avoided.
+	switch name {
+	case AITranslateCommand:
+		return cmd.Execute(session, parts)
+	default:
+		// For other commands, check for subcommands.s
+		if len(parts) > 1 {
+			return r.executeSubcommand(name, session, parts)
+		}
+		// If no subcommands, execute the main command.
 		return cmd.Execute(session, parts)
 	}
-
-	// For other commands, check for subcommands.
-	if len(parts) > 1 {
-		return r.executeSubcommand(name, session, parts)
-	}
-
-	// If no subcommands, execute the main command.
-	return cmd.Execute(session, parts)
 }
 
 func (r *CommandRegistry) executeSubcommand(baseCommand string, session *Session, parts []string) (bool, error) {
 	subcommand := parts[1]
 	subcmdHandler, ok := r.subcommands[baseCommand][subcommand]
 	if !ok {
-		// If the command does not exist, log the error and return.
+		// If the subcommand does not exist, log the error and return.
 		logger.Error(ErrorUnrecognizedSubCommand, baseCommand, subcommand)
 		return false, nil
 	}
 
+	// Execute the subcommand handler.
 	return subcmdHandler.HandleSubcommand(subcommand, session, parts)
 }
 
