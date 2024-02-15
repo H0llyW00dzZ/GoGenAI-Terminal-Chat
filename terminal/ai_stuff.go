@@ -334,6 +334,7 @@ func DisplayModelInfo(info *genai.ModelInfo) {
 		info.BaseModelID,
 		info.Version,
 		info.Description,
+		info.SupportedGenerationMethods,
 		info.InputTokenLimit,
 		info.OutputTokenLimit,
 	)
