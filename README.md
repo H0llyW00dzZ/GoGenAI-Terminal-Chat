@@ -428,8 +428,8 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
   - [X] **Processing Multiple Image Datasets for Token Counting**
   - [X] **Processing Multiple Text Datasets for Token Counting**
 
-  > [!NOTE]
-  > The features for `Processing Multiple Image & Text Datasets for Token Counting` are protected against `race conditions` and `deadlocks`. Moreover, they can `efficiently` handle `multiple text data` or `multiple image data`.
+> [!NOTE]
+> The features for `Processing Multiple Image & Text Datasets for Token Counting` are protected against `race conditions` and `deadlocks`. Moreover, they can `efficiently` handle `multiple text data` or `multiple image data`.
 
 - [ ] **Pin Each Message for a Simpler Context Prompt**
 > [!NOTE]
