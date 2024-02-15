@@ -9,6 +9,16 @@ import (
 	"strings"
 )
 
+// Error returns the error message associated with the ErrorASCIIArt error.
+func (e ErrorASCIIArt) Error() string {
+	return e.Message
+}
+
+// NewASCIIArtError creates a new ErrorASCIIArt with the given message.
+func NewASCIIArtError(message string) error {
+	return ErrorASCIIArt{Message: message}
+}
+
 // NewASCIIArtStyle creates and returns a new ASCIIArtStyle map. It initializes
 // an empty map that can be populated with ASCII art characters using the AddChar
 // method or by direct assignment.
@@ -30,11 +40,11 @@ func (style ASCIIArtStyle) AddChar(char rune, pattern []string, color string) {
 }
 
 // applyColor applies a color to a given line if the color exists.
-func (art *ASCIIArtChar) applyColor(line string) string {
+func (art *ASCIIArtChar) applyColor(line string) (string, error) {
 	if art.Color == "" {
-		return line // No color to apply
+		return line, nil // No color to apply
 	}
-	return art.Color + line + ColorReset
+	return art.Color + line + ColorReset, nil
 }
 
 // ToASCIIArt converts a string to its ASCII art representation using a given style.
@@ -65,8 +75,7 @@ func (art *ASCIIArtChar) applyColor(line string) string {
 //	or a character is not found in the style.
 func ToASCIIArt(input string, style ASCIIArtStyle) (string, error) {
 	if err := checkStyle(style); err != nil {
-		logger.Error(ErrorToASCIIArtcheckstyle, err) // Use the package-level logger
-		return "", err
+		return "", NewASCIIArtError(err.Error())
 	}
 
 	maxHeight := maxPatternHeight(style)
@@ -74,8 +83,7 @@ func ToASCIIArt(input string, style ASCIIArtStyle) (string, error) {
 
 	for _, char := range input {
 		if err := buildOutput(&output, char, style); err != nil {
-			logger.Error(ErrorToASCIIArtbuildOutput, err) // Log the error
-			// Handle the error as needed, e.g., continue, return, etc.
+			return "", NewASCIIArtError(err.Error())
 		}
 	}
 
@@ -94,7 +102,7 @@ func ToASCIIArt(input string, style ASCIIArtStyle) (string, error) {
 //	An error if the style is empty; otherwise, nil.
 func checkStyle(style ASCIIArtStyle) error {
 	if len(style) == 0 {
-		return fmt.Errorf(ErrorStyleIsEmpty)
+		return NewASCIIArtError(ErrorStyleIsEmpty)
 	}
 	return nil
 }
@@ -138,11 +146,15 @@ func maxPatternHeight(style ASCIIArtStyle) int {
 func buildOutput(output *[]string, char rune, style ASCIIArtStyle) error {
 	art, exists := style[char]
 	if !exists {
-		return fmt.Errorf(ErrorCharacterNotFoundinStyle, char)
+		return NewASCIIArtError(fmt.Sprintf(ErrorCharacterNotFoundinStyle, char))
 	}
 	for i := range *output {
 		if i < len(art.Pattern) {
-			(*output)[i] += art.applyColor(art.Pattern[i])
+			line, err := art.applyColor(art.Pattern[i])
+			if err != nil {
+				return err
+			}
+			(*output)[i] += line
 		} else {
 			(*output)[i] += " " // Add spaces if the pattern is shorter than the max height
 		}
