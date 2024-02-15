@@ -259,6 +259,13 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 
 // Execute processes the ":aitranslate" command within a chat session.
 func (cmd *handleAITranslateCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Ensure that the command is valid before proceeding.
+	if !cmd.IsValid(parts) {
+		// Log the error with the logger instead of returning fmt.Errorf
+		logger.Error(ErrorWhileTypingCommandArgs, AITranslateCommand, parts)
+		return false, nil // Return nil error because the logger already handled it
+	}
+
 	// Find the index of the language flag ":lang" to separate text and target language.
 	languageFlagIndex := len(parts) - 2
 	textToTranslate := strings.Join(parts[1:languageFlagIndex], " ")
