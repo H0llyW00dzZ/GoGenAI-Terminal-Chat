@@ -97,11 +97,11 @@ const (
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <number>: Generate a random string of the specified length.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + ": Summarize a current conversation\n\n" +
 		DoubleAsterisk + "Note" + DoubleAsterisk + ": When you summarize a current conversation, it will be displayed at the top of the chat history.\n\n" +
-		DoubleAsterisk + "%s %s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat history.\n\n" +
-		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat statistic.\n\n" +
-		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all system summary messages from the chat history.\n\n" +
-		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all chat history and reset the total token usage count if enabled.\n\n" +
-		DoubleAsterisk + "%s" + DoubleAsterisk + " <" + DoubleAsterisk + "model-name" + DoubleAsterisk + ">: Check the details of a specific AI model.\n\n" +
+		DoubleAsterisk + "%s %s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat history.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat statistic.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all system summary messages from the chat history.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all chat history and reset the total token usage count if enabled.\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + " <" + DoubleAsterisk + "model-name" + DoubleAsterisk + ">: Check the details of a specific AI model.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <" + DoubleAsterisk + "path/file/data.txt" + DoubleAsterisk + "> or <" +
 		DoubleAsterisk + "data.txt" + DoubleAsterisk + ">: Counts a token from the specified file.\n\n" +
 		DoubleAsterisk + "Note" + DoubleAsterisk + ": The token count file feature supports multiple files simultaneously with the following extensions: " +
