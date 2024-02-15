@@ -310,6 +310,7 @@ const (
 		"Model ID: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
 		"Version: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
 		"Description: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
+		"Supported Generation Methods: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
 		"Input Token Limit: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
 		"Output Token Limit: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 )
