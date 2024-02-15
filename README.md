@@ -468,7 +468,7 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
       participant G2 as Goroutine 2
       participant G3 as Goroutine 3
       participant Ch as Error Channel
-      participant Collector as Error Collector
+      participant Collector as Error Collector (Known As Retry Policy)
 
       Main->>Ch: Create channel with capacity
       Main->>G1: Start Goroutine 1
