@@ -139,6 +139,7 @@ const (
 	StatsCommand       = ":stats"
 	TokenCountCommands = ":tokencount"
 	FileCommands       = ":file"
+	CheckModelCommands = ":checkmodel"
 	PingCommand        = ":ping" // Currently marked as TODO
 	PrefixChar         = ":"
 	// List args
@@ -202,6 +203,7 @@ const (
 	ErrorVariableImageFileTypeNotSupported          = "image file type not supported: only %s files are allowed." // Low level error
 	ErrorNoInputProvideForTokenCounting             = "no input provided for token counting"                      // low level error
 	ErrorGopherEncounteredAnError                   = "Goroutine %d encountered an error: %w"
+	ErrorFailedToRetriveModelInfo                   = "Failed to retrieve model info: %v"
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
