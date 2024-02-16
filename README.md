@@ -374,8 +374,10 @@ flowchart LR
     CommandRegistry -->|Quit| End
     CommandRegistry -->|Other Commands| ProcessCommand[Process Command]
     CommandRegistry -->|Token Count| TokenCountingProcess[Token Counting Process]
+    CommandRegistry -->|Check Model| CheckModelProcess[CheckModelProcess]
     SendMessage -->|Receive AI Response| UpdateHistory[Update Chat History]
     TokenCountingProcess -->|Receive AI Response| DisplayResponse[Display AI Response]
+    CheckModelProcess -->|Receive AI Response| DisplayResponse[Display AI Response]
     UpdateHistory --> DisplayResponse[Display AI Response]
     ProcessCommand --> MainLoop
     DisplayResponse --> MainLoop
