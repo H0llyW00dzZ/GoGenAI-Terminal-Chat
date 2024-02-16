@@ -74,7 +74,7 @@ func (l *DebugOrErrorLogger) Error(format string, v ...interface{}) {
 	builder.WriteString(colors.ColorReset)
 
 	// Print the error prefix with a timestamp
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX, "")
 
 	// Simulate typing the error message
 	l.PrintTypingChat(builder.String(), TypingDelay)
@@ -204,7 +204,7 @@ func (l *DebugOrErrorLogger) Info(format string, v ...interface{}) {
 	builder.WriteString(colors.ColorReset)
 
 	// Print the message with a timestamp and colored output.
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX, "")
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
@@ -224,7 +224,7 @@ func (l *DebugOrErrorLogger) Any(format string, v ...interface{}) {
 	builder.WriteString(message)
 
 	// Print the message with a timestamp but without any color output.
-	PrintPrefixWithTimeStamp(SYSTEMPREFIX)
+	PrintPrefixWithTimeStamp(SYSTEMPREFIX, "")
 	l.PrintTypingChat(builder.String(), TypingDelay)
 
 	// Print a newline after the message
