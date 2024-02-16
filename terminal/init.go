@@ -299,6 +299,7 @@ func init() {
 		TIP,
 		Blank,
 		Copyright,
+		eMpty,
 		// Note: This utilizes a struct for color definitions to ensure consistency. This is important for compatibility with operating systems that may not handle ANSI colors properly.
 	}, BoldText+colors.ColorCyan24Bit)
 	// Initialize the text style patterns for 'V'.

@@ -82,7 +82,6 @@ func (s *Session) Start() {
 	text := "GV"
 	asciiArt, _ := ToASCIIArt(text, combinedStyle)
 	fmt.Println(asciiArt)
-	printnewlineASCII()
 	// Note: This is securely managed by the Gopher Officer, which handles the session and is linked to the `processInput` function.
 	// Additionally, the Gopher Officer may occasionally sleep during the session's lifecycle and will wake up when needed.
 	defer s.cleanup()
