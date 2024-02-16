@@ -182,7 +182,6 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string, subcomma
 	// Validate the command arguments.
 	if !cmd.IsValid(parts) {
 		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
-		printnewlineASCII()
 		return true, nil
 	}
 
@@ -190,7 +189,6 @@ func (cmd *handlepingCommand) Execute(session *Session, parts []string, subcomma
 	_, err := fun_stuff.PingIP(ip)
 	if err != nil {
 		logger.Error(ErrorPingFailed, err)
-		printnewlineASCII()
 	}
 
 	return false, nil
@@ -241,7 +239,6 @@ func (cmd *handleSafetyCommand) HandleSubcommand(subcommand string, session *Ses
 	// Caution is advised: if you're not familiar with these practices, improper handling in this "Execute" could lead to frequent panics 24/7 🤪.
 	if !cmd.IsValid(parts) {
 		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
-		printnewlineASCII()
 		return false, nil
 	}
 
@@ -406,7 +403,6 @@ func (cmd *handleTokeCountingCommand) Execute(session *Session, parts []string) 
 func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	if !cmd.IsValid(parts) {
 		logger.Error(ErrorWhileTypingCommandArgs, subcommand, parts)
-		printnewlineASCII()
 		return false, nil
 	}
 
