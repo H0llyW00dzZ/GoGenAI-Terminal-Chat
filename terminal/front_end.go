@@ -52,14 +52,12 @@ func FilterLanguageFromCodeBlock(text string) string {
 //
 // The prefix parameter is appended to the timestamp and can be a log level, a descriptor,
 // or any other string that aids in categorizing or highlighting the message.
-func PrintPrefixWithTimeStamp(prefix string) {
+func PrintPrefixWithTimeStamp(prefix, message string) {
 	currentTime := time.Now().Format(TimeFormat)
 	// Check if the first character is potentially an emoji or wide character.
 	if isFirstCharacterWide(prefix) {
 		// Add an extra space after the prefix to ensure separation in terminals that might not handle wide characters well.
-		fmt.Printf(ObjectHighLevelStringWithSpace, currentTime, prefix)
-	} else {
-		fmt.Printf(ObjectHighLevelString, currentTime, prefix)
+		fmt.Printf(ObjectHighLevelTripleString, currentTime, prefix, message)
 	}
 }
 
@@ -84,12 +82,13 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 	// Iterate over safety ratings and print them.
 	for i, rating := range feedback.SafetyRatings {
 		safetyPrefix := ShieldEmoji
-		PrintPrefixWithTimeStamp(safetyPrefix)
+		PrintPrefixWithTimeStamp(safetyPrefix, "")
 		promptFeedback := fmt.Sprintf(PROMPTFEEDBACK, rating.Category.String(), rating.Probability.String())
 		if i < len(feedback.SafetyRatings)-1 {
 			promptFeedback += StringNewLine
 		}
-		PrintTypingChat(promptFeedback, TypingDelay)
+		humanTyping := NewTypingPrinter()
+		humanTyping.Print(promptFeedback, TypingDelay)
 	}
 	// fix front end lmao
 	printVisualSeparator()
@@ -148,16 +147,18 @@ func handleTokenCountError(err error) {
 func printCurrentTokenCount(tokenCount int) {
 	tokenPrefix := TokenEmoji
 	tokenMSG := fmt.Sprintf(TokenCount, tokenCount)
-	PrintPrefixWithTimeStamp(tokenPrefix)
-	PrintTypingChat(tokenMSG, TypingDelay)
+	humanTyping := NewTypingPrinter()
+	PrintPrefixWithTimeStamp(tokenPrefix, "")
+	humanTyping.Print(tokenMSG, TypingDelay)
 }
 
 // updateAndPrintTotalTokenCount updates the total token count for the session and prints it.
 func updateAndPrintTotalTokenCount(tokenCount int) {
 	totalTokenCount += tokenCount // Assuming totalTokenCount is a global or package-level variable
 	tokenUsageMSG := fmt.Sprintf(TotalTokenCount, totalTokenCount)
-	PrintPrefixWithTimeStamp(StatisticsEmoji)
-	PrintTypingChat(tokenUsageMSG, TypingDelay)
+	humanTyping := NewTypingPrinter()
+	PrintPrefixWithTimeStamp(StatisticsEmoji, "")
+	humanTyping.Print(tokenUsageMSG, TypingDelay)
 }
 
 // printVisualSeparator prints a visual separator to the standard output.
@@ -234,8 +235,9 @@ func printAIResponse(response string, isSystemMessage bool) {
 	} else {
 		prefix = AiNerd // Use AI prefix for AI messages
 	}
-	PrintPrefixWithTimeStamp(prefix)
-	PrintTypingChat(response, TypingDelay)
+	humanTyping := NewTypingPrinter()
+	PrintPrefixWithTimeStamp(prefix, "")
+	humanTyping.Print(response, TypingDelay)
 }
 
 // printResponseFooter prints the footer after the AI response and includes prompt feedback and token count if enabled.
@@ -261,4 +263,21 @@ func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string)
 
 	// Print the closing footer separator
 	printnewlineASCII() // fix front end issue lmao
+}
+
+// NewTypingPrinter creates a new instance of TypingPrinter with a default print function.
+// This constructor function is idiomatic in Go, providing a way to set up the struct
+// with default values, which in this case is the PrintTypingChat function.
+func NewTypingPrinter() *TypingPrinter {
+	return &TypingPrinter{
+		PrintFunc: PrintTypingChat, // Set the default typing effect function.
+	}
+}
+
+// Print executes the typing effect for the given message using the configured PrintFunc.
+// This method offers the flexibility to change the typing effect logic at runtime by
+// assigning a different function to PrintFunc. The delay parameter controls the speed
+// of the typing effect, making it adaptable to various use cases.
+func (tp *TypingPrinter) Print(message string, delay time.Duration) {
+	tp.PrintFunc(message, delay) // Delegate the print operation to the configured function.
 }
