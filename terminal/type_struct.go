@@ -296,6 +296,15 @@ type TokenCountRequest struct {
 	Images [][]byte
 }
 
+// TypingPrinter encapsulates the functionality for simulating the typing of text output.
+// It allows for different typing effect implementations to be used interchangeably.
+type TypingPrinter struct {
+	// PrintFunc is a function that, when called, prints the provided message with a delay
+	// between each character to simulate typing. The function signature matches that of
+	// PrintTypingChat, allowing it to be set as the default implementation.
+	PrintFunc func(string, time.Duration)
+}
+
 // NewLineChar is a struct that containt Rune for New Line Character
 type NewLineChar struct {
 	NewLineChars rune
