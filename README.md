@@ -459,7 +459,7 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
 - [ ] **Leverage `ChatHistory` by automatically syncing for multi-modal use (`gemini-pro-vision`)**
 > [!NOTE]
 > The enhancement, `Leverage ChatHistory by automatically syncing for multi-modal use (gemini-pro-vision)`, utilizes `ChatHistory` as a highly efficient, in-memory data storage solution unlike written in `C` or other language that causing `memory leaks` . This ensures seamless synchronization and optimal performance across various modes.
-- [X] **[Explicit] The retry policy is dynamically applied to main goroutine, allowing for independent error handling and retry attempts.**
+- [X] **[Explicit] The `retry policy` is dynamically applied to main goroutine, allowing for independent error handling and retry attempts.**
 - [ ] **[Explicit] Improve `Error` message handling to make it more dynamic.**
 
   - [X] **[Explicit] Each goroutine dynamically handles `Error` messages during `Count Tokens` operations, communicating through a channel.**
