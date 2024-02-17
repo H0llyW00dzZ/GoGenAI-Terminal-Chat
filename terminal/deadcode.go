@@ -17,8 +17,8 @@ import (
 // Each message is printed in the order it was added, preserving the conversation
 // flow. This method does not return any value or error.
 //
-// Deprecated: This method is deprecated was replaced by GetHistory.
-// It used to be used for debugging purposes while made the chat system without storage such as database.
+// Deprecated: This method is deprecated and was replaced by GetHistory.
+// See GetHistory for current functionality.
 func (h *ChatHistory) PrintHistory() {
 	for _, msg := range h.Messages {
 		fmt.Println(msg)
@@ -38,7 +38,8 @@ func (h *ChatHistory) PrintHistory() {
 // a goroutine or function. When a panic occurs, the deferred function will handle the panic
 // by logging its message and stack trace, as provided by the recover built-in function.
 //
-// Deprecated: This method is deprecated was replaced by logger.RecoverFromPanic.
+// Deprecated: This method is deprecated and was replaced by logger.RecoverFromPanic.
+// Refer to logger.RecoverFromPanic for the updated implementation.
 func RecoverFromPanic() func() {
 	return func() {
 		if r := recover(); r != nil {
@@ -51,7 +52,7 @@ func RecoverFromPanic() func() {
 // IsANSISequence checks if the current index in the rune slice is the start of an ANSI sequence.
 //
 // Deprecated: This method is no longer used, and was replaced by SanitizeMessage.
-// It used to be filter for fix truncated message.
+// Consult SanitizeMessage for handling ANSI sequences in messages.
 func IsANSISequence(runes []rune, index int) bool {
 	return index+1 < len(runes) && runes[index] == ansichar.BinaryAnsiChar && runes[index+1] == ansichar.BinaryLeftSquareBracket
 }
@@ -59,7 +60,7 @@ func IsANSISequence(runes []rune, index int) bool {
 // PrintANSISequence prints the full ANSI sequence without delay and returns the new index.
 //
 // Deprecated: This method is no longer used, and was replaced by SanitizeMessage.
-// It used to be filter for fix truncated message.
+// See SanitizeMessage for current message processing.
 func PrintANSISequence(runes []rune, index int) int {
 	// Print the full ANSI sequence without delay.
 	for index < len(runes) && runes[index] != ansichar.BinaryAnsiSquenseChar {
@@ -75,7 +76,7 @@ func PrintANSISequence(runes []rune, index int) int {
 // ApplyBold applies bold formatting to the provided text if the delimiter indicates bold.
 //
 // Deprecated: This method is no longer used, and was replaced by ApplyFormatting.
-// It used to be used for formatting text.
+// Refer to ApplyFormatting for text formatting options.
 func ApplyBold(text string, delimiter string, color string) string {
 	if delimiter == DoubleAsterisk {
 		return color + BoldText + text + ResetBoldText + ColorReset
@@ -103,6 +104,7 @@ func ApplyBold(text string, delimiter string, color string) string {
 // while sending the message, the function logs the error and returns an error to the caller.
 //
 // Deprecated: This method is no longer used, and was replaced by CommandRegistry.
+// See CommandRegistry for handling unrecognized commands.
 func HandleUnrecognizedCommand(command string, session *Session, parts []string) (bool, error) {
 	// Debug
 	logger.Debug(DEBUGEXECUTINGCMD, command, parts)
@@ -129,15 +131,14 @@ func HandleUnrecognizedCommand(command string, session *Session, parts []string)
 // of safety settings so that different configurations can be applied without changing
 // the struct directly.
 //
-// Deprecated: This type is deprecated and has been replaced by the SafetyOption struct,
-// which provides a more structured way to represent safety settings along with their
-// validity state. The SafetyOption struct includes a Setter function of this type and
-// a Valid flag indicating whether the safety setting is applicable.
+// Deprecated: This type is deprecated and has been replaced by the SafetyOption struct.
+// Refer to SafetyOption for safety settings configurations.
 type SafetySetter func(*SafetySettings)
 
 // ASCIIPatterns Define the ASCII patterns for the 'slant' font for the characters
 //
 // Deprecated: This variable is no longer used, and was replaced by NewASCIIArtStyle().
+// Use NewASCIIArtStyle() for ASCII art styles and colors.
 var ASCIIPatterns = map[rune][]string{
 	// Figlet in a compiled language, not an interpreted language.
 	// This literally header in your machine lmao.
@@ -163,6 +164,7 @@ var ASCIIPatterns = map[rune][]string{
 // ASCIIColors Define a map for character Ascii colors
 //
 // Deprecated: This variable is no longer used, and was replaced by NewASCIIArtStyle().
+// Consult NewASCIIArtStyle() for ASCII color configurations.
 var ASCIIColors = map[rune]string{
 	G: BoldText + colors.ColorHex95b806,
 	V: BoldText + colors.ColorCyan24Bit,
@@ -171,6 +173,7 @@ var ASCIIColors = map[rune]string{
 // PrintAnotherVisualSeparator prints a visual separator to the standard output.
 //
 // Deprecated: This method is no longer used, and was replaced by NewASCIIArtStyle().
+// NewASCIIArtStyle() should be used for visual separators.
 func PrintAnotherVisualSeparator() {
 	fmt.Println(colors.ColorCyan24Bit + StripChars + colors.ColorReset)
 }
@@ -178,6 +181,7 @@ func PrintAnotherVisualSeparator() {
 // ReplaceTripleBackticks replaces all occurrences of triple backticks with a placeholder.
 //
 // Deprecated: This method is no longer used, and was replaced by Colorize().
+// Refer to Colorize() for replacing triple backticks in text.
 func ReplaceTripleBackticks(text, placeholder string) string {
 	for {
 		index := strings.Index(text, TripleBacktick)
@@ -191,7 +195,8 @@ func ReplaceTripleBackticks(text, placeholder string) string {
 
 // IsLastMessage checks if the current index is the last message in the slice
 //
-// Deprecated: This method is no longer used, and was replaced by separateSystemMessages
+// Deprecated: This method is no longer used, and was replaced by separateSystemMessages.
+// See separateSystemMessages for message handling logic.
 func IsLastMessage(index int, messages []string) bool {
 	return index == len(messages)-1
 }
@@ -200,7 +205,8 @@ func IsLastMessage(index int, messages []string) bool {
 // It specifically flags if a SystemMessage is encountered, as it may require special handling.
 // Returns true if the incremented message type is a system message.
 //
-// Deprecated: This method is no longer used, and was replaced by ChatHistory.AddMessage
+// Deprecated: This method is no longer used, and was replaced by ChatHistory.AddMessage.
+// Consult ChatHistory.AddMessage for message type counting and handling.
 func (h *ChatHistory) IncrementMessageTypeCount(messageType MessageType) bool {
 	switch messageType {
 	case UserMessage:
