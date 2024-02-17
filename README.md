@@ -467,6 +467,11 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
   - [X] **[Explicit] Each goroutine dynamically handles `Error` messages during `Count Tokens` operations, communicating through a channel.**
 
   ***Illustration of how it works:***
+
+  <p align="center">
+  <img src="https://i.imgur.com/fYbAxJ9.png" alt="gopher communication" />
+  </p>
+
   ```mermaid
   sequenceDiagram
       participant Main as Main Goroutine
