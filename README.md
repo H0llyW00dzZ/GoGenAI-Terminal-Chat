@@ -513,11 +513,16 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
 
 ### Command Tools:
 - [ ] **Calculate the Size of the Code Base Volume**
+
 > [!NOTE]
 > The `Calculate the Size of the Code Base Volume` feature is designed to assess the size of a code base. For example, it can calculate the volume of Google's Open Source projects, or Other Open Source Projects, which contain billions of lines of code written in `Go`.
+
 - [ ] **Convert Each Function in `Go Code` to `Mermaid Markdown`**
+
 > [!NOTE]
 > The feature, `Convert Each Function in Go Code to Mermaid Markdown`, is designed to evaluate a code base. It is inspired by the Go tool `Dead Code`. For instance, it will transform each reachable function into `Mermaid Markdown` format.
+
+- [ ] **Kubernetes instance calculator**
 
 ## 🕵️‍♂️ HACKING
 Available [`here`](https://github.com/H0llyW00dzZ/GoGenAI-Terminal-Chat/security/policy)
