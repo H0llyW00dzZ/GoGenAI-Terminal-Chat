@@ -39,7 +39,7 @@ func (op *RetryableOperation) retryWithExponentialBackoff(handleError ErrorHandl
 			continue // Retry the request
 		} else {
 			// Non-retryable error or max retries exceeded
-			logger.Error(ErrorNonretryableerror, maxRetries, err)
+			logger.Error(ErrorNonretryableerror, err)
 			return false, err
 		}
 	}

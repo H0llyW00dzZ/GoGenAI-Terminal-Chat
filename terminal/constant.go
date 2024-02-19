@@ -184,7 +184,7 @@ const (
 	ErrorLowLevelNoResponse                         = "no response from AI service"
 	ErrorLowLevelMaximumRetries                     = "[Retry Policy] maximum retries reached without success - %v" // low level
 	ErrorLowLevelFailedToCountTokensAfterRetries    = "failed to count tokens after retries"                        // low level
-	ErrorNonretryableerror                          = "[Retry Policy] Failed to Retrying after %d (SKIPPED) retries due to a non-retryable error: %v"
+	ErrorNonretryableerror                          = "[Retry Policy] Retry attempt failed due to a non-retryable error: %v"
 	ErrorFailedToSendHelpMessage                    = "Failed to send help message: %v"
 	ErrorFailedToSendHelpMessagesAfterRetries       = "Failed to send help message after retries" // low level
 	ErrorFailedToSendShutdownMessage                = "Failed to send shutdown message: %v"
