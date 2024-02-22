@@ -37,6 +37,7 @@ const (
 	AnimatedChars = "%c"
 	// this model is subject to changed in future
 	GeminiPro       = "gemini-1.0-pro"
+	GeminiProLatest = "gemini-1.0-pro-latest"
 	GeminiProVision = "gemini-pro-vision"
 	// Testing this models during development
 	GeminiProTuning = "gemini-1.0-pro-001"
