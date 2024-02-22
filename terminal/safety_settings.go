@@ -94,28 +94,8 @@ func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel, modelName st
 	// For instance, simplify the process by breaking down the logic into smaller components.
 	// Keeping cyclomatic complexity under 5 is a secret key hahaha in Go programming. It leads to reusable, easy-to-maintain code that boosts performance and minimizes bugs.
 	switch modelName {
-	case GeminiPro:
-		// Apply a specific set of safety settings for the "gemini-pro" model
-		model.SafetySettings = []*genai.SafetySetting{
-			{
-				Category:  genai.HarmCategoryDangerousContent,
-				Threshold: s.DangerousContentThreshold,
-			},
-			{
-				Category:  genai.HarmCategoryHarassment,
-				Threshold: s.HarassmentContentThreshold,
-			},
-			{
-				Category:  genai.HarmCategorySexuallyExplicit,
-				Threshold: s.SexuallyExplicitContentThreshold,
-			},
-			{
-				Category:  genai.HarmCategoryHateSpeech,
-				Threshold: s.HateSpeechThreshold,
-			},
-		}
-	case GeminiProTuning:
-		// Apply a specific set of safety settings for the "gemini-1.0-pro-001 (tuning)" model
+	case GeminiPro, GeminiProLatest, GeminiProTuning:
+		// Apply a specific set of safety settings for the "gemini-pro", "gemini-1.0-pro-latest", "gemini-1.0-pro-001 (tuning)" model
 		model.SafetySettings = []*genai.SafetySetting{
 			{
 				Category:  genai.HarmCategoryDangerousContent,
