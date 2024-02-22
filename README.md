@@ -497,6 +497,7 @@ Please refer to our [`Contribution Guidelines`](CONTRIBUTING.md) for detailed in
   ```
 
 - [ ] **Improve `Colorize` to enhance scalability and integrate it with Standard Library Regex for better performance.**
+- [ ] **Switch Model By Using Commands**
 
 ### Other:
 - [ ] **Plan for Google Cloud Deployment**

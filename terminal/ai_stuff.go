@@ -261,7 +261,7 @@ func (cmd *handleTokeCountingCommand) readTextFile(filePath string, params *Toke
 		return fmt.Errorf(ErrorFailedToReadFile, filePath, err) // low level in 2024
 	}
 	params.Input = string(fileContent)
-	params.ModelName = GeminiPro
+	params.ModelName = GeminiProFineTuning
 	return nil
 }
 

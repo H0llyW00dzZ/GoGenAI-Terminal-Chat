@@ -38,6 +38,8 @@ const (
 	// this model is subject to changed in future
 	GeminiPro       = "gemini-1.0-pro"
 	GeminiProVision = "gemini-pro-vision"
+	// Testing this models during development
+	GeminiProFineTuning = "gemini-1.0-pro-001"
 	// this may subject to changed in future for example can customize the delay
 	TypingDelay = 60 * time.Millisecond
 	// this clearing chat history in secret storage
