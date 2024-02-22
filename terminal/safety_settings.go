@@ -114,6 +114,26 @@ func (s *SafetySettings) ApplyToModel(model *genai.GenerativeModel, modelName st
 				Threshold: s.HateSpeechThreshold,
 			},
 		}
+	case GeminiProTuning:
+		// Apply a specific set of safety settings for the "gemini-1.0-pro-001 (tuning)" model
+		model.SafetySettings = []*genai.SafetySetting{
+			{
+				Category:  genai.HarmCategoryDangerousContent,
+				Threshold: s.DangerousContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHarassment,
+				Threshold: s.HarassmentContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategorySexuallyExplicit,
+				Threshold: s.SexuallyExplicitContentThreshold,
+			},
+			{
+				Category:  genai.HarmCategoryHateSpeech,
+				Threshold: s.HateSpeechThreshold,
+			},
+		}
 	// TODO: Implement Perfect System in Terminal For Gemini-Pro Vision Capabilities
 	case GeminiProVision:
 		// Apply a specific set of safety settings for the "gemini-pro-vision" model
