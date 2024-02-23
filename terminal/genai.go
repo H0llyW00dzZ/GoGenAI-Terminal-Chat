@@ -63,6 +63,7 @@ func (s *Session) ConfigureModelForSession() *genai.GenerativeModel {
 	// Use the default model name
 	modelName := s.DefaultModelName
 	if s.CurrentModelName != "" {
+		// Note: This refactoring makes the code easier to maintain and less prone to bugs, compared to stupid complex and convoluted approaches.
 		modelName = s.CurrentModelName // Override with the current model name if set
 	}
 	// Initialize the model with the specific AI model identifier.
