@@ -311,7 +311,6 @@ const (
 		" attempt number " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
 	// ModelFormat defines a template for displaying model information with color and bold formatting for placeholders.
 	ModelFormat = "Model Name: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
-		"Model ID: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
 		"Version: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
 		"Description: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
 		"Supported Generation Methods: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
