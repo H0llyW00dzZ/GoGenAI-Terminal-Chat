@@ -104,13 +104,8 @@ func (s *Session) ConfigureModelForSession() *genai.GenerativeModel {
 // specified by the session's ChatConfig, to the generative AI model. It then calls `printResponse` to process
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func (s *Session) SendMessage(ctx context.Context, client *genai.Client, chatContext string) (string, error) {
-	// Use the default model name
-	modelName := s.DefaultModelName
-	if s.CurrentModelName != "" {
-		modelName = s.CurrentModelName // Override with the current model name if set
-	}
 	// Get the generative model from the client
-	model := s.Client.GenerativeModel(modelName) // Simplify 🤪
+	model := s.ConfigureModelForSession() // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
