@@ -231,7 +231,7 @@ func (s *Session) printResponse(resp *genai.GenerateContentResponse) string {
 	// print the prompt feedback if it's present
 	// why this so simple ? because it's more efficient and faster.
 	// get good get "Go" hahaha
-	printResponseFooter(resp, aiResponse)
+	s.printResponseFooter(resp, aiResponse)
 	return aiResponse
 }
 
