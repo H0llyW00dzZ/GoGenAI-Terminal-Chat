@@ -96,10 +96,14 @@ func printPromptFeedback(feedback *genai.PromptFeedback) {
 
 // printTokenCount prints the number of tokens used in the AI's response, including the chat history.
 // It now supports image data for the GeminiProVision model.
-func printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
+func (s *Session) printTokenCount(apiKey, aiResponse string, chatHistory ...string) {
 	// Concatenate chat history and AI response for token counting
 	fullText := concatenateChatHistory(aiResponse, chatHistory...)
-	modelName := GeminiPro // Default model name
+	// Use the default model name
+	modelName := s.DefaultModelName
+	if s.CurrentModelName != "" {
+		modelName = s.CurrentModelName // Override with the current model name if set
+	}
 	var imageData [][]byte
 	var imageFormat string
 
@@ -243,7 +247,7 @@ func printAIResponse(response string, isSystemMessage bool) {
 // printResponseFooter prints the footer after the AI response and includes prompt feedback and token count if enabled.
 //
 // Note: this functionality are powerful, it won't break a current session of conversation hahaha.
-func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string) {
+func (s *Session) printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string) {
 	showPromptFeedback := os.Getenv(ShowPromptFeedBack) == "true"
 	showTokenCount := os.Getenv(ShowTokenCount) == "true"
 
@@ -258,7 +262,7 @@ func printResponseFooter(resp *genai.GenerateContentResponse, aiResponse string)
 	// Print token count if enabled
 	if showTokenCount {
 		apiKey := os.Getenv(APIKey) // Retrieve the API_KEY from the environment
-		printTokenCount(apiKey, aiResponse)
+		s.printTokenCount(apiKey, aiResponse)
 	}
 
 	// Print the closing footer separator
