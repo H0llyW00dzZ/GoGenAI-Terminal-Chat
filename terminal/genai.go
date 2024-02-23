@@ -249,11 +249,7 @@ func sanitizeAIResponse(response string) string {
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
 func (s *Session) sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string) error {
 	// Use the default model name
-	modelName := s.DefaultModelName
-	if s.CurrentModelName != "" {
-		modelName = s.CurrentModelName // Override with the current model name if set
-	}
-	model := s.Client.GenerativeModel(modelName)
+	model := s.ConfigureModelForSession()
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
