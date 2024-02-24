@@ -207,7 +207,8 @@ func (s *Session) sendInputToAI(input string) bool {
 
 	if err != nil || !success {
 		logger.Error(ErrorSendingMessage, err)
-		return false // Sending input to AI failed.
+		s.endSession() // Ensure the session ends with cleanup.
+		return false   // Sending input to AI failed.
 	}
 
 	return true // Input was successfully sent to AI.
