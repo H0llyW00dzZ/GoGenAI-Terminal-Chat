@@ -39,7 +39,6 @@ const (
 	GeminiPro       = "gemini-1.0-pro"
 	GeminiProLatest = "gemini-1.0-pro-latest"
 	GeminiProVision = "gemini-pro-vision"
-	// Testing this models during development
 	GeminiProTuning = "gemini-1.0-pro-001"
 	// this may subject to changed in future for example can customize the delay
 	TypingDelay = 60 * time.Millisecond
@@ -127,26 +126,27 @@ const (
 // Note: will add more in future based on the need,
 // for example, to change the model, or to change the delay, another thing is syncing ai with goroutine (known as gopher)
 const (
-	QuitCommand        = ":quit"
-	ShortQuitCommand   = ":q" // Short quit command
-	VersionCommand     = ":checkversion"
-	HelpCommand        = ":help"
-	ShortHelpCommand   = ":h" // Short help command
-	SafetyCommand      = ":safety"
-	AITranslateCommand = ":aitranslate"
-	LangArgs           = ":lang"
-	CryptoRandCommand  = ":cryptorand"
-	LengthArgs         = ":length"
-	ShowCommands       = ":show"
-	ChatCommands       = ":chat"
-	SummarizeCommands  = ":summarize"
-	ClearCommand       = ":clear"
-	StatsCommand       = ":stats"
-	TokenCountCommands = ":tokencount"
-	FileCommands       = ":file"
-	CheckModelCommands = ":checkmodel"
-	PingCommand        = ":ping" // Currently marked as TODO
-	PrefixChar         = ":"
+	QuitCommand         = ":quit"
+	ShortQuitCommand    = ":q" // Short quit command
+	VersionCommand      = ":checkversion"
+	HelpCommand         = ":help"
+	ShortHelpCommand    = ":h" // Short help command
+	SafetyCommand       = ":safety"
+	AITranslateCommand  = ":aitranslate"
+	LangArgs            = ":lang"
+	CryptoRandCommand   = ":cryptorand"
+	LengthArgs          = ":length"
+	ShowCommands        = ":show"
+	ChatCommands        = ":chat"
+	SummarizeCommands   = ":summarize"
+	ClearCommand        = ":clear"
+	StatsCommand        = ":stats"
+	TokenCountCommands  = ":tokencount"
+	FileCommands        = ":file"
+	CheckModelCommands  = ":checkmodel"
+	SwitchModelCommands = ":switchmodel"
+	PingCommand         = ":ping" // Currently marked as TODO
+	PrefixChar          = ":"
 	// List args
 	ChatHistoryArgs = "history"
 )
@@ -209,6 +209,8 @@ const (
 	ErrorNoInputProvideForTokenCounting             = "no input provided for token counting"                      // low level error
 	ErrorGopherEncounteredAnError                   = "Goroutine %d encountered an error: %w"
 	ErrorFailedToRetriveModelInfo                   = "Failed to retrieve model info: %v"
+	ErrorInvalidModelName                           = "Invalid model name: %s"
+	ErrorUnsupportedModelName                       = "unsupported model name: %s"
 
 	// List Error not because of this go codes, it literally google apis issue
 	// that so bad can't handle this a powerful terminal
@@ -275,9 +277,10 @@ const (
 		" command with parts: " +
 		// Better Readability use Custom HEX color
 		ColorHex95b806 + "%#v" + ColorReset
-	DEBUGRETRYPOLICY   = "Retry Policy Attempt %d: error occurred - %v"
-	ShowPromptFeedBack = "SHOW_PROMPT_FEEDBACK"
-	PROMPTFEEDBACK     = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
+	DEBUGRETRYPOLICY    = "Retry Policy Attempt %d: error occurred - %v"
+	DebugSwitchingModel = "Switching to AI model: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset
+	ShowPromptFeedBack  = "SHOW_PROMPT_FEEDBACK"
+	PROMPTFEEDBACK      = "Rating for category " + ColorHex95b806 + "%s" + ColorReset + ": " +
 		ColorHex95b806 + "%s" + ColorReset
 	ShowTokenCount  = "SHOW_TOKEN_COUNT"
 	TokenCount      = ColorHex95b806 + "%d" + ColorReset + " tokens\n"
@@ -316,6 +319,7 @@ const (
 		"Supported Generation Methods: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset + "\n" +
 		"Input Token Limit: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset + "\n" +
 		"Output Token Limit: " + ColorHex95b806 + BoldText + "%d" + ResetBoldText + ColorReset
+	SwitchedModel = "Switched to model: " + ColorHex95b806 + BoldText + "%s" + ResetBoldText + ColorReset
 )
 
 // Defined Tools

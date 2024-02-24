@@ -457,3 +457,40 @@ func (cmd *handleCheckModelCommand) Execute(session *Session, parts []string) (b
 	// Return false to indicate the session should continue.
 	return false, nil
 }
+
+// isValidModelName checks if the provided model name is supported.
+func isValidModelName(modelName string) (bool, error) {
+	if valid, exists := supportedModels[modelName]; exists && valid {
+		return true, nil
+	}
+	// If the model name is not found or not valid, return an error.
+	return false, fmt.Errorf(ErrorUnsupportedModelName, modelName)
+}
+
+// Execute changes the current AI model used in the session to the one specified in the command.
+func (cmd *handleSwitchModelCommand) Execute(session *Session, parts []string) (bool, error) {
+	// Check if the command is valid.
+	if !cmd.IsValid(parts) {
+		logger.Error(ErrorWhileTypingCommandArgs, SwitchModelCommands, parts)
+		return false, nil
+	}
+
+	// Extract the model name from the command parts.
+	modelName := parts[1]
+
+	// Validate the model name.
+	valid, err := isValidModelName(modelName)
+	if !valid {
+		// Log the error using logger.Error and return the error message.
+		logger.Error(err.Error())
+		return false, nil // Continue the session
+	}
+
+	// Update the session with the new model name.
+	session.CurrentModelName = modelName
+
+	// Log a confirmation message using the logger.
+	logger.Any(SwitchedModel, modelName)
+
+	return false, nil // Continue the session.
+}
