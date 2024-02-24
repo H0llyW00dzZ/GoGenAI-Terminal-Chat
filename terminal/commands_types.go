@@ -93,7 +93,9 @@ func (r *CommandRegistry) ExecuteCommand(name string, session *Session, parts []
 	// Use a switch to handle special commands or default to subcommand execution.
 	// Note: By refactoring with a switch statement like this, the complexity of multiple if statements is avoided.
 	switch name {
-	case AITranslateCommand, CheckModelCommands:
+	case AITranslateCommand,
+		CheckModelCommands,
+		SwitchModelCommands:
 		return cmd.Execute(session, parts)
 	default:
 		// For other commands, check for subcommands.s
@@ -355,6 +357,19 @@ func (cmd *handleCheckModelCommand) IsValid(parts []string) bool {
 
 func (cmd *handleCheckModelCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
 	// The checkmodel command should not have any subcommand.
+	return true, nil
+}
+
+// Command handler for switching AI models.
+type handleSwitchModelCommand struct{}
+
+func (cmd *handleSwitchModelCommand) IsValid(parts []string) bool {
+	// The command should have exactly two parts: the command itself and the model name.
+	return len(parts) == 2
+}
+
+func (cmd *handleSwitchModelCommand) HandleSubcommand(subcommand string, session *Session, parts []string) (bool, error) {
+	// The switch model command should not have any subcommand.
 	return true, nil
 }
 
