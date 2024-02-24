@@ -70,6 +70,8 @@ func (s *Session) ConfigureModelForSession(ctx context.Context) *genai.Generativ
 	if s.CurrentModelName != "" {
 		// Note: This refactoring makes the code easier to maintain and less prone to bugs, compared to stupid complex and convoluted approaches.
 		modelName = s.CurrentModelName // Override with the current model name if set
+		// Log the model change
+		logger.Debug(DebugSwitchingModel, modelName)
 	}
 	// Initialize the model with the specific AI model identifier.
 	model := s.Client.GenerativeModel(modelName)
