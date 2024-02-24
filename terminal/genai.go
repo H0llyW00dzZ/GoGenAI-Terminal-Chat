@@ -50,6 +50,11 @@ func PrintTypingChat(message string, delay time.Duration) {
 // such as temperature. This function is essential for ensuring that the AI model behaves according
 // to the desired safety guidelines and operational parameters before engaging in a chat session.
 //
+// Parameters:
+//
+//	ctx context.Context: A context.Context that carries deadlines, cancellation signals, and other request-scoped
+//	       values across API boundaries and between processes.
+//
 // Returns:
 //
 //	*genai.GenerativeModel: A pointer to a generative AI model that is configured and ready for
@@ -59,7 +64,7 @@ func PrintTypingChat(message string, delay time.Duration) {
 // contains valid safety settings. If no safety settings are present in the session, default
 // safety settings are applied. The modelName parameter allows for model-specific configuration,
 // enabling more granular control over the behavior and safety of different AI models.
-func (s *Session) ConfigureModelForSession() *genai.GenerativeModel {
+func (s *Session) ConfigureModelForSession(ctx context.Context) *genai.GenerativeModel {
 	// Use the default model name
 	modelName := s.DefaultModelName
 	if s.CurrentModelName != "" {
@@ -106,7 +111,7 @@ func (s *Session) ConfigureModelForSession() *genai.GenerativeModel {
 // and print the AI's response. The final AI response is returned as a concatenated string of all parts from the AI response.
 func (s *Session) SendMessage(ctx context.Context, client *genai.Client, chatContext string) (string, error) {
 	// Get the generative model from the client
-	model := s.ConfigureModelForSession() // Simplify 🤪
+	model := s.ConfigureModelForSession(ctx) // Simplify 🤪
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
@@ -250,7 +255,7 @@ func sanitizeAIResponse(response string) string {
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
 func (s *Session) sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string) error {
 	// Use the default model name
-	model := s.ConfigureModelForSession()
+	model := s.ConfigureModelForSession(ctx)
 
 	// Retrieve the relevant chat history using ChatConfig
 	chatHistory := s.ChatHistory.GetHistory(s.ChatConfig)
