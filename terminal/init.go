@@ -279,6 +279,8 @@ func init() {
 	// Register the check models command and its handler.
 	checkModelCommandHandler := &handleCheckModelCommand{}
 	registry.Register(CheckModelCommands, checkModelCommandHandler)
+	// Register the switch models command and its handler.
+	registry.Register(SwitchModelCommands, &handleSwitchModelCommand{})
 
 	//TODO: Will add more commands here, example: :help, :about, :credits, :k8s, syncing AI With Go Routines (Known as Gopher hahaha) etc.
 	// Note: In python, I don't think so it's possible hahaahaha, also I am using prefix ":" instead of "/" is respect to git and command line, fuck prefix "/" which is confusing for command line
@@ -333,5 +335,8 @@ func init() {
 	supportedModels = map[string]bool{
 		GeminiPro:       true,
 		GeminiProTuning: true,
+		// List Model TODO or not A fucking available but already showing in docs https://ai.google.dev/models/gemini
+		GeminiProLatest: false,
+		GeminiProVision: false,
 	}
 }
