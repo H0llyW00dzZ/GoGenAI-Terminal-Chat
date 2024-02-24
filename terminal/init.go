@@ -335,8 +335,8 @@ func init() {
 	supportedModels = map[string]bool{
 		GeminiPro:       true,
 		GeminiProTuning: true,
+		GeminiProLatest: true,
 		// List Model TODO or not A fucking available but already showing in docs https://ai.google.dev/models/gemini
-		GeminiProLatest: false,
 		GeminiProVision: false,
 	}
 }
