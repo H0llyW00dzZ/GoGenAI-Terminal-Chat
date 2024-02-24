@@ -100,6 +100,9 @@ const (
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + " <number>: Generate a random string of the specified length.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + ": Summarize a current conversation\n\n" +
 		DoubleAsterisk + "Note" + DoubleAsterisk + ": When you summarize a current conversation, it will be displayed at the top of the chat history.\n\n" +
+		DoubleAsterisk + "%s" + DoubleAsterisk + ": Switch the model for the current conversation.\n\n" +
+		DoubleAsterisk + "Note" + DoubleAsterisk + ": The current model-switching feature supports only the following models: " +
+		DoubleAsterisk + "%s" + DoubleAsterisk + ", " + DoubleAsterisk + "%s" + DoubleAsterisk + "\n\n" +
 		DoubleAsterisk + "%s %s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat history.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Show the chat statistic.\n" +
 		DoubleAsterisk + "%s" + DoubleAsterisk + " " + DoubleAsterisk + "%s" + DoubleAsterisk + ": Clear all system summary messages from the chat history.\n" +

@@ -89,6 +89,8 @@ func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, e
 			CryptoRandCommand,
 			LengthArgs,
 			SummarizeCommands,
+			SwitchModelCommands,
+			GeminiPro, GeminiProTuning,
 			ChatCommands,
 			ShowCommands,
 			ChatHistoryArgs,
