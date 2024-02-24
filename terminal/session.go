@@ -168,7 +168,8 @@ func (s *Session) handleUserInput(input string) bool {
 	s.ChatHistory.AddMessage(YouNerd, input, s.ChatConfig) // Add the user's input to the chat history
 
 	if success := s.sendInputToAI(input); !success {
-		return true // End the session if sending input to AI failed
+		s.endSession() // Ensure the session ends with cleanup.
+		return true    // End the session if sending input to AI failed
 	}
 
 	return false // Continue the session
@@ -207,8 +208,7 @@ func (s *Session) sendInputToAI(input string) bool {
 
 	if err != nil || !success {
 		logger.Error(ErrorSendingMessage, err)
-		s.endSession() // Ensure the session ends with cleanup.
-		return false   // Sending input to AI failed.
+		return false // Sending input to AI failed.
 	}
 
 	return true // Input was successfully sent to AI.
