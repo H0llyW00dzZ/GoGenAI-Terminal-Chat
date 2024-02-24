@@ -222,6 +222,8 @@ func readImageFile(filePath string) ([]byte, string) {
 	return imageData, imageFormat
 }
 
+var supportedModels map[string]bool
+
 func init() {
 	// Initialize the logger when the package is imported.
 	logger = NewDebugOrErrorLogger()
@@ -326,4 +328,10 @@ func init() {
 		slantA4,
 		slantA5,
 	}, BoldText+colors.ColorHex95b806)
+
+	// Initialize the map of supported models
+	supportedModels = map[string]bool{
+		GeminiPro:       true,
+		GeminiProTuning: true,
+	}
 }
