@@ -90,7 +90,7 @@ func (cmd *handleHelpCommand) Execute(session *Session, parts []string) (bool, e
 			LengthArgs,
 			SummarizeCommands,
 			SwitchModelCommands,
-			GeminiPro, GeminiProTuning,
+			GeminiPro, GeminiProTuning, GeminiProLatest,
 			ChatCommands,
 			ShowCommands,
 			ChatHistoryArgs,
