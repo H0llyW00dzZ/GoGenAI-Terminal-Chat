@@ -113,7 +113,7 @@ const (
 		DoubleAsterisk + "Note" + DoubleAsterisk + ": The token count file feature supports multiple files simultaneously with the following extensions: " +
 		dotMD + dotStringComma + dotTxt + dotStringComma + dotPng + dotStringComma +
 		dotJpg + dotStringComma + dotJpeg + dotStringComma + dotWebp + dotStringComma +
-		dotHeic + dotStringComma + dotHeif + ".\n\n" +
+		dotHeic + dotStringComma + dotHeif + ".\n" + "Also, note that .txt and .md files are currently only supported by gemini-pro.\n\n" +
 		DoubleAsterisk + "Additional Note" + DoubleAsterisk + ": There are no additional commands or HTML Markdown available " +
 		"because this is a terminal application and is limited.\n"
 	// TranslateCommandPrompt commands
