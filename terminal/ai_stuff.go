@@ -261,7 +261,9 @@ func (cmd *handleTokeCountingCommand) readTextFile(filePath string, params *Toke
 		return fmt.Errorf(ErrorFailedToReadFile, filePath, err) // low level in 2024
 	}
 	params.Input = string(fileContent)
-	params.ModelName = GeminiProTuning
+	// Note: This may change in the future, allowing users to utilize other models or depend on the current session model.
+	// Users can switch models using the :switchmodel <model-name> command
+	params.ModelName = GeminiPro
 	return nil
 }
 
