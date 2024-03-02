@@ -109,7 +109,7 @@ func (h *handleSummarizeCommand) sendSummarizePrompt(session *Session, sanitized
 }
 
 // handleAIResponse processes the AI's response to the summarize command.
-func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMessage, aiResponse, customText string) {
+func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMessage, aiResponse, SummaryPrefix string) {
 	// Concatenate custom text with the AI response.
 	fullResponse := SummaryPrefix + aiResponse
 
@@ -132,7 +132,6 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 //
 //	apiKey string: The API key used for authenticating requests to the AI service.
 //	filePaths []string: A slice of file paths to be processed for token counting.
-//	session *Session: The current chat session containing state and context.
 //
 // Returns:
 //
@@ -141,7 +140,7 @@ func (h *handleSummarizeCommand) handleAIResponse(session *Session, sanitizedMes
 //
 // Note: This approach simplifies maintenance and improvements by abstracting logic in this manner,
 // in contrast to less optimal practices where functions are made overly complex (e.g, stupid human) with excessive conditional statements.
-func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths []string, session *Session) (bool, error) {
+func (cmd *handleTokeCountingCommand) handleTokenCount(apiKey string, filePaths []string) (bool, error) {
 	var validFilePaths []string
 	totalTokenCount := 0
 	// Note: This functionality may only be compatible with Go version 1.22 and onwards hahahaha.

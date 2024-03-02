@@ -414,7 +414,7 @@ func (cmd *handleTokeCountingCommand) HandleSubcommand(subcommand string, sessio
 	apiKey := os.Getenv(APIKey) // Retrieve the API_KEY from the environment
 	switch subcommand {
 	case FileCommands:
-		return cmd.handleTokenCount(apiKey, filePaths, session)
+		return cmd.handleTokenCount(apiKey, filePaths)
 	default:
 		// Log an error for unrecognized subcommands and continue the session.
 		logger.Error(ErrorUnrecognizedSubcommandForTokenCount, subcommand)
