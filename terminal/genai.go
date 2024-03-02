@@ -255,7 +255,7 @@ func sanitizeAIResponse(response string) string {
 // sendToAIWithoutDisplay sends a message to the AI, processes the response, and updates the chat history without displaying the response.
 //
 // Note: This function is currently unused, but it will be employed for automated summarization in the future.
-func (s *Session) sendToAIWithoutDisplay(ctx context.Context, client *genai.Client, chatContext string) error {
+func (s *Session) sendToAIWithoutDisplay(ctx context.Context, chatContext string) error {
 	// Use the default model name
 	model := s.ConfigureModelForSession(ctx)
 
