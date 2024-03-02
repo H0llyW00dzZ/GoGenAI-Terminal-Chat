@@ -151,7 +151,7 @@ func (s *Session) SendMessage(ctx context.Context, client *genai.Client, chatCon
 //	An error if sending the dummy message fails.
 func SendDummyMessage(client *genai.Client) (bool, error) {
 	// Initialize a dummy chat session or use an appropriate lightweight method.
-	model := client.GenerativeModel(GeminiProTuning)
+	model := client.GenerativeModel(GeminiPro)
 	// Configure the model with options.
 	// Apply the configurations to the model.
 	// Note: This a testing in live production by sending a Dummy messages lmao
