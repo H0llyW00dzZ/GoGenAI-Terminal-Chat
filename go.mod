@@ -4,7 +4,7 @@ go 1.22.1
 
 require (
 	github.com/google/generative-ai-go v0.10.0 // direct
-	google.golang.org/api v0.169.0 // direct
+	google.golang.org/api v0.170.0 // direct
 )
 
 require (
@@ -36,7 +36,7 @@ require (
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240304212257-790db918fca8 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240304212257-790db918fca8 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240311132316-a219d84964c2 // indirect
 	google.golang.org/grpc v1.62.1 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect
 )
