@@ -1,5 +1,5 @@
 # Start from the official Go image to build our application.
-FROM golang:1.22.1 as builder
+FROM golang:1.22.3 as builder
 
 # Set the working directory inside the container.
 WORKDIR /app
