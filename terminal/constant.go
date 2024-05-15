@@ -40,6 +40,7 @@ const (
 	GeminiProLatest = "gemini-1.0-pro-latest"
 	GeminiProVision = "gemini-pro-vision"
 	GeminiProTuning = "gemini-1.0-pro-001"
+	GeminiProFlash  = "gemini-1.5-flash-latest"
 	// this may subject to changed in future for example can customize the delay
 	TypingDelay = 60 * time.Millisecond
 	// this clearing chat history in secret storage
