@@ -4,11 +4,11 @@ go 1.22.3
 
 require (
 	github.com/google/generative-ai-go v0.18.0 // direct
-	google.golang.org/api v0.200.0 // direct
+	google.golang.org/api v0.201.0 // direct
 )
 
 require (
-	cloud.google.com/go v0.115.1 // indirect
+	cloud.google.com/go v0.116.0 // indirect
 	cloud.google.com/go/ai v0.8.0 // indirect
 	cloud.google.com/go/auth v0.9.8 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.4 // indirect
