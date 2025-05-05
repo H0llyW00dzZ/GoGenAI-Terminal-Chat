@@ -4,7 +4,7 @@ go 1.22.3
 toolchain go1.24.1
 
 require (
-	github.com/google/generative-ai-go v0.19.0 // direct
+	github.com/google/generative-ai-go v0.20.1 // direct
 	google.golang.org/api v0.226.0 // direct
 )
 
